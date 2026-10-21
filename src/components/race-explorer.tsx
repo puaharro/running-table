@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { AdSidebar, AdSlot, Icon, showAdPlaceholders } from "./ui";
+import { AdSlot, Icon } from "./ui";
 import {
   defaultFilters,
   displayDate,
@@ -391,7 +391,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
         官方來源整理，狀態只對應所列渠道；超過 72 小時未核對會顯示待核實。
         {!ready && <span className="sr-only">正在載入你的篩選條件。</span>}
       </p>
-      <div className={`race-results-layout${showAdPlaceholders ? " with-ad-rail" : ""}`}>
+      <div className="race-results-layout">
         <div className="race-results-main">
           <div className="race-list">
             <div className="race-table-head" aria-hidden="true">
@@ -513,7 +513,6 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             <a href="#race-list">返回篩選 ↑</a>
           </div>
         </div>
-        <AdSidebar format="sidebar-tall" />
       </div>
     </section>
   );

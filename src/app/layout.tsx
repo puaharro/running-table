@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Header, Footer } from "@/components/ui";
+import { AdFrame } from "@/components/ad-frame";
 import { siteName, siteUrl } from "@/lib/site";
 import { assertReleaseReady, releaseSettings } from "@/lib/release";
 import "./globals.css";
@@ -18,9 +19,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="zh-HK">
       <body>
-        <Header />
-        {children}
-        <Footer />
+        <AdFrame>
+          <Header />
+          {children}
+          <Footer />
+        </AdFrame>
       </body>
     </html>
   );

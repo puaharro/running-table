@@ -2399,83 +2399,221 @@ p {
   }
 }
 
-/* Ad rails stay in normal document flow, apart from controls and official links. */
-.race-results-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 24px;
-}
-.race-results-main {
+/* Preview-only overlay formats; real overlay ads are managed by AdSense Auto ads. */
+.ad-page-content {
   min-width: 0;
 }
-.ad-rail {
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto 24px;
+.outer-ad-rail,
+.mobile-ad-anchor {
+  display: none;
 }
-.ad-slot--sidebar-tall,
-.ad-slot--sidebar-box {
-  width: 100%;
-  margin: 0;
-  border: 0;
-  outline: 1px dashed #cdd7cc;
-  outline-offset: -1px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  padding: 20px;
-}
-.ad-slot--sidebar-tall {
-  aspect-ratio: 1 / 2;
-}
-.ad-slot--sidebar-box {
-  aspect-ratio: 6 / 5;
-}
-.ad-slot .ad-size-label {
-  font-size: 24px;
-  letter-spacing: 0.03em;
-  font-weight: 400;
-  color: #8a9987;
-}
-.ad-rail-note {
-  font-size: 9px;
-  text-align: center;
-  color: #83917f;
-  margin: 9px 0 0;
-}
-.detail-sidebar > .ad-rail,
-.article-sidebar > .ad-rail {
-  margin-top: 28px;
-}
-@media (min-width: 1120px) {
-  .race-results-layout.with-ad-rail {
-    grid-template-columns: minmax(0, 1fr) 300px;
-    align-items: start;
+@media (min-width: 1440px) {
+  .ad-page-frame {
+    --rail-width: clamp(120px, calc((100vw - 1328px) / 2), 300px);
   }
-  .with-ad-rail .race-table-head,
-  .with-ad-rail .race-row {
-    grid-template-columns: 88px minmax(0, 1fr) 130px 135px 24px;
-    gap: 12px;
-    padding-inline: 16px;
+  .ad-page-content {
+    width: calc(100% - var(--rail-width) * 2 - 48px);
+    margin-inline: auto;
   }
-  .with-ad-rail .race-date {
-    gap: 7px;
+  .outer-ad-rail {
+    display: flex;
+    position: fixed;
+    top: 150px;
+    width: var(--rail-width);
+    height: min(600px, calc(100dvh - 180px));
+    min-height: 260px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 12px;
+    border: 1px dashed #bac9ba;
+    background: #eef2e9;
+    color: #778773;
+    text-align: center;
+    z-index: 5;
   }
-  .with-ad-rail .race-date > strong {
-    font-size: 32px;
+  .outer-ad-rail--left {
+    left: 12px;
+  }
+  .outer-ad-rail--right {
+    right: 12px;
+  }
+  .outer-ad-rail > span:first-child {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+  .outer-ad-rail strong {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .outer-ad-rail small {
+    font-size: 10px;
+    line-height: 1.8;
+  }
+  .outer-ad-size::after {
+    content: "響應式直幅";
+    font-size: 12px;
   }
 }
-@media (max-width: 1119px) {
-  .race-results-layout > .ad-rail .ad-slot--sidebar-tall {
-    aspect-ratio: 6 / 5;
-  }
-  .race-results-layout > .ad-rail .ad-size-label {
-    font-size: 0;
-  }
-  .race-results-layout > .ad-rail .ad-size-label::after {
-    content: "300 × 250";
+@media (min-width: 1928px) {
+  .outer-ad-size::after {
+    content: "300 × 600";
     font-size: 24px;
   }
+}
+.ad-close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #d9dfd7;
+  border-radius: 50%;
+  background: #fff;
+  color: #102d3b;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
+@media (max-width: 767px) {
+  .has-mobile-anchor .ad-page-content {
+    padding-bottom: calc(145px + env(safe-area-inset-bottom));
+  }
+  .mobile-ad-anchor {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    inset-inline: 0;
+    z-index: 30;
+    min-height: 108px;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+    background: #fff;
+    border-top: 1px solid #dfe4df;
+    box-shadow: 0 -6px 28px #102d3b12;
+  }
+  .mobile-ad-anchor > .ad-close {
+    position: absolute;
+    right: 8px;
+    top: -44px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .anchor-ad-art {
+    display: grid;
+    place-items: center;
+    width: 78px;
+    height: 68px;
+    flex-shrink: 0;
+    background: #102d3b;
+    color: #dbe777;
+    font-size: 28px;
+    font-weight: 800;
+  }
+  .anchor-ad-copy {
+    display: grid;
+    gap: 5px;
+  }
+  .anchor-ad-copy small {
+    color: #78827b;
+    font-size: 10px;
+  }
+  .anchor-ad-copy strong {
+    font-size: 14px;
+  }
+  .anchor-ad-copy button {
+    background: none;
+    border: 0;
+    padding: 6px 0;
+    text-align: left;
+    color: #526a41;
+    font-size: 12px;
+    cursor: pointer;
+    min-height: 32px;
+  }
+}
+.ad-vignette {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #102d3b;
+  color: white;
+  overflow-y: auto;
+}
+.ad-vignette::backdrop {
+  background: #102d3bd9;
+}
+html:has(.ad-vignette[open]) {
+  overflow: hidden;
+}
+.vignette-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 12px;
+  background: #071d28;
+}
+.vignette-toolbar > span {
+  font-size: 11px;
+  color: #c7d2cd;
+}
+.vignette-art {
+  min-height: calc(100dvh - 160px);
+  padding: 35px 28px;
+  background: radial-gradient(ellipse at 100% 60%, #536632, transparent 65%), #102d3b;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+}
+.vignette-art > span {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: #c5d1c0;
+}
+.vignette-number {
+  font-size: clamp(110px, 35vw, 220px);
+  font-weight: 900;
+  line-height: 0.95;
+  color: #dbe777;
+  letter-spacing: -0.08em;
+}
+.vignette-art h2 {
+  font-size: 22px;
+  margin: 10px 0 0;
+  color: white;
+}
+.vignette-art p {
+  font-size: clamp(28px, 8vw, 52px);
+  line-height: 1.5;
+  margin: 0;
+  color: #fff;
+}
+.vignette-art small {
+  color: #c5d1c0;
+  font-size: 12px;
+}
+.vignette-return {
+  display: block;
+  width: calc(100% - 48px);
+  max-width: 420px;
+  margin: 16px auto calc(16px + env(safe-area-inset-bottom));
+  padding: 14px 20px;
+  border: 0;
+  background: #dbe777;
+  color: #102d3b;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
 }

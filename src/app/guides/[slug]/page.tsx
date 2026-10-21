@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { guides } from "@/data/guides";
 import { races } from "@/data/races";
-import { AdSidebar, AdSlot, Breadcrumb, Icon } from "@/components/ui";
+import { AdSlot, Breadcrumb, Icon } from "@/components/ui";
 import { pageMetadata, raceHref } from "@/lib/site";
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -67,7 +67,6 @@ export default async function GuidePage({ params }: Props) {
               </a>
             ))}
           </div>
-          <AdSidebar />
           <div className="related-races">
             <h2>相關賽事</h2>
             <p>報名安排以大會最新資料為準。</p>
