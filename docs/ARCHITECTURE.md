@@ -1,44 +1,46 @@
-# 技術架構
+# 技術架構 v0.2
 
-## 開發方式
+## 程式與內容
 
-參照 MTRI 嘅 Next.js App Router、React、TypeScript、人工整理資料及 Vitest 做法，使用獨立 repo。唔包含 MTRI 問卷或推薦評分程式。
+獨立 Git repo；參照 MTRI 嘅 Next.js App Router、React、TypeScript、人工整理資料及 Vitest，唔複製跑旅問卷或推薦評分。
 
-第一版使用 Next.js 靜態輸出。建置時產生總覽、所有賽事詳情、指南及支援頁；瀏覽器負責組合篩選及網址同步。唔需要資料庫或登入服務。
+Next.js 靜態輸出，建置時產生總覽、6 場真實賽事頁、指南及支援頁。瀏覽器處理搜尋、篩選、狀態時鐘及分享網址。唔需要會員或資料庫。
 
-## 主要目錄
-
-- `src/app`：頁面、metadata、robots、sitemap、樣式。
-- `src/components`：總覽互動、共用介面、返回篩選連結。
-- `src/data/races.ts`：目前虛構賽事資料。
-- `src/data/guides.ts`：原創指南。
-- `src/lib/types.ts`：資料合約。
-- `src/lib/races.ts`：日期、狀態、篩選、查詢參數邏輯。
-- `src/lib/*.test.ts`：核心邏輯與資料驗證。
-- `scripts/serve.mjs`：建置輸出嘅本地預覽伺服器。
-- `out/`：建置產物，唔追蹤入 Git。
+- src/data/catalog.json：真實資料與來源紀錄。
+- src/data/races.ts：驗證並只匯出 published + verified 記錄。
+- tests/fixtures/races.ts：舊虛構資料，只供測試，唔由應用匯入。
+- src/lib/catalog.ts：阻止重複 ID、錯誤日期、非法費用、斷開來源、無佐證狀態等資料進入建置。
+- src/lib/races.ts：香港日期、精確截止、72 小時狀態新鮮度、同組別配對、網址參數。
+- src/components/live-registration.tsx：詳情頁狀態及組別時鐘。
+- src/lib/release.ts：搜尋收錄設定檢查。
+- src/lib/structured-data.ts：僅對真實且地點明確嘅活動產生 SportsEvent。
 
 ## 網址
 
-- `/`：總覽。
-- `/races/[year]/[slug]/`：該屆賽事詳情。
-- `/guides/`、`/guides/[slug]/`：指南列表及文章。
-- `/about/`、`/privacy/`：原型支援說明。
+首頁 /；賽事 /races/[year]/[slug]/；指南 /guides/ 及 /guides/[slug]/；關於 /about/；私隱 /privacy/。
 
-## 日期與建置快照
+比賽名稱先連本站詳情，再提供官方連結，唔將名額狀態理解為付款保證。
 
-總覽載入後會按香港當日更新狀態，每分鐘重新檢查日期。靜態詳情嘅狀態係建置時快照，正式營運需要排程重新建置或改成按請求更新；未設定排程前唔應聲稱即時名額資訊。
+## 靜態快照與時鐘
 
-## SEO 與示範隔離
+初始 HTML 狀態係建置快照；總覽載入後按裝置當前時間每 60 秒重算，詳情每 30 秒重算，統一轉成香港時間。截止邏輯可處理時分秒；畫面更新有上述刷新間隔。使用者裝置時間錯誤亦可能影響顯示。
 
-原型 metadata 全站 noindex；robots 允許爬取以讀到 noindex；sitemap 暫時空白。唔為虛構賽事輸出 Event 結構化資料。
+超過 72 小時未核對嘅報名狀態變待核實；已過官方明確截止時間、已完成及取消狀態唔會重新變開放。呢個機制唔會代替人工重查官方消息，亦唔會自動取得即時餘額。
 
-設定真實 `NEXT_PUBLIC_SITE_URL` 後建置，先會輸出對應 canonical 與分享網址。正式啟用收錄前先替換／隔離示範資料、完成來源核實，再調整 robots metadata、有效 sitemap 同必要結構化資料。原型唔用假網域做 canonical。
+正式部署需要定期重新建置以更新無 JavaScript 嘅 HTML 快照；目前未設定排程或自動部署。
 
-篩選網址與專門內容入口要分開管理。正式上線時定義篩選頁 noindex／爬取策略，避免大量重複組合。
+## SEO 與發布
 
-## 廣告與第二階段
+預設 SITE_INDEXABLE=false：全站 noindex、空 sitemap、唔輸出活動結構化資料。允許爬取，讓搜尋引擎讀到 noindex。
 
-廣告目前只係靜態版位。接 AdSense 時需要真實 publisher 設定、適當第三方載入／同意安排、ads.txt 及效能檢查；唔直接沿用 MTRI 限制所有外部腳本嘅設定。
+正式 HTTPS origin、營運者同聯絡電郵齊備後，可設定 SITE_INDEXABLE=true；缺必要設定會令建置失敗。此時產生正式 canonical、有效 sitemap、robots sitemap 連結及符合條件嘅 SportsEvent，未知時間、費用與名額唔會捏造。
 
-第二階段再接入會員與資料庫，以固定賽事 ID 關聯收藏。會員資料唔放 Git；日曆匯出亦留待第二階段。
+來源日期使用實際內容核實時間，唔隨建置自動改成今天。結構化資料唔保證特殊搜尋展示。
+
+篩選組合唔列入 sitemap；正式上線前再依選定託管平台配置參數頁嘅 HTTP 索引／爬取策略。靜態主機無法單靠建置時 metadata 分辨每個 query，所以目前整站仍處於 noindex 測試狀態。
+
+## 廣告
+
+預設完全唔載入廣告或分析腳本。只有 NEXT_PUBLIC_SHOW_AD_PLACEHOLDERS=true 先顯示開發版位。AdSense 帳戶接入、驗證、ads.txt、地區同意要求及效能驗證留待正式部署。
+
+第二階段會員資料用獨立伺服器儲存，唔放 Git；收藏及加入日曆維持未實作。

@@ -1,0 +1,525 @@
+[
+  {
+    "id": "hzmb-half-marathon-2026",
+    "slug": "hzmb-half-marathon-2026",
+    "name": "港珠澳大橋（香港段）半馬拉松 2026",
+    "englishName": "Hong Kong-Zhuhai-Macao Bridge Half Marathon 2026",
+    "date": "2026-11-15",
+    "endDate": "2026-11-15",
+    "region": "離島",
+    "district": "大嶼山",
+    "venue": "港珠澳大橋香港連接路",
+    "sport": "路跑",
+    "tags": ["半馬", "公眾抽籤"],
+    "status": "scheduled",
+    "organizer": "中國香港田徑總會",
+    "summary": "設半馬及十公里，兩組時限及集合時間不同。頁內報名狀態對應公眾抽籤，唔代表其他特別渠道；參賽者需按大會指示到亞博集合。",
+    "highlights": [
+      "半馬時限 3 小時，十公里時限 1 小時 30 分鐘。",
+      "公眾抽籤於 7 月 2 日中午截止；其他渠道請另查大會。",
+      "起終點與集合地點不同，須預留指定接駁及檢查時間。"
+    ],
+    "transport": "官方指定於亞洲國際博覽館集合，再乘大會專車前往起跑區。各組集合截止時間不同，請按官方賽事資訊核對。",
+    "groups": [
+      {
+        "id": "hzmb-2026-half",
+        "name": "半馬拉松（公眾抽籤）",
+        "distanceKm": 21.0975,
+        "date": "2026-11-15",
+        "price": 550,
+        "priceNote": "本地參賽者費用；非本地另計。",
+        "status": "closed",
+        "registrationStart": "2026-06-18",
+        "deadline": "2026-07-02",
+        "registrationOpensAt": "2026-06-18T14:00:00+08:00",
+        "registrationClosesAt": "2026-07-02T12:00:00+08:00",
+        "registrationVerifiedAt": "2026-10-21T13:22:07+08:00",
+        "registrationMethod": "公眾抽籤",
+        "registrationNote": "所列期限只適用公眾抽籤。",
+        "registrationUrl": "https://hzmb-halfmarathon.com/event-information",
+        "limit": "全程 3 小時；年齡及途中截點見官方規則。",
+        "sourceIds": ["hzmb-info"]
+      },
+      {
+        "id": "hzmb-2026-10k",
+        "name": "十公里（公眾抽籤）",
+        "distanceKm": 10,
+        "date": "2026-11-15",
+        "price": 450,
+        "priceNote": "本地參賽者費用；官方列明包含指定接駁。",
+        "status": "closed",
+        "registrationStart": "2026-06-18",
+        "deadline": "2026-07-02",
+        "registrationOpensAt": "2026-06-18T14:00:00+08:00",
+        "registrationClosesAt": "2026-07-02T12:00:00+08:00",
+        "registrationVerifiedAt": "2026-10-21T13:22:07+08:00",
+        "registrationMethod": "公眾抽籤",
+        "registrationUrl": "https://hzmb-halfmarathon.com/event-information",
+        "limit": "全程 1 小時 30 分鐘；須按組別安排到亞博集合。",
+        "sourceIds": ["hzmb-info"]
+      }
+    ],
+    "sourceUrl": "https://hzmb-halfmarathon.com/event-information",
+    "updatedAt": "2026-10-21",
+    "verifiedAt": "2026-10-21T05:33:34Z",
+    "verification": "verified",
+    "publication": "published",
+    "sources": [
+      {
+        "id": "hzmb-info",
+        "title": "大會賽事資訊",
+        "url": "https://hzmb-halfmarathon.com/event-information",
+        "checkedAt": "2026-10-21T13:22:07+08:00",
+        "fields": [
+          "date",
+          "venue",
+          "groups.distanceKm",
+          "groups.price",
+          "groups.registration",
+          "groups.limit",
+          "transport"
+        ]
+      },
+      {
+        "id": "hzmb-organizer",
+        "title": "大會主辦方介紹",
+        "url": "https://hzmb-halfmarathon.com/about-us",
+        "checkedAt": "2026-10-21T05:33:34Z",
+        "fields": ["organizer"]
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-10-21",
+        "note": "按官方資料建立，區分公眾抽籤與其他渠道。"
+      }
+    ]
+  },
+  {
+    "id": "mizuno-hk-run-fest-2026",
+    "slug": "mizuno-hk-run-fest-2026",
+    "name": "美津濃香港跑步祭 2026",
+    "englishName": "Mizuno Hong Kong Run Fest 2026",
+    "date": "2026-12-06",
+    "endDate": "2026-12-06",
+    "region": "新界",
+    "district": "沙田／科學園",
+    "venue": "香港科學園高錕會議中心廣場（金蛋）",
+    "sport": "路跑",
+    "tags": ["多組別", "額滿"],
+    "status": "scheduled",
+    "organizer": "運動版圖有限公司（活動統籌）",
+    "summary": "設 3K、5K、10K 個人組，可按距離及年齡組別比較。官方最新消息已公告所有組別額滿，唔應只按活動簡介原有「額滿即止」字眼判斷仍可報名。",
+    "highlights": [
+      "官方 6 月 24 日消息指所有組別額滿。",
+      "起步時間屬暫定安排，須按大會分配組別出發。",
+      "部分隊際盃以已成功報名個人組為前提，唔等於另有個人名額。"
+    ],
+    "transport": "官方列明場地為科學園金蛋廣場。個別組別出發及集合安排，請按大會選手資訊核對。",
+    "groups": [
+      {
+        "id": "mizuno-2026-3k",
+        "name": "3 公里個人組",
+        "distanceKm": 3,
+        "date": "2026-12-06",
+        "price": 320,
+        "status": "full",
+        "registrationVerifiedAt": "2026-10-21T13:22:07+08:00",
+        "registrationMethod": "個人報名",
+        "registrationUrl": "https://mizunohkrun.com/zh-hant",
+        "limit": "按出生年份分組，詳見官方活動簡介。",
+        "sourceIds": ["mizuno-info", "mizuno-news"]
+      },
+      {
+        "id": "mizuno-2026-5k",
+        "name": "5 公里個人組",
+        "distanceKm": 5,
+        "date": "2026-12-06",
+        "price": 360,
+        "status": "full",
+        "registrationVerifiedAt": "2026-10-21T13:22:07+08:00",
+        "registrationMethod": "個人報名",
+        "registrationUrl": "https://mizunohkrun.com/zh-hant",
+        "limit": "年齡組別及時間按官方分配。",
+        "sourceIds": ["mizuno-info", "mizuno-news"]
+      },
+      {
+        "id": "mizuno-2026-10k",
+        "name": "10 公里個人組",
+        "distanceKm": 10,
+        "date": "2026-12-06",
+        "price": 400,
+        "status": "full",
+        "registrationVerifiedAt": "2026-10-21T13:22:07+08:00",
+        "registrationMethod": "個人報名",
+        "registrationUrl": "https://mizunohkrun.com/zh-hant",
+        "limit": "組別及起步時間見大會安排。",
+        "sourceIds": ["mizuno-info", "mizuno-news"]
+      }
+    ],
+    "sourceUrl": "https://mizunohkrun.com/zh-hant/event-information",
+    "updatedAt": "2026-10-21",
+    "verifiedAt": "2026-10-21T13:22:07+08:00",
+    "verification": "verified",
+    "publication": "published",
+    "sources": [
+      {
+        "id": "mizuno-info",
+        "title": "官方活動簡介",
+        "url": "https://mizunohkrun.com/zh-hant/event-information",
+        "checkedAt": "2026-10-21T13:22:07+08:00",
+        "fields": ["date", "venue", "groups.distanceKm", "groups.price", "organizer"]
+      },
+      {
+        "id": "mizuno-news",
+        "title": "官方最新消息：所有組別額滿",
+        "url": "https://mizunohkrun.com/zh-hant",
+        "checkedAt": "2026-10-21T13:22:07+08:00",
+        "fields": ["groups.registration"],
+        "note": "依最新消息處理，唔沿用其他列表頁嘅報名中標籤。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-10-21",
+        "note": "交叉核對活動簡介與官方額滿公告。"
+      }
+    ]
+  },
+  {
+    "id": "unicef-powerun-2027",
+    "slug": "unicef-powerun-2027",
+    "name": "UNICEF HERO RUN 超能跑 2026/27",
+    "englishName": "UNICEF HERO RUN PoweRun 2026/27",
+    "date": "2027-01-03",
+    "endDate": "2027-01-03",
+    "region": "離島",
+    "district": "大嶼山",
+    "venue": "香港迪士尼樂園度假區",
+    "sport": "路跑",
+    "tags": ["慈善", "多組別"],
+    "status": "scheduled",
+    "organizer": "香港聯合國兒童基金會",
+    "summary": "官方首頁列出半馬、10K、5K 及 3K 少年賽，日期為 2027 年 1 月 3 日。此紀錄目前只核實日期、場地及距離，收費與報名期限仍待補充。",
+    "highlights": [
+      "同系列「童您跑」係另一日活動，唔應混用日期。",
+      "所列場地係度假區；精確集合點須再核對選手資料。",
+      "未核實報名狀態及收費，請直接查看官方活動詳情。"
+    ],
+    "transport": "已核實場地為香港迪士尼樂園度假區；集合位置、交通及接駁細節尚未完成核實。",
+    "groups": [
+      {
+        "id": "unicef-2027-half",
+        "name": "半馬拉松",
+        "distanceKm": 21.0975,
+        "date": "2027-01-03",
+        "price": null,
+        "status": "unknown",
+        "registrationUrl": "https://run.unicef.org.hk/powerun/zh",
+        "sourceIds": ["unicef-events"]
+      },
+      {
+        "id": "unicef-2027-10k",
+        "name": "10 公里賽",
+        "distanceKm": 10,
+        "date": "2027-01-03",
+        "price": null,
+        "status": "unknown",
+        "registrationUrl": "https://run.unicef.org.hk/powerun/zh",
+        "sourceIds": ["unicef-events"]
+      },
+      {
+        "id": "unicef-2027-5k",
+        "name": "5 公里賽",
+        "distanceKm": 5,
+        "date": "2027-01-03",
+        "price": null,
+        "status": "unknown",
+        "registrationUrl": "https://run.unicef.org.hk/powerun/zh",
+        "sourceIds": ["unicef-events"]
+      },
+      {
+        "id": "unicef-2027-3k",
+        "name": "3 公里少年賽",
+        "distanceKm": 3,
+        "date": "2027-01-03",
+        "price": null,
+        "status": "unknown",
+        "registrationUrl": "https://run.unicef.org.hk/powerun/zh",
+        "sourceIds": ["unicef-events"]
+      }
+    ],
+    "sourceUrl": "https://run.unicef.org.hk/",
+    "updatedAt": "2026-10-21",
+    "verifiedAt": "2026-10-21T13:22:07+08:00",
+    "verification": "verified",
+    "publication": "published",
+    "sources": [
+      {
+        "id": "unicef-events",
+        "title": "UNICEF HERO RUN 官方活動首頁",
+        "url": "https://run.unicef.org.hk/",
+        "checkedAt": "2026-10-21T13:22:07+08:00",
+        "fields": ["date", "venue", "groups.distanceKm"],
+        "note": "費用及報名期限未核實，維持未知。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-10-21",
+        "note": "僅加入官方已核實活動欄位，報名保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "schkm-harbourfront-2027",
+    "slug": "schkm-harbourfront-2027",
+    "name": "渣打香港馬拉松 2027 — 5 公里海濱跑",
+    "englishName": "Standard Chartered Hong Kong Marathon 5km Harbourfront Run 2027",
+    "date": "2027-01-16",
+    "endDate": "2027-01-16",
+    "region": "九龍",
+    "district": "啟德",
+    "venue": "啟德青年運動場",
+    "sport": "路跑",
+    "tags": ["親子", "公眾抽籤"],
+    "status": "scheduled",
+    "organizer": "中國香港田徑總會",
+    "summary": "主賽事前一日舉行嘅約 5 公里非競賽活動，設個人及家庭公眾抽籤。抽籤截止、結果公布與付款係不同時間，提交申請唔等於取得名額。",
+    "highlights": [
+      "公眾抽籤於 10 月 26 日中午截止；另有輪椅渠道。",
+      "家庭抽籤參加者年齡要求與個人抽籤不同。",
+      "全程時限 60 分鐘；以官方分配時段出發。"
+    ],
+    "transport": "起點為啟德青年運動場，終點設於啟德海濱。起終點不同，請按官方通知安排集合及離場。",
+    "groups": [
+      {
+        "id": "schkm-2027-harbour5",
+        "name": "約 5 公里（個人／家庭公眾抽籤）",
+        "distanceKm": 5,
+        "date": "2027-01-16",
+        "price": 300,
+        "status": "open",
+        "registrationStart": "2026-10-20",
+        "deadline": "2026-10-26",
+        "registrationOpensAt": "2026-10-20T12:00:00+08:00",
+        "registrationClosesAt": "2026-10-26T12:00:00+08:00",
+        "registrationVerifiedAt": "2026-10-21T13:22:07+08:00",
+        "registrationMethod": "公眾抽籤",
+        "registrationNote": "提交抽籤申請唔等於取得名額；輪椅渠道另見官方。",
+        "registrationUrl": "https://www.hkmarathon.com/harbourfront-run",
+        "limit": "60 分鐘；個人及家庭年齡要求見官方。",
+        "sourceIds": ["schkm-harbour"]
+      }
+    ],
+    "sourceUrl": "https://www.hkmarathon.com/harbourfront-run",
+    "updatedAt": "2026-10-21",
+    "verifiedAt": "2026-10-21T13:22:07+08:00",
+    "verification": "verified",
+    "publication": "published",
+    "sources": [
+      {
+        "id": "schkm-harbour",
+        "title": "官方 5 公里海濱跑資料",
+        "url": "https://www.hkmarathon.com/harbourfront-run",
+        "checkedAt": "2026-10-21T13:22:07+08:00",
+        "fields": [
+          "date",
+          "venue",
+          "groups.distanceKm",
+          "groups.price",
+          "groups.registration",
+          "groups.limit"
+        ]
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-10-21",
+        "note": "以公眾抽籤作所列報名渠道，記錄中午精確截止時間。"
+      }
+    ]
+  },
+  {
+    "id": "schkm-youth-2027",
+    "slug": "schkm-youth-2027",
+    "name": "渣打香港馬拉松 2027 — 少年跑",
+    "englishName": "Standard Chartered Hong Kong Marathon Youth Run 2027",
+    "date": "2027-01-16",
+    "endDate": "2027-01-16",
+    "region": "九龍",
+    "district": "啟德",
+    "venue": "啟德青年運動場",
+    "sport": "路跑",
+    "tags": ["少年", "短途"],
+    "status": "scheduled",
+    "organizer": "中國香港田徑總會",
+    "summary": "約 2 公里少年路跑，按 2027 出生年份計須為 10 至 15 歲。報名採先到先得，官方保留額滿時提早截止嘅安排。",
+    "highlights": [
+      "報名於 11 月 27 日晚上 11:59 截止，額滿可提早結束。",
+      "年齡按出生年份計，唔應直接套用成人組別要求。",
+      "全程時限 30 分鐘，按獲分配場次起跑。"
+    ],
+    "transport": "起終點均為啟德青年運動場；集合及領包安排請依官方通知核對。",
+    "groups": [
+      {
+        "id": "schkm-2027-youth2",
+        "name": "約 2 公里少年組",
+        "distanceKm": 2,
+        "date": "2027-01-16",
+        "price": 200,
+        "status": "open",
+        "registrationStart": "2026-10-20",
+        "deadline": "2026-11-27",
+        "registrationOpensAt": "2026-10-20T12:00:00+08:00",
+        "registrationClosesAt": "2026-11-27T23:59:00+08:00",
+        "registrationVerifiedAt": "2026-10-21T13:22:07+08:00",
+        "registrationMethod": "先到先得",
+        "registrationNote": "名額可提前額滿；不承諾即時餘額。",
+        "registrationUrl": "https://www.hkmarathon.com/youth-run",
+        "limit": "30 分鐘；2027 年按出生年份計 10–15 歲。",
+        "sourceIds": ["schkm-youth"]
+      }
+    ],
+    "sourceUrl": "https://www.hkmarathon.com/youth-run",
+    "updatedAt": "2026-10-21",
+    "verifiedAt": "2026-10-21T13:22:07+08:00",
+    "verification": "verified",
+    "publication": "published",
+    "sources": [
+      {
+        "id": "schkm-youth",
+        "title": "官方少年跑資料",
+        "url": "https://www.hkmarathon.com/youth-run",
+        "checkedAt": "2026-10-21T13:22:07+08:00",
+        "fields": [
+          "date",
+          "venue",
+          "groups.distanceKm",
+          "groups.price",
+          "groups.registration",
+          "groups.limit"
+        ]
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-10-21",
+        "note": "記錄報名窗口、年齡限制及提前額滿條款。"
+      }
+    ]
+  },
+  {
+    "id": "standard-chartered-hk-marathon-2027",
+    "slug": "standard-chartered-hk-marathon-2027",
+    "name": "渣打香港馬拉松 2027 — 主賽事",
+    "englishName": "Standard Chartered Hong Kong Marathon 2027",
+    "date": "2027-01-17",
+    "endDate": "2027-01-17",
+    "region": null,
+    "district": "按組別起點",
+    "venue": "多個起點，按組別核對",
+    "sport": "路跑",
+    "tags": ["全馬", "半馬", "公眾抽籤"],
+    "status": "scheduled",
+    "organizer": "中國香港田徑總會",
+    "summary": "主賽事包括全馬、半馬及十公里。公眾抽籤已於 9 月 20 日截止，其他特別名額渠道有獨立期限；此頁狀態唔代表所有渠道。",
+    "highlights": [
+      "全馬起點在尖沙咀彌敦道，終點為維多利亞公園。",
+      "半馬及十公里費用、起點未完成本頁核實，唔以全馬資料代填。",
+      "慈善、殘疾人士等渠道有各自條件，請參閱官方重要日期。"
+    ],
+    "transport": "全馬官方起點為尖沙咀彌敦道。其他組別起點及各時段交通安排，需要另按當屆官方資料確認。",
+    "groups": [
+      {
+        "id": "schkm-2027-marathon",
+        "name": "全馬（公眾抽籤）",
+        "distanceKm": 42.195,
+        "date": "2027-01-17",
+        "price": 600,
+        "priceNote": "本地參賽者費用；非本地另計。",
+        "region": "九龍",
+        "venue": "尖沙咀彌敦道",
+        "status": "closed",
+        "registrationStart": "2026-09-11",
+        "deadline": "2026-09-20",
+        "registrationOpensAt": "2026-09-11T14:00:00+08:00",
+        "registrationClosesAt": "2026-09-20T19:00:00+08:00",
+        "registrationVerifiedAt": "2026-10-21T13:22:07+08:00",
+        "registrationMethod": "公眾抽籤",
+        "registrationUrl": "https://www.hkmarathon.com/race-information",
+        "registrationNote": "只描述公眾抽籤；其他渠道另查官方。",
+        "limit": "全程 6 小時，資格及途中截點見官方規則。",
+        "sourceIds": ["schkm-main", "schkm-dates"]
+      },
+      {
+        "id": "schkm-2027-half",
+        "name": "半馬（公眾抽籤）",
+        "distanceKm": 21.0975,
+        "date": "2027-01-17",
+        "price": null,
+        "status": "closed",
+        "registrationStart": "2026-09-11",
+        "deadline": "2026-09-20",
+        "registrationOpensAt": "2026-09-11T14:00:00+08:00",
+        "registrationClosesAt": "2026-09-20T19:00:00+08:00",
+        "registrationVerifiedAt": "2026-10-21T13:22:07+08:00",
+        "registrationMethod": "公眾抽籤",
+        "registrationUrl": "https://www.hkmarathon.com/race-information",
+        "limit": "起點、收費與時限待本頁核實。",
+        "sourceIds": ["schkm-dates"]
+      },
+      {
+        "id": "schkm-2027-10k",
+        "name": "十公里（公眾抽籤）",
+        "distanceKm": 10,
+        "date": "2027-01-17",
+        "price": null,
+        "status": "closed",
+        "registrationStart": "2026-09-11",
+        "deadline": "2026-09-20",
+        "registrationOpensAt": "2026-09-11T14:00:00+08:00",
+        "registrationClosesAt": "2026-09-20T19:00:00+08:00",
+        "registrationVerifiedAt": "2026-10-21T13:22:07+08:00",
+        "registrationMethod": "公眾抽籤",
+        "registrationUrl": "https://www.hkmarathon.com/race-information",
+        "limit": "起點、收費與時限待本頁核實。",
+        "sourceIds": ["schkm-dates"]
+      }
+    ],
+    "sourceUrl": "https://www.hkmarathon.com/race-information",
+    "updatedAt": "2026-10-21",
+    "verifiedAt": "2026-10-21T13:22:07+08:00",
+    "verification": "verified",
+    "publication": "published",
+    "sources": [
+      {
+        "id": "schkm-main",
+        "title": "官方主賽事資料（已核對全馬頁籤）",
+        "url": "https://www.hkmarathon.com/race-information",
+        "checkedAt": "2026-10-21T13:22:07+08:00",
+        "fields": [
+          "date",
+          "groups.marathon.distanceKm",
+          "groups.marathon.price",
+          "groups.marathon.venue",
+          "groups.marathon.limit"
+        ]
+      },
+      {
+        "id": "schkm-dates",
+        "title": "官方重要日期",
+        "url": "https://www.hkmarathon.com/important-dates",
+        "checkedAt": "2026-10-21T13:22:07+08:00",
+        "fields": ["date", "groups.registration"],
+        "note": "明確分開公眾抽籤同其他報名渠道。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-10-21",
+        "note": "建立主賽事紀錄，只填已核實欄位，其他費用及起點留空。"
+      }
+    ]
+  }
+]

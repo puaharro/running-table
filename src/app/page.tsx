@@ -2,9 +2,102 @@ import { RaceExplorer } from "@/components/race-explorer";
 import { races } from "@/data/races";
 import { guides } from "@/data/guides";
 import { GuideCard, Icon } from "@/components/ui";
-import { hongKongToday } from "@/lib/races";
+import { pageMetadata } from "@/lib/site";
 import Link from "next/link";
 
+export const metadata = pageMetadata(
+  "香港路跑賽事總覽",
+  "按日期、距離、地區及報名狀態組合篩選香港路跑賽事，查看官方來源及原創報名指南。",
+  "/",
+);
+
 export default function Home() {
-  return <main id="main"><section className="hero"><div className="shell hero-inner"><div className="hero-copy"><div className="hero-kicker"><span/> HONG KONG ROAD RUNNING</div><h1>下一場比賽，<br/>由<span>呢度開始。</span></h1><p>由第一場 5K，到下一個全馬。<br className="mobile-break"/>一頁搵齊你想跑嘅路。</p><a href="#race-list" className="button button-coral">搵下一場比賽 <Icon name="arrow"/></a><div className="hero-footnote">公開資訊 · 組別比較 · 原創選賽指南</div></div><div className="hero-art" aria-hidden="true"><div className="track-caption">FIND YOUR<br/>NEXT START.</div><svg viewBox="0 0 560 380" fill="none"><path d="M570 40H280C120 40 120 310 280 310H570" stroke="#25434d" strokeWidth="95"/><path d="M570 9H280C76 9 76 341 280 341H570M570 30H280C104 30 104 320 280 320H570M570 51H280C132 51 132 299 280 299H570M570 72H280C160 72 160 278 280 278H570" stroke="#f1eee4" strokeOpacity=".48" strokeWidth="1.3"/><path d="M570 51H280C132 51 132 299 280 299H418" stroke="#f55b3b" strokeWidth="5"/><circle cx="418" cy="299" r="10" fill="#f55b3b"/><circle cx="418" cy="299" r="19" stroke="#f55b3b" strokeOpacity=".4"/><path d="M420 5V88M432 5V88" stroke="#f1eee4" strokeWidth="3"/><text x="465" y="285" fill="#9aafb0" fontSize="12" letterSpacing="3">START</text></svg><div className="art-ticket"><span>下一個起點</span><strong>由你決定 <span>↗</span></strong><small>5K / 10K / HALF / MARATHON</small></div></div></div></section><section className="intro-strip"><div className="shell"><span><Icon name="calendar"/> 一頁掌握賽事</span><span><Icon name="filter"/> 五項條件組合篩選</span><span><Icon name="check"/> 來源與狀態清楚列明</span><small>現階段：示範資料預覽</small></div></section><RaceExplorer races={races} initialToday={hongKongToday()}/><section className="guides-section shell"><div className="section-heading"><div><div className="eyebrow">BEFORE THE START LINE</div><h2>報名之前，睇多一步。</h2><p>實用資訊，幫你揀一場適合自己嘅比賽。</p></div><Link className="text-link" href="/guides/">全部指南 <Icon name="arrow"/></Link></div><div className="guide-grid">{guides.map(g => <GuideCard key={g.slug} guide={g}/>)}</div></section></main>;
+  return (
+    <main id="main">
+      <section className="hero">
+        <div className="shell hero-inner">
+          <div className="hero-copy">
+            <div className="hero-kicker">
+              <span /> HONG KONG ROAD RUNNING
+            </div>
+            <h1>
+              下一場比賽，
+              <br />由<span>呢度開始。</span>
+            </h1>
+            <p>
+              由第一場 5K，到下一個全馬。
+              <br className="mobile-break" />
+              一頁搵齊你想跑嘅路。
+            </p>
+            <a href="#race-list" className="button button-coral">
+              搵下一場比賽 <Icon name="arrow" />
+            </a>
+            <div className="hero-footnote">公開資訊 · 組別比較 · 原創選賽指南</div>
+          </div>
+          <div className="hero-art" aria-hidden="true">
+            <div className="track-caption">
+              FIND YOUR
+              <br />
+              NEXT START.
+            </div>
+            <svg viewBox="0 0 560 380" fill="none">
+              <path d="M570 40H280C120 40 120 310 280 310H570" stroke="#25434d" strokeWidth="95" />
+              <path
+                d="M570 9H280C76 9 76 341 280 341H570M570 30H280C104 30 104 320 280 320H570M570 51H280C132 51 132 299 280 299H570M570 72H280C160 72 160 278 280 278H570"
+                stroke="#f1eee4"
+                strokeOpacity=".48"
+                strokeWidth="1.3"
+              />
+              <path d="M570 51H280C132 51 132 299 280 299H418" stroke="#f55b3b" strokeWidth="5" />
+              <circle cx="418" cy="299" r="10" fill="#f55b3b" />
+              <circle cx="418" cy="299" r="19" stroke="#f55b3b" strokeOpacity=".4" />
+              <path d="M420 5V88M432 5V88" stroke="#f1eee4" strokeWidth="3" />
+              <text x="465" y="285" fill="#9aafb0" fontSize="12" letterSpacing="3">
+                START
+              </text>
+            </svg>
+            <div className="art-ticket">
+              <span>下一個起點</span>
+              <strong>
+                由你決定 <span>↗</span>
+              </strong>
+              <small>5K / 10K / HALF / MARATHON</small>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="intro-strip">
+        <div className="shell">
+          <span>
+            <Icon name="calendar" /> 一頁掌握賽事
+          </span>
+          <span>
+            <Icon name="filter" /> 五項條件組合篩選
+          </span>
+          <span>
+            <Icon name="check" /> 來源與狀態清楚列明
+          </span>
+          <small>官方來源 · 逐項核對</small>
+        </div>
+      </section>
+      <RaceExplorer races={races} initialNow={new Date().toISOString()} />
+      <section className="guides-section shell">
+        <div className="section-heading">
+          <div>
+            <div className="eyebrow">BEFORE THE START LINE</div>
+            <h2>報名之前，睇多一步。</h2>
+            <p>實用資訊，幫你揀一場適合自己嘅比賽。</p>
+          </div>
+          <Link className="text-link" href="/guides/">
+            全部指南 <Icon name="arrow" />
+          </Link>
+        </div>
+        <div className="guide-grid">
+          {guides.map((g) => (
+            <GuideCard key={g.slug} guide={g} />
+          ))}
+        </div>
+      </section>
+    </main>
+  );
 }

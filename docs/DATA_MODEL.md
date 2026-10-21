@@ -1,33 +1,42 @@
-# 資料合約
+# 資料合約 v0.2
 
-目前型別定義喺 `src/lib/types.ts`。內容仍全部係虛構示範，唔可以只改 verification 就當正式資料。
+程式型別：src/lib/types.ts。真實資料：src/data/catalog.json。資料匯入時會執行 assertCatalog，建置失敗時唔會產生新發布。
 
 ## Race：一個活動嘅一屆
 
-| 欄位 | 規則 |
-| --- | --- |
-| id / slug | 穩定、唯一；已發布後修改 slug 需處理舊連結 |
-| name / englishName | 顯示名稱，唔包含推銷或未核實認證描述 |
-| date / endDate | YYYY-MM-DD，比賽開始／結束日期，香港日期語意 |
-| region / district / venue | 四大區、細分地區、起點；同頁展示 |
-| sport | 首階段只接受「路跑」 |
-| tags | 親子、慈善、海濱等屬性；唔當距離或運動類別 |
-| status | scheduled / postponed / cancelled / completed |
-| summary / highlights / transport | 原創整理；判斷需有根據 |
-| sourceUrl | 原型為 null；正式資料要記錄官方來源 |
-| updatedAt | 實際資料修改日期，唔隨每次建置虛假更新 |
-| verification | demo / verified / pending |
+穩定 ID、slug、中英文名、開始及結束日期、地區／細分地區／起點、路跑類別、標籤、主辦／統籌、原創摘要、選賽重點、交通說明、組別、官方網址、修改日期。
 
-## RaceGroup：組別
+publication 為 draft 或 published；verification 為 demo、pending 或 verified。只有 published + verified 可以匯出頁面；虛構測試資料另放 tests/fixtures，唔寫入正式 catalog。
 
-每組有固定 ID、名稱、距離公里數、比賽日期、可選結束日期、費用、報名狀態、可選開放／截止日期同限制說明。組別日期須落喺活動日期範圍。
+region 可以係四大區或 null。多組別起點未確定時留 null，按組別已核實起點篩選，唔硬套某一組地區。
 
-半馬用 21.0975，全馬用 42.195。免費費用係 0；未知係 null。其他距離照實保存，唔硬套 5K 或 10K。
+## RaceGroup：參賽組別及所列渠道
 
-報名狀態：open、upcoming、waitlist、full、closed、unknown。賽事取消、已完成或組別日期已過時覆蓋為 closed；延期覆蓋為 unknown；截止翌日覆蓋為 closed。到達開放日期而無重新核實，upcoming 變 unknown。
+| 欄位                                       | 規則                                                 |
+| ------------------------------------------ | ---------------------------------------------------- |
+| id / name                                  | 全站唯一組別 ID、清楚列明渠道嘅名稱                  |
+| distanceKm / date / endDate                | 實際公里數、香港日期；組別日期落於活動範圍           |
+| price / priceNote                          | 港元；未知 null、免費 0；區分本地費用等條件          |
+| status                                     | open / upcoming / waitlist / full / closed / unknown |
+| registrationMethod / registrationNote      | 公眾抽籤、先到先得等；說明只涵蓋所列渠道             |
+| registrationUrl                            | 已核對官方資料／報名入口，必須 HTTPS                 |
+| registrationOpensAt / registrationClosesAt | ISO 8601，必須有時區；以香港顯示                     |
+| registrationStart / deadline               | 日期版欄位，與精確截止換算後嘅香港日期一致           |
+| registrationVerifiedAt                     | 實際核對狀態時間，已知狀態必填                       |
+| region / venue                             | 已核實組別起點，覆蓋活動預設值；未知可 null          |
+| limit                                      | 年齡、時限等已核實說明，未知唔補造                   |
+| sourceIds                                  | 引用同一活動 sources 中嘅 ID，唔接受斷開引用         |
 
-## 正式資料擴充前必做
+半馬 21.0975、全馬 42.195；其他公里數按實際資料記錄。
 
-目前單一 sourceUrl 同 updatedAt 只夠原型。正式內容匯入前補上每個組別／重要欄位嘅 sources、verifiedAt、報名網址、公開／草稿狀態、精確香港開賽／截止時間及修改記錄，並加入驗證。資料過舊要標示待核實。
+## 欄位來源
 
-唔好以目前虛構 organizer、費用或示範文字代替真實核實。無官方報名網址時只顯示無入口，唔製造連結。
+sources 每項有 id、title、url、checkedAt、fields、可選 note。fields 列明核實日期、地點、費用、報名等範圍。已知報名狀態必須引用有 groups.registration 證據嘅來源。
+
+verifiedAt 代表最後完成當次欄位核對嘅時間，唔代表全部資訊完整；未知欄位仍留空。updatedAt 只記實際內容修改日；changes 保存日期及變更說明。
+
+## 狀態優先次序
+
+取消／已完成／組別日期已過 → 已截止；延期 → 待核實；明確截止已到 → 已截止；原始未知 → 待核實；未到開放時間 → 未開放；超過 72 小時未核對 → 待核實。到達原定開放時間，唔會憑日曆自動承諾有名額。
+
+同一活動可以仲有本頁未收錄嘅慈善、輪椅或其他渠道。列表同詳情都有範圍說明，唔以公眾抽籤截止概括所有參賽方式。

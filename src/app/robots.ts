@@ -1,3 +1,11 @@
 import type { MetadataRoute } from "next";
+import { releaseSettings } from "@/lib/release";
 export const dynamic = "force-static";
-export default function robots(): MetadataRoute.Robots { return {rules:{userAgent:"*",allow:"/"}}; }
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: { userAgent: "*", allow: "/" },
+    ...(releaseSettings.indexable && releaseSettings.origin
+      ? { sitemap: new URL("/sitemap.xml", releaseSettings.origin).toString() }
+      : {}),
+  };
+}

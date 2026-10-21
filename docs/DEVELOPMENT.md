@@ -1,8 +1,6 @@
-# 開發及交接
+# 開發及交接 v0.2
 
-## 本地開發
-
-使用支援本項目 Next.js 版本嘅 Node.js；目前開發環境 Node 24。使用 package-lock.json 固定實際安裝版本。
+## 指令
 
 ```text
 npm ci
@@ -10,37 +8,49 @@ npm run dev
 npm test
 npm run typecheck
 npm run build
+npm run check:export
+npm run test:http
+npm run review:data
 npm start
 ```
 
-dev 啟動 Next.js 開發環境；build 產生 out/ 靜態網站；start 喺 http://127.0.0.1:3000 提供靜態預覽。可透過 PORT 設定預覽埠。唔使用 next start 服務靜態輸出。
+Node 24、Next.js 靜態輸出；package-lock.json 固定依賴。dev 啟動開發環境；build 產生 out/；start 服務本機靜態預覽，預設 http://127.0.0.1:3000，可用 PORT 調整。唔使用 next start 服務靜態輸出。
 
-如 Windows npm 指令 shim 出現問題，可用 Node 直接執行已安裝套件入口，例如 `node node_modules/vitest/vitest.mjs run`、`node node_modules/typescript/bin/tsc --noEmit`、`node node_modules/next/dist/bin/next build`。套件下載遇系統憑證鏈問題可使用 Node --use-system-ca，唔停用 TLS 驗證。
+格式化：npm run format。Windows npm shim 有問題可直接用 Node 執行 node_modules 入口。下載遇到系統憑證鏈問題可使用 Node --use-system-ca，唔停用 TLS。
 
-## Git 工作方式
+## 編輯真實資料
 
-main 保持可建置；短期功能分支交付一項完整改動，審閱後合併。唔追蹤 node_modules、out、.next、環境密鑰、個人投稿或會員資料。正式 GitHub repo 擁有者、名稱、存取權及部署平台待確認；目前唔聲稱已建立遠端 repo。
+改 src/data/catalog.json；保持固定 ID、來源及組別引用。先閱讀 DATA_MODEL.md。修改後跑測試、建置及匯出檢查。npm run review:data 產生待核對組別清單，包括 72 小時過期、7 日內截止、未知費用／起點。
 
-## 第一版已建立
+來源核對只覆蓋明確列出欄位，唔將目錄網站嘅報名中標籤當成官方確認。UNKNOWN 唔等於未開放。
 
-- 賽事總覽、關鍵字搜尋、五項條件介面、複合篩選與三種排序。
-- 即將舉行／歷屆／全部、快捷日期、分享連結、返回保留條件。
-- 12 場虛構賽事詳情、組別與狀態、資料來源說明。
-- 3 篇原創指南、列表、目錄、相關賽事連結。
-- 手機／桌面樣式、404、關於、原型私隱說明、廣告版位。
-- 全站 noindex、空 sitemap，避免示範資料當正式資訊收錄。
-- 16 項核心邏輯與資料測試。
-- 已備妥 GitHub Actions 檢查流程；尚未連接遠端，因此未在 GitHub 執行。
+## Git 與 CI
 
-## 正式公開上線前
+本地開發分支 feature/production-content-foundation。程式、公開資料、指南及來源紀錄一併提交；唔放環境密鑰、私人投稿或會員資料。
 
-1. 確認品牌、正式 GitHub repo、網域及部署服務。
-2. 擴充正式資料合約，替換／隔離所有虛構賽事。
-3. 核實來源、組別報名網址及精確截止時間，加入變更紀錄。
-4. 補上真實營運者身份、聯絡方式及按實際服務撰寫嘅政策文件。
-5. 設定 NEXT_PUBLIC_SITE_URL；完成正式 canonical、有效 sitemap、篩選頁索引策略與需要嘅結構化資料。
-6. 為靜態日期／報名狀態配置排程重新建置，或改用按請求更新。
-7. 確認內容完整後再解除正式頁 noindex，連接 Search Console。
-8. 申請 AdSense，按帳戶及投放地區完成驗證、ads.txt、同意機制、廣告版位及效能驗證。
+已備 GitHub Actions，執行 npm ci、測試、建置、匯出及 HTTP 路由檢查。未連接 GitHub remote，未喺遠端執行；目前仍以本地 Git 作版本紀錄。
 
-會員、收藏、加入日曆、跨裝置同步留待第二階段。
+## 搜尋收錄與正式網域
+
+.env.example 列出設定。預設 SITE_INDEXABLE=false，可維持真實資料測試版。
+
+正式啟用收錄時需要：
+
+- NEXT_PUBLIC_SITE_URL：真實 HTTPS origin，唔帶子路徑。
+- SITE_CONTACT_EMAIL：真實公開聯絡電郵。
+- SITE_OPERATOR_NAME：真實營運者名稱。
+- SITE_INDEXABLE=true：明確開啟收錄；必要設定缺失會阻止建置。
+
+目前按使用者決定沿用「跑期 RunDates」，聯絡資料稍後補齊。未有上述設定之前，繼續 noindex 測試版，唔妨礙開發。
+
+## 公開發布前剩餘工作
+
+1. 選定 GitHub repo、正式網域及部署平台，配置來源推送／部署流程。
+2. 補完優先資料待辦，增加已核實香港路跑覆蓋面。
+3. 完成桌面／手機瀏覽器與鍵盤操作驗證；目前有工具政策限制，未繞過。
+4. 補上真實營運者與聯絡資料，按實際託管／資料處理完成政策文件。
+5. 設定正式 origin、收錄及參數頁索引策略；核對 sitemap、canonical、活動資料。
+6. 安排人工核實及靜態重新建置頻率，唔將重建當成重新核實。
+7. 完整內容網站上線後申請 AdSense，再處理驗證、ads.txt、同意要求及效能。
+
+無會員、無收藏、無加入日曆、無廣告腳本。呢啲仍按既定階段處理。
