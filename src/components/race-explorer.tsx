@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { AdSlot, Icon } from "./ui";
+import { AdSidebar, AdSlot, Icon, showAdPlaceholders } from "./ui";
 import {
   defaultFilters,
   displayDate,
@@ -391,124 +391,129 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
         官方來源整理，狀態只對應所列渠道；超過 72 小時未核對會顯示待核實。
         {!ready && <span className="sr-only">正在載入你的篩選條件。</span>}
       </p>
-      <div className="race-list">
-        <div className="race-table-head" aria-hidden="true">
-          <span>比賽日期</span>
-          <span>賽事／組別</span>
-          <span>地區／起點</span>
-          <span>報名狀態</span>
-          <span />
-        </div>
-        {results.map(({ race, groups }, index) => {
-          const summary = statusSummary(race, groups, now);
-          const month = race.date.slice(0, 7);
-          const previousMonth = results[index - 1]?.race.date.slice(0, 7);
-          const deadline = groups
-            .filter((g) => groupStatus(race, g, now) === "open" && g.deadline)
-            .map((g) => g.registrationClosesAt ?? g.deadline!)
-            .sort()[0];
-          return (
-            <Fragment key={race.id}>
-              {filters.sort === "date" && month !== previousMonth && (
-                <div className="month-divider">
-                  <span>{monthLabel(race.date)}</span>
-                  <i />
-                </div>
-              )}
-              <article className="race-row">
-                <div className="race-date">
-                  <strong>{race.date.slice(8)}</strong>
-                  <span>
-                    {displayDate(race.date, { month: "short", day: undefined })}
-                    <small>
-                      {displayDate(race.date, {
-                        weekday: "short",
-                        month: undefined,
-                        day: undefined,
-                      })}
-                    </small>
-                  </span>
-                  {race.date !== race.endDate && <small className="multi-day">多日</small>}
-                </div>
-                <div className="race-info">
-                  <div className="race-tags">
-                    <span className="road-tag">路跑</span>
-                    {race.tags.map((tag) => (
-                      <span key={tag}>{tag}</span>
-                    ))}
-                  </div>
-                  <h3>
-                    <Link href={raceHref(race)}>{race.name}</Link>
-                  </h3>
-                  <p className="race-english">{race.englishName}</p>
-                  <div className="distance-tags">
-                    {groups.map((g) => (
-                      <span
-                        key={g.id}
-                        title={`${g.name}：${registrationLabels[groupStatus(race, g, now)]}`}
-                      >
-                        {distanceLabel(g.distanceKm)}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="race-location">
-                  <Icon name="pin" size={16} />
-                  <div>
-                    {race.venue}
-                    <small>
-                      {race.region ?? "按組別起點"} · {race.district}
-                    </small>
-                  </div>
-                </div>
-                <div className="race-status">
-                  <span className={`status-badge ${summary.key}`}>
-                    <i />
-                    {summary.label}
-                  </span>
-                  {deadline && (
-                    <small>
-                      {deadline.includes("T")
-                        ? formatTimestamp(deadline) + " HKT"
-                        : displayDate(deadline)}{" "}
-                      截止
-                    </small>
+      <div className={`race-results-layout${showAdPlaceholders ? " with-ad-rail" : ""}`}>
+        <div className="race-results-main">
+          <div className="race-list">
+            <div className="race-table-head" aria-hidden="true">
+              <span>比賽日期</span>
+              <span>賽事／組別</span>
+              <span>地區／起點</span>
+              <span>報名狀態</span>
+              <span />
+            </div>
+            {results.map(({ race, groups }, index) => {
+              const summary = statusSummary(race, groups, now);
+              const month = race.date.slice(0, 7);
+              const previousMonth = results[index - 1]?.race.date.slice(0, 7);
+              const deadline = groups
+                .filter((g) => groupStatus(race, g, now) === "open" && g.deadline)
+                .map((g) => g.registrationClosesAt ?? g.deadline!)
+                .sort()[0];
+              return (
+                <Fragment key={race.id}>
+                  {filters.sort === "date" && month !== previousMonth && (
+                    <div className="month-divider">
+                      <span>{monthLabel(race.date)}</span>
+                      <i />
+                    </div>
                   )}
-                  <small className="verification-label">
-                    {race.verifiedAt
-                      ? `核對 ${displayDate(race.verifiedAt.slice(0, 10))}`
-                      : "待核實"}
-                  </small>
-                </div>
-                <Link
-                  className="row-arrow"
-                  href={raceHref(race)}
-                  aria-label={`查看${race.name}詳情`}
-                >
-                  <Icon name="arrow" size={20} />
-                </Link>
-              </article>
-              {index === 5 && results.length > 7 && <AdSlot />}
-            </Fragment>
-          );
-        })}
-      </div>
-      {!results.length && (
-        <div className="empty-state">
-          <Icon name="search" size={36} />
-          <h3>{error ? "調整一下篩選範圍" : "暫時搵唔到符合條件嘅賽事"}</h3>
-          <p>試下放寬日期、移除部分條件，或者切換「全部」。</p>
-          <button
-            className="button button-dark"
-            onClick={() => update({ ...defaultFilters, view: "all" })}
-          >
-            查看全部賽事 <Icon name="arrow" />
-          </button>
+                  <article className="race-row">
+                    <div className="race-date">
+                      <strong>{race.date.slice(8)}</strong>
+                      <span>
+                        {displayDate(race.date, { month: "short", day: undefined })}
+                        <small>
+                          {displayDate(race.date, {
+                            weekday: "short",
+                            month: undefined,
+                            day: undefined,
+                          })}
+                        </small>
+                      </span>
+                      {race.date !== race.endDate && <small className="multi-day">多日</small>}
+                    </div>
+                    <div className="race-info">
+                      <div className="race-tags">
+                        <span className="road-tag">路跑</span>
+                        {race.tags.map((tag) => (
+                          <span key={tag}>{tag}</span>
+                        ))}
+                      </div>
+                      <h3>
+                        <Link href={raceHref(race)}>{race.name}</Link>
+                      </h3>
+                      <p className="race-english">{race.englishName}</p>
+                      <div className="distance-tags">
+                        {groups.map((g) => (
+                          <span
+                            key={g.id}
+                            title={`${g.name}：${registrationLabels[groupStatus(race, g, now)]}`}
+                          >
+                            {distanceLabel(g.distanceKm)}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="race-location">
+                      <Icon name="pin" size={16} />
+                      <div>
+                        {race.venue}
+                        <small>
+                          {race.region ?? "按組別起點"} · {race.district}
+                        </small>
+                      </div>
+                    </div>
+                    <div className="race-status">
+                      <span className={`status-badge ${summary.key}`}>
+                        <i />
+                        {summary.label}
+                      </span>
+                      {deadline && (
+                        <small>
+                          {deadline.includes("T")
+                            ? formatTimestamp(deadline) + " HKT"
+                            : displayDate(deadline)}{" "}
+                          截止
+                        </small>
+                      )}
+                      <small className="verification-label">
+                        {race.verifiedAt
+                          ? `核對 ${displayDate(race.verifiedAt.slice(0, 10))}`
+                          : "待核實"}
+                      </small>
+                    </div>
+                    <Link
+                      className="row-arrow"
+                      href={raceHref(race)}
+                      aria-label={`查看${race.name}詳情`}
+                    >
+                      <Icon name="arrow" size={20} />
+                    </Link>
+                  </article>
+                  {index === 5 && results.length > 7 && <AdSlot />}
+                </Fragment>
+              );
+            })}
+          </div>
+          {!results.length && (
+            <div className="empty-state">
+              <Icon name="search" size={36} />
+              <h3>{error ? "調整一下篩選範圍" : "暫時搵唔到符合條件嘅賽事"}</h3>
+              <p>試下放寬日期、移除部分條件，或者切換「全部」。</p>
+              <button
+                className="button button-dark"
+                onClick={() => update({ ...defaultFilters, view: "all" })}
+              >
+                查看全部賽事 <Icon name="arrow" />
+              </button>
+            </div>
+          )}
+          <div className="results-footer">
+            <span>顯示全部 {results.length} 場符合條件嘅賽事</span>
+            <a href="#race-list">返回篩選 ↑</a>
+          </div>
         </div>
-      )}
-      <div className="results-footer">
-        <span>顯示全部 {results.length} 場符合條件嘅賽事</span>
-        <a href="#race-list">返回篩選 ↑</a>
+        <AdSidebar format="sidebar-tall" />
       </div>
     </section>
   );

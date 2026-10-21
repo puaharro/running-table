@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { races } from "@/data/races";
 import { guides } from "@/data/guides";
-import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
+import { AdSidebar, AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { ReturnLink } from "@/components/return-link";
 import { LiveRaceStatus, RegistrationGroups } from "@/components/live-registration";
 import { displayDate, distanceLabel, formatTimestamp } from "@/lib/races";
@@ -200,6 +200,7 @@ export default async function RacePage({ params }: Props) {
               </a>
               <small>將開啟大會網站。本站唔收報名費，亦唔保證即時餘額。</small>
             </div>
+            <AdSidebar />
             <div className="sidebar-note">
               <Icon name="check" />
               <h3>抽籤截止，唔等於全部渠道截止。</h3>

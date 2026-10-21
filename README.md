@@ -54,3 +54,5 @@ npm start
 公開收錄需要設定正式 HTTPS 網域、真實營運者及聯絡電郵，再明確設定 SITE_INDEXABLE=true。網站會檢查必要設定；詳細清單見開發文件。品牌按使用者決定先沿用「跑期 RunDates」，公開聯絡資料稍後補齊。
 
 本地 Git 保留開發分支與提交。已備妥 GitHub Actions，但未喺遠端執行。
+
+側欄及內容廣告安排見 [廣告版位規劃](docs/ADVERTISING.md)。

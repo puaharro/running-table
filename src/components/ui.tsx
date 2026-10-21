@@ -120,14 +120,36 @@ export function Footer() {
     </footer>
   );
 }
-export function AdSlot() {
-  if (process.env.NEXT_PUBLIC_SHOW_AD_PLACEHOLDERS !== "true") return null;
+export const showAdPlaceholders = process.env.NEXT_PUBLIC_SHOW_AD_PLACEHOLDERS === "true";
+export function AdSlot({
+  format = "inline",
+}: {
+  format?: "inline" | "sidebar-tall" | "sidebar-box";
+}) {
+  if (!showAdPlaceholders) return null;
   return (
-    <aside className="ad-slot" aria-label="廣告版位預留">
+    <aside
+      className={`ad-slot ad-slot--${format}`}
+      aria-label={format === "inline" ? "內容廣告版位預留" : "側欄廣告版位預留"}
+    >
       <span>ADVERTISEMENT</span>
-      <p>廣告版位預留</p>
+      <p>{format === "inline" ? "廣告版位預留" : "側欄廣告版位預留"}</p>
+      {format !== "inline" && (
+        <strong className="ad-size-label">
+          {format === "sidebar-tall" ? "300 × 600" : "300 × 250"}
+        </strong>
+      )}
       <small>尚未接入 Google AdSense</small>
     </aside>
+  );
+}
+export function AdSidebar({ format = "sidebar-box" }: { format?: "sidebar-tall" | "sidebar-box" }) {
+  if (!showAdPlaceholders) return null;
+  return (
+    <div className="ad-rail">
+      <AdSlot format={format} />
+      <p className="ad-rail-note">廣告位預覽 · 窄畫面自動調整</p>
+    </div>
   );
 }
 export function GuideCard({ guide }: { guide: Guide }) {

@@ -2398,3 +2398,84 @@ p {
     animation: none !important;
   }
 }
+
+/* Ad rails stay in normal document flow, apart from controls and official links. */
+.race-results-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+.race-results-main {
+  min-width: 0;
+}
+.ad-rail {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto 24px;
+}
+.ad-slot--sidebar-tall,
+.ad-slot--sidebar-box {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  outline: 1px dashed #cdd7cc;
+  outline-offset: -1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 20px;
+}
+.ad-slot--sidebar-tall {
+  aspect-ratio: 1 / 2;
+}
+.ad-slot--sidebar-box {
+  aspect-ratio: 6 / 5;
+}
+.ad-slot .ad-size-label {
+  font-size: 24px;
+  letter-spacing: 0.03em;
+  font-weight: 400;
+  color: #8a9987;
+}
+.ad-rail-note {
+  font-size: 9px;
+  text-align: center;
+  color: #83917f;
+  margin: 9px 0 0;
+}
+.detail-sidebar > .ad-rail,
+.article-sidebar > .ad-rail {
+  margin-top: 28px;
+}
+@media (min-width: 1120px) {
+  .race-results-layout.with-ad-rail {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    align-items: start;
+  }
+  .with-ad-rail .race-table-head,
+  .with-ad-rail .race-row {
+    grid-template-columns: 88px minmax(0, 1fr) 130px 135px 24px;
+    gap: 12px;
+    padding-inline: 16px;
+  }
+  .with-ad-rail .race-date {
+    gap: 7px;
+  }
+  .with-ad-rail .race-date > strong {
+    font-size: 32px;
+  }
+}
+@media (max-width: 1119px) {
+  .race-results-layout > .ad-rail .ad-slot--sidebar-tall {
+    aspect-ratio: 6 / 5;
+  }
+  .race-results-layout > .ad-rail .ad-size-label {
+    font-size: 0;
+  }
+  .race-results-layout > .ad-rail .ad-size-label::after {
+    content: "300 × 250";
+    font-size: 24px;
+  }
+}
