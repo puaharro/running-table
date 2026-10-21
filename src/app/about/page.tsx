@@ -1,0 +1,5 @@
+import Link from "next/link";
+import { Breadcrumb } from "@/components/ui";
+import { pageMetadata } from "@/lib/site";
+export const metadata = pageMetadata("關於跑期及資料政策", "跑期嘅網站定位、資料核實方式及更正政策。", "/about/");
+export default function About() { return <main id="main" className="content-main shell"><Breadcrumb items={[{label:"關於跑期"}]}/><div className="page-heading"><div className="eyebrow">ABOUT RUNDATES</div><h1>每一個起點，<br/>都值得清楚嘅資訊。</h1><p>跑期係一個以香港路跑為主嘅資訊網站，協助跑手比較賽事同掌握報名資料。</p></div><div className="prose narrow"><section><h2>網站目前處於開發預覽</h2><p>所有賽事資料均為自行設計嘅虛構示範。本站目前唔提供真實報名服務、唔收款、無會員系統，亦未接入 Google AdSense。</p></section><section><h2>正式資料點樣整理</h2><p>正式上線前，每場賽事會按主辦方官網或正式公告核實，清楚記錄來源同最後核實時間。報名狀態按組別分開處理，未知資料標示「未公布」或「待核實」。</p><p>第三方資訊唔代替官方條款。付款前應再次核對比賽年份、組別、費用、資格及退款／改期安排。</p></section><section><h2>原創內容與廣告</h2><p>本站指南提供報名同選賽嘅整理方法。內容同廣告會清楚區分，廣告版位唔會偽裝成官方報名入口。目前顯示嘅廣告區只係版面預留。</p></section><section id="corrections"><h2>資料更正與聯絡</h2><p>此原型尚未開放公開投稿或聯絡表格。正式上線前，需要補上真實營運者身份、可用聯絡渠道同更正處理流程。目前測試意見請直接喺建立此網站嘅對話中提出。</p></section><Link className="text-link" href="/guides/">閱讀原創指南 →</Link></div></main>; }
