@@ -4,6 +4,7 @@ import { AdFrame } from "@/components/ad-frame";
 import { siteName, siteUrl } from "@/lib/site";
 import { assertReleaseReady, releaseSettings } from "@/lib/release";
 import "./globals.css";
+import "./refresh.css";
 
 assertReleaseReady();
 

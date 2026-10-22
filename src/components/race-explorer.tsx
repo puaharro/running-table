@@ -37,7 +37,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [now, setNow] = useState(initialNow);
   const [ready, setReady] = useState(false);
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const [copyMessage, setCopyMessage] = useState("");
   useEffect(() => {
     const sync = () => {
@@ -51,6 +51,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
       }
     };
     sync();
+    setExpanded(window.matchMedia("(min-width: 768px)").matches);
     setNow(new Date().toISOString());
     setReady(true);
     window.addEventListener("popstate", sync);
@@ -76,6 +77,12 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     } catch {
       /* Sharing and browser back remain available without storage. */
     }
+  }
+  function showResults() {
+    setExpanded(false);
+    window.requestAnimationFrame(() => {
+      document.getElementById("results-toolbar")?.scrollIntoView({ block: "start" });
+    });
   }
   function field<K extends keyof Filters>(key: K, value: Filters[K]) {
     update({ ...filters, [key]: value });
@@ -149,8 +156,8 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
       <div className="section-heading explorer-heading">
         <div>
           <div className="eyebrow">THE RACE CALENDAR</div>
-          <h2 id="explorer-heading">搵到你想跑嘅一場。</h2>
-          <p>按自己嘅節奏，揀日期、揀距離、揀下一個起點。</p>
+          <h2 id="explorer-heading">賽事月曆</h2>
+          <p>揀日期、揀距離，搵到適合自己嘅一場。</p>
         </div>
         <div className="stat-pair">
           <div>
@@ -173,7 +180,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               value={filters.q}
               maxLength={200}
               onChange={(e) => field("q", e.target.value)}
-              placeholder="搜尋比賽名稱、地點或主辦方…"
+              placeholder="搜尋賽事、地點或主辦方"
             />
           </label>
           <button
@@ -183,7 +190,8 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             onClick={() => setExpanded(!expanded)}
           >
             <Icon name="filter" />
-            篩選條件<span>{expanded ? "−" : "+"}</span>
+            篩選{chips.length > 0 && <b className="filter-count">{chips.length}</b>}
+            <span>{expanded ? "−" : "+"}</span>
           </button>
         </div>
         <div className="quick-row">
@@ -318,7 +326,13 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             </fieldset>
           </div>
           <div className="filter-hint">
-            同一項可多選；不同條件同時符合。報名狀態以個別組別為準。
+            <span>條件可組合及多選 · 狀態以個別組別為準</span>
+            <button className="filter-reset" onClick={() => update({ ...defaultFilters })}>
+              重設條件
+            </button>
+            <button className="mobile-filter-done" onClick={showResults}>
+              查看 {results.length} 場賽事 <Icon name="arrow" size={16} />
+            </button>
           </div>
         </div>
       </div>
@@ -345,7 +359,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
           </button>
         </div>
       )}
-      <div className="results-toolbar">
+      <div className="results-toolbar" id="results-toolbar">
         <div className="view-tabs" role="group" aria-label="賽事時段">
           {[
             ["upcoming", "即將舉行"],
@@ -419,9 +433,10 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                   )}
                   <article className="race-row">
                     <div className="race-date">
+                      <span className="race-date-month">{Number(race.date.slice(5, 7))} 月</span>
                       <strong>{race.date.slice(8)}</strong>
                       <span>
-                        {displayDate(race.date, { month: "short", day: undefined })}
+                        {race.date.slice(0, 4)}
                         <small>
                           {displayDate(race.date, {
                             weekday: "short",
