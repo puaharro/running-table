@@ -1,24 +1,16 @@
-/* RunDates visual refresh — keep advertising formats in globals.css. */
-:root {
-  --paper: #f4f6f3;
-  --ink: #183a3b;
-  --muted: #607373;
-  --line: #dce5de;
-  --coral: #e45d3c;
-  --coral-dark: #aa3b23;
-}
+/* NXTGO visual refresh — keep advertising formats in globals.css. */
 body {
   background: var(--paper);
 }
 .prototype-strip {
-  background: #163a3b;
-  color: #e8f0e8;
-  font-size: 11px;
+  background: var(--surface-dark);
+  color: var(--text-on-dark);
+  font-size: var(--text-sm);
   padding-block: 8px;
   letter-spacing: 0;
 }
 .site-header {
-  background: #fff;
+  background: var(--surface-card);
 }
 .header-inner {
   height: 82px;
@@ -28,22 +20,22 @@ body {
   font-size: 30px;
 }
 .brand-en {
-  font-size: 9px;
+  font-size: var(--text-sm);
   letter-spacing: 0.2em;
 }
 .site-header nav {
   gap: 28px;
-  font-size: 13px;
+  font-size: var(--text-sm);
 }
 .header-note {
   padding: 8px 12px;
-  border: 1px solid #dce5de;
+  border: 1px solid var(--border-subtle);
   border-radius: 30px;
   color: #517064;
   background: #f5f8f3;
 }
 .calendar-masthead {
-  background: #eaf0e7;
+  background: var(--surface-brand);
   border-bottom: 1px solid #dce5d8;
 }
 .masthead-grid {
@@ -51,14 +43,14 @@ body {
   grid-template-columns: 1.15fr 1fr;
   gap: clamp(30px, 4vw, 70px);
   align-items: center;
-  padding-block: 38px;
+  padding-block: 28px;
 }
 .masthead-kicker {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   color: #5d7869;
-  font-size: 10px;
+  font-size: var(--text-sm);
   letter-spacing: 0.14em;
   font-weight: 700;
 }
@@ -66,39 +58,32 @@ body {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #e45d3c;
+  background: var(--brand-accent);
 }
 .masthead-copy h1 {
-  font-size: clamp(34px, 3.8vw, 52px);
-  letter-spacing: -0.05em;
+  font-size: clamp(34px, 3.5vw, 46px);
+  letter-spacing: -0.03em;
   line-height: 1.27;
   margin: 18px 0 14px;
-  font-weight: 800;
+  font-weight: 700;
 }
 .masthead-copy h1 span {
-  color: #ce4f31;
+  color: var(--brand-emphasis);
 }
 .masthead-copy > p {
-  font-size: 14px;
+  font-size: var(--text-md);
   line-height: 1.9;
   margin: 0 0 22px;
-  color: #516d62;
+  color: var(--text-secondary);
 }
 .masthead-actions {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
-}
-.button {
-  border-radius: 7px;
-  min-height: 44px;
-}
-.button-coral {
-  box-shadow: 0 3px 0 #b5482e18;
+  gap: var(--space-4);
 }
 .masthead-guide {
-  font-size: 12px;
+  font-size: var(--text-sm);
   font-weight: 600;
   text-underline-offset: 5px;
 }
@@ -109,8 +94,8 @@ body {
   display: flex;
   align-items: center;
   gap: 7px;
-  color: #5a7265;
-  font-size: 10px;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
   margin-top: 21px;
 }
 .masthead-trust i {
@@ -122,10 +107,10 @@ body {
 }
 .next-race-card {
   display: block;
-  background: #173c3e;
+  background: var(--surface-dark);
   color: white;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   box-shadow: 0 12px 24px #183a3b12;
   transform: rotate(-1deg);
   transition: transform 0.2s;
@@ -140,11 +125,11 @@ body {
   align-items: center;
   gap: 14px;
   padding: 17px 22px 0;
-  font-size: 11px;
+  font-size: var(--text-sm);
   color: #cbdccf;
 }
 .next-race-visual {
-  height: 138px;
+  height: 112px;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -162,19 +147,19 @@ body {
   border-radius: 50%;
   transform: rotate(-26deg);
   box-shadow:
-    0 0 0 14px #173c3e,
+    0 0 0 14px var(--surface-dark),
     0 0 0 15px #6e8b7f,
-    0 0 0 29px #173c3e,
+    0 0 0 29px var(--surface-dark),
     0 0 0 30px #6e8b7f,
-    0 0 0 44px #173c3e,
+    0 0 0 44px var(--surface-dark),
     0 0 0 45px #6e8b7f;
   opacity: 0.65;
 }
 .next-race-day {
   z-index: 1;
-  font-size: 78px;
+  font-size: 64px;
   font-weight: 700;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.03em;
   line-height: 0.95;
   color: #e4ebbf;
   font-variant-numeric: tabular-nums;
@@ -182,7 +167,7 @@ body {
 .next-race-day span {
   display: block;
   color: #b6cabb;
-  font-size: 10px;
+  font-size: var(--text-sm);
   font-weight: 500;
   letter-spacing: 0.12em;
   margin-top: 9px;
@@ -190,20 +175,20 @@ body {
 .next-race-word {
   z-index: 1;
   font-size: 27px;
-  font-weight: 800;
+  font-weight: 700;
   color: #bfd1a7;
   line-height: 0.95;
   letter-spacing: -0.04em;
   margin-right: 2px;
 }
 .next-race-bottom {
-  background: #fff;
+  background: var(--surface-card);
   color: var(--ink);
   padding: 17px 22px 20px;
 }
 .next-race-bottom small {
-  font-size: 11px;
-  color: #6c7d71;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
 }
 .next-race-bottom h2 {
   font-size: 19px;
@@ -219,7 +204,7 @@ body {
 .next-race-bottom > div > span {
   border-radius: 4px;
   padding: 4px 8px;
-  font-size: 10px;
+  font-size: var(--text-sm);
   background: #eff3e8;
   color: #3e6654;
 }
@@ -230,11 +215,11 @@ body {
   padding-right: 0;
 }
 .explorer {
-  padding-top: 36px;
+  padding-top: 28px;
 }
 .eyebrow {
   color: #66816b;
-  font-size: 10px;
+  font-size: var(--text-sm);
   letter-spacing: 0.13em;
 }
 .section-heading h2 {
@@ -245,7 +230,7 @@ body {
   margin-bottom: 22px;
 }
 .section-heading p {
-  font-size: 13px;
+  font-size: var(--text-sm);
   line-height: 1.8;
 }
 .stat-pair {
@@ -260,10 +245,10 @@ body {
   font-variant-numeric: tabular-nums;
 }
 .stat-pair span {
-  font-size: 11px;
+  font-size: var(--text-sm);
 }
 .filter-card {
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   border-color: #d8e2d8;
   box-shadow: 0 4px 16px #193c2a05;
   overflow: hidden;
@@ -274,20 +259,16 @@ body {
 .search-box {
   background: #f5f7f3;
   border-color: #e0e7dd;
-  border-radius: 7px;
-}
-.search-box:focus-within {
-  box-shadow: 0 0 0 2px #8da88b40;
-  border-color: #789779;
+  border-radius: var(--radius-control);
 }
 .search-box input {
   min-height: 48px;
-  font-size: 14px;
+  font-size: var(--text-base);
 }
 .filter-toggle {
-  border-radius: 7px;
+  border-radius: var(--radius-control);
   min-height: 48px;
-  font-size: 13px;
+  font-size: var(--text-sm);
 }
 .filter-toggle.active {
   background: #edf3e8;
@@ -300,18 +281,18 @@ body {
   width: 21px;
   height: 21px;
   border-radius: 50%;
-  font-size: 10px;
+  font-size: var(--text-sm);
   background: #193e3e;
-  color: #fff;
+  color: var(--surface-card);
 }
 .quick-row {
   padding: 12px 20px 18px;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .quick-row button {
   background: #f0f4ed;
-  min-height: 34px;
-  font-size: 12px;
+  min-height: var(--control-size);
+  font-size: var(--text-sm);
   border-radius: 5px;
   padding: 6px 12px;
 }
@@ -319,9 +300,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: #e5eee0;
-  color: #315b3b;
-  box-shadow: inset 0 0 0 1px #c6d7be;
+  background: #f0f4ed;
+  color: var(--ink);
 }
 .quick-row .only-open-shortcut[aria-pressed="true"] {
   background: #214d3c;
@@ -333,41 +313,31 @@ body {
   align-items: center;
   gap: 4px;
   color: #496c3e;
-  font-size: 11px;
+  font-size: var(--text-sm);
   font-weight: 600;
   line-height: 1.7;
 }
 .deadline-countdown.urgent {
-  color: #aa3b23;
+  color: var(--action-primary-hover);
 }
 .race-status .deadline-exact {
-  font-size: 9px;
-  color: #718173;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
 }
 .filter-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
+  gap: var(--space-6);
   padding: 22px 20px;
   background: #fcfdfa;
 }
 .filter-grid .date-field {
   grid-column: auto;
 }
-.filter-grid .sport-field {
-  grid-column: 2;
-  grid-row: 2;
-}
-.filter-grid .status-field {
-  grid-column: 3;
-  grid-row: 1 / 3;
-  border-left: 1px solid #e2e9df;
-  padding-left: 20px;
-}
 .filter-grid legend {
-  font-size: 10px;
+  font-size: var(--text-sm);
 }
 .filter-grid legend > span {
-  font-size: 13px;
+  font-size: var(--text-sm);
 }
 .date-inputs {
   flex-direction: row;
@@ -381,9 +351,9 @@ body {
   display: inline;
 }
 .date-inputs input {
-  min-height: 38px;
+  min-height: var(--control-size);
   padding: 6px;
-  font-size: 11px;
+  font-size: var(--text-sm);
   border-radius: 5px;
 }
 .option-row {
@@ -391,36 +361,30 @@ body {
 }
 .option-row button {
   border-radius: 5px;
-  min-height: 36px;
-  font-size: 12px;
+  min-height: var(--control-size);
+  font-size: var(--text-sm);
   padding: 6px 10px;
 }
-.option-row button[aria-pressed="true"] {
-  background: #e6efdf;
-  border-color: #7a9b6b;
-  color: #284c33;
-  box-shadow: inset 0 0 0 1px #7a9b6b;
-}
 .filter-grid small {
-  font-size: 10px;
+  font-size: var(--text-sm);
 }
 .custom-range {
-  font-size: 11px;
+  font-size: var(--text-sm);
 }
 .custom-range summary {
   padding-block: 5px;
 }
 .number-inputs input {
-  min-height: 36px;
-  font-size: 12px;
+  min-height: var(--control-size);
+  font-size: var(--text-sm);
 }
 .filter-hint {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-3);
   padding: 12px 20px;
-  font-size: 11px;
+  font-size: var(--text-sm);
   background: white;
 }
 .filter-reset {
@@ -430,7 +394,7 @@ body {
   text-decoration: underline;
   text-underline-offset: 4px;
   padding: 5px;
-  font-size: 11px;
+  font-size: var(--text-sm);
   white-space: nowrap;
 }
 .mobile-filter-done {
@@ -441,20 +405,20 @@ body {
   min-height: 32px;
 }
 .results-toolbar {
-  padding-top: 24px;
+  padding-top: var(--space-6);
   border-bottom: 0;
   padding-bottom: 5px;
 }
 .view-tabs {
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: #e7ede5;
   padding: 4px;
   gap: 3px;
 }
 .view-tabs button {
-  min-height: 37px;
+  min-height: var(--control-size);
   border-radius: 5px;
-  font-size: 12px;
+  font-size: var(--text-sm);
 }
 .view-tabs button[aria-pressed="true"] {
   background: white;
@@ -464,17 +428,17 @@ body {
 .results-actions select {
   border: 1px solid #d9e2d7;
   border-radius: 5px;
-  padding: 8px;
-  font-size: 12px;
+  padding: var(--space-2);
+  font-size: var(--text-sm);
   background: white;
-  min-height: 38px;
+  min-height: var(--control-size);
 }
 .share-button {
-  font-size: 11px;
-  min-height: 38px;
+  font-size: var(--text-sm);
+  min-height: var(--control-size);
 }
 .data-note {
-  font-size: 11px;
+  font-size: var(--text-sm);
   line-height: 1.7;
   margin: 10px 0 14px;
 }
@@ -486,19 +450,19 @@ body {
 }
 .race-table-head,
 .race-row {
-  grid-template-columns: 76px minmax(0, 1fr) 150px 145px 28px;
+  grid-template-columns: 76px minmax(0, 1fr) 140px 168px 44px;
   gap: 20px;
 }
 .race-table-head {
   background: transparent;
   padding: 12px 22px;
-  font-size: 11px;
-  color: #7b8c7b;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
 }
 .race-row {
-  background: #fff;
+  background: var(--surface-card);
   border: 1px solid #e0e7dc;
-  border-radius: 10px;
+  border-radius: var(--radius-card);
   margin-bottom: 10px;
   padding: 22px;
   box-shadow: 0 2px 3px #15372a02;
@@ -507,7 +471,7 @@ body {
   border-bottom: 1px solid #e0e7dc;
 }
 .race-row:hover {
-  background: #fff;
+  background: var(--surface-card);
   border-color: #b7c9b0;
   box-shadow: 0 4px 16px #22482a08;
 }
@@ -517,7 +481,7 @@ body {
   gap: 0;
   align-items: center;
   border: 1px solid #e1e8db;
-  border-radius: 7px;
+  border-radius: var(--radius-control);
   background: #f8faf4;
   overflow: hidden;
   padding: 0 0 6px;
@@ -527,7 +491,7 @@ body {
   display: block;
   text-align: center;
   color: #5d7756;
-  font-size: 10px;
+  font-size: var(--text-sm);
   font-weight: 700;
   background: #eaf0e2;
   padding: 4px 0;
@@ -540,16 +504,16 @@ body {
   margin: 4px 0 1px;
 }
 .race-date > span:not(.race-date-month) {
-  font-size: 9px;
+  font-size: var(--text-sm);
   text-align: center;
   line-height: 1.5;
 }
 .race-date > span > small {
-  font-size: 9px;
+  font-size: var(--text-sm);
 }
 .race-date .multi-day {
   position: static;
-  font-size: 9px;
+  font-size: var(--text-sm);
 }
 .race-info h3 {
   font-size: 17px;
@@ -557,17 +521,17 @@ body {
   margin-bottom: 2px;
 }
 .race-english {
-  font-size: 11px;
+  font-size: var(--text-sm);
   line-height: 1.6;
-  color: #8a978b;
+  color: var(--text-secondary);
   margin-bottom: 9px;
 }
 .race-tags {
-  font-size: 10px;
+  font-size: var(--text-sm);
   margin-bottom: 5px;
 }
 .distance-tags span {
-  font-size: 11px;
+  font-size: var(--text-sm);
   border: 0;
   border-radius: 4px;
   padding: 4px 8px;
@@ -575,49 +539,44 @@ body {
   color: #45623c;
 }
 .race-location {
-  font-size: 12px;
+  font-size: var(--text-sm);
   line-height: 1.7;
 }
 .race-location small {
-  font-size: 10px;
-}
-.status-badge {
-  border-radius: 5px;
-  font-size: 11px;
-  padding: 5px 8px;
+  font-size: var(--text-sm);
 }
 .race-status small {
-  font-size: 10px;
+  font-size: var(--text-sm);
   line-height: 1.6;
 }
 .race-status .verification-label {
-  font-size: 9px;
+  font-size: var(--text-sm);
 }
 .month-divider {
   padding: 16px 0 12px;
   background: transparent;
   border: 0;
-  font-size: 12px;
+  font-size: var(--text-sm);
   color: #55724e;
 }
 .row-arrow {
   background: #f1f5ec;
   border: 0;
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   color: #47703d;
 }
 .results-footer {
-  font-size: 11px;
+  font-size: var(--text-sm);
   padding-top: 10px;
 }
 .guides-section {
-  padding-top: 48px;
+  padding-top: var(--space-12);
   padding-bottom: 60px;
 }
 .guide-card {
-  border-radius: 11px;
+  border-radius: var(--radius-card);
   overflow: hidden;
   border-color: #dee6da;
   background: white;
@@ -629,7 +588,7 @@ body {
   padding: 22px;
 }
 .guide-card-body p {
-  font-size: 13px;
+  font-size: var(--text-sm);
   line-height: 1.9;
 }
 .site-footer {
@@ -641,10 +600,10 @@ body {
 .source-card,
 .group-card,
 .toc {
-  border-radius: 10px;
+  border-radius: var(--radius-card);
 }
 .detail-heading h1 {
-  letter-spacing: -0.045em;
+  letter-spacing: -0.03em;
 }
 .detail-content > section > h2,
 .article-content h2 {
@@ -652,7 +611,7 @@ body {
 }
 .outer-ad-rail {
   border-color: #cbd5c6;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
   background: #eff3ea;
   color: #7c8b74;
 }
@@ -660,7 +619,253 @@ body {
   border-color: #d6e1cf;
 }
 .anchor-ad-art {
-  border-radius: 7px;
+  border-radius: var(--radius-control);
+}
+input {
+  caret-color: var(--coral-dark);
+}
+::selection {
+  background: var(--state-selected);
+  color: var(--ink);
+}
+.race-location small,
+.race-status .verification-label {
+  color: var(--text-secondary);
+}
+.data-note,
+.filter-hint {
+  color: var(--text-secondary);
+}
+.race-status .deadline-exact {
+  font-variant-numeric: tabular-nums;
+}
+.date-shortcuts {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.date-shortcuts button {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+  border-radius: 6px;
+  min-height: var(--control-size);
+  padding: 7px 10px;
+  font-size: var(--text-sm);
+}
+.advanced-filters {
+  border-top: 1px solid var(--line);
+  padding: 0 20px;
+}
+.advanced-filters > summary,
+.custom-range > summary,
+.group-status-list summary {
+  cursor: pointer;
+  min-height: var(--control-size);
+  align-content: center;
+  color: var(--ink);
+  font-size: var(--text-sm);
+  text-underline-offset: 4px;
+}
+.advanced-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  padding-bottom: 20px;
+}
+.advanced-grid fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.advanced-grid legend {
+  font-size: var(--text-md);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.number-inputs {
+  flex-wrap: wrap;
+}
+.number-inputs input {
+  min-width: 0;
+  flex: 1;
+  width: 90px;
+}
+.group-status-list {
+  margin-top: 10px;
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+.group-status-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.group-status-list li + li {
+  margin-top: 7px;
+}
+.group-status-list li > span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.group-status-list strong {
+  color: #315b3b;
+}
+.group-channel-status {
+  color: var(--text-secondary);
+}
+.group-channel-status b {
+  font-weight: 600;
+}
+.group-status-list summary {
+  color: var(--coral-dark);
+}
+.race-info,
+.race-status {
+  min-width: 0;
+}
+.registration-summary {
+  margin: 0 0 32px;
+  padding-block: 8px;
+}
+.registration-summary-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.registration-summary-heading h2 {
+  font-size: 24px;
+}
+.registration-summary-heading a,
+.summary-official-link {
+  font-size: var(--text-md);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  min-height: var(--control-size);
+  align-content: center;
+}
+.registration-summary > p {
+  font-size: var(--text-md);
+  color: var(--text-secondary);
+  margin: 8px 0 16px;
+  line-height: 1.8;
+}
+.registration-summary-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-block: 1px solid var(--line);
+}
+.registration-summary-list > li {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr auto;
+  gap: var(--space-6);
+  padding: 18px 0;
+  align-items: center;
+}
+.registration-summary-list > li + li {
+  border-top: 1px solid var(--line);
+}
+.summary-group-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.summary-group-name strong {
+  width: 100%;
+  font-size: var(--text-base);
+  overflow-wrap: anywhere;
+}
+.summary-group-name > span:not(.status-badge) {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+.registration-summary-list dl {
+  display: grid;
+  grid-template-columns: 0.7fr 1.3fr;
+  gap: var(--space-4);
+  margin: 0;
+}
+.registration-summary-list dt {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.registration-summary-list dd {
+  font-size: var(--text-md);
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+.registration-summary-list dd small {
+  display: block;
+  font-weight: 400;
+  margin-top: 5px;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+#registration-groups,
+#results-toolbar {
+  scroll-margin-top: var(--space-6);
+}
+.detail-content section > p,
+.article-content p,
+.article-content li {
+  font-size: var(--text-base);
+  line-height: 1.9;
+}
+.key-facts span,
+.group-card h3,
+.group-card dt,
+.group-sources,
+.source-card small {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+.key-facts strong,
+.group-card dl,
+.group-card dd,
+.group-note,
+.group-official-link {
+  font-size: var(--text-md);
+}
+.verified-notice p,
+.verified-notice strong {
+  font-size: var(--text-sm);
+  line-height: 1.8;
+  color: #74521f;
+}
+.group-official-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-size);
+}
+.filter-reset,
+.selected-filters .clear-all {
+  color: var(--coral-dark);
+}
+@media (max-width: 1100px) {
+  .filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .filter-grid .date-field {
+    grid-column: 1 / -1;
+  }
+  .registration-summary-list > li {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+  .summary-official-link {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
 }
 @media (min-width: 768px) and (max-width: 1100px) {
   .header-note {
@@ -668,12 +873,12 @@ body {
   }
   .race-table-head,
   .race-row {
-    grid-template-columns: 64px minmax(0, 1fr) 115px 123px 24px;
-    gap: 12px;
+    grid-template-columns: 64px minmax(0, 1fr) 110px 146px 44px;
+    gap: var(--space-3);
     padding-inline: 16px;
   }
   .race-info h3 {
-    font-size: 15px;
+    font-size: var(--text-base);
   }
   .masthead-grid {
     gap: 26px;
@@ -684,7 +889,7 @@ body {
     width: calc(100% - 32px);
   }
   .prototype-strip {
-    font-size: 10px;
+    font-size: var(--text-sm);
     padding: 7px 12px;
   }
   .prototype-strip span {
@@ -692,21 +897,21 @@ body {
   }
   .header-inner {
     height: 70px;
-    gap: 12px;
+    gap: var(--space-3);
   }
   .brand {
     font-size: 25px;
     gap: 9px;
   }
   .brand-en {
-    font-size: 7px;
+    font-size: var(--text-xs);
   }
   .site-header nav {
-    gap: 16px;
-    font-size: 11px;
+    gap: var(--space-4);
+    font-size: var(--text-sm);
   }
   .site-header nav a {
-    min-height: 44px;
+    min-height: var(--control-size);
     display: flex;
     align-items: center;
   }
@@ -716,11 +921,11 @@ body {
   }
   .masthead-grid {
     grid-template-columns: 1fr;
-    padding-block: 28px 24px;
-    gap: 24px;
+    padding-block: 22px 20px;
+    gap: var(--space-6);
   }
   .masthead-kicker {
-    font-size: 8px;
+    font-size: var(--text-sm);
     letter-spacing: 0.12em;
   }
   .masthead-copy h1 {
@@ -728,28 +933,28 @@ body {
     margin: 14px 0 12px;
   }
   .masthead-copy > p {
-    font-size: 13px;
+    font-size: var(--text-sm);
     line-height: 1.8;
     margin-bottom: 18px;
   }
   .masthead-actions {
-    gap: 12px;
+    gap: var(--space-3);
   }
   .masthead-actions .button {
     padding: 11px 17px;
-    font-size: 12px;
+    font-size: var(--text-sm);
     gap: 14px;
   }
   .masthead-guide {
-    font-size: 11px;
+    font-size: var(--text-sm);
   }
   .masthead-trust {
-    margin-top: 16px;
-    font-size: 9px;
+    margin-top: var(--space-4);
+    font-size: var(--text-sm);
   }
   .next-race-card {
     transform: none;
-    border-radius: 10px;
+    border-radius: var(--radius-card);
     display: grid;
     grid-template-columns: 88px minmax(0, 1fr);
   }
@@ -758,8 +963,8 @@ body {
   }
   .next-race-visual {
     height: auto;
-    min-height: 126px;
-    padding: 12px;
+    min-height: 116px;
+    padding: var(--space-3);
     justify-content: center;
   }
   .next-race-day {
@@ -767,7 +972,7 @@ body {
     text-align: center;
   }
   .next-race-day span {
-    font-size: 8px;
+    font-size: var(--text-sm);
     letter-spacing: 0;
   }
   .next-race-word {
@@ -777,27 +982,27 @@ body {
     padding: 15px;
   }
   .next-race-bottom h2 {
-    font-size: 14px;
+    font-size: var(--text-md);
     margin: 5px 0 10px;
   }
   .next-race-bottom small {
-    font-size: 10px;
+    font-size: var(--text-sm);
   }
   .next-race-bottom > div > span {
-    font-size: 9px;
+    font-size: var(--text-sm);
   }
   .next-race-bottom > div > .next-race-detail {
     display: none;
   }
   .explorer {
     padding-top: 28px;
-    scroll-margin-top: 12px;
+    scroll-margin-top: var(--space-3);
   }
   .section-heading h2 {
     font-size: 24px;
   }
   .section-heading p {
-    font-size: 12px;
+    font-size: var(--text-sm);
   }
   .explorer-heading {
     gap: 10px;
@@ -811,37 +1016,34 @@ body {
     font-size: 27px;
   }
   .stat-pair span {
-    font-size: 9px;
+    font-size: var(--text-sm);
   }
   .stat-pair > div {
     padding-left: 12px;
   }
   .search-row {
     padding: 14px 14px 0;
-    gap: 8px;
+    gap: var(--space-2);
   }
   .search-box {
     padding-inline: 10px;
-    gap: 8px;
+    gap: var(--space-2);
   }
   .search-box input {
-    font-size: 16px;
-    min-height: 44px;
+    font-size: var(--text-base);
+    min-height: var(--control-size);
     width: 100%;
-  }
-  .search-box input::placeholder {
-    font-size: 12px;
   }
   .filter-toggle {
     padding: 8px 11px;
-    min-height: 44px;
+    min-height: var(--control-size);
     gap: 6px;
-    font-size: 12px;
+    font-size: var(--text-sm);
   }
   .filter-count {
     width: 18px;
     height: 18px;
-    font-size: 9px;
+    font-size: var(--text-sm);
   }
   .quick-row {
     flex-wrap: nowrap;
@@ -855,9 +1057,9 @@ body {
   }
   .quick-row button {
     flex-shrink: 0;
-    min-height: 36px;
+    min-height: var(--control-size);
     padding: 7px 10px;
-    font-size: 11px;
+    font-size: var(--text-sm);
   }
   .filter-grid {
     grid-template-columns: minmax(0, 1fr);
@@ -866,63 +1068,57 @@ body {
   }
   .filter-grid .date-field,
   .filter-grid .sport-field,
-  .filter-grid .status-field {
-    grid-column: auto;
-    grid-row: auto;
-    border: 0;
-    padding: 0;
-  }
   .filter-grid legend > span {
-    font-size: 13px;
+    font-size: var(--text-sm);
   }
   .date-inputs {
     gap: 7px;
   }
   .date-inputs input {
-    min-height: 44px;
-    font-size: 16px;
+    min-height: var(--control-size);
+    font-size: var(--text-base);
   }
   .date-inputs > label {
     width: calc(50% - 12px);
   }
   .option-row button {
-    min-height: 44px;
+    min-height: var(--control-size);
     padding: 9px 12px;
-    font-size: 13px;
+    font-size: var(--text-sm);
   }
   .number-inputs input {
-    font-size: 16px;
-    min-height: 44px;
+    font-size: var(--text-base);
+    min-height: var(--control-size);
   }
   .filter-hint {
     flex-wrap: wrap;
     padding: 12px 14px;
   }
   .filter-hint > span {
-    font-size: 10px;
+    font-size: var(--text-sm);
     flex: 1;
     line-height: 1.8;
   }
   .filter-reset {
-    min-height: 44px;
+    min-height: var(--control-size);
   }
   .mobile-filter-done {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    gap: 12px;
+    gap: var(--space-3);
     border: 0;
     border-radius: 6px;
     background: #193e3e;
     color: white;
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 700;
     padding: 13px;
     min-height: 46px;
   }
   .results-toolbar {
-    gap: 12px;
+    gap: var(--space-3);
     padding-top: 18px;
   }
   .view-tabs {
@@ -931,32 +1127,32 @@ body {
   }
   .view-tabs button {
     flex: 1;
-    font-size: 12px;
-    min-height: 40px;
-    padding: 8px;
+    font-size: var(--text-sm);
+    min-height: var(--control-size);
+    padding: var(--space-2);
   }
   .results-actions {
-    font-size: 12px;
+    font-size: var(--text-sm);
     gap: 10px;
   }
   .results-actions select {
-    min-height: 40px;
-    font-size: 12px;
+    min-height: var(--control-size);
+    font-size: var(--text-sm);
     padding: 7px;
   }
   .share-button {
-    font-size: 11px;
-    min-height: 40px;
+    font-size: var(--text-sm);
+    min-height: var(--control-size);
   }
   .data-note {
-    font-size: 10px;
+    font-size: var(--text-sm);
     margin-block: 10px 14px;
   }
   .race-table-head {
     display: none;
   }
   .race-row {
-    grid-template-columns: 54px minmax(0, 1fr) 24px;
+    grid-template-columns: 54px minmax(0, 1fr) 44px;
     gap: 8px 12px;
     padding: 16px 13px;
     margin-bottom: 10px;
@@ -970,45 +1166,42 @@ body {
     font-size: 28px;
   }
   .race-date > .race-date-month {
-    font-size: 10px;
+    font-size: var(--text-sm);
   }
   .race-info h3 {
-    font-size: 16px;
+    font-size: var(--text-base);
     line-height: 1.55;
   }
   .race-english {
-    font-size: 10px;
+    font-size: var(--text-sm);
     line-height: 1.6;
   }
   .race-tags {
-    font-size: 9px;
+    font-size: var(--text-sm);
   }
   .distance-tags span {
-    font-size: 10px;
+    font-size: var(--text-sm);
     padding: 3px 7px;
   }
   .race-location {
-    font-size: 11px;
+    font-size: var(--text-sm);
   }
   .race-location small {
-    font-size: 9px;
+    font-size: var(--text-sm);
   }
   .race-status {
     gap: 7px;
   }
-  .status-badge {
-    font-size: 10px;
-  }
   .race-status small {
-    font-size: 9px;
+    font-size: var(--text-sm);
   }
   .race-status .verification-label {
     margin-left: 0;
-    font-size: 9px;
+    font-size: var(--text-sm);
   }
   .row-arrow {
-    width: 25px;
-    height: 25px;
+    width: 44px;
+    height: 44px;
   }
   .guides-section {
     padding-block: 32px 44px;
@@ -1021,10 +1214,42 @@ body {
     font-size: 22px;
   }
   .selected-filters button {
-    min-height: 38px;
+    min-height: var(--control-size);
   }
   .results-footer {
-    font-size: 10px;
+    font-size: var(--text-sm);
+  }
+  .filter-grid .date-field {
+    grid-column: auto;
+  }
+  .advanced-filters {
+    padding-inline: 14px;
+  }
+  .advanced-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .registration-summary-list > li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .registration-summary-list dl {
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  }
+  .summary-official-link {
+    grid-column: auto;
+  }
+  .group-card dl > div {
+    flex-wrap: wrap;
+  }
+  .group-card dd {
+    max-width: 100%;
+  }
+  .next-race-bottom > div > .next-race-detail {
+    display: inline;
+    margin-left: 0;
+  }
+  .next-race-bottom small::before {
+    content: "下一場已收錄 · ";
   }
 }
 @media (prefers-reduced-motion: reduce) {

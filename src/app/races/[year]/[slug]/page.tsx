@@ -4,7 +4,11 @@ import { races } from "@/data/races";
 import { guides } from "@/data/guides";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { ReturnLink } from "@/components/return-link";
-import { LiveRaceStatus, RegistrationGroups } from "@/components/live-registration";
+import {
+  LiveRaceStatus,
+  RegistrationGroups,
+  RegistrationSummary,
+} from "@/components/live-registration";
 import { displayDate, distanceLabel, formatTimestamp } from "@/lib/races";
 import { pageMetadata, raceHref } from "@/lib/site";
 import { releaseSettings } from "@/lib/release";
@@ -76,6 +80,7 @@ export default async function RacePage({ params }: Props) {
             </p>
           </div>
         </div>
+        <RegistrationSummary race={race} initialNow={now} />
         <div className="detail-layout">
           <article className="detail-content">
             <div className="key-facts">
@@ -123,7 +128,9 @@ export default async function RacePage({ params }: Props) {
                 <h2>組別及報名資料</h2>
                 <span>時間：香港時間 · 收費說明以各組為準</span>
               </div>
-              <RegistrationGroups race={race} initialNow={now} />
+              <div id="registration-groups" tabIndex={-1}>
+                <RegistrationGroups race={race} initialNow={now} />
+              </div>
             </section>
             <AdSlot />
             <section>

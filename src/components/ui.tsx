@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Guide } from "@/data/guides";
+import { siteName } from "@/lib/site";
 
 export function Icon({
   name,
@@ -75,20 +76,18 @@ export function Header() {
       </div>
       <header className="site-header">
         <div className="shell header-inner">
-          <Link className="brand" href="/" aria-label="跑期 RunDates 首頁">
+          <Link className="brand" href="/" aria-label={`${siteName} 首頁`}>
             <span className="brand-mark">
               <i />
               <i />
               <i />
             </span>
-            <span>
-              跑期<span className="brand-en">RUNDATES</span>
-            </span>
+            <span className="brand-wordmark">{siteName}</span>
           </Link>
           <nav aria-label="主要導航">
             <Link href="/">賽事總覽</Link>
             <Link href="/guides/">報名及選賽指南</Link>
-            <Link href="/about/">關於跑期</Link>
+            <Link href="/about/">關於{siteName}</Link>
           </nav>
           <span className="header-note">香港路跑 · 一站掌握</span>
         </div>
@@ -102,7 +101,7 @@ export function Footer() {
       <div className="shell footer-main">
         <div>
           <Link href="/" className="footer-brand">
-            跑期 <span>RUNDATES</span>
+            <span className="brand-wordmark">{siteName}</span>
           </Link>
           <p>你嘅下一場比賽，由呢度開始。</p>
           <p className="muted">香港路跑資訊網站 · 官方來源整理</p>
@@ -114,7 +113,7 @@ export function Footer() {
         </div>
       </div>
       <div className="shell footer-bottom">
-        <span>© 2026 跑期 RunDates</span>
+        <span>© 2026 {siteName}</span>
         <span>獨立資訊整理 · 報名及名額安排以大會公告為準</span>
       </div>
     </footer>

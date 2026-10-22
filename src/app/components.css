@@ -1,0 +1,231 @@
+/* Shared controls and data presentation; layout remains in globals/refresh. */
+.brand .brand-wordmark,
+.footer-brand .brand-wordmark {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.035em;
+}
+@media (max-width: 767px) {
+  .brand .brand-wordmark,
+  .footer-brand .brand-wordmark {
+    font-size: 30px;
+  }
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: 11px 18px;
+  min-height: var(--control-size);
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  font-size: var(--text-md);
+  font-weight: 700;
+  line-height: 1.5;
+}
+.button-coral {
+  background: var(--action-primary);
+  color: white;
+}
+.button-coral:hover {
+  background: var(--action-primary-hover);
+  color: white;
+}
+.button-dark {
+  background: var(--text-primary);
+  color: white;
+}
+.button-dark:hover {
+  background: #295350;
+  color: white;
+}
+.status-badge {
+  --badge-text: var(--status-closed-text);
+  --badge-surface: var(--status-closed-surface);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: var(--radius-badge);
+  padding: 5px 8px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: normal;
+  color: var(--badge-text);
+  background: var(--badge-surface);
+}
+.status-badge i {
+  flex-shrink: 0;
+  width: 4px;
+  height: 4px;
+  background: currentColor;
+  border-radius: 50%;
+}
+.status-badge.open {
+  --badge-text: var(--status-open-text);
+  --badge-surface: var(--status-open-surface);
+}
+.status-badge.upcoming {
+  --badge-text: var(--status-upcoming-text);
+  --badge-surface: var(--status-upcoming-surface);
+}
+.status-badge.waitlist {
+  --badge-text: var(--status-waitlist-text);
+  --badge-surface: var(--status-waitlist-surface);
+}
+.status-badge.full {
+  --badge-text: var(--status-full-text);
+  --badge-surface: var(--status-full-surface);
+}
+.status-badge.closed {
+  --badge-text: var(--status-closed-text);
+  --badge-surface: var(--status-closed-surface);
+}
+.status-badge.unknown {
+  --badge-text: var(--status-unknown-text);
+  --badge-surface: var(--status-unknown-surface);
+}
+.next-race-bottom > div > .status-badge {
+  color: var(--badge-text);
+  background: var(--badge-surface);
+}
+.option-row button,
+.date-shortcuts button {
+  border-color: var(--border-control);
+}
+.option-row button:hover,
+.date-shortcuts button:hover {
+  background: var(--surface-brand);
+}
+.option-row button[aria-pressed="true"] {
+  background: var(--state-selected);
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+  box-shadow: inset 0 0 0 1px var(--text-primary);
+}
+.quick-row button[aria-pressed="true"] {
+  background: var(--text-primary);
+  color: white;
+}
+.search-box,
+.filter-toggle,
+.results-actions select,
+.date-inputs input,
+.number-inputs input {
+  border-color: var(--border-control);
+}
+.search-box:focus-within {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 2px var(--state-selected);
+}
+.search-box input::placeholder {
+  color: var(--text-secondary);
+  opacity: 1;
+}
+.filter-count {
+  background: var(--text-primary);
+  color: white;
+}
+.text-link,
+.summary-official-link {
+  font-weight: 500;
+  text-underline-offset: 4px;
+}
+.text-link:hover,
+.summary-official-link:hover {
+  text-decoration: underline;
+}
+.prose p,
+.prose li {
+  font-size: var(--text-base);
+  line-height: 1.9;
+}
+.race-date > strong,
+.next-race-day,
+.date-stamp strong,
+.stat-pair strong,
+.next-race-word,
+.guide-graphic > span,
+.brand-en,
+.footer-brand > span {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+.race-date > strong,
+.stat-pair strong {
+  font-weight: 600;
+}
+.race-date > strong,
+.next-race-day,
+.stat-pair strong {
+  font-variant-numeric: tabular-nums;
+}
+time,
+.deadline-exact,
+.registration-summary-list dd {
+  font-variant-numeric: tabular-nums;
+}
+.group-status-list li {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.group-status-list li > .group-channel-status {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.group-status-list .group-channel-status b {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+.group-status-list details > summary {
+  font-size: var(--text-sm);
+}
+.group-identity {
+  font-size: var(--text-md);
+}
+.group-status-list li + li {
+  margin-top: var(--space-2);
+}
+button,
+.button,
+.row-arrow,
+.text-link,
+summary,
+.selected-filters button {
+  transition:
+    color var(--motion-fast) var(--motion-ease),
+    background-color var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease);
+  touch-action: manipulation;
+}
+button:disabled,
+.button[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

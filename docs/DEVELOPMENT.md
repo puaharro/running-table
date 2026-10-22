@@ -41,7 +41,7 @@ Node 24、Next.js 靜態輸出；package-lock.json 固定依賴。dev 啟動開�
 - SITE_OPERATOR_NAME：真實營運者名稱。
 - SITE_INDEXABLE=true：明確開啟收錄；必要設定缺失會阻止建置。
 
-目前按使用者決定沿用「跑期 RunDates」，聯絡資料稍後補齊。未有上述設定之前，繼續 noindex 測試版，唔妨礙開發。
+目前按使用者決定使用「NXTGO」，聯絡資料稍後補齊。未有上述設定之前，繼續 noindex 測試版，唔妨礙開發。
 
 ## 公開發布前剩餘工作
 

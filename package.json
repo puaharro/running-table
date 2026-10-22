@@ -16,6 +16,8 @@
     "test:http": "node scripts/smoke-http.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/noto-sans-hk": "5.3.1",
+    "@fontsource/barlow-condensed": "5.3.0",
     "next": "16.3.5",
     "react": "19.3.0",
     "react-dom": "19.3.0"

@@ -9,7 +9,9 @@ import {
   registrationIsStale,
   statusSummary,
 } from "@/lib/races";
-import { registrationLabels, type Race } from "@/lib/types";
+import { type Race } from "@/lib/types";
+
+import { StatusBadge } from "./status-badge";
 
 function useClock(initialNow: string) {
   const [now, setNow] = useState(initialNow);
@@ -23,11 +25,72 @@ function useClock(initialNow: string) {
 export function LiveRaceStatus({ race, initialNow }: { race: Race; initialNow: string }) {
   const now = useClock(initialNow),
     summary = statusSummary(race, race.groups, now);
+  return <StatusBadge status={summary.key}>{summary.label}</StatusBadge>;
+}
+export function RegistrationSummary({ race, initialNow }: { race: Race; initialNow: string }) {
+  const now = useClock(initialNow);
   return (
-    <span className={`status-badge ${summary.key}`}>
-      <i />
-      {summary.label}
-    </span>
+    <section className="registration-summary" aria-labelledby="registration-summary-heading">
+      <div className="registration-summary-heading">
+        <h2 id="registration-summary-heading">報名重點</h2>
+        <a href="#registration-groups">查看完整組別資料 ↓</a>
+      </div>
+      <p>按組別核對渠道、費用及截止時間；抽籤申請唔等於取得名額。</p>
+      <ul className="registration-summary-list">
+        {race.groups.map((group) => {
+          const status = groupStatus(race, group, now);
+          const officialUrl = group.registrationUrl ?? race.sourceUrl;
+          return (
+            <li key={group.id}>
+              <div className="summary-group-name">
+                <strong>{group.name}</strong>
+                <StatusBadge status={status} />
+                <span>{group.registrationMethod ?? "渠道待核實"}</span>
+              </div>
+              <dl>
+                <div>
+                  <dt>參賽費用</dt>
+                  <dd>
+                    {group.price === null
+                      ? "待核實"
+                      : group.price === 0
+                        ? "免費"
+                        : `HK$ ${group.price}`}
+                    {group.priceNote && <small>{group.priceNote}</small>}
+                  </dd>
+                </div>
+                <div>
+                  <dt>報名截止 · 香港時間</dt>
+                  <dd>
+                    {group.registrationClosesAt ? (
+                      <time dateTime={group.registrationClosesAt}>
+                        {formatTimestamp(group.registrationClosesAt)} HKT
+                      </time>
+                    ) : group.deadline ? (
+                      <time dateTime={group.deadline}>
+                        {displayDate(group.deadline, { year: "numeric" })}
+                      </time>
+                    ) : (
+                      "待核實／未有已核對期限"
+                    )}
+                  </dd>
+                </div>
+              </dl>
+              {officialUrl && (
+                <a
+                  className="summary-official-link"
+                  href={officialUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  查看{group.registrationUrl ? "此組別" : "賽事"}官方資料 ↗
+                </a>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
 export function RegistrationGroups({ race, initialNow }: { race: Race; initialNow: string }) {
@@ -40,10 +103,7 @@ export function RegistrationGroups({ race, initialNow }: { race: Race; initialNo
           <div key={group.id} className="group-card">
             <div className="group-card-top">
               <strong>{distanceLabel(group.distanceKm)}</strong>
-              <span className={`status-badge ${status}`}>
-                <i />
-                {registrationLabels[status]}
-              </span>
+              <StatusBadge status={status} />
             </div>
             <h3>{group.name}</h3>
             <dl>

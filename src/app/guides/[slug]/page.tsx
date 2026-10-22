@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { guides } from "@/data/guides";
 import { races } from "@/data/races";
 import { AdSlot, Breadcrumb, Icon } from "@/components/ui";
-import { pageMetadata, raceHref } from "@/lib/site";
+import { pageMetadata, raceHref, siteName } from "@/lib/site";
 export const dynamicParams = false;
 export function generateStaticParams() {
   return guides.map((g) => ({ slug: g.slug }));
@@ -29,7 +29,7 @@ export default async function GuidePage({ params }: Props) {
         </div>
         <h1>{guide.title}</h1>
         <p>{guide.description}</p>
-        <div className="article-byline">跑期編輯整理 · 原創內容 · 2026 年 10 月 21 日</div>
+        <div className="article-byline">{siteName}編輯整理 · 原創內容 · 2026 年 10 月 21 日</div>
       </header>
       <div className="article-layout">
         <article className="prose">

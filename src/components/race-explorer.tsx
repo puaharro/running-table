@@ -3,6 +3,7 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AdSlot, Icon } from "./ui";
+import { StatusBadge } from "./status-badge";
 import {
   defaultFilters,
   displayDate,
@@ -24,6 +25,7 @@ import {
   registrationLabels,
   type Filters,
   type Race,
+  type RaceGroup,
   type RegistrationStatus,
 } from "@/lib/types";
 
@@ -32,6 +34,41 @@ function monthLabel(date: string) {
 }
 function dateString(date: Date) {
   return date.toISOString().slice(0, 10);
+}
+
+function GroupStatusList({ race, groups, now }: { race: Race; groups: RaceGroup[]; now: string }) {
+  const rows = (items: RaceGroup[]) =>
+    items.map((group) => {
+      const ambiguous = race.groups.some(
+        (other) =>
+          other.id !== group.id &&
+          other.distanceKm === group.distanceKm &&
+          other.registrationMethod === group.registrationMethod,
+      );
+      return (
+        <li key={group.id}>
+          <span className="group-identity">
+            <strong>{distanceLabel(group.distanceKm)}</strong>
+          </span>
+          <span className="group-channel-status">
+            <span>{group.registrationMethod ?? "渠道待核實"}</span>
+            <StatusBadge status={groupStatus(race, group, now)} />
+          </span>
+          {ambiguous && <span className="group-name">{group.name}</span>}
+        </li>
+      );
+    });
+  return (
+    <div className="group-status-list">
+      <ul>{rows(groups.slice(0, 2))}</ul>
+      {groups.length > 2 && (
+        <details>
+          <summary>查看其餘 {groups.length - 2} 個組別</summary>
+          <ul>{rows(groups.slice(2))}</ul>
+        </details>
+      )}
+    </div>
+  );
 }
 
 export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow: string }) {
@@ -52,7 +89,6 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
       }
     };
     sync();
-    setExpanded(window.matchMedia("(min-width: 768px)").matches);
     setNow(new Date().toISOString());
     setReady(true);
     window.addEventListener("popstate", sync);
@@ -158,7 +194,6 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     <section id="race-list" className="explorer shell" aria-labelledby="explorer-heading">
       <div className="section-heading explorer-heading">
         <div>
-          <div className="eyebrow">THE RACE CALENDAR</div>
           <h2 id="explorer-heading">賽事月曆</h2>
           <p>揀日期、揀距離，搵到適合自己嘅一場。</p>
         </div>
@@ -169,7 +204,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
           </div>
           <div>
             <strong>{openCount.toString().padStart(2, "0")}</strong>
-            <span>場所列渠道開放</span>
+            <span>場有組別可報名</span>
           </div>
         </div>
       </div>
@@ -206,12 +241,9 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               update({ ...filters, statuses: onlyOpen ? [] : ["open"], view: "upcoming" })
             }
           >
-            <Icon name="check" size={14} />
+            {onlyOpen && <Icon name="check" size={14} />}
             只睇可報名
           </button>
-          <button onClick={() => quickDate("weekend")}>今個週末</button>
-          <button onClick={() => quickDate("month")}>今個月</button>
-          <button onClick={() => quickDate("next")}>下個月</button>
           <button
             className={
               filters.sort === "deadline" && filters.statuses.includes("open") ? "selected" : ""
@@ -228,8 +260,13 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
           <div className="filter-grid">
             <fieldset className="date-field">
               <legend>
-                01 <span>比賽日期</span>
+                <span>比賽日期</span>
               </legend>
+              <div className="date-shortcuts">
+                <button onClick={() => quickDate("weekend")}>今個週末</button>
+                <button onClick={() => quickDate("month")}>今個月</button>
+                <button onClick={() => quickDate("next")}>下個月</button>
+              </div>
               <div className="date-inputs">
                 <label>
                   <span className="sr-only">開始日期</span>
@@ -254,7 +291,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             </fieldset>
             <fieldset>
               <legend>
-                02 <span>距離／組別</span>
+                <span>距離／組別</span>
               </legend>
               <div className="option-row">
                 {distanceOptions.map((x) => (
@@ -267,6 +304,49 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                   </button>
                 ))}
               </div>
+            </fieldset>
+            <fieldset>
+              <legend>
+                <span>地區</span>
+              </legend>
+              <div className="option-row">
+                {regions.map((x) => (
+                  <button
+                    aria-pressed={filters.regions.includes(x)}
+                    key={x}
+                    onClick={() => toggle("regions", x)}
+                  >
+                    {x}
+                  </button>
+                ))}
+              </div>
+              <small>按賽事起點分類</small>
+            </fieldset>
+          </div>
+          <details className="advanced-filters">
+            <summary>
+              進階篩選
+              {filters.statuses.length > 0 || filters.min || filters.max
+                ? " · 已套用"
+                : " · 報名狀態／公里範圍"}
+            </summary>
+            <div className="advanced-grid">
+              <fieldset className="status-field">
+                <legend>
+                  <span>報名狀態</span>
+                </legend>
+                <div className="option-row">
+                  {Object.entries(registrationLabels).map(([key, label]) => (
+                    <button
+                      aria-pressed={filters.statuses.includes(key as RegistrationStatus)}
+                      key={key}
+                      onClick={() => toggle("statuses", key)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
               <details className="custom-range">
                 <summary>自訂公里範圍</summary>
                 <div className="number-inputs">
@@ -293,53 +373,10 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                   />
                 </div>
               </details>
-            </fieldset>
-            <fieldset>
-              <legend>
-                03 <span>地區</span>
-              </legend>
-              <div className="option-row">
-                {regions.map((x) => (
-                  <button
-                    aria-pressed={filters.regions.includes(x)}
-                    key={x}
-                    onClick={() => toggle("regions", x)}
-                  >
-                    {x}
-                  </button>
-                ))}
-              </div>
-              <small>按賽事起點分類</small>
-            </fieldset>
-            <fieldset className="sport-field">
-              <legend>
-                04 <span>運動類別</span>
-              </legend>
-              <label className="sport-value">
-                <input type="checkbox" checked readOnly aria-label="路跑，目前唯一收錄類別" />
-                路跑
-              </label>
-              <small>首階段只收錄路跑</small>
-            </fieldset>
-            <fieldset className="status-field">
-              <legend>
-                05 <span>報名狀態</span>
-              </legend>
-              <div className="option-row">
-                {Object.entries(registrationLabels).map(([key, label]) => (
-                  <button
-                    aria-pressed={filters.statuses.includes(key as RegistrationStatus)}
-                    key={key}
-                    onClick={() => toggle("statuses", key)}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-          </div>
+            </div>
+          </details>
           <div className="filter-hint">
-            <span>條件可組合及多選 · 狀態以個別組別為準</span>
+            <span>只收錄路跑 · 條件可多選，狀態按組別判斷</span>
             <button className="filter-reset" onClick={() => update({ ...defaultFilters })}>
               重設條件
             </button>
@@ -468,16 +505,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                         <Link href={raceHref(race)}>{race.name}</Link>
                       </h3>
                       <p className="race-english">{race.englishName}</p>
-                      <div className="distance-tags">
-                        {groups.map((g) => (
-                          <span
-                            key={g.id}
-                            title={`${g.name}：${registrationLabels[groupStatus(race, g, now)]}`}
-                          >
-                            {distanceLabel(g.distanceKm)}
-                          </span>
-                        ))}
-                      </div>
+                      <GroupStatusList race={race} groups={groups} now={now} />
                     </div>
                     <div className="race-location">
                       <Icon name="pin" size={16} />
@@ -489,10 +517,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                       </div>
                     </div>
                     <div className="race-status">
-                      <span className={`status-badge ${summary.key}`}>
-                        <i />
-                        {summary.label}
-                      </span>
+                      <StatusBadge status={summary.key}>{summary.label}</StatusBadge>
                       {countdown && (
                         <>
                           <span

@@ -1,24 +1,24 @@
 import Link from "next/link";
 import { Breadcrumb } from "@/components/ui";
-import { pageMetadata } from "@/lib/site";
+import { pageMetadata, siteName } from "@/lib/site";
 import { releaseSettings } from "@/lib/release";
 export const metadata = pageMetadata(
-  "關於跑期及資料政策",
-  "跑期嘅網站定位、資料核實方式及更正政策。",
+  `關於${siteName}及資料政策`,
+  `${siteName}嘅網站定位、資料核實方式及更正政策。`,
   "/about/",
 );
 export default function About() {
   return (
     <main id="main" className="content-main shell">
-      <Breadcrumb items={[{ label: "關於跑期" }]} />
+      <Breadcrumb items={[{ label: `關於${siteName}` }]} />
       <div className="page-heading">
-        <div className="eyebrow">ABOUT RUNDATES</div>
+        <div className="eyebrow">ABOUT {siteName}</div>
         <h1>
           每一個起點，
           <br />
           都值得清楚嘅資訊。
         </h1>
-        <p>跑期係一個以香港路跑為主嘅資訊網站，協助跑手比較賽事同掌握報名資料。</p>
+        <p>{siteName}係一個以香港路跑為主嘅資訊網站，協助跑手比較賽事同掌握報名資料。</p>
       </div>
       <div className="prose narrow">
         <section>

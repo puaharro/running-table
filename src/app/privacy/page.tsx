@@ -1,9 +1,9 @@
 import { Breadcrumb } from "@/components/ui";
 import { releaseSettings } from "@/lib/release";
-import { pageMetadata } from "@/lib/site";
+import { pageMetadata, siteName } from "@/lib/site";
 export const metadata = pageMetadata(
   "私隱說明",
-  "了解跑期目前嘅篩選網址、瀏覽器儲存及資料處理方式。",
+  `了解${siteName}目前嘅篩選網址、瀏覽器儲存及資料處理方式。`,
   "/privacy/",
 );
 export default function Privacy() {

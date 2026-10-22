@@ -1,4 +1,4 @@
-# 跑期 RunDates｜香港路跑資訊
+# NXTGO｜香港路跑資訊
 
 正式開發 v0.2.0，2026-10-21。以一頁總覽搵賽事，連到獨立資訊頁及原創指南；開發方式參照 MTRI 嘅 Next.js、React、TypeScript 及 Git 管理。
 
@@ -51,7 +51,7 @@ npm start
 
 目前係真實資料測試版，預設 noindex；未接入 AdSense、未公開部署、未連接 GitHub remote。唔聲稱已覆蓋香港全部賽事，亦唔保證即時餘額。
 
-公開收錄需要設定正式 HTTPS 網域、真實營運者及聯絡電郵，再明確設定 SITE_INDEXABLE=true。網站會檢查必要設定；詳細清單見開發文件。品牌按使用者決定先沿用「跑期 RunDates」，公開聯絡資料稍後補齊。
+公開收錄需要設定正式 HTTPS 網域、真實營運者及聯絡電郵，再明確設定 SITE_INDEXABLE=true。網站會檢查必要設定；詳細清單見開發文件。品牌按使用者決定改為「NXTGO」，公開聯絡資料稍後補齊。
 
 本地 Git 保留開發分支與提交。已備妥 GitHub Actions，但未喺遠端執行。
 

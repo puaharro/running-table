@@ -6,6 +6,7 @@ import { pageMetadata } from "@/lib/site";
 import Link from "next/link";
 import { distanceLabel, displayDate, hongKongToday } from "@/lib/races";
 import { raceHref } from "@/lib/site";
+import { LiveRaceStatus } from "@/components/live-registration";
 
 export const metadata = pageMetadata(
   "香港路跑賽事總覽",
@@ -14,6 +15,7 @@ export const metadata = pageMetadata(
 );
 
 export default function Home() {
+  const initialNow = new Date().toISOString();
   const nextRace = [...races]
     .filter((race) => race.endDate >= hongKongToday() && race.status === "scheduled")
     .sort((a, b) => a.date.localeCompare(b.date))[0];
@@ -22,9 +24,6 @@ export default function Home() {
       <section className="calendar-masthead">
         <div className="shell masthead-grid">
           <div className="masthead-copy">
-            <div className="masthead-kicker">
-              <span /> HONG KONG RUNNING CALENDAR
-            </div>
             <h1>
               每一場起跑，
               <br />
@@ -73,6 +72,7 @@ export default function Home() {
                 </small>
                 <h2>{nextRace.name}</h2>
                 <div>
+                  <LiveRaceStatus race={nextRace} initialNow={initialNow} />
                   {[
                     ...new Set(nextRace.groups.map((group) => distanceLabel(group.distanceKm))),
                   ].map((distance) => (
@@ -85,7 +85,7 @@ export default function Home() {
           )}
         </div>
       </section>
-      <RaceExplorer races={races} initialNow={new Date().toISOString()} />
+      <RaceExplorer races={races} initialNow={initialNow} />
       <section className="guides-section shell">
         <div className="section-heading">
           <div>

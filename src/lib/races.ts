@@ -57,15 +57,18 @@ export function closingTime(group: RaceGroup) {
       : Infinity;
 }
 export function formatTimestamp(value: string) {
-  return new Intl.DateTimeFormat("zh-HK", {
+  const parts = new Intl.DateTimeFormat("zh-HK", {
     timeZone: "Asia/Hong_Kong",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
-  }).format(new Date(value));
+    hourCycle: "h23",
+  }).formatToParts(new Date(value));
+  const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((p) => p.type === type)!.value;
+  // ICU versions use different literal spaces; keep SSR and browser text identical.
+  return `${part("day")}/${part("month")}/${part("year")} ${part("hour")}:${part("minute")}`;
 }
 export function registrationIsStale(race: Race, group: RaceGroup, now: Clock) {
   if (race.verification === "demo") return false;
@@ -121,7 +124,11 @@ export function registrationCountdown(race: Race, groups: RaceGroup[], now: Cloc
     groupName: group.name,
   };
 }
-export function statusSummary(race: Race, groups: RaceGroup[], now: Clock) {
+export function statusSummary(
+  race: Race,
+  groups: RaceGroup[],
+  now: Clock,
+): { key: RegistrationStatus; label: string } {
   const today = hongKongToday(clockTime(now));
   if (race.status === "cancelled") return { key: "closed", label: "賽事取消" };
   if (race.status === "postponed") return { key: "unknown", label: "賽事延期" };
