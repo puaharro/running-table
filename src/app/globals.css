@@ -2404,7 +2404,7 @@ p {
   min-width: 0;
 }
 .outer-ad-rail,
-.mobile-ad-anchor {
+.bottom-ad-anchor {
   display: none;
 }
 @media (min-width: 1440px) {
@@ -2476,11 +2476,79 @@ p {
   line-height: 1;
   cursor: pointer;
 }
+.anchor-desktop-label,
+.anchor-desktop-note {
+  display: none;
+}
+@media (min-width: 768px) {
+  .has-bottom-anchor .ad-page-content {
+    padding-bottom: calc(160px + env(safe-area-inset-bottom));
+  }
+  .bottom-ad-anchor {
+    display: flex;
+    position: fixed;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(760px, calc(100% - 80px));
+    min-height: 100px;
+    z-index: 30;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 24px;
+    background: #fff;
+    border: 1px solid #d6e1cf;
+    border-radius: 10px;
+    box-shadow: 0 5px 30px #102d3b18;
+  }
+  .bottom-ad-anchor > .ad-close {
+    position: absolute;
+    right: 0;
+    top: -44px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .anchor-ad-art {
+    display: grid;
+    place-items: center;
+    width: 96px;
+    height: 64px;
+    flex-shrink: 0;
+    background: #173c3e;
+    color: #dbe777;
+    font-size: 28px;
+    font-weight: 800;
+  }
+  .anchor-ad-copy {
+    display: grid;
+    gap: 7px;
+  }
+  .anchor-ad-copy small {
+    color: #78827b;
+    font-size: 10px;
+  }
+  .anchor-ad-copy strong {
+    font-size: 15px;
+  }
+  .anchor-desktop-label,
+  .anchor-desktop-note {
+    display: inline;
+  }
+  .anchor-desktop-note {
+    color: #78827b;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .anchor-mobile-label,
+  .anchor-ad-copy button {
+    display: none;
+  }
+}
 @media (max-width: 767px) {
-  .has-mobile-anchor .ad-page-content {
+  .has-bottom-anchor .ad-page-content {
     padding-bottom: calc(145px + env(safe-area-inset-bottom));
   }
-  .mobile-ad-anchor {
+  .bottom-ad-anchor {
     display: flex;
     position: fixed;
     bottom: 0;
@@ -2494,7 +2562,7 @@ p {
     border-top: 1px solid #dfe4df;
     box-shadow: 0 -6px 28px #102d3b12;
   }
-  .mobile-ad-anchor > .ad-close {
+  .bottom-ad-anchor > .ad-close {
     position: absolute;
     right: 8px;
     top: -44px;

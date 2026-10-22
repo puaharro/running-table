@@ -9,7 +9,7 @@ export function AdFrame({ children }: { children: React.ReactNode }) {
   const dialog = useRef<HTMLDialogElement>(null);
   if (!enabled) return children;
   return (
-    <div className={`ad-page-frame${anchorVisible ? " has-mobile-anchor" : ""}`}>
+    <div className={`ad-page-frame${anchorVisible ? " has-bottom-anchor" : ""}`}>
       {(["left", "right"] as const).map((side) => (
         <aside
           key={side}
@@ -24,7 +24,7 @@ export function AdFrame({ children }: { children: React.ReactNode }) {
       ))}
       <div className="ad-page-content">{children}</div>
       {anchorVisible && (
-        <aside className="mobile-ad-anchor" aria-label="底部廣告預覽">
+        <aside className="bottom-ad-anchor" aria-label="底部廣告預覽">
           <button
             className="ad-close"
             type="button"
@@ -38,7 +38,11 @@ export function AdFrame({ children }: { children: React.ReactNode }) {
           </div>
           <div className="anchor-ad-copy">
             <small>廣告版位預覽</small>
-            <strong>手機底部固定橫幅</strong>
+            <strong>
+              <span className="anchor-mobile-label">手機底部固定橫幅</span>
+              <span className="anchor-desktop-label">電腦底部固定橫幅</span>
+            </strong>
+            <span className="anchor-desktop-note">響應式廣告版位 · 尚未接入 Google AdSense</span>
             <button type="button" onClick={() => dialog.current?.showModal()}>
               查看全屏廣告示意 ↗
             </button>
