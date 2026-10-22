@@ -93,6 +93,34 @@ export function groupStatus(race: Race, group: RaceGroup, now: Clock): Registrat
     return "unknown";
   return group.status;
 }
+export function registrationCountdown(race: Race, groups: RaceGroup[], now: Clock) {
+  const current = clockTime(now).getTime();
+  if (!Number.isFinite(current)) return null;
+  const group = groups
+    .filter((candidate) => groupStatus(race, candidate, now) === "open")
+    .filter((candidate) => Number.isFinite(closingTime(candidate)))
+    .sort((a, b) => closingTime(a) - closingTime(b))[0];
+  if (!group) return null;
+  const remaining = closingTime(group) - current;
+  if (remaining <= 0) return null;
+  const minute = 60_000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+  const label =
+    remaining >= day
+      ? `仲有 ${Math.floor(remaining / day)} 日截止`
+      : remaining >= hour
+        ? `仲有 ${Math.floor(remaining / hour)} 小時截止`
+        : remaining >= minute
+          ? `仲有 ${Math.floor(remaining / minute)} 分鐘截止`
+          : "不足 1 分鐘截止";
+  return {
+    label,
+    urgent: remaining < day,
+    deadline: group.registrationClosesAt ?? group.deadline!,
+    groupName: group.name,
+  };
+}
 export function statusSummary(race: Race, groups: RaceGroup[], now: Clock) {
   const today = hongKongToday(clockTime(now));
   if (race.status === "cancelled") return { key: "closed", label: "賽事取消" };

@@ -27,3 +27,7 @@
 待帳戶與站點設定齊備後再接入，處理適用私隱與同意安排及所需 ads.txt，並覆核閱讀空間。
 
 官方參考：[Auto ads 格式及設定](https://support.google.com/adsense/answer/9305577?hl=en)、[Anchor ads](https://support.google.com/adsense/answer/15484692?hl=en)、[Side rail ads](https://support.google.com/adsense/answer/16531757?hl=en-GB)。
+
+## 本次瀏覽的關閉記憶
+
+底部廣告示意的關閉選擇以同一分頁的 sessionStorage 保留，key 為 rundates:ads:anchor-dismissed；不使用長期 cookie 或記錄個人資料。重新整理及跨頁後不會再次顯示，亦不保留多餘底部空白。這只控制本站示意，並不控制未接入的 AdSense 真實投放。若瀏覽器封鎖 sessionStorage，關閉仍即時生效，但無法保證重新載入後保留。

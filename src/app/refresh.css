@@ -315,6 +315,35 @@ body {
   border-radius: 5px;
   padding: 6px 12px;
 }
+.quick-row .only-open-shortcut {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #e5eee0;
+  color: #315b3b;
+  box-shadow: inset 0 0 0 1px #c6d7be;
+}
+.quick-row .only-open-shortcut[aria-pressed="true"] {
+  background: #214d3c;
+  color: white;
+  box-shadow: none;
+}
+.deadline-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #496c3e;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.7;
+}
+.deadline-countdown.urgent {
+  color: #aa3b23;
+}
+.race-status .deadline-exact {
+  font-size: 9px;
+  color: #718173;
+}
 .filter-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;

@@ -1,12 +1,34 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const enabled = process.env.NEXT_PUBLIC_SHOW_AD_PLACEHOLDERS === "true";
+const anchorDismissedKey = "rundates:ads:anchor-dismissed";
 
 export function AdFrame({ children }: { children: React.ReactNode }) {
-  const [anchorVisible, setAnchorVisible] = useState(true);
+  const [anchorVisible, setAnchorVisible] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    if (!enabled) return;
+    const restore = () => {
+      try {
+        setAnchorVisible(window.sessionStorage.getItem(anchorDismissedKey) !== "true");
+      } catch {
+        setAnchorVisible(true);
+      }
+    };
+    restore();
+    window.addEventListener("pageshow", restore);
+    return () => window.removeEventListener("pageshow", restore);
+  }, []);
+  function dismissAnchor() {
+    setAnchorVisible(false);
+    try {
+      window.sessionStorage.setItem(anchorDismissedKey, "true");
+    } catch {
+      /* Closing remains available when browser storage is blocked. */
+    }
+  }
   if (!enabled) return children;
   return (
     <div className={`ad-page-frame${anchorVisible ? " has-bottom-anchor" : ""}`}>
@@ -29,7 +51,7 @@ export function AdFrame({ children }: { children: React.ReactNode }) {
             className="ad-close"
             type="button"
             aria-label="關閉底部廣告預覽"
-            onClick={() => setAnchorVisible(false)}
+            onClick={dismissAnchor}
           >
             ×
           </button>

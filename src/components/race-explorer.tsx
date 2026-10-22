@@ -12,6 +12,7 @@ import {
   groupStatus,
   hongKongToday,
   parseFilters,
+  registrationCountdown,
   selectRaces,
   serializeFilters,
   statusSummary,
@@ -118,6 +119,8 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     r.groups.some((g) => groupStatus(r, g, now) === "open"),
   ).length;
   const error = filterError(filters);
+  const onlyOpen =
+    filters.view === "upcoming" && filters.statuses.length === 1 && filters.statuses[0] === "open";
   const chips: { label: string; remove: () => void }[] = [
     ...(filters.q ? [{ label: `搜尋：${filters.q}`, remove: () => field("q", "") }] : []),
     ...(filters.from || filters.to
@@ -196,6 +199,16 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
         </div>
         <div className="quick-row">
           <span>快速搵：</span>
+          <button
+            className={`only-open-shortcut${onlyOpen ? " selected" : ""}`}
+            aria-pressed={onlyOpen}
+            onClick={() =>
+              update({ ...filters, statuses: onlyOpen ? [] : ["open"], view: "upcoming" })
+            }
+          >
+            <Icon name="check" size={14} />
+            只睇可報名
+          </button>
           <button onClick={() => quickDate("weekend")}>今個週末</button>
           <button onClick={() => quickDate("month")}>今個月</button>
           <button onClick={() => quickDate("next")}>下個月</button>
@@ -419,10 +432,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               const summary = statusSummary(race, groups, now);
               const month = race.date.slice(0, 7);
               const previousMonth = results[index - 1]?.race.date.slice(0, 7);
-              const deadline = groups
-                .filter((g) => groupStatus(race, g, now) === "open" && g.deadline)
-                .map((g) => g.registrationClosesAt ?? g.deadline!)
-                .sort()[0];
+              const countdown = registrationCountdown(race, groups, now);
               return (
                 <Fragment key={race.id}>
                   {filters.sort === "date" && month !== previousMonth && (
@@ -483,13 +493,24 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                         <i />
                         {summary.label}
                       </span>
-                      {deadline && (
-                        <small>
-                          {deadline.includes("T")
-                            ? formatTimestamp(deadline) + " HKT"
-                            : displayDate(deadline)}{" "}
-                          截止
-                        </small>
+                      {countdown && (
+                        <>
+                          <span
+                            className={`deadline-countdown${countdown.urgent ? " urgent" : ""}`}
+                            title={`最早截止組別：${countdown.groupName}`}
+                          >
+                            <Icon name="clock" size={13} />
+                            {countdown.label}
+                          </span>
+                          <small className="deadline-exact" title={countdown.groupName}>
+                            最早截止：
+                            <time dateTime={countdown.deadline}>
+                              {countdown.deadline.includes("T")
+                                ? formatTimestamp(countdown.deadline) + " HKT"
+                                : displayDate(countdown.deadline) + " HKT"}
+                            </time>
+                          </small>
+                        </>
                       )}
                       <small className="verification-label">
                         {race.verifiedAt
