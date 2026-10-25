@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { races } from "../../tests/fixtures/races";
 import { registrationCountdown } from "./races";
-import type { Race, RaceGroup } from "./types";
+import type { Race, RegistrationChannel } from "./types";
 
 const now = "2026-10-24T12:00:00+08:00";
-function event(overrides: Partial<RaceGroup> = {}): Race {
+function event(overrides: Partial<RegistrationChannel> = {}): Race {
   return {
     ...races[0],
     status: "scheduled",
@@ -15,13 +15,18 @@ function event(overrides: Partial<RaceGroup> = {}): Race {
       {
         ...races[0].groups[0],
         date: "2026-11-15",
-        status: "open",
-        registrationStart: "2026-10-01",
-        registrationOpensAt: "2026-10-01T10:00:00+08:00",
-        registrationVerifiedAt: "2026-10-24T11:00:00+08:00",
-        registrationClosesAt: "2026-10-27T12:00:00+08:00",
-        deadline: "2026-10-27",
-        ...overrides,
+        channels: [
+          {
+            ...races[0].groups[0].channels[0],
+            status: "open",
+            registrationStart: "2026-10-01",
+            registrationOpensAt: "2026-10-01T10:00:00+08:00",
+            registrationVerifiedAt: "2026-10-24T11:00:00+08:00",
+            registrationClosesAt: "2026-10-27T12:00:00+08:00",
+            deadline: "2026-10-27",
+            ...overrides,
+          },
+        ],
       },
     ],
   };
@@ -70,13 +75,25 @@ describe("registration deadline countdown", () => {
       ...race.groups[0],
       id: "later",
       name: "較後截止組別",
-      registrationClosesAt: "2026-10-29T12:00:00+08:00",
+      channels: [
+        {
+          ...race.groups[0].channels[0],
+          id: "later-channel",
+          registrationClosesAt: "2026-10-29T12:00:00+08:00",
+        },
+      ],
     };
     const full = {
       ...race.groups[0],
       id: "full",
-      status: "full" as const,
-      registrationClosesAt: "2026-10-24T13:00:00+08:00",
+      channels: [
+        {
+          ...race.groups[0].channels[0],
+          id: "full-channel",
+          status: "full" as const,
+          registrationClosesAt: "2026-10-24T13:00:00+08:00",
+        },
+      ],
     };
     race.groups.push(later, full);
     expect(countdown(race)?.label).toBe("仲有 3 日截止");

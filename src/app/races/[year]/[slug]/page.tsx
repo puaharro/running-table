@@ -73,10 +73,10 @@ export default async function RacePage({ params }: Props) {
         <div className="demo-notice verified-notice">
           <Icon name="check" size={22} />
           <div>
-            <strong>已核對官方列明資料，未知欄位保留待核實</strong>
+            <strong>賽事資料按官方來源整理</strong>
             <p>
-              最後核對：{formatTimestamp(race.verifiedAt!)}{" "}
-              HKT。報名狀態只對應下列組別及渠道，唔代表全部特別名額。
+              賽事資料整理核對：{formatTimestamp(race.verifiedAt!)}{" "}
+              HKT。核實範圍見下方來源紀錄；未知欄位保留待核實。報名狀態另按渠道列出核對時間，只對應所列渠道。
             </p>
           </div>
         </div>
@@ -160,13 +160,24 @@ export default async function RacePage({ params }: Props) {
                               organizer: "主辦／統籌",
                               transport: "交通",
                               "groups.distanceKm": "組別距離",
-                              "groups.price": "費用",
-                              "groups.registration": "報名渠道及期限",
+                              "groups.price": "費用／最低籌款額",
+                              "groups.startTime": "組別起跑時間",
+                              "channels.registration": "渠道申請安排及期限",
+                              "channels.price": "渠道價格",
+                              "channels.eligibility": "渠道資格及套票內容",
                               "groups.limit": "資格／時限",
                               "groups.marathon.distanceKm": "全馬距離",
                               "groups.marathon.price": "全馬費用",
                               "groups.marathon.venue": "全馬起點",
-                              "groups.marathon.limit": "全馬時限",
+                              "groups.marathon.limit": "全馬資格／時限",
+                              "groups.half.distanceKm": "半馬距離",
+                              "groups.half.price": "半馬費用",
+                              "groups.half.venue": "半馬起點",
+                              "groups.half.limit": "半馬資格／時限",
+                              "groups.10k.distanceKm": "10K 距離",
+                              "groups.10k.price": "10K 費用",
+                              "groups.10k.venue": "10K 起點",
+                              "groups.10k.limit": "10K 資格／時限",
                             })[field] ?? field,
                         )
                         .join("、")}
@@ -186,8 +197,11 @@ export default async function RacePage({ params }: Props) {
                   </li>
                 ))}
               </ul>
-              <Link className="text-link" href="/about/#corrections">
-                資料更正方式 ↗
+              <Link
+                className="text-link"
+                href={`/about/?race=${encodeURIComponent(race.id)}#corrections`}
+              >
+                回報資料有誤 ↗
               </Link>
             </section>
             <ReturnLink />

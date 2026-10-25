@@ -1,5 +1,5 @@
 import { hongKongToday, validDate } from "./races";
-import { registrationLabels, regions, type Race } from "./types";
+import { channelTypeLabels, registrationLabels, regions, type Race } from "./types";
 
 export function isHttpsUrl(value: unknown): value is string {
   if (typeof value !== "string") return false;
@@ -22,7 +22,8 @@ export function assertCatalog(input: unknown): asserts input is Race[] {
   if (!Array.isArray(input)) throw new Error("Catalog must be an array.");
   const ids = new Set<string>(),
     slugs = new Set<string>(),
-    groupIds = new Set<string>();
+    groupIds = new Set<string>(),
+    channelIds = new Set<string>();
   const fail = (id: unknown, message: string): never => {
     throw new Error(`Catalog ${String(id)}: ${message}`);
   };
@@ -105,49 +106,77 @@ export function assertCatalog(input: unknown): asserts input is Race[] {
         (group.endDate && (!validDate(group.endDate) || group.endDate < group.date))
       )
         fail(group.id, "invalid group dates");
-      if (group.price !== null && (!Number.isFinite(group.price) || group.price < 0))
-        fail(group.id, "invalid price");
-      if (!(group.status in registrationLabels)) fail(group.id, "invalid registration status");
       if (group.region !== undefined && group.region !== null && !regions.includes(group.region))
         fail(group.id, "invalid group region");
       if (!group.sourceIds?.length || group.sourceIds.some((id) => !sourceIds.has(id)))
         fail(group.id, "missing source references");
-      if (group.registrationUrl && !isHttpsUrl(group.registrationUrl))
-        fail(group.id, "registration link must use HTTPS");
-      for (const date of [group.registrationStart, group.deadline])
-        if (date && !validDate(date)) fail(group.id, "invalid registration date");
-      for (const timestamp of [
-        group.registrationOpensAt,
-        group.registrationClosesAt,
-        group.registrationVerifiedAt,
-        group.startTime,
-      ])
-        if (timestamp && !validTimestamp(timestamp)) fail(group.id, "invalid timestamp");
-      if (
-        group.registrationOpensAt &&
-        group.registrationClosesAt &&
-        Date.parse(group.registrationOpensAt) >= Date.parse(group.registrationClosesAt)
-      )
-        fail(group.id, "registration range reversed");
-      if (
-        group.registrationClosesAt &&
-        group.deadline &&
-        hongKongToday(new Date(group.registrationClosesAt)) !== group.deadline
-      )
-        fail(group.id, "deadline date and timestamp disagree");
-      if (
-        group.status !== "unknown" &&
-        (!group.registrationVerifiedAt || !group.registrationMethod)
-      )
-        fail(group.id, "known registration status needs timestamp and channel");
-      if (
-        group.status !== "unknown" &&
-        !race.sources!.some(
-          (source) =>
-            group.sourceIds!.includes(source.id) && source.fields.includes("groups.registration"),
+      if (group.startTime && !validTimestamp(group.startTime)) fail(group.id, "invalid timestamp");
+      if (!Array.isArray(group.channels) || !group.channels.length)
+        fail(group.id, "channels required");
+      for (const channel of group.channels) {
+        if (!channel || !channel.id || channelIds.has(channel.id) || !channel.name?.trim())
+          fail(group.id, "invalid or duplicate channel");
+        channelIds.add(channel.id);
+        if (!Object.hasOwn(channelTypeLabels, channel.type))
+          fail(channel.id, "invalid channel type");
+        if (!channel.eligibility?.trim() || !channel.registrationMethod?.trim())
+          fail(channel.id, "channel eligibility and method required");
+        if (!(channel.status in registrationLabels))
+          fail(channel.id, "invalid registration status");
+        if (channel.price !== null && (!Number.isFinite(channel.price) || channel.price < 0))
+          fail(channel.id, "invalid price");
+        if (!["HKD", "USD"].includes(channel.currency)) fail(channel.id, "invalid currency");
+        if (
+          channel.priceType !== undefined &&
+          !["entry-fee", "minimum-donation", "package"].includes(channel.priceType)
         )
-      )
-        fail(group.id, "registration status lacks field evidence");
+          fail(channel.id, "invalid price type");
+        if (channel.priceType === "package" && channel.price !== null && !channel.priceUnit?.trim())
+          fail(channel.id, "package price unit required");
+        if (!channel.sourceIds?.length || channel.sourceIds.some((id) => !sourceIds.has(id)))
+          fail(channel.id, "missing channel source references");
+        if (channel.registrationUrl && !isHttpsUrl(channel.registrationUrl))
+          fail(channel.id, "registration link must use HTTPS");
+        for (const date of [channel.registrationStart, channel.deadline])
+          if (date && !validDate(date)) fail(channel.id, "invalid registration date");
+        for (const timestamp of [
+          channel.registrationOpensAt,
+          channel.registrationClosesAt,
+          channel.registrationVerifiedAt,
+          channel.resultAnnouncedAt,
+          channel.paymentClosesAt,
+        ])
+          if (timestamp && !validTimestamp(timestamp)) fail(channel.id, "invalid timestamp");
+        if (
+          channel.registrationOpensAt &&
+          channel.registrationClosesAt &&
+          Date.parse(channel.registrationOpensAt) >= Date.parse(channel.registrationClosesAt)
+        )
+          fail(channel.id, "registration range reversed");
+        if (
+          channel.registrationClosesAt &&
+          channel.deadline &&
+          hongKongToday(new Date(channel.registrationClosesAt)) !== channel.deadline
+        )
+          fail(channel.id, "deadline date and timestamp disagree");
+        if (
+          channel.resultAnnouncedAt &&
+          channel.paymentClosesAt &&
+          Date.parse(channel.paymentClosesAt) < Date.parse(channel.resultAnnouncedAt)
+        )
+          fail(channel.id, "payment deadline precedes result");
+        if (channel.status !== "unknown" && !channel.registrationVerifiedAt)
+          fail(channel.id, "known registration status needs timestamp and channel");
+        if (
+          channel.status !== "unknown" &&
+          !race.sources!.some(
+            (source) =>
+              channel.sourceIds.includes(source.id) &&
+              source.fields.includes("channels.registration"),
+          )
+        )
+          fail(channel.id, "registration status lacks field evidence");
+      }
     }
   }
 }

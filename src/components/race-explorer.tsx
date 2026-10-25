@@ -1,4 +1,5 @@
 "use client";
+import { registrationUncertaintyReason } from "@/lib/verification";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -11,6 +12,7 @@ import {
   distanceLabel,
   filterError,
   groupStatus,
+  channelStatus,
   hongKongToday,
   parseFilters,
   registrationCountdown,
@@ -18,9 +20,11 @@ import {
   serializeFilters,
   statusSummary,
 } from "@/lib/races";
+import { groupLocations } from "@/lib/group-locations";
 import { raceHref } from "@/lib/site";
 import {
   distanceOptions,
+  channelTypeLabels,
   regions,
   registrationLabels,
   type Filters,
@@ -38,26 +42,26 @@ function dateString(date: Date) {
 
 function GroupStatusList({ race, groups, now }: { race: Race; groups: RaceGroup[]; now: string }) {
   const rows = (items: RaceGroup[]) =>
-    items.map((group) => {
-      const ambiguous = race.groups.some(
-        (other) =>
-          other.id !== group.id &&
-          other.distanceKm === group.distanceKm &&
-          other.registrationMethod === group.registrationMethod,
-      );
-      return (
-        <li key={group.id}>
-          <span className="group-identity">
-            <strong>{distanceLabel(group.distanceKm)}</strong>
-          </span>
-          <span className="group-channel-status">
-            <span>{group.registrationMethod ?? "渠道待核實"}</span>
-            <StatusBadge status={groupStatus(race, group, now)} />
-          </span>
-          {ambiguous && <span className="group-name">{group.name}</span>}
-        </li>
-      );
-    });
+    items.flatMap((group) =>
+      group.channels.map((channel) => {
+        const reason = registrationUncertaintyReason(race, group, channel, now);
+        return (
+          <li key={channel.id} className="channel-list-row">
+            <span className="group-identity">
+              <strong>
+                {distanceLabel(group.distanceKm)} · {channel.name}
+              </strong>
+            </span>
+            <span className="group-channel-status">
+              <span>{channel.registrationMethod}</span>
+              <StatusBadge status={channelStatus(race, group, channel, now)} />
+            </span>
+            <span className="group-name">{channel.eligibility}</span>
+            {reason && <span className="group-name verification-reason">{reason}</span>}
+          </li>
+        );
+      }),
+    );
   return (
     <div className="group-status-list">
       <ul>{rows(groups.slice(0, 2))}</ul>
@@ -124,7 +128,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   function field<K extends keyof Filters>(key: K, value: Filters[K]) {
     update({ ...filters, [key]: value });
   }
-  function toggle(key: "distances" | "regions" | "statuses", value: string) {
+  function toggle(key: "distances" | "regions" | "statuses" | "channels", value: string) {
     const values: string[] = filters[key];
     update({
       ...filters,
@@ -169,6 +173,10 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
       : []),
     ...filters.distances.map((x) => ({ label: x, remove: () => toggle("distances", x) })),
     ...filters.regions.map((x) => ({ label: x, remove: () => toggle("regions", x) })),
+    ...filters.channels.map((x) => ({
+      label: channelTypeLabels[x],
+      remove: () => toggle("channels", x),
+    })),
     ...filters.statuses.map((x) => ({
       label: registrationLabels[x],
       remove: () => toggle("statuses", x),
@@ -204,7 +212,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
           </div>
           <div>
             <strong>{openCount.toString().padStart(2, "0")}</strong>
-            <span>場有組別可報名</span>
+            <span>場有渠道接受申請</span>
           </div>
         </div>
       </div>
@@ -242,7 +250,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             }
           >
             {onlyOpen && <Icon name="check" size={14} />}
-            只睇可報名
+            只睇接受申請嘅渠道
           </button>
           <button
             className={
@@ -304,6 +312,23 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                   </button>
                 ))}
               </div>
+            </fieldset>
+            <fieldset>
+              <legend>
+                <span>報名渠道</span>
+              </legend>
+              <div className="option-row">
+                {Object.entries(channelTypeLabels).map(([key, label]) => (
+                  <button
+                    key={key}
+                    aria-pressed={filters.channels.includes(key as keyof typeof channelTypeLabels)}
+                    onClick={() => toggle("channels", key)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <small>同欄多選；接受申請仍須符合該渠道資格</small>
             </fieldset>
             <fieldset>
               <legend>
@@ -376,7 +401,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             </div>
           </details>
           <div className="filter-hint">
-            <span>只收錄路跑 · 條件可多選，狀態按組別判斷</span>
+            <span>只收錄路跑 · 條件可多選，渠道及狀態須同時符合</span>
             <button className="filter-reset" onClick={() => update({ ...defaultFilters })}>
               重設條件
             </button>
@@ -452,7 +477,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
       )}
       <p className="data-note">
         <span className="demo-dot" />
-        官方來源整理，狀態只對應所列渠道；超過 72 小時未核對會顯示待核實。
+        列表只顯示符合條件嘅渠道，接受申請仍須符合資格；超過 72 小時未核對會顯示待核實。
         {!ready && <span className="sr-only">正在載入你的篩選條件。</span>}
       </p>
       <div className="race-results-layout">
@@ -509,12 +534,15 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                     </div>
                     <div className="race-location">
                       <Icon name="pin" size={16} />
-                      <div>
-                        {race.venue}
-                        <small>
-                          {race.region ?? "按組別起點"} · {race.district}
-                        </small>
-                      </div>
+                      <ul className="race-start-list" aria-label="符合條件的組別起點">
+                        {groupLocations(race, groups).map((location, index) => (
+                          <li key={index}>
+                            <strong>{location.distances.join("／")}起點</strong>
+                            <span>{location.venue ?? "起點待核實"}</span>
+                            {location.region && <small>{location.region}</small>}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                     <div className="race-status">
                       <StatusBadge status={summary.key}>{summary.label}</StatusBadge>
@@ -522,12 +550,15 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                         <>
                           <span
                             className={`deadline-countdown${countdown.urgent ? " urgent" : ""}`}
-                            title={`最早截止組別：${countdown.groupName}`}
+                            title={`最早截止：${countdown.groupName} · ${countdown.channelName}`}
                           >
                             <Icon name="clock" size={13} />
                             {countdown.label}
                           </span>
-                          <small className="deadline-exact" title={countdown.groupName}>
+                          <small
+                            className="deadline-exact"
+                            title={`${countdown.groupName} · ${countdown.channelName}`}
+                          >
                             最早截止：
                             <time dateTime={countdown.deadline}>
                               {countdown.deadline.includes("T")
@@ -539,7 +570,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                       )}
                       <small className="verification-label">
                         {race.verifiedAt
-                          ? `核對 ${displayDate(race.verifiedAt.slice(0, 10))}`
+                          ? `賽事資料核對 ${displayDate(race.verifiedAt.slice(0, 10))}`
                           : "待核實"}
                       </small>
                     </div>
