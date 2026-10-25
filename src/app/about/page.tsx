@@ -1,3 +1,6 @@
+import { CorrectionForm } from "@/components/correction-form";
+import { races } from "@/data/races";
+import { raceHref } from "@/lib/site";
 import Link from "next/link";
 import { Breadcrumb } from "@/components/ui";
 import { pageMetadata, siteName } from "@/lib/site";
@@ -31,7 +34,7 @@ export default function About() {
           <h2>正式資料點樣整理</h2>
           <p>
             每場已發布紀錄按主辦方官網或正式公告整理，清楚記錄來源及核實範圍。報名狀態超過 72
-            小時未核對會變為待核實，已過明確截止時間則顯示已截止。報名狀態按組別分開處理，未知資料標示「未公布」或「待核實」。
+            小時未核對會變為待核實，已過明確截止時間則顯示已截止。報名狀態按組別分開處理，未知資料標示「待核實」並說明原因；只有官方明確表示尚未公布，先會標示「官方未公布」。
           </p>
           <p>
             第三方資訊唔代替官方條款。付款前應再次核對比賽年份、組別、費用、資格及退款／改期安排。
@@ -48,15 +51,10 @@ export default function About() {
           {releaseSettings.operatorName && (
             <p>網站營運／資料整理：{releaseSettings.operatorName}</p>
           )}
-          {releaseSettings.contactEmail ? (
-            <p>
-              如發現日期、組別或報名安排有誤，請電郵{" "}
-              <a href={`mailto:${releaseSettings.contactEmail}`}>{releaseSettings.contactEmail}</a>
-              ，附上賽事名稱、需要更正嘅內容同官方公告連結。我們會核實後更新紀錄。
-            </p>
-          ) : (
-            <p>此測試版本暫未開放公開投稿或回報。正式上線時會提供營運者資料同聯絡渠道。</p>
-          )}
+          <CorrectionForm
+            races={races.map((race) => ({ id: race.id, name: race.name, path: raceHref(race) }))}
+            contactEmail={releaseSettings.contactEmail}
+          />
         </section>
         <Link className="text-link" href="/guides/">
           閱讀原創指南 →

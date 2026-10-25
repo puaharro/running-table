@@ -229,3 +229,155 @@ summary:focus-visible {
     animation: none !important;
   }
 }
+
+.registration-verification {
+  margin: 12px 0;
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+.registration-verification p {
+  margin: 4px 0;
+}
+.verification-reason {
+  color: #76501d;
+}
+.correction-form {
+  display: grid;
+  gap: 18px;
+  margin-top: 20px;
+}
+.correction-form label {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+}
+.correction-form input,
+.correction-form select,
+.correction-form textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #9badaa;
+  border-radius: 8px;
+  background: white;
+  color: #183a3b;
+  font: inherit;
+}
+.correction-form textarea {
+  resize: vertical;
+}
+.correction-form button {
+  justify-self: start;
+}
+.correction-form [role="status"] {
+  overflow-wrap: anywhere;
+}
+.correction-form textarea:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.race-start-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+}
+.race-start-list li {
+  display: grid;
+  gap: 2px;
+  overflow-wrap: anywhere;
+}
+.race-start-list strong {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+.race-location .race-start-list small {
+  margin: 0;
+}
+
+.registration-channel {
+  margin-top: 18px;
+  padding: 18px 0;
+  border-top: 1px solid #c7d3cb;
+  overflow-wrap: anywhere;
+  scroll-margin-top: 100px;
+}
+.registration-channel h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+.registration-channel .summary-group-name {
+  gap: 8px;
+}
+.registration-channel dd small {
+  display: block;
+  margin-top: 5px;
+  line-height: 1.65;
+}
+.channel-summary-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+.channel-summary-list > li + li {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #c7d3cb;
+}
+.channel-summary-list p {
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  margin: 6px 0;
+}
+.channels-heading {
+  margin-top: 22px;
+}
+.channel-list-row {
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e6df;
+}
+.group-status-list .channel-list-row .group-name {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+.group-status-list .channel-list-row .verification-reason {
+  color: #76501d;
+}
+
+.registration-summary-list > li {
+  grid-template-columns: minmax(100px, 0.25fr) minmax(0, 1fr);
+  align-items: start;
+}
+.registration-summary-list > li > h3 {
+  margin: 12px 0 0;
+}
+.channel-summary-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 0;
+}
+.channel-summary-list > li {
+  min-width: 0;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #d7e0d8;
+  border-radius: 8px;
+}
+.channel-summary-list > li + li {
+  margin-top: 0;
+  padding-top: 12px;
+  border-top: 1px solid #d7e0d8;
+}
+@media (max-width: 760px) {
+  .registration-summary-list > li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .channel-summary-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

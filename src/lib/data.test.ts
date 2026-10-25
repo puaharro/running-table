@@ -19,8 +19,11 @@ it("has unique stable IDs, valid group dates and transparent prototype provenanc
       expect(validDate(g.date)).toBe(true);
       expect(g.date >= r.date && g.date <= r.endDate).toBe(true);
       expect(g.distanceKm).toBeGreaterThan(0);
-      expect(g.price === null || g.price >= 0).toBe(true);
-      if (g.deadline) expect(validDate(g.deadline)).toBe(true);
+      expect(g.channels.length).toBeGreaterThan(0);
+      for (const channel of g.channels) {
+        expect(channel.price === null || channel.price >= 0).toBe(true);
+        if (channel.deadline) expect(validDate(channel.deadline)).toBe(true);
+      }
     }
   }
   expect(new Set(groupIds).size).toBe(groupIds.length);

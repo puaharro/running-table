@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import rawCatalog from "../data/catalog.json";
 import { assertCatalog, publishedRaces } from "./catalog";
-import { defaultFilters, groupStatus, selectRaces } from "./races";
+import { defaultFilters, groupStatus, channelStatus, selectRaces } from "./races";
 import { releaseIssues } from "./release";
 import { raceStructuredData, safeJsonLd } from "./structured-data";
 import type { Race } from "./types";
-const now = "2026-10-21T13:30:00+08:00";
+const now = "2026-10-25T13:30:00+08:00";
 function catalog() {
   const data: unknown = structuredClone(rawCatalog);
   assertCatalog(data);
@@ -14,7 +14,7 @@ function catalog() {
 describe("real catalog publication and provenance", () => {
   it("validates deadlines as Hong Kong dates even when stored in UTC", () => {
     const data = catalog();
-    const group = data.find((r) => r.id === "schkm-harbourfront-2027")!.groups[0];
+    const group = data.find((r) => r.id === "schkm-harbourfront-2027")!.groups[0].channels[0];
     group.registrationClosesAt = "2026-10-25T16:30:00Z";
     expect(() => assertCatalog(data)).not.toThrow();
   });
@@ -46,45 +46,53 @@ describe("real catalog publication and provenance", () => {
   });
   it("rejects unsafe links, invalid timestamps and mismatched deadlines", () => {
     const data = catalog();
-    data[0].groups[0].registrationUrl = "javascript:alert(1)";
+    data[0].groups[0].channels[0].registrationUrl = "javascript:alert(1)";
     expect(() => assertCatalog(data)).toThrow("HTTPS");
     const other = catalog();
     other[0].verifiedAt = "2026-10-21";
     expect(() => assertCatalog(other)).toThrow("timestamp");
     const wrong = catalog();
-    wrong[0].groups[0].deadline = "2026-07-03";
+    wrong[0].groups[0].channels[0].deadline = "2026-07-03";
     expect(() => assertCatalog(wrong)).toThrow("disagree");
   });
   it("rejects negative fees and a registration window in reverse", () => {
     const data = catalog();
-    data[0].groups[0].price = -1;
+    data[0].groups[0].channels[0].price = -1;
     expect(() => assertCatalog(data)).toThrow("price");
     const other = catalog();
-    other[0].groups[0].registrationOpensAt = "2027-01-01T00:00:00+08:00";
+    other[0].groups[0].channels[0].registrationOpensAt = "2027-01-01T00:00:00+08:00";
     expect(() => assertCatalog(other)).toThrow("reversed");
   });
 });
 describe("exact deadlines, freshness and truthful channel statuses", () => {
   it("closes the 5K ballot exactly at noon HK time", () => {
     const r = catalog().find((r) => r.id === "schkm-harbourfront-2027")!;
-    const g = { ...r.groups[0], registrationVerifiedAt: "2026-10-26T11:00:00+08:00" };
-    expect(groupStatus(r, g, "2026-10-26T11:59:59+08:00")).toBe("open");
-    expect(groupStatus(r, g, "2026-10-26T04:00:00Z")).toBe("closed");
+    const g = { ...r.groups[0].channels[0], registrationVerifiedAt: "2026-10-26T11:00:00+08:00" };
+    expect(channelStatus(r, r.groups[0], g, "2026-10-26T11:59:59+08:00")).toBe("open");
+    expect(channelStatus(r, r.groups[0], g, "2026-10-26T04:00:00Z")).toBe("closed");
   });
   it("turns stale status into unknown after 72 hours without inventing capacity", () => {
     const r = catalog().find((r) => r.id === "schkm-youth-2027")!;
-    expect(groupStatus(r, r.groups[0], "2026-10-24T13:22:07+08:00")).toBe("open");
-    expect(groupStatus(r, r.groups[0], "2026-10-24T13:22:08+08:00")).toBe("unknown");
+    const group = {
+      ...r.groups[0].channels[0],
+      registrationVerifiedAt: "2026-10-21T13:22:07+08:00",
+    };
+    expect(channelStatus(r, r.groups[0], group, "2026-10-24T13:22:07+08:00")).toBe("open");
+    expect(channelStatus(r, r.groups[0], group, "2026-10-24T13:22:08+08:00")).toBe("unknown");
   });
   it("preserves deadline closure even when its source is older", () => {
     const r = catalog()[0];
     expect(groupStatus(r, r.groups[0], now)).toBe("closed");
   });
-  it("keeps unknown registration fees and status unknown", () => {
+  it("keeps unavailable UNICEF categories unknown and distinguishes minimum fundraising from entry fees", () => {
     const r = catalog().find((r) => r.id === "unicef-powerun-2027")!;
-    expect(r.groups.every((g) => g.price === null && groupStatus(r, g, now) === "unknown")).toBe(
-      true,
-    );
+    expect(r.groups.map((g) => g.channels[0].price)).toEqual([600, 550, 500, 400]);
+    expect(r.groups.every((g) => g.channels[0].priceType === "minimum-donation")).toBe(true);
+    expect(groupStatus(r, r.groups[0], now)).toBe("unknown");
+    expect(r.groups.slice(1).every((g) => groupStatus(r, g, now) === "open")).toBe(true);
+    expect(
+      selectRaces([r], { ...defaultFilters, distances: ["半馬"], statuses: ["open"] }, now),
+    ).toEqual([]);
   });
   it("honours an official sold-out notice rather than a directory tag", () => {
     const r = catalog().find((r) => r.id === "mizuno-hk-run-fest-2026")!;

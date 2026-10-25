@@ -10,29 +10,34 @@ const queue = [];
 for (const race of records) {
   if (race.publication !== "published") continue;
   for (const group of race.groups) {
-    const reasons = [];
-    const age = group.registrationVerifiedAt
-      ? now.getTime() - Date.parse(group.registrationVerifiedAt)
-      : Infinity;
-    const deadline = group.registrationClosesAt
-      ? Date.parse(group.registrationClosesAt)
-      : group.deadline
-        ? Date.parse(`${group.deadline}T23:59:59+08:00`)
+    for (const channel of group.channels) {
+      const reasons = [];
+      const age = channel.registrationVerifiedAt
+        ? now.getTime() - Date.parse(channel.registrationVerifiedAt)
         : Infinity;
-    if (deadline >= now.getTime() && group.status !== "closed" && age > 72 * 3600000)
-      reasons.push("報名狀態超過72小時／未核實");
-    if (deadline >= now.getTime() && deadline - now.getTime() <= 7 * 86400000)
-      reasons.push("7日內報名截止，優先覆核");
-    if (group.price === null) reasons.push("費用未核實");
-    if (group.region === null || (group.region === undefined && race.region === null))
-      reasons.push("組別起點地區未核實");
-    if (reasons.length)
-      queue.push({
-        race: race.name,
-        group: group.name,
-        reasons,
-        officialUrl: group.registrationUrl ?? race.sourceUrl,
-      });
+      const deadline = channel.registrationClosesAt
+        ? Date.parse(channel.registrationClosesAt)
+        : channel.deadline
+          ? Date.parse(`${channel.deadline}T23:59:59+08:00`)
+          : Infinity;
+      if (deadline >= now.getTime() && channel.status === "unknown")
+        reasons.push("報名狀態仍待確認");
+      if (deadline >= now.getTime() && channel.status !== "closed" && age > 72 * 3600000)
+        reasons.push("報名狀態超過72小時／未核實");
+      if (deadline >= now.getTime() && deadline - now.getTime() <= 7 * 86400000)
+        reasons.push("7日內報名截止，優先覆核");
+      if (channel.price === null) reasons.push("費用未核實");
+      if (group.region === null || (group.region === undefined && race.region === null))
+        reasons.push("組別起點地區未核實");
+      if (reasons.length)
+        queue.push({
+          race: race.name,
+          group: group.name,
+          channel: channel.name,
+          reasons,
+          officialUrl: channel.registrationUrl ?? race.sourceUrl,
+        });
+    }
   }
 }
 console.log(JSON.stringify({ generatedAt: now.toISOString(), items: queue }, null, 2));

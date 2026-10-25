@@ -4,9 +4,7 @@ import { guides } from "@/data/guides";
 import { GuideCard, Icon } from "@/components/ui";
 import { pageMetadata } from "@/lib/site";
 import Link from "next/link";
-import { distanceLabel, displayDate, hongKongToday } from "@/lib/races";
-import { raceHref } from "@/lib/site";
-import { LiveRaceStatus } from "@/components/live-registration";
+import { NextRaceCard } from "@/components/next-race-card";
 
 export const metadata = pageMetadata(
   "香港路跑賽事總覽",
@@ -16,9 +14,6 @@ export const metadata = pageMetadata(
 
 export default function Home() {
   const initialNow = new Date().toISOString();
-  const nextRace = [...races]
-    .filter((race) => race.endDate >= hongKongToday() && race.status === "scheduled")
-    .sort((a, b) => a.date.localeCompare(b.date))[0];
   return (
     <main id="main">
       <section className="calendar-masthead">
@@ -43,46 +38,10 @@ export default function Home() {
               </Link>
             </div>
             <div className="masthead-trust">
-              <Icon name="check" size={15} /> 官方來源整理 <i /> 依組別列出報名狀態
+              <Icon name="check" size={15} /> 官方來源整理 <i /> 依渠道列出申請安排
             </div>
           </div>
-          {nextRace && (
-            <Link href={raceHref(nextRace)} className="next-race-card">
-              <div className="next-race-top">
-                <span>下一場已收錄賽事</span>
-                <Icon name="arrow" />
-              </div>
-              <div className="next-race-visual" aria-hidden="true">
-                <div className="track-orbit" />
-                <div className="next-race-day">
-                  {nextRace.date.slice(8)}
-                  <span>
-                    {Number(nextRace.date.slice(5, 7))} 月 · {nextRace.date.slice(0, 4)}
-                  </span>
-                </div>
-                <span className="next-race-word">
-                  NEXT
-                  <br />
-                  START.
-                </span>
-              </div>
-              <div className="next-race-bottom">
-                <small>
-                  {displayDate(nextRace.date)} · {nextRace.district}
-                </small>
-                <h2>{nextRace.name}</h2>
-                <div>
-                  <LiveRaceStatus race={nextRace} initialNow={initialNow} />
-                  {[
-                    ...new Set(nextRace.groups.map((group) => distanceLabel(group.distanceKm))),
-                  ].map((distance) => (
-                    <span key={distance}>{distance}</span>
-                  ))}
-                  <span className="next-race-detail">查看賽事 ↗</span>
-                </div>
-              </div>
-            </Link>
-          )}
+          <NextRaceCard races={races} initialNow={initialNow} />
         </div>
       </section>
       <RaceExplorer races={races} initialNow={initialNow} />

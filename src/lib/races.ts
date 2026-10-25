@@ -1,10 +1,13 @@
 import {
+  channelTypeLabels,
   distanceOptions,
   registrationLabels,
   regions,
   type Filters,
   type Race,
   type RaceGroup,
+  type RegistrationChannel,
+  type ChannelType,
   type RegistrationStatus,
 } from "./types";
 
@@ -18,6 +21,7 @@ export const defaultFilters: Filters = {
   regions: [],
   sports: [],
   statuses: [],
+  channels: [],
   view: "upcoming",
   sort: "date",
 };
@@ -49,7 +53,7 @@ export type Clock = string | Date;
 export function clockTime(now: Clock) {
   return now instanceof Date ? now : new Date(now.length === 10 ? `${now}T00:00:00+08:00` : now);
 }
-export function closingTime(group: RaceGroup) {
+export function closingTime(group: RegistrationChannel) {
   return group.registrationClosesAt
     ? Date.parse(group.registrationClosesAt)
     : group.deadline
@@ -70,19 +74,24 @@ export function formatTimestamp(value: string) {
   // ICU versions use different literal spaces; keep SSR and browser text identical.
   return `${part("day")}/${part("month")}/${part("year")} ${part("hour")}:${part("minute")}`;
 }
-export function registrationIsStale(race: Race, group: RaceGroup, now: Clock) {
+export function registrationIsStale(race: Race, group: RegistrationChannel, now: Clock) {
   if (race.verification === "demo") return false;
   if (!group.registrationVerifiedAt) return true;
   const age = clockTime(now).getTime() - Date.parse(group.registrationVerifiedAt);
   return !Number.isFinite(age) || age < 0 || age > 72 * 60 * 60 * 1000;
 }
-export function groupStatus(race: Race, group: RaceGroup, now: Clock): RegistrationStatus {
+export function channelStatus(
+  race: Race,
+  raceGroup: RaceGroup,
+  group: RegistrationChannel,
+  now: Clock,
+): RegistrationStatus {
   const current = clockTime(now),
     today = hongKongToday(current);
   if (
     race.status === "cancelled" ||
     race.status === "completed" ||
-    (group.endDate ?? group.date) < today
+    (raceGroup.endDate ?? raceGroup.date) < today
   )
     return "closed";
   if (race.status === "postponed") return "unknown";
@@ -92,19 +101,36 @@ export function groupStatus(race: Race, group: RaceGroup, now: Clock): Registrat
     return "upcoming";
   if (registrationIsStale(race, group, now)) return "unknown";
   if (group.registrationStart && group.registrationStart > today) return "upcoming";
-  if (group.status === "upcoming" && group.registrationStart && group.registrationStart <= today)
+  if (
+    group.status === "upcoming" &&
+    (group.registrationOpensAt
+      ? current.getTime() >= Date.parse(group.registrationOpensAt)
+      : group.registrationStart && group.registrationStart <= today)
+  )
     return "unknown";
   return group.status;
+}
+function aggregateStatus(statuses: RegistrationStatus[]): RegistrationStatus {
+  return (
+    (["open", "unknown", "waitlist", "upcoming", "full", "closed"] as const).find((status) =>
+      statuses.includes(status),
+    ) ?? "unknown"
+  );
+}
+export function groupStatus(race: Race, group: RaceGroup, now: Clock): RegistrationStatus {
+  return aggregateStatus(group.channels.map((channel) => channelStatus(race, group, channel, now)));
 }
 export function registrationCountdown(race: Race, groups: RaceGroup[], now: Clock) {
   const current = clockTime(now).getTime();
   if (!Number.isFinite(current)) return null;
-  const group = groups
-    .filter((candidate) => groupStatus(race, candidate, now) === "open")
-    .filter((candidate) => Number.isFinite(closingTime(candidate)))
-    .sort((a, b) => closingTime(a) - closingTime(b))[0];
-  if (!group) return null;
-  const remaining = closingTime(group) - current;
+  const entry = groups
+    .flatMap((group) => group.channels.map((channel) => ({ group, channel })))
+    .filter(({ group, channel }) => channelStatus(race, group, channel, now) === "open")
+    .filter(({ channel }) => Number.isFinite(closingTime(channel)))
+    .sort((a, b) => closingTime(a.channel) - closingTime(b.channel))[0];
+  if (!entry) return null;
+  const { group, channel } = entry;
+  const remaining = closingTime(channel) - current;
   if (remaining <= 0) return null;
   const minute = 60_000;
   const hour = 60 * minute;
@@ -120,7 +146,8 @@ export function registrationCountdown(race: Race, groups: RaceGroup[], now: Cloc
   return {
     label,
     urgent: remaining < day,
-    deadline: group.registrationClosesAt ?? group.deadline!,
+    deadline: channel.registrationClosesAt ?? channel.deadline!,
+    channelName: channel.name,
     groupName: group.name,
   };
 }
@@ -134,18 +161,24 @@ export function statusSummary(
   if (race.status === "postponed") return { key: "unknown", label: "賽事延期" };
   if (race.status === "completed" || race.endDate < today)
     return { key: "closed", label: "已完成" };
-  const statuses = [...new Set(groups.map((g) => groupStatus(race, g, now)))];
+  const entries = groups.flatMap((group) => group.channels.map((channel) => ({ group, channel })));
+  const statuses = [
+    ...new Set(entries.map(({ group, channel }) => channelStatus(race, group, channel, now))),
+  ];
   if (statuses.includes("open"))
-    return { key: "open", label: statuses.length > 1 ? "部分組別可報名" : "開放報名" };
-  const key = statuses.includes("unknown")
-    ? "unknown"
-    : statuses.includes("waitlist")
-      ? "waitlist"
-      : statuses.includes("upcoming")
-        ? "upcoming"
-        : (statuses[0] ?? "unknown");
-  const ballot = groups.length > 0 && groups.every((g) => g.registrationMethod === "公眾抽籤");
-  return { key, label: ballot && key === "closed" ? "公眾抽籤已截止" : registrationLabels[key] };
+    return { key: "open", label: statuses.length > 1 ? "部分渠道接受申請" : "所列渠道接受申請" };
+  const key = aggregateStatus(statuses);
+  const ballot =
+    entries.length > 0 && entries.every(({ channel }) => channel.registrationMethod === "公眾抽籤");
+  return {
+    key,
+    label:
+      ballot && key === "closed"
+        ? "公眾抽籤已截止"
+        : key === "closed"
+          ? "所列渠道已截止"
+          : registrationLabels[key],
+  };
 }
 function distanceMatches(km: number, selection: string[]) {
   if (!selection.length) return true;
@@ -172,29 +205,38 @@ export function selectRaces(races: Race[], f: Filters, now: Clock) {
     if (f.view === "upcoming" && race.endDate < today) return [];
     if (f.view === "past" && race.endDate >= today) return [];
     if (f.sports.length && !f.sports.includes(race.sport)) return [];
-    if (
-      q &&
-      ![race.name, race.englishName, race.organizer, race.district, race.venue, ...race.tags]
+    const raceMatchesQuery =
+      !q ||
+      [race.name, race.englishName, race.organizer, race.district, race.venue, ...race.tags]
         .join(" ")
         .toLocaleLowerCase()
-        .includes(q)
-    )
-      return [];
-    const groups = race.groups.filter((g) => {
+        .includes(q);
+    const groups = race.groups.flatMap((g) => {
+      if (!raceMatchesQuery && !(g.venue ?? "").toLocaleLowerCase().includes(q)) return [];
       const region = g.region === undefined ? race.region : g.region;
-      if (f.regions.length && (!region || !f.regions.includes(region))) return false;
-      if (f.from && (g.endDate ?? g.date) < f.from) return false;
-      if (f.to && g.date > f.to) return false;
-      if (!distanceMatches(g.distanceKm, f.distances)) return false;
-      if (f.min && g.distanceKm < Number(f.min)) return false;
-      if (f.max && g.distanceKm > Number(f.max)) return false;
-      if (f.statuses.length && !f.statuses.includes(groupStatus(race, g, now))) return false;
-      return true;
+      if (f.regions.length && (!region || !f.regions.includes(region))) return [];
+      if (f.from && (g.endDate ?? g.date) < f.from) return [];
+      if (f.to && g.date > f.to) return [];
+      if (!distanceMatches(g.distanceKm, f.distances)) return [];
+      if (f.min && g.distanceKm < Number(f.min)) return [];
+      if (f.max && g.distanceKm > Number(f.max)) return [];
+      const channels = g.channels.filter(
+        (channel) =>
+          (!f.channels.length || f.channels.includes(channel.type)) &&
+          (!f.statuses.length || f.statuses.includes(channelStatus(race, g, channel, now))),
+      );
+      return channels.length ? [{ ...g, channels }] : [];
     });
     return groups.length ? [{ race, groups }] : [];
   });
   const nearestDeadline = ({ race, groups }: (typeof result)[number]) =>
-    Math.min(...groups.filter((g) => groupStatus(race, g, now) === "open").map(closingTime));
+    Math.min(
+      ...groups.flatMap((group) =>
+        group.channels
+          .filter((channel) => channelStatus(race, group, channel, now) === "open")
+          .map(closingTime),
+      ),
+    );
   return result.sort((a, b) =>
     f.sort === "deadline"
       ? nearestDeadline(a) - nearestDeadline(b) || a.race.date.localeCompare(b.race.date)
@@ -222,6 +264,7 @@ export function parseFilters(params: URLSearchParams): Filters {
     regions: list("region", regions),
     sports: list("sport", ["路跑"]),
     statuses: list("status", Object.keys(registrationLabels)) as RegistrationStatus[],
+    channels: list("channel", Object.keys(channelTypeLabels)) as ChannelType[],
     view: ["upcoming", "all", "past"].includes(params.get("view") ?? "")
       ? (params.get("view") as Filters["view"])
       : "upcoming",
@@ -238,9 +281,17 @@ export function serializeFilters(f: Filters) {
     ["regions", "region"],
     ["sports", "sport"],
     ["statuses", "status"],
+    ["channels", "channel"],
   ] as const)
     for (const value of f[field]) p.append(key, value);
   if (f.view !== "upcoming") p.set("view", f.view);
   if (f.sort !== "date") p.set("sort", f.sort);
   return p.toString();
+}
+
+export function nextScheduledRace(races: Race[], now: Clock) {
+  const today = hongKongToday(clockTime(now));
+  return races
+    .filter((race) => race.status === "scheduled" && race.endDate >= today)
+    .sort((a, b) => a.date.localeCompare(b.date))[0];
 }

@@ -78,7 +78,7 @@ describe("statuses and Hong Kong dates", () => {
     expect(groupStatus(race, race.groups[0], "2026-12-02")).toBe("unknown");
   });
   it("marks partial availability and produces the correct HK day", () => {
-    expect(statusSummary(races[0], races[0].groups, today).label).toBe("部分組別可報名");
+    expect(statusSummary(races[0], races[0].groups, today).label).toBe("部分渠道接受申請");
     expect(hongKongToday(new Date("2026-10-20T16:00:00Z"))).toBe(today);
     expect(hongKongToday(new Date("2026-10-20T15:59:59Z"))).toBe("2026-10-20");
   });
