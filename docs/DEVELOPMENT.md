@@ -28,7 +28,7 @@ Node 24、Next.js 靜態輸出；package-lock.json 固定依賴。dev 啟動開�
 
 本地開發分支 feature/production-content-foundation。程式、公開資料、指南及來源紀錄一併提交；唔放環境密鑰、私人投稿或會員資料。
 
-已備 GitHub Actions，執行 npm ci、測試、建置、匯出及 HTTP 路由檢查。未連接 GitHub remote，未喺遠端執行；目前仍以本地 Git 作版本紀錄。
+GitHub Actions 會於 main 更新或 Pull Request 執行 npm ci、測試、建置、匯出及 HTTP 路由檢查。repo 已連接 GitHub；功能修改使用獨立分支與 Pull Request，發布前檢查該提交的 CI 結果。
 
 ## 搜尋收錄與正式網域
 
