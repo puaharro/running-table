@@ -41,36 +41,69 @@ function dateString(date: Date) {
 }
 
 function GroupStatusList({ race, groups, now }: { race: Race; groups: RaceGroup[]; now: string }) {
-  const rows = (items: RaceGroup[]) =>
-    items.flatMap((group) =>
-      group.channels.map((channel) => {
-        const reason = registrationUncertaintyReason(race, group, channel, now);
-        return (
-          <li key={channel.id} className="channel-list-row">
-            <span className="group-identity">
-              <strong>
-                {distanceLabel(group.distanceKm)} · {channel.name}
-              </strong>
-            </span>
-            <span className="group-channel-status">
-              <span>{channel.registrationMethod}</span>
-              <StatusBadge status={channelStatus(race, group, channel, now)} />
-            </span>
-            <span className="group-name">{channel.eligibility}</span>
-            {reason && <span className="group-name verification-reason">{reason}</span>}
-          </li>
-        );
-      }),
-    );
+  const count = groups.reduce((total, group) => total + group.channels.length, 0);
+  const groupLabel = (group: RaceGroup) =>
+    groups.filter(
+      (candidate) => distanceLabel(candidate.distanceKm) === distanceLabel(group.distanceKm),
+    ).length > 1
+      ? group.name
+      : distanceLabel(group.distanceKm);
   return (
-    <div className="group-status-list">
-      <ul>{rows(groups.slice(0, 2))}</ul>
-      {groups.length > 2 && (
-        <details>
-          <summary>查看其餘 {groups.length - 2} 個組別</summary>
-          <ul>{rows(groups.slice(2))}</ul>
-        </details>
-      )}
+    <div className="group-status-list compact-channels">
+      <ul className="group-status-preview" aria-label="符合條件的渠道摘要">
+        {groups.slice(0, 2).map((group) => (
+          <li
+            key={group.id}
+            className={`channel-preview-group${groupLabel(group) !== distanceLabel(group.distanceKm) ? " named-group" : ""}`}
+          >
+            <strong>{groupLabel(group)}</strong>
+            <ul>
+              {group.channels.slice(0, 2).map((channel) => (
+                <li key={channel.id} className="channel-preview-row">
+                  <span>{channel.name}</span>
+                  <StatusBadge status={channelStatus(race, group, channel, now)} />
+                </li>
+              ))}
+            </ul>
+            {group.channels.length > 2 && (
+              <small className="channel-more">另有 {group.channels.length - 2} 個渠道</small>
+            )}
+          </li>
+        ))}
+        {groups.length > 2 && <li className="channel-more">另有 {groups.length - 2} 個組別</li>}
+      </ul>
+      <details className="channel-disclosure">
+        <summary>
+          <span className="when-closed">查看{count > 1 ? `全部 ${count} 個` : ""}渠道及資格</span>
+          <span className="when-open">收起渠道及資格</span>
+          <span className="sr-only">：{race.name}</span>
+        </summary>
+        <ul className="channel-expanded-groups">
+          {groups.map((group) => (
+            <li key={group.id} className="channel-expanded-group">
+              <strong>{group.name}</strong>
+              <ul>
+                {group.channels.map((channel) => {
+                  const reason = registrationUncertaintyReason(race, group, channel, now);
+                  return (
+                    <li key={channel.id} className="channel-expanded-row">
+                      <div className="channel-preview-row">
+                        <strong>{channel.name}</strong>
+                        <StatusBadge status={channelStatus(race, group, channel, now)} />
+                      </div>
+                      {!channel.name.includes(channel.registrationMethod) && (
+                        <p>方式：{channel.registrationMethod}</p>
+                      )}
+                      <p>資格：{channel.eligibility}</p>
+                      {reason && <p className="verification-reason">{reason}</p>}
+                    </li>
+                  );
+                })}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </details>
     </div>
   );
 }
@@ -240,17 +273,18 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             <span>{expanded ? "−" : "+"}</span>
           </button>
         </div>
-        <div className="quick-row">
+        <div className="quick-row" aria-describedby="quick-filter-note">
           <span>快速搵：</span>
           <button
             className={`only-open-shortcut${onlyOpen ? " selected" : ""}`}
             aria-pressed={onlyOpen}
+            aria-describedby="quick-filter-note"
             onClick={() =>
               update({ ...filters, statuses: onlyOpen ? [] : ["open"], view: "upcoming" })
             }
           >
             {onlyOpen && <Icon name="check" size={14} />}
-            只睇接受申請嘅渠道
+            接受申請
           </button>
           <button
             className={
@@ -264,6 +298,9 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
           </button>
           <button onClick={() => update({ ...filters, q: "親子" })}>親子同樂</button>
         </div>
+        <p id="quick-filter-note" className="quick-filter-note">
+          接受申請仍須符合渠道資格，名額以大會確認為準。
+        </p>
         <div id="filters" hidden={!expanded}>
           <div className="filter-grid">
             <fieldset className="date-field">

@@ -42,7 +42,7 @@
   min-width: 0;
 }
 .group-note {
-  background: #f2f5ed;
+  background: var(--surface-muted);
   padding: 10px 12px;
   font-size: var(--text-xs);
   line-height: 1.9;
@@ -192,7 +192,7 @@ p {
   top: 8px;
 }
 .prototype-strip {
-  background: #e9eee9;
+  background: var(--surface-muted);
   color: #39515b;
   text-align: center;
   font-size: var(--text-xs);
@@ -379,7 +379,7 @@ p {
 }
 .intro-strip {
   border-bottom: 1px solid var(--line);
-  background: #eeefe8;
+  background: var(--surface-muted);
 }
 .intro-strip > .shell {
   display: flex;
@@ -471,7 +471,7 @@ p {
   display: flex;
   align-items: center;
   gap: 13px;
-  background: #f5f6f2;
+  background: var(--surface-muted);
   border: 1px solid #e6e9e1;
   border-radius: 3px;
   flex: 1;
@@ -524,7 +524,7 @@ p {
 }
 .quick-row button {
   border: 0;
-  background: #f3f4ee;
+  background: var(--surface-muted);
   color: #536364;
   border-radius: 2px;
   padding: 4px 10px;
@@ -645,7 +645,7 @@ p {
   color: #687b75;
   border-top: 1px solid #eef0ec;
   padding: 9px 22px;
-  background: #fcfdf9;
+  background: var(--surface-card);
 }
 .selected-filters {
   display: flex;
@@ -682,7 +682,7 @@ p {
   gap: 15px;
   padding-top: 27px;
   padding-bottom: 13px;
-  border-bottom: 1px solid #cdd6ce;
+  border-bottom: 1px solid var(--border-subtle);
 }
 .view-tabs {
   display: flex;
@@ -760,7 +760,7 @@ p {
 }
 .race-table-head {
   padding: 13px 23px;
-  background: #eef1eb;
+  background: var(--surface-muted);
   font-size: var(--text-xs);
   color: #657970;
   letter-spacing: 0.04em;
@@ -770,14 +770,14 @@ p {
   align-items: center;
   gap: 13px;
   padding: 13px 23px;
-  background: #fbfcf9;
+  background: var(--surface-card);
   font-size: var(--text-xs);
   font-weight: 700;
   border-bottom: 1px solid #edf0e9;
 }
 .month-divider i {
   height: 1px;
-  background: #e8ece4;
+  background: var(--surface-muted);
   flex: 1;
 }
 .race-row {
@@ -787,7 +787,7 @@ p {
   transition: background 0.15s;
 }
 .race-row:hover {
-  background: #fcfdf9;
+  background: var(--surface-card);
 }
 .race-row:last-child {
   border-bottom: 0;
@@ -861,7 +861,7 @@ p {
 }
 .distance-tags span {
   font-size: var(--text-xs);
-  background: #f0f3ed;
+  background: var(--surface-muted);
   border: 1px solid #e3e9de;
   color: #466451;
   border-radius: 2px;
@@ -993,7 +993,7 @@ p {
   gap: 22px;
 }
 .guide-card {
-  border: 1px solid #dbe1d8;
+  border: 1px solid var(--border-subtle);
   border-radius: 4px;
   background: white;
   overflow: hidden;
@@ -1090,7 +1090,7 @@ p {
 }
 .site-footer {
   border-top: 1px solid var(--line);
-  background: #eeefe8;
+  background: var(--surface-muted);
 }
 .footer-main {
   padding: 35px 0 28px;
@@ -1126,7 +1126,7 @@ p {
 }
 .footer-bottom {
   padding-block: 14px;
-  border-top: 1px solid #d8dfd3;
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   justify-content: space-between;
   font-size: var(--text-xs);
@@ -1178,7 +1178,7 @@ p {
   font-size: var(--text-xs);
   color: #637a69;
   padding: 3px 8px;
-  border: 1px solid #dbe3d5;
+  border: 1px solid var(--border-subtle);
   border-radius: 3px;
 }
 .date-stamp {
@@ -1274,7 +1274,7 @@ p {
   gap: 15px;
   align-items: flex-start;
   padding: 14px 0;
-  border-bottom: 1px solid #e2e7dc;
+  border-bottom: 1px solid var(--border-subtle);
 }
 .highlight-list li > span {
   font-size: var(--text-xs);
@@ -1304,7 +1304,7 @@ p {
 }
 .group-card {
   background: white;
-  border: 1px solid #d9e1d3;
+  border: 1px solid var(--border-subtle);
   border-radius: 3px;
   padding: 20px;
 }
@@ -1334,7 +1334,7 @@ p {
   justify-content: space-between;
   gap: var(--space-3);
   padding: 9px 0;
-  border-top: 1px solid #edf0e8;
+  border-top: 1px solid var(--border-subtle);
 }
 .group-card dt {
   white-space: nowrap;
@@ -1540,7 +1540,7 @@ p {
   color: var(--coral-dark);
 }
 .article-cta {
-  background: #e9eee3;
+  background: var(--surface-muted);
   padding: 28px;
   border-radius: 3px;
   margin-top: 40px;
@@ -2376,7 +2376,7 @@ p {
   width: 44px;
   height: 44px;
   padding: 0;
-  border: 1px solid #d9dfd7;
+  border: 1px solid var(--border-subtle);
   border-radius: 50%;
   background: var(--surface-card);
   color: var(--text-primary);

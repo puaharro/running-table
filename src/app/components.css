@@ -1,4 +1,88 @@
 /* Shared controls and data presentation; layout remains in globals/refresh. */
+.quick-filter-note {
+  margin: 0;
+  padding: 0 20px 16px;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+.compact-channels .channel-expanded-group {
+  display: block;
+}
+.compact-channels .channel-preview-group {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 4px 8px;
+}
+.compact-channels .channel-preview-group.named-group {
+  grid-template-columns: minmax(0, 1fr);
+}
+.compact-channels .channel-preview-group > strong {
+  display: block;
+  color: var(--text-primary);
+  margin-bottom: 0;
+}
+.compact-channels .channel-preview-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+.compact-channels .channel-preview-row > span:first-child {
+  display: inline;
+}
+.compact-channels .channel-more {
+  display: block;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  margin-top: 6px;
+}
+.compact-channels .channel-preview-group > .channel-more {
+  grid-column: 2;
+}
+.compact-channels .named-group > .channel-more {
+  grid-column: 1;
+}
+.compact-channels:has(> details[open]) > .group-status-preview {
+  display: none;
+}
+.channel-disclosure > summary .when-open,
+.channel-disclosure[open] > summary .when-closed {
+  display: none;
+}
+.channel-disclosure[open] > summary .when-open {
+  display: inline;
+}
+.compact-channels .channel-expanded-row {
+  display: block;
+  padding-block: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.compact-channels .channel-expanded-row p {
+  margin: 6px 0 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.compact-channels .channel-expanded-row .verification-reason {
+  color: var(--status-unknown-text);
+}
+.compact-channels .channel-expanded-group > strong {
+  display: block;
+  color: var(--text-primary);
+  margin-top: 10px;
+}
+@media (max-width: 767px) {
+  .quick-filter-note {
+    padding: 0 14px 14px;
+  }
+  .race-info {
+    grid-column: 2 / 4;
+  }
+  .race-row .row-arrow {
+    grid-row: 4;
+    justify-self: end;
+  }
+}
 .brand .brand-wordmark,
 .footer-brand .brand-wordmark {
   font-family: var(--font-display);
@@ -257,10 +341,10 @@ summary:focus-visible {
   width: 100%;
   min-width: 0;
   padding: 12px;
-  border: 1px solid #9badaa;
+  border: 1px solid var(--border-control);
   border-radius: 8px;
   background: white;
-  color: #183a3b;
+  color: var(--text-primary);
   font: inherit;
 }
 .correction-form textarea {
@@ -301,7 +385,7 @@ summary:focus-visible {
 .registration-channel {
   margin-top: 18px;
   padding: 18px 0;
-  border-top: 1px solid #c7d3cb;
+  border-top: 1px solid var(--border-subtle);
   overflow-wrap: anywhere;
   scroll-margin-top: 100px;
 }
@@ -325,7 +409,7 @@ summary:focus-visible {
 .channel-summary-list > li + li {
   margin-top: 16px;
   padding-top: 14px;
-  border-top: 1px solid #c7d3cb;
+  border-top: 1px solid var(--border-subtle);
 }
 .channel-summary-list p {
   font-size: var(--text-sm);
@@ -337,7 +421,7 @@ summary:focus-visible {
 }
 .channel-list-row {
   padding: 8px 0;
-  border-bottom: 1px solid #e0e6df;
+  border-bottom: 1px solid var(--border-subtle);
 }
 .group-status-list .channel-list-row .group-name {
   font-size: var(--text-xs);
@@ -364,13 +448,13 @@ summary:focus-visible {
   min-width: 0;
   padding: 12px;
   background: #fff;
-  border: 1px solid #d7e0d8;
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
 }
 .channel-summary-list > li + li {
   margin-top: 0;
   padding-top: 12px;
-  border-top: 1px solid #d7e0d8;
+  border-top: 1px solid var(--border-subtle);
 }
 @media (max-width: 760px) {
   .registration-summary-list > li {

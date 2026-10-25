@@ -2,19 +2,21 @@
 :root {
   color-scheme: light;
   --text-primary: #183a3b;
-  --text-secondary: #536b5c;
+  --text-secondary: #58676a;
   --brand-accent: #e45d3c;
   --brand-emphasis: #c04b30;
   --action-primary: #b7472d;
   --action-primary-hover: #aa3b23;
   --surface-page: #f4f6f3;
   --surface-card: #fff;
-  --surface-brand: #eaf0e7;
+  --surface-brand: #eef2f1;
+  --surface-muted: #f1f3f3;
   --surface-dark: #183a3b;
-  --text-on-dark: #e8f0e8;
-  --border-subtle: #dce5de;
-  --border-control: #7b8e80;
-  --state-selected: #dce8cf;
+  --text-on-dark: #edf3f2;
+  --border-subtle: #dce2e2;
+  --border-control: #7b8b8e;
+  --border-hover: #91a5a5;
+  --state-selected: #e3eded;
   --focus-ring: #aa3b23;
   --status-open-text: #27633b;
   --status-open-surface: #edf5eb;
@@ -24,8 +26,8 @@
   --status-waitlist-surface: #fbf1d9;
   --status-full-text: #735f43;
   --status-full-surface: #f3eee5;
-  --status-closed-text: #536b5c;
-  --status-closed-surface: #edf0ed;
+  --status-closed-text: #58676a;
+  --status-closed-surface: #edf0f0;
   --status-unknown-text: #805031;
   --status-unknown-surface: #f5eae5;
   --font-body: "Noto Sans HK Variable", "PingFang HK", "Microsoft JhengHei", sans-serif;

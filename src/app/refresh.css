@@ -31,12 +31,12 @@ body {
   padding: 8px 12px;
   border: 1px solid var(--border-subtle);
   border-radius: 30px;
-  color: #517064;
-  background: #f5f8f3;
+  color: var(--text-secondary);
+  background: var(--surface-muted);
 }
 .calendar-masthead {
-  background: var(--surface-brand);
-  border-bottom: 1px solid #dce5d8;
+  background: var(--surface-card);
+  border-bottom: 1px solid var(--border-subtle);
 }
 .masthead-grid {
   display: grid;
@@ -49,7 +49,7 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  color: #5d7869;
+  color: var(--text-secondary);
   font-size: var(--text-sm);
   letter-spacing: 0.14em;
   font-weight: 700;
@@ -161,7 +161,7 @@ body {
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 0.95;
-  color: #e4ebbf;
+  color: var(--text-on-dark);
   font-variant-numeric: tabular-nums;
 }
 .next-race-day span {
@@ -176,7 +176,7 @@ body {
   z-index: 1;
   font-size: 27px;
   font-weight: 700;
-  color: #bfd1a7;
+  color: var(--text-on-dark);
   line-height: 0.95;
   letter-spacing: -0.04em;
   margin-right: 2px;
@@ -205,20 +205,20 @@ body {
   border-radius: 4px;
   padding: 4px 8px;
   font-size: var(--text-sm);
-  background: #eff3e8;
-  color: #3e6654;
+  background: var(--surface-muted);
+  color: var(--text-primary);
 }
 .next-race-bottom > div > .next-race-detail {
   margin-left: auto;
   background: none;
-  color: #a0442f;
+  color: var(--action-primary);
   padding-right: 0;
 }
 .explorer {
   padding-top: 28px;
 }
 .eyebrow {
-  color: #66816b;
+  color: var(--text-secondary);
   font-size: var(--text-sm);
   letter-spacing: 0.13em;
 }
@@ -241,7 +241,7 @@ body {
 }
 .stat-pair strong {
   font-size: 30px;
-  color: #2e5949;
+  color: var(--text-primary);
   font-variant-numeric: tabular-nums;
 }
 .stat-pair span {
@@ -249,7 +249,7 @@ body {
 }
 .filter-card {
   border-radius: var(--radius-card);
-  border-color: #d8e2d8;
+  border-color: var(--border-subtle);
   box-shadow: 0 4px 16px #193c2a05;
   overflow: hidden;
 }
@@ -257,8 +257,8 @@ body {
   padding: 20px 20px 0;
 }
 .search-box {
-  background: #f5f7f3;
-  border-color: #e0e7dd;
+  background: var(--surface-card);
+  border-color: var(--border-subtle);
   border-radius: var(--radius-control);
 }
 .search-box input {
@@ -271,9 +271,9 @@ body {
   font-size: var(--text-sm);
 }
 .filter-toggle.active {
-  background: #edf3e8;
-  color: #2f5a43;
-  border-color: #b7cbb4;
+  background: var(--surface-brand);
+  color: var(--text-primary);
+  border-color: var(--text-primary);
 }
 .filter-count {
   display: inline-grid;
@@ -290,7 +290,7 @@ body {
   gap: var(--space-2);
 }
 .quick-row button {
-  background: #f0f4ed;
+  background: var(--surface-muted);
   min-height: var(--control-size);
   font-size: var(--text-sm);
   border-radius: 5px;
@@ -300,11 +300,11 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: #f0f4ed;
+  background: var(--surface-muted);
   color: var(--ink);
 }
 .quick-row .only-open-shortcut[aria-pressed="true"] {
-  background: #214d3c;
+  background: var(--text-primary);
   color: white;
   box-shadow: none;
 }
@@ -328,7 +328,7 @@ body {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-6);
   padding: 22px 20px;
-  background: #fcfdfa;
+  background: var(--surface-card);
 }
 .filter-grid .date-field {
   grid-column: auto;
@@ -390,7 +390,7 @@ body {
 .filter-reset {
   border: 0;
   background: none;
-  color: #6b7c71;
+  color: var(--text-secondary);
   text-decoration: underline;
   text-underline-offset: 4px;
   padding: 5px;
@@ -411,7 +411,7 @@ body {
 }
 .view-tabs {
   border-radius: var(--radius-control);
-  background: #e7ede5;
+  background: var(--surface-muted);
   padding: 4px;
   gap: 3px;
 }
@@ -422,11 +422,11 @@ body {
 }
 .view-tabs button[aria-pressed="true"] {
   background: white;
-  color: #21453d;
+  color: var(--text-primary);
   box-shadow: 0 1px 5px #1c442c0e;
 }
 .results-actions select {
-  border: 1px solid #d9e2d7;
+  border: 1px solid var(--border-subtle);
   border-radius: 5px;
   padding: var(--space-2);
   font-size: var(--text-sm);
@@ -461,18 +461,18 @@ body {
 }
 .race-row {
   background: var(--surface-card);
-  border: 1px solid #e0e7dc;
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-card);
   margin-bottom: 10px;
   padding: 22px;
   box-shadow: 0 2px 3px #15372a02;
 }
 .race-row:last-child {
-  border-bottom: 1px solid #e0e7dc;
+  border-bottom: 1px solid var(--border-subtle);
 }
 .race-row:hover {
   background: var(--surface-card);
-  border-color: #b7c9b0;
+  border-color: var(--border-hover);
   box-shadow: 0 4px 16px #22482a08;
 }
 .race-date {
@@ -480,9 +480,9 @@ body {
   flex-direction: column;
   gap: 0;
   align-items: center;
-  border: 1px solid #e1e8db;
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-control);
-  background: #f8faf4;
+  background: var(--surface-card);
   overflow: hidden;
   padding: 0 0 6px;
 }
@@ -490,10 +490,10 @@ body {
   width: 100%;
   display: block;
   text-align: center;
-  color: #5d7756;
+  color: var(--text-on-dark);
   font-size: var(--text-sm);
   font-weight: 700;
-  background: #eaf0e2;
+  background: var(--surface-dark);
   padding: 4px 0;
   line-height: 1.2;
 }
@@ -535,8 +535,8 @@ body {
   border: 0;
   border-radius: 4px;
   padding: 4px 8px;
-  background: #edf3e8;
-  color: #45623c;
+  background: var(--surface-brand);
+  color: var(--text-primary);
 }
 .race-location {
   font-size: var(--text-sm);
@@ -557,15 +557,15 @@ body {
   background: transparent;
   border: 0;
   font-size: var(--text-sm);
-  color: #55724e;
+  color: var(--text-primary);
 }
 .row-arrow {
-  background: #f1f5ec;
+  background: var(--surface-muted);
   border: 0;
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  color: #47703d;
+  color: var(--text-primary);
 }
 .results-footer {
   font-size: var(--text-sm);
@@ -578,7 +578,7 @@ body {
 .guide-card {
   border-radius: var(--radius-card);
   overflow: hidden;
-  border-color: #dee6da;
+  border-color: var(--border-subtle);
   background: white;
 }
 .guide-card h3 {
@@ -592,8 +592,8 @@ body {
   line-height: 1.9;
 }
 .site-footer {
-  background: #e9eee5;
-  border-top-color: #dbe4d5;
+  background: var(--surface-brand);
+  border-top-color: var(--border-subtle);
 }
 .key-facts,
 .registration-card,
@@ -711,7 +711,7 @@ input {
   overflow-wrap: anywhere;
 }
 .group-status-list strong {
-  color: #315b3b;
+  color: var(--text-primary);
 }
 .group-channel-status {
   color: var(--text-secondary);
@@ -1046,9 +1046,9 @@ input {
     font-size: var(--text-sm);
   }
   .quick-row {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding: 10px 14px 14px;
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding: 10px 14px 6px;
     gap: 7px;
     scrollbar-width: thin;
   }
