@@ -17,6 +17,7 @@ import {
   type RegistrationChannel,
 } from "@/lib/types";
 import { StatusBadge } from "./status-badge";
+import { channelPriceHeading, channelPriceLabel } from "@/lib/registration-display";
 
 export function useClock(initialNow: string) {
   const [now, setNow] = useState(initialNow);
@@ -102,19 +103,9 @@ function ChannelCard({
           <dd>{channel.eligibility}</dd>
         </div>
         <div>
-          <dt>
-            {channel.priceType === "minimum-donation"
-              ? "最低籌款額"
-              : channel.priceType === "package"
-                ? "套票價格"
-                : "此渠道參賽費用"}
-          </dt>
+          <dt>{channelPriceHeading(channel)}</dt>
           <dd>
-            {channel.price === null
-              ? "待核實"
-              : channel.price === 0
-                ? "免費"
-                : `${channel.currency === "HKD" ? "HK$" : "US$"} ${channel.price.toLocaleString("en-HK")}`}
+            {channelPriceLabel(channel)}
             {channel.priceUnit && ` · ${channel.priceUnit}`}
             {channel.priceNote && <small>{channel.priceNote}</small>}
           </dd>
@@ -194,19 +185,59 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
       <ul className="registration-summary-list">
         {race.groups.map((group) => (
           <li key={group.id}>
-            <h3>{group.name}</h3>
-            <ul className="channel-summary-list">
-              {group.channels.map((channel) => (
-                <li key={channel.id}>
-                  <strong>{channel.name}</strong>{" "}
-                  <StatusBadge status={channelStatus(race, group, channel, now)} />
-                  <p>{channel.eligibility}</p>
-                  <a className="text-link" href={`#channel-${channel.id}`}>
-                    查看此渠道費用及期限 ↓
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <details className="summary-distance" open={group.channels.length === 1}>
+              <summary>
+                <h3>{group.name}</h3>
+                <span>
+                  {group.channels.length} 個渠道 ·{" "}
+                  {
+                    group.channels.filter((c) => channelStatus(race, group, c, now) === "open")
+                      .length
+                  }{" "}
+                  個接受申請
+                </span>
+              </summary>
+              <ul className="channel-summary-list">
+                {[...group.channels]
+                  .sort(
+                    (a, b) =>
+                      Number(channelStatus(race, group, b, now) === "open") -
+                      Number(channelStatus(race, group, a, now) === "open"),
+                  )
+                  .map((channel) => (
+                    <li key={channel.id}>
+                      <strong>{channel.name}</strong>{" "}
+                      <StatusBadge status={channelStatus(race, group, channel, now)} />
+                      <dl className="channel-comparison">
+                        <div>
+                          <dt>{channelPriceHeading(channel)}</dt>
+                          <dd>
+                            {channelPriceLabel(channel)}
+                            {channel.priceUnit && ` · ${channel.priceUnit}`}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>申請截止 · 香港時間</dt>
+                          <dd>
+                            {channel.registrationClosesAt || channel.deadline ? (
+                              <Timestamp
+                                value={(channel.registrationClosesAt ?? channel.deadline)!}
+                              />
+                            ) : (
+                              "期限待核實"
+                            )}
+                          </dd>
+                        </div>
+                      </dl>
+                      {channel.priceNote && <p>{channel.priceNote}</p>}
+                      <p>{channel.eligibility}</p>
+                      <a className="text-link" href={`#channel-${channel.id}`}>
+                        查看完整條件及官方資料 ↓
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </details>
           </li>
         ))}
       </ul>

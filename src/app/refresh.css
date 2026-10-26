@@ -1260,3 +1260,107 @@ input {
     transform: none;
   }
 }
+
+/* Mobile registration flow: keep the next action within reach. */
+.mobile-filter-actions {
+  display: none;
+}
+.race-row,
+#results-toolbar,
+[id^="channel-"],
+#registration-groups {
+  scroll-margin-top: 100px;
+}
+.summary-distance {
+  width: 100%;
+  min-width: 0;
+}
+.registration-summary-list > li {
+  display: block;
+}
+.summary-distance > summary {
+  cursor: pointer;
+  padding: 12px 0;
+  min-height: 48px;
+}
+.summary-distance > summary h3 {
+  display: inline;
+  margin: 0 12px 0 0;
+  font-size: var(--text-lg);
+}
+.summary-distance > summary span {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+.channel-summary-list .channel-comparison {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0;
+}
+.channel-comparison > div {
+  min-width: 0;
+}
+.channel-summary-list .channel-comparison dt {
+  font-size: var(--text-xs);
+  margin-bottom: 3px;
+}
+.channel-summary-list .channel-comparison dd {
+  margin: 0;
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+.return-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+@media (max-width: 760px) {
+  #filters:not([hidden]) {
+    padding-bottom: 88px;
+  }
+  .filter-hint > .filter-reset {
+    display: none;
+  }
+  .mobile-filter-actions {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 60;
+    gap: 12px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: #fff;
+    border-top: 1px solid var(--border-subtle);
+    box-shadow: 0 -4px 16px #193e3e14;
+  }
+  .mobile-filter-actions .filter-reset {
+    flex: 0 0 auto;
+    padding: 8px;
+  }
+  .mobile-filter-actions .mobile-filter-done {
+    flex: 1;
+    width: auto;
+  }
+  .mobile-filter-done:disabled {
+    opacity: 0.6;
+  }
+  .summary-distance > summary span {
+    display: block;
+    margin: 6px 0 0 18px;
+  }
+  .registration-summary-heading {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .channel-summary-list .text-link,
+  .group-official-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+.race-info h3 a {
+  display: block;
+  min-height: 44px;
+}
