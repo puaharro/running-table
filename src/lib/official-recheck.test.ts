@@ -22,9 +22,15 @@ describe("official channel review on 26 October", () => {
     expect(main.groups.map((g) => g.channels.find((c) => c.id.endsWith("-kely"))!.price)).toEqual([
       5000, 5000, 3000,
     ]);
-    expect(
-      selectRaces([main], { ...defaultFilters, channels: ["charity"], statuses: ["open"] }, now),
-    ).toEqual([]);
+    const result = selectRaces(
+      [main],
+      { ...defaultFilters, channels: ["charity"], statuses: ["open"] },
+      now,
+    );
+    expect(result.flatMap((r) => r.groups.flatMap((g) => g.channels.map((c) => c.id)))).toEqual([
+      "schkm-2027-half-charity-herfund",
+      "schkm-2027-10k-charity-herfund",
+    ]);
   });
 
   it("limits currently actionable hotel results to the verified full-marathon application", () => {
@@ -122,8 +128,76 @@ describe("remaining official evidence review", () => {
     expect(
       acsvaw.every((c) => c.deadline === "2026-10-15" && c.registrationClosesAt === undefined),
     ).toBe(true);
+    const result = selectRaces(
+      [main],
+      { ...defaultFilters, channels: ["charity"], statuses: ["open"] },
+      now,
+    );
+    expect(result.flatMap((r) => r.groups.flatMap((g) => g.channels.map((c) => c.id)))).toEqual([
+      "schkm-2027-half-charity-herfund",
+      "schkm-2027-10k-charity-herfund",
+    ]);
+  });
+});
+
+describe("additional NGO evidence without extrapolating availability or prices", () => {
+  it("offers only the two verified HER Fund distances when filtering open charity applications", () => {
+    const result = selectRaces(
+      [main],
+      { ...defaultFilters, channels: ["charity"], statuses: ["open"] },
+      now,
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].groups.map((g) => g.distanceKm)).toEqual([21.0975, 10]);
     expect(
-      selectRaces([main], { ...defaultFilters, channels: ["charity"], statuses: ["open"] }, now),
+      result[0].groups.every(
+        (g) =>
+          g.channels.length === 1 &&
+          g.channels[0].price === 2500 &&
+          g.channels[0].deadline === "2026-11-02" &&
+          !g.channels[0].registrationClosesAt,
+      ),
+    ).toBe(true);
+    expect(
+      selectRaces(
+        [main],
+        { ...defaultFilters, distances: ["全馬"], channels: ["charity"], statuses: ["open"] },
+        now,
+      ),
     ).toEqual([]);
+  });
+  it("keeps APF individual and team rates independent and discloses the extra per-person reservation charge", () => {
+    const half = main.groups[1].channels.find((c) => c.id.endsWith("-apf-individual"))!;
+    const ten = main.groups[2].channels.find((c) => c.id.endsWith("-apf-individual"))!;
+    const team = main.groups[2].channels.find((c) => c.id.endsWith("-apf-team"))!;
+    expect([half.price, ten.price, team.price]).toEqual([2800, 2600, 4000]);
+    expect(team.eligibility).toContain("2–3人");
+    expect(
+      [half, ten, team].every(
+        (c) =>
+          c.priceNote?.includes("HK$100") &&
+          c.deadline === "2026-10-12" &&
+          channelStatus(main, main.groups[2], c, now) === "closed",
+      ),
+    ).toBe(true);
+  });
+  it("preserves the family foundation sold-out evidence without inventing a minimum from its fundraising target", () => {
+    for (const group of main.groups) {
+      const channel = group.channels.find((c) => c.id.endsWith("-familyvalue"))!;
+      expect(channelStatus(main, group, channel, now)).toBe("full");
+      expect(channel.price).toBeNull();
+      expect(channel.priceNote).toContain("籌款目標HK$10,000");
+    }
+  });
+  it("uses the breast cancer foundation recruitment deadline, not the later organiser registration", () => {
+    const channels = main.groups
+      .slice(1)
+      .map((g) => g.channels.find((c) => c.id.endsWith("-hkbcf"))!);
+    expect(channels.map((c) => c.price)).toEqual([2600, 2200]);
+    expect(
+      channels.every(
+        (c) => c.registrationClosesAt === "2026-10-11T23:59:00+08:00" && c.status === "closed",
+      ),
+    ).toBe(true);
   });
 });
