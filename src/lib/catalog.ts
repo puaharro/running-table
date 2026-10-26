@@ -92,6 +92,18 @@ export function assertCatalog(input: unknown): asserts input is Race[] {
         fail(race.id, "invalid or duplicate source");
       sourceIds.add(source.id);
     }
+    if (race.enquiryLinks !== undefined) {
+      if (!Array.isArray(race.enquiryLinks)) fail(race.id, "invalid enquiry links");
+      const enquiryIds = new Set<string>();
+      for (const link of race.enquiryLinks) {
+        if (!link.id || enquiryIds.has(link.id) || !link.title?.trim() || !link.description?.trim())
+          fail(race.id, "invalid or duplicate enquiry link");
+        enquiryIds.add(link.id);
+        if (!isHttpsUrl(link.url)) fail(link.id, "enquiry link must use HTTPS");
+        if (!link.sourceIds?.length || link.sourceIds.some((id) => !sourceIds.has(id)))
+          fail(link.id, "missing enquiry source references");
+      }
+    }
     if (!Array.isArray(race.groups) || !race.groups.length) fail(race.id, "groups required");
     for (const group of race.groups) {
       if (!group.id || groupIds.has(group.id) || !group.name)

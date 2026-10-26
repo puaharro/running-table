@@ -133,6 +133,21 @@ export default async function RacePage({ params }: Props) {
               </div>
             </section>
             <AdSlot />
+            {!!race.enquiryLinks?.length && (
+              <section id="enquiries" tabIndex={-1}>
+                <h2>其他慈善機構查詢</h2>
+                <div className="source-cards">
+                  {race.enquiryLinks.map((link) => (
+                    <div key={link.id} className="source-card">
+                      <a href={link.url} target="_blank" rel="noopener noreferrer">
+                        {link.title} ↗
+                      </a>
+                      <p>{link.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
             <section>
               <h2>交通及集合安排</h2>
               <p>{race.transport}</p>

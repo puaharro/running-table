@@ -802,27 +802,6 @@
             "paymentClosesAt": "2026-09-14T23:59:00+08:00"
           },
           {
-            "id": "schkm-2027-marathon-charity",
-            "type": "charity",
-            "name": "其他慈善機構（逐間確認）",
-            "registrationMethod": "向參與慈善機構申請",
-            "eligibility": "須向獲分配此距離名額的慈善機構申請，符合機構籌款及審核要求。",
-            "price": null,
-            "priceType": "minimum-donation",
-            "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
-            "currency": "HKD",
-            "status": "unknown",
-            "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
-            "registrationUrl": "https://www.hkmarathon.com/about-the-charitable-organisations",
-            "registrationNote": "10月27日再核大會計劃文件及機構名單。此項是未逐間核實機構的查詢入口，並非一個統一價格或保證有名額的報名渠道；請選定機構，查其當屆招募及該距離條件。大會文件的每名額籌款要求屬機構層面，不是各機構向跑手收取的最低額；名單星號亦不是即時名額。11月大會登記不代表機構仍招募。",
-            "sourceIds": [
-              "schkm-channel-dates",
-              "schkm-charity",
-              "schkm-charity-directory",
-              "schkm-charity-programme-terms"
-            ]
-          },
-          {
             "id": "schkm-2027-marathon-hotel",
             "type": "hotel",
             "name": "住宿連名額套票",
@@ -980,27 +959,6 @@
             "priceNote": "官方該距離本地參賽費；非本地 USD 85，優先申請已截止。",
             "resultAnnouncedAt": "2026-09-11T10:00:00+08:00",
             "paymentClosesAt": "2026-09-14T23:59:00+08:00"
-          },
-          {
-            "id": "schkm-2027-half-charity",
-            "type": "charity",
-            "name": "其他慈善機構（逐間確認）",
-            "registrationMethod": "向參與慈善機構申請",
-            "eligibility": "須向獲分配此距離名額的慈善機構申請，符合機構籌款及審核要求。",
-            "price": null,
-            "priceType": "minimum-donation",
-            "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
-            "currency": "HKD",
-            "status": "unknown",
-            "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
-            "registrationUrl": "https://www.hkmarathon.com/about-the-charitable-organisations",
-            "registrationNote": "10月27日再核大會計劃文件及機構名單。此項是未逐間核實機構的查詢入口，並非一個統一價格或保證有名額的報名渠道；請選定機構，查其當屆招募及該距離條件。大會文件的每名額籌款要求屬機構層面，不是各機構向跑手收取的最低額；名單星號亦不是即時名額。11月大會登記不代表機構仍招募。",
-            "sourceIds": [
-              "schkm-channel-dates",
-              "schkm-charity",
-              "schkm-charity-directory",
-              "schkm-charity-programme-terms"
-            ]
           },
           {
             "id": "schkm-2027-half-charity-avs",
@@ -1215,27 +1173,6 @@
             "priceNote": "官方該距離本地參賽費；非本地 USD 70，優先申請已截止。",
             "resultAnnouncedAt": "2026-09-11T10:00:00+08:00",
             "paymentClosesAt": "2026-09-14T23:59:00+08:00"
-          },
-          {
-            "id": "schkm-2027-10k-charity",
-            "type": "charity",
-            "name": "其他慈善機構（逐間確認）",
-            "registrationMethod": "向參與慈善機構申請",
-            "eligibility": "須向獲分配此距離名額的慈善機構申請，符合機構籌款及審核要求。",
-            "price": null,
-            "priceType": "minimum-donation",
-            "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
-            "currency": "HKD",
-            "status": "unknown",
-            "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
-            "registrationUrl": "https://www.hkmarathon.com/about-the-charitable-organisations",
-            "registrationNote": "10月27日再核大會計劃文件及機構名單。此項是未逐間核實機構的查詢入口，並非一個統一價格或保證有名額的報名渠道；請選定機構，查其當屆招募及該距離條件。大會文件的每名額籌款要求屬機構層面，不是各機構向跑手收取的最低額；名單星號亦不是即時名額。11月大會登記不代表機構仍招募。",
-            "sourceIds": [
-              "schkm-channel-dates",
-              "schkm-charity",
-              "schkm-charity-directory",
-              "schkm-charity-programme-terms"
-            ]
           },
           {
             "id": "schkm-2027-10k-charity-avs",
@@ -1631,6 +1568,19 @@
       {
         "date": "2026-10-27",
         "note": "再核七項未知：新增家庭基金官方表格招募完成依據；其他機構查詢改連官方名單，機構籌款要求不冒充跑手最低費用。七項缺失保持未知；另覆核婦女動力基金半馬／10K公開意向表仍可用。"
+      },
+      {
+        "date": "2026-10-27",
+        "note": "將三個「其他慈善機構」綜合提示移出各組報名渠道，合併為獨立機構查詢入口；不再參與報名狀態、篩選、渠道數量或缺失統計。具名機構資料及真正未知欄位保留。"
+      }
+    ],
+    "enquiryLinks": [
+      {
+        "id": "schkm-other-charities",
+        "title": "查閱大會官方慈善機構名單",
+        "url": "https://www.hkmarathon.com/about-the-charitable-organisations",
+        "description": "想了解其他慈善機構？可從大會名單選定機構，再向該機構確認可報距離、最低籌款額、資格及招募期限。此處只提供查詢入口，名單星號不代表即時餘額；已核對的具名渠道見上方各組報名資料。",
+        "sourceIds": ["schkm-charity-directory", "schkm-charity", "schkm-charity-programme-terms"]
       }
     ]
   }

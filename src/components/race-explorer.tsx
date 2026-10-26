@@ -568,6 +568,11 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                       </h3>
                       <p className="race-english">{race.englishName}</p>
                       <GroupStatusList race={race} groups={groups} now={now} />
+                      {!!race.enquiryLinks?.length && (
+                        <Link className="text-link" href={`${raceHref(race)}#enquiries`}>
+                          其他慈善機構查詢 ↗
+                        </Link>
+                      )}
                     </div>
                     <div className="race-location">
                       <Icon name="pin" size={16} />

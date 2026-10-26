@@ -18,11 +18,18 @@ function event(): Race {
   const race = structuredClone(source);
   // Keep these synthetic filter scenarios independent of newly researched NGO channels.
   for (const group of race.groups) {
+    const charity = structuredClone(group.channels.find((channel) => channel.id.endsWith("-avs"))!);
+    charity.id = `${group.id}-charity`;
+    charity.name = "測試慈善渠道";
+    charity.price = null;
+    charity.status = "unknown";
+    delete charity.deadline;
     group.channels = group.channels.filter((channel) =>
       ["general", "priority", "charity", "hotel"].some(
         (suffix) => channel.id === `${group.id}-${suffix}`,
       ),
     );
+    group.channels.push(charity);
     const hotel = group.channels.find((channel) => channel.type === "hotel");
     if (hotel) hotel.status = "unknown";
   }
@@ -78,9 +85,7 @@ describe("independent registration channels", () => {
       filters({ channels: ["charity"], statuses: ["open"] }),
       now,
     )[0];
-    expect(registrationCountdown(race, result.groups, now)?.channelName).toBe(
-      "其他慈善機構（逐間確認）",
-    );
+    expect(registrationCountdown(race, result.groups, now)?.channelName).toBe("測試慈善渠道");
     expect(registrationCountdown(race, result.groups, now)?.deadline).toBe(
       "2026-11-06T23:59:00+08:00",
     );
@@ -125,7 +130,7 @@ describe("channel-specific publication contracts", () => {
     });
     expect(source.groups[0]).not.toHaveProperty("price");
     expect(
-      source.groups[0].channels.find((channel) => channel.type === "charity")?.price,
+      source.groups[0].channels.find((channel) => channel.id.endsWith("-familyvalue"))?.price,
     ).toBeNull();
   });
   it("rejects duplicate channel IDs, broken source references and missing package units", () => {
