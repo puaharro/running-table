@@ -292,9 +292,9 @@
             "status": "unknown",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
             "registrationMethod": "個人報名",
-            "registrationNote": "官方只列截止日期，未列精確時刻。目前公開選單未列半馬，未能確認是否仍接受申請，唔推斷額滿。",
+            "registrationNote": "本輪公開個人選單仍未列半馬，只列10K一組、5K、3K；不能據此判斷額滿。另查20人或以上團體申請，配額仍須大會確認，不能用團體程序推斷個人半馬現況。官方只列11月15日截止，無精確時刻。",
             "id": "unicef-2027-half-charity",
             "type": "charity",
             "name": "慈善報名（個人）",
@@ -304,7 +304,8 @@
               "unicef-race-info",
               "unicef-schedule",
               "unicef-individual",
-              "unicef-enrolment-faq"
+              "unicef-enrolment-faq",
+              "unicef-group-procedure"
             ]
           }
         ],
@@ -332,7 +333,7 @@
             "status": "open",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
             "registrationMethod": "個人報名",
             "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，唔保證即時餘額。",
             "id": "unicef-2027-10k-charity",
@@ -372,7 +373,7 @@
             "status": "open",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
             "registrationMethod": "個人報名",
             "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，唔保證即時餘額。",
             "id": "unicef-2027-5k-charity",
@@ -412,7 +413,7 @@
             "status": "open",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
             "registrationMethod": "個人報名",
             "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，唔保證即時餘額。",
             "id": "unicef-2027-3k-charity",
@@ -433,7 +434,7 @@
     ],
     "sourceUrl": "https://run.unicef.org.hk/powerun/zh/event-info/race-information",
     "updatedAt": "2026-10-26",
-    "verifiedAt": "2026-10-26T13:29:09+08:00",
+    "verifiedAt": "2026-10-26T13:40:20+08:00",
     "verification": "verified",
     "publication": "published",
     "sources": [
@@ -472,7 +473,7 @@
         "id": "unicef-individual",
         "title": "官方個人報名：公開可選組別",
         "url": "https://run.unicef.org.hk/powerun/zh/individual",
-        "checkedAt": "2026-10-26T13:29:09+08:00",
+        "checkedAt": "2026-10-26T13:40:20+08:00",
         "fields": ["channels.registration"],
         "note": "下拉選單列有 10K 一組、5K、3K；未列半馬及 10K 挑戰賽，不據此推斷額滿。只讀取公開選單，無提交報名或個人資料。"
       },
@@ -499,6 +500,14 @@
         "checkedAt": "2026-10-26T13:29:09+08:00",
         "fields": ["channels.registration"],
         "note": "第4題只說各組額滿可提早終止，不提供半馬現時餘額；半馬仍未列於個人選單，不能由一般說明判成接受申請或額滿。"
+      },
+      {
+        "id": "unicef-group-procedure",
+        "title": "官方團體申請：配額須大會回覆",
+        "url": "https://run.unicef.org.hk/powerun/zh/group",
+        "checkedAt": "2026-10-26T13:40:20+08:00",
+        "fields": ["channels.registration"],
+        "note": "團體須20人或以上，公司／團體提交後由大會回覆，個別配額依報名情況安排。未填寫公司或聯絡資料，未提交、未索取驗證碼；此程序不能佐證個人半馬仍接受申請。"
       }
     ],
     "changes": [
@@ -517,6 +526,10 @@
       {
         "date": "2026-10-26",
         "note": "展開當屆一般活動FAQ第7題，確認四組起終點為香港迪士尼樂園旅遊巴士停車場，補齊離島地區。重讀個人選單及報名FAQ，半馬仍未列可選，狀態維持未知。"
+      },
+      {
+        "date": "2026-10-26",
+        "note": "重讀個人選單及團體申請安排，個人半馬仍未列可選，團體配額須大會另行確認，保持未知，不借用團體程序證明個人接受申請。"
       }
     ]
   },
@@ -727,7 +740,7 @@
     "tags": ["全馬", "半馬", "公眾抽籤"],
     "status": "scheduled",
     "organizer": "中國香港田徑總會",
-    "summary": "設全馬、半馬及十公里。一般及優先申請已截止；本地全馬住宿套票核對時有登記表。慈善按機構及申請身份分列，已核對五間機構的招募均已截止；其他機構仍須另查。",
+    "summary": "設全馬、半馬及十公里。一般及優先申請已截止；住宿套票及婦女動力基金半馬／10K核對時有可用申請入口。慈善按機構、個人或團體身份分列，仍須審核及確認名額，其他機構資料不能統一概括。",
     "highlights": [
       "全馬及半馬起點均在尖沙咀彌敦道，10K 起點在港島東區走廊。",
       "本地費用：全馬 HK$600、半馬 HK$520、10K HK$420；非本地另計。",
@@ -795,9 +808,9 @@
             "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
             "currency": "HKD",
             "status": "unknown",
-            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
             "registrationUrl": "https://www.hkmarathon.com/marathon-charity-programme",
-            "registrationNote": "此項保留尚未逐間核實的其他機構，不是統一價格或完整名單。本站已具名核對義務工作發展局、啟勵扶青會、關注婦女性暴力協會、籽識慈善基金及樂餉社，招募期限按各機構獨立列出；不能由已查機構推斷其餘機構名額。11月6日23:59是大會跑手登記最後期限，不是各機構招募期限。",
+            "registrationNote": "此項保留其餘未逐間核實機構，並非統一價格或完整名單。已具名核對九間機構；當中婦女動力基金半馬／10K接受意向，維護家庭基金三距離有額滿公告，其餘按獨立期限列出。不能由個別機構概括其他機構；11月6日大會登記不是所有機構招募截止。",
             "sourceIds": ["schkm-channel-dates", "schkm-charity", "schkm-charity-directory"]
           },
           {
@@ -891,6 +904,23 @@
             "registrationUrl": "https://www.lavioletcharity.org/渣打香港馬拉松慈善計劃2027-runfordream",
             "registrationNote": "機構招募已截止；獲選後的大會登記期限不延長機構招募。官方未列精確截止時刻，故只記日期。獲預留名額後須於通知日起7天內完成最低籌款；該相對付款期限不當成招募截止。",
             "sourceIds": ["schkm-laviolet", "schkm-charity-directory"]
+          },
+          {
+            "id": "schkm-2027-marathon-charity-familyvalue",
+            "type": "charity",
+            "name": "慈善報名（維護家庭基金）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "非挑戰組，須符合該距離大會參賽資格；機構已公告所有名額額滿。",
+            "price": null,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "官方只列每位籌款目標HK$10,000或以上；未確認統一最低捐款或報名費，不能把目標填作最低額。",
+            "currency": "HKD",
+            "status": "full",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
+            "registrationUrl": "https://www.familyvalue.org.hk/marathon.html",
+            "registrationNote": "官方9月30日14:00公告全馬、半馬及10K名額均0；本次讀取該明確額滿公告，不當成即時查詢庫存。",
+            "sourceIds": ["schkm-familyvalue", "schkm-charity-directory"]
           }
         ]
       },
@@ -953,9 +983,9 @@
             "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
             "currency": "HKD",
             "status": "unknown",
-            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
             "registrationUrl": "https://www.hkmarathon.com/marathon-charity-programme",
-            "registrationNote": "此項保留尚未逐間核實的其他機構，不是統一價格或完整名單。本站已具名核對義務工作發展局、啟勵扶青會、關注婦女性暴力協會、籽識慈善基金及樂餉社，招募期限按各機構獨立列出；不能由已查機構推斷其餘機構名額。11月6日23:59是大會跑手登記最後期限，不是各機構招募期限。",
+            "registrationNote": "此項保留其餘未逐間核實機構，並非統一價格或完整名單。已具名核對九間機構；當中婦女動力基金半馬／10K接受意向，維護家庭基金三距離有額滿公告，其餘按獨立期限列出。不能由個別機構概括其他機構；11月6日大會登記不是所有機構招募截止。",
             "sourceIds": ["schkm-channel-dates", "schkm-charity", "schkm-charity-directory"]
           },
           {
@@ -1049,6 +1079,78 @@
             "registrationNote": "機構招募已截止；獲選後的大會登記期限不延長機構招募。",
             "sourceIds": ["schkm-feedinghk", "schkm-charity-directory"],
             "registrationClosesAt": "2026-10-09T23:59:00+08:00"
+          },
+          {
+            "id": "schkm-2027-half-charity-apf-individual",
+            "type": "charity",
+            "name": "慈善報名（APF愛培自閉症基金・個人）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款要求，經機構確認名額；遞交意向不等於已獲名額。",
+            "price": 2800,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "最低籌款以外另付HK$100留位費，不計入最低籌款、不退款，亦無捐款退稅收據。",
+            "currency": "HKD",
+            "status": "closed",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
+            "registrationUrl": "https://www.apf.org.hk/消息/marathon27",
+            "registrationNote": "非挑戰組；招募已截止，官方未列精確截止時刻。部分獲選者10月30日前達到籌款要求，不代表招募延長。",
+            "sourceIds": ["schkm-apf", "schkm-charity-directory"],
+            "deadline": "2026-10-12"
+          },
+          {
+            "id": "schkm-2027-half-charity-hkbcf",
+            "type": "charity",
+            "name": "慈善報名（香港乳癌基金會）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款要求，經機構確認名額；遞交意向不等於已獲名額。",
+            "price": 2600,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為此機構此渠道的最低捐款要求，不適用其他機構。",
+            "currency": "HKD",
+            "status": "closed",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
+            "registrationUrl": "https://www.hkbcf.org/zh/media_centre/main/1456/",
+            "registrationNote": "機構意向登記已截止；11月6日只是獲選後大會登記，不延長機構招募。",
+            "sourceIds": ["schkm-hkbcf", "schkm-charity-directory"],
+            "deadline": "2026-10-11",
+            "registrationClosesAt": "2026-10-11T23:59:00+08:00"
+          },
+          {
+            "id": "schkm-2027-half-charity-herfund",
+            "type": "charity",
+            "name": "慈善報名（婦女動力基金）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款要求，經機構確認名額；遞交意向不等於已獲名額。",
+            "price": 2500,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "每位最低捐款HK$2,500。表格另列的HK$10,000／15,000／20,000是自行承諾籌款目標；HK$400,000是整體計劃目標。",
+            "currency": "HKD",
+            "status": "open",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
+            "registrationUrl": "https://herfund.org.hk/tc/work/events/detail/30002038142140495",
+            "registrationNote": "核對時公開招募表格有此距離可用選項，接受意向申請，名額須由機構確認；未提交或付款，不保證餘額。官網只列11月2日或之前，無精確截止時刻。",
+            "sourceIds": ["schkm-herfund", "schkm-herfund-form", "schkm-charity-directory"],
+            "deadline": "2026-11-02"
+          },
+          {
+            "id": "schkm-2027-half-charity-familyvalue",
+            "type": "charity",
+            "name": "慈善報名（維護家庭基金）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "非挑戰組，須符合該距離大會參賽資格；機構已公告所有名額額滿。",
+            "price": null,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "官方只列每位籌款目標HK$10,000或以上；未確認統一最低捐款或報名費，不能把目標填作最低額。",
+            "currency": "HKD",
+            "status": "full",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
+            "registrationUrl": "https://www.familyvalue.org.hk/marathon.html",
+            "registrationNote": "官方9月30日14:00公告全馬、半馬及10K名額均0；本次讀取該明確額滿公告，不當成即時查詢庫存。",
+            "sourceIds": ["schkm-familyvalue", "schkm-charity-directory"]
           }
         ]
       },
@@ -1111,9 +1213,9 @@
             "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
             "currency": "HKD",
             "status": "unknown",
-            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
             "registrationUrl": "https://www.hkmarathon.com/marathon-charity-programme",
-            "registrationNote": "此項保留尚未逐間核實的其他機構，不是統一價格或完整名單。本站已具名核對義務工作發展局、啟勵扶青會、關注婦女性暴力協會、籽識慈善基金及樂餉社，招募期限按各機構獨立列出；不能由已查機構推斷其餘機構名額。11月6日23:59是大會跑手登記最後期限，不是各機構招募期限。",
+            "registrationNote": "此項保留其餘未逐間核實機構，並非統一價格或完整名單。已具名核對九間機構；當中婦女動力基金半馬／10K接受意向，維護家庭基金三距離有額滿公告，其餘按獨立期限列出。不能由個別機構概括其他機構；11月6日大會登記不是所有機構招募截止。",
             "sourceIds": ["schkm-channel-dates", "schkm-charity", "schkm-charity-directory"]
           },
           {
@@ -1188,13 +1290,103 @@
             "registrationUrl": "https://www.lavioletcharity.org/渣打香港馬拉松慈善計劃2027-runfordream",
             "registrationNote": "機構招募已截止；獲選後的大會登記期限不延長機構招募。官方未列精確截止時刻，故只記日期。獲預留名額後須於通知日起7天內完成最低籌款；該相對付款期限不當成招募截止。",
             "sourceIds": ["schkm-laviolet", "schkm-charity-directory"]
+          },
+          {
+            "id": "schkm-2027-10k-charity-apf-individual",
+            "type": "charity",
+            "name": "慈善報名（APF愛培自閉症基金・個人）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款要求，經機構確認名額；遞交意向不等於已獲名額。",
+            "price": 2600,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "最低籌款以外另付HK$100留位費，不計入最低籌款、不退款，亦無捐款退稅收據。",
+            "currency": "HKD",
+            "status": "closed",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
+            "registrationUrl": "https://www.apf.org.hk/消息/marathon27",
+            "registrationNote": "非挑戰組；招募已截止，官方未列精確截止時刻。部分獲選者10月30日前達到籌款要求，不代表招募延長。",
+            "sourceIds": ["schkm-apf", "schkm-charity-directory"],
+            "deadline": "2026-10-12"
+          },
+          {
+            "id": "schkm-2027-10k-charity-hkbcf",
+            "type": "charity",
+            "name": "慈善報名（香港乳癌基金會）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款要求，經機構確認名額；遞交意向不等於已獲名額。",
+            "price": 2200,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為此機構此渠道的最低捐款要求，不適用其他機構。",
+            "currency": "HKD",
+            "status": "closed",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
+            "registrationUrl": "https://www.hkbcf.org/zh/media_centre/main/1456/",
+            "registrationNote": "機構意向登記已截止；11月6日只是獲選後大會登記，不延長機構招募。",
+            "sourceIds": ["schkm-hkbcf", "schkm-charity-directory"],
+            "deadline": "2026-10-11",
+            "registrationClosesAt": "2026-10-11T23:59:00+08:00"
+          },
+          {
+            "id": "schkm-2027-10k-charity-herfund",
+            "type": "charity",
+            "name": "慈善報名（婦女動力基金）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款要求，經機構確認名額；遞交意向不等於已獲名額。",
+            "price": 2500,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "每位最低捐款HK$2,500。表格另列的HK$10,000／15,000／20,000是自行承諾籌款目標；HK$400,000是整體計劃目標。",
+            "currency": "HKD",
+            "status": "open",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
+            "registrationUrl": "https://herfund.org.hk/tc/work/events/detail/30002038142140495",
+            "registrationNote": "核對時公開招募表格有此距離可用選項，接受意向申請，名額須由機構確認；未提交或付款，不保證餘額。官網只列11月2日或之前，無精確截止時刻。",
+            "sourceIds": ["schkm-herfund", "schkm-herfund-form", "schkm-charity-directory"],
+            "deadline": "2026-11-02"
+          },
+          {
+            "id": "schkm-2027-10k-charity-apf-team",
+            "type": "charity",
+            "name": "慈善報名（APF愛培自閉症基金・公司／團體）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "只限2–3人公司／團體隊伍，非挑戰組；每位須符合10K參賽資格及各自籌款要求。",
+            "price": 4000,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "每位最低籌款HK$4,000，另付每位HK$100留位費；金額不是整隊合計。留位費不計最低籌款、不退款及無捐款退稅收據。",
+            "currency": "HKD",
+            "status": "closed",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
+            "registrationUrl": "https://www.apf.org.hk/消息/marathon27",
+            "registrationNote": "招募已截止；官方只列截止日期，無精確時刻。",
+            "sourceIds": ["schkm-apf", "schkm-charity-directory"],
+            "deadline": "2026-10-12"
+          },
+          {
+            "id": "schkm-2027-10k-charity-familyvalue",
+            "type": "charity",
+            "name": "慈善報名（維護家庭基金）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "非挑戰組，須符合該距離大會參賽資格；機構已公告所有名額額滿。",
+            "price": null,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "官方只列每位籌款目標HK$10,000或以上；未確認統一最低捐款或報名費，不能把目標填作最低額。",
+            "currency": "HKD",
+            "status": "full",
+            "registrationVerifiedAt": "2026-10-26T13:40:20+08:00",
+            "registrationUrl": "https://www.familyvalue.org.hk/marathon.html",
+            "registrationNote": "官方9月30日14:00公告全馬、半馬及10K名額均0；本次讀取該明確額滿公告，不當成即時查詢庫存。",
+            "sourceIds": ["schkm-familyvalue", "schkm-charity-directory"]
           }
         ]
       }
     ],
     "sourceUrl": "https://www.hkmarathon.com/race-information",
     "updatedAt": "2026-10-26",
-    "verifiedAt": "2026-10-26T13:29:09+08:00",
+    "verifiedAt": "2026-10-26T13:40:20+08:00",
     "verification": "verified",
     "publication": "published",
     "sources": [
@@ -1334,6 +1526,46 @@
         "checkedAt": "2026-10-26T13:29:09+08:00",
         "fields": ["channels.price", "channels.registration", "channels.eligibility"],
         "note": "當前頁面只明列半馬最低2500港元；意向登記10月9日23:59截止，11月6日23:59只屬獲選後大會登記；不推斷全馬或10K名額。"
+      },
+      {
+        "id": "schkm-apf",
+        "title": "APF官方招募及圖片組別價目",
+        "url": "https://www.apf.org.hk/消息/marathon27",
+        "checkedAt": "2026-10-26T13:40:20+08:00",
+        "fields": ["channels.price", "channels.registration", "channels.eligibility"],
+        "note": "實際查看三張組別圖片：10K個人最低2600、10K公司／團體每位4000（2–3人）、半馬個人2800港元，另付每位100留位費，不計最低籌款。10月12日招募截止；10月30日是部分獲選者完成籌款期限，非新申請。"
+      },
+      {
+        "id": "schkm-hkbcf",
+        "title": "香港乳癌基金會官方2027招募",
+        "url": "https://www.hkbcf.org/zh/media_centre/main/1456/",
+        "checkedAt": "2026-10-26T13:40:20+08:00",
+        "fields": ["channels.price", "channels.registration", "channels.eligibility"],
+        "note": "實際瀏覽頁面，半馬最低2600、10K最低2200；10月11日23:59意向登記截止，11月6日僅獲選後大會登記。"
+      },
+      {
+        "id": "schkm-herfund",
+        "title": "婦女動力基金官方2027招募",
+        "url": "https://herfund.org.hk/tc/work/events/detail/30002038142140495",
+        "checkedAt": "2026-10-26T13:40:20+08:00",
+        "fields": ["channels.registration", "channels.eligibility"],
+        "note": "明列半馬及10K，11月2日或之前填表，未列精確時刻；40名額並非即時餘額，40萬元為整體籌款目標。"
+      },
+      {
+        "id": "schkm-herfund-form",
+        "title": "機構官網連結的公開招募表格",
+        "url": "https://docs.google.com/forms/d/e/1FAIpQLSe35thpOrLu37iwDCvfADXZ1y_L9Eg7WhnZaFr52Qmra-7edw/viewform",
+        "checkedAt": "2026-10-26T13:40:20+08:00",
+        "fields": ["channels.price", "channels.registration", "channels.eligibility"],
+        "note": "讀取已載入表格：每位最低捐款2500港元，半馬／10K選項可用；10000／15000／20000為自行承諾的籌款目標，非最低捐款。未填寫或提交任何資料。"
+      },
+      {
+        "id": "schkm-familyvalue",
+        "title": "維護家庭基金官方額滿公告",
+        "url": "https://www.familyvalue.org.hk/marathon.html",
+        "checkedAt": "2026-10-26T13:40:20+08:00",
+        "fields": ["channels.registration", "channels.eligibility", "channels.price"],
+        "note": "9月30日14:00公告三距離名額均0、全部額滿；每位10000港元列為籌款目標，沒有充分依據將其當作統一最低捐款或報名費，因此price保持null。"
       }
     ],
     "changes": [
@@ -1356,6 +1588,10 @@
       {
         "date": "2026-10-26",
         "note": "再核對其他慈善機構，新增關注婦女性暴力協會、籽識慈善基金及樂餉社共七個具名渠道。籽識10K學校代表最低額與公眾全馬／半馬分開；其他機構仍未知，不統一套用價格及招募狀態。"
+      },
+      {
+        "date": "2026-10-26",
+        "note": "新增APF三渠道、乳癌基金會兩渠道、婦女動力基金兩渠道及維護家庭基金三距離額滿紀錄。最低捐款、額外留位費與籌款目標分清；未能確認的最低費用保持null，不以目標代填。"
       }
     ]
   }
