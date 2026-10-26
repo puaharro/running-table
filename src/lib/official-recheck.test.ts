@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { races } from "@/data/races";
 import { channelStatus, defaultFilters, selectRaces } from "./races";
 
-const now = "2026-10-26T14:00:00+08:00";
+const now = "2026-10-27T01:00:00+08:00";
 const main = races.find((race) => race.id === "standard-chartered-hk-marathon-2027")!;
 
 describe("official channel review on 26 October", () => {
@@ -199,5 +199,30 @@ describe("additional NGO evidence without extrapolating availability or prices",
         (c) => c.registrationClosesAt === "2026-10-11T23:59:00+08:00" && c.status === "closed",
       ),
     ).toBe(true);
+  });
+});
+
+describe("27 October review preserves unresolved official evidence", () => {
+  it("routes the three unspecified charity enquiries to the official directory without inventing fees or status", () => {
+    for (const group of main.groups) {
+      const channel = group.channels.find((c) => c.name === "其他慈善機構（逐間確認）")!;
+      expect(channel.registrationUrl).toBe(
+        "https://www.hkmarathon.com/about-the-charitable-organisations",
+      );
+      expect(channel.price).toBeNull();
+      expect(channelStatus(main, group, channel, now)).toBe("unknown");
+      expect(channel.sourceIds).toContain("schkm-charity-programme-terms");
+    }
+  });
+  it("keeps the completed family recruitment separate from its unverified minimum donation", () => {
+    for (const group of main.groups) {
+      const channel = group.channels.find((c) => c.id.endsWith("-familyvalue"))!;
+      expect(channel.sourceIds).toContain("schkm-familyvalue-form");
+      expect(channel.registrationNote).toContain("招募已完成");
+      expect(channelStatus(main, group, channel, now)).toBe("full");
+      expect(channel.price).toBeNull();
+    }
+    const half = races.find((r) => r.id === "unicef-powerun-2027")!.groups[0].channels[0];
+    expect(half.status).toBe("unknown");
   });
 });
