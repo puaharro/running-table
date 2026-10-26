@@ -203,17 +203,6 @@ describe("additional NGO evidence without extrapolating availability or prices",
 });
 
 describe("27 October review preserves unresolved official evidence", () => {
-  it("routes the three unspecified charity enquiries to the official directory without inventing fees or status", () => {
-    for (const group of main.groups) {
-      const channel = group.channels.find((c) => c.name === "其他慈善機構（逐間確認）")!;
-      expect(channel.registrationUrl).toBe(
-        "https://www.hkmarathon.com/about-the-charitable-organisations",
-      );
-      expect(channel.price).toBeNull();
-      expect(channelStatus(main, group, channel, now)).toBe("unknown");
-      expect(channel.sourceIds).toContain("schkm-charity-programme-terms");
-    }
-  });
   it("keeps the completed family recruitment separate from its unverified minimum donation", () => {
     for (const group of main.groups) {
       const channel = group.channels.find((c) => c.id.endsWith("-familyvalue"))!;

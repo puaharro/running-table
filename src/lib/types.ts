@@ -79,6 +79,13 @@ export interface Race {
   highlights: string[];
   transport: string;
   groups: RaceGroup[];
+  enquiryLinks?: {
+    id: string;
+    title: string;
+    url: string;
+    description: string;
+    sourceIds: string[];
+  }[];
   sourceUrl: string | null;
   updatedAt: string;
   verification: "demo" | "verified" | "pending";
