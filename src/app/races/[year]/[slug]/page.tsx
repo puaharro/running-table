@@ -44,6 +44,7 @@ export default async function RacePage({ params }: Props) {
             dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
           />
         )}
+        <ReturnLink />
         <Breadcrumb items={[{ label: race.name }]} />
         <div className="detail-heading">
           <div>

@@ -22,6 +22,7 @@ import {
 } from "@/lib/races";
 import { groupLocations } from "@/lib/group-locations";
 import { raceHref } from "@/lib/site";
+import { resultsHref } from "@/lib/results-location";
 import {
   distanceOptions,
   channelTypeLabels,
@@ -155,9 +156,20 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   function showResults() {
     setExpanded(false);
     window.requestAnimationFrame(() => {
-      document.getElementById("results-toolbar")?.scrollIntoView({ block: "start" });
+      const toolbar = document.getElementById("results-toolbar");
+      toolbar?.focus({ preventScroll: true });
+      toolbar?.scrollIntoView({ block: "start" });
     });
   }
+  useEffect(() => {
+    if (!ready || !/^#race-[a-z0-9-]+$/.test(window.location.hash)) return;
+    const frame = window.requestAnimationFrame(() => {
+      const row = document.getElementById(window.location.hash.slice(1));
+      row?.scrollIntoView({ block: "start" });
+      row?.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [ready]);
   function field<K extends keyof Filters>(key: K, value: Filters[K]) {
     update({ ...filters, [key]: value });
   }
@@ -442,8 +454,14 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             <button className="filter-reset" onClick={() => update({ ...defaultFilters })}>
               重設條件
             </button>
-            <button className="mobile-filter-done" onClick={showResults}>
-              查看 {results.length} 場賽事 <Icon name="arrow" size={16} />
+          </div>
+          <div className="mobile-filter-actions">
+            <button className="filter-reset" onClick={() => update({ ...defaultFilters })}>
+              重設條件
+            </button>
+            <button className="mobile-filter-done" disabled={!!error} onClick={showResults}>
+              {error ? "請修正篩選條件" : `查看 ${results.length} 場賽事`}
+              <Icon name="arrow" size={16} />
             </button>
           </div>
         </div>
@@ -471,7 +489,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
           </button>
         </div>
       )}
-      <div className="results-toolbar" id="results-toolbar">
+      <div className="results-toolbar" id="results-toolbar" tabIndex={-1}>
         <div className="view-tabs" role="group" aria-label="賽事時段">
           {[
             ["upcoming", "即將舉行"],
@@ -540,7 +558,20 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                       <i />
                     </div>
                   )}
-                  <article className="race-row">
+                  <article
+                    className="race-row"
+                    id={`race-${race.id}`}
+                    tabIndex={-1}
+                    onClickCapture={(event) => {
+                      const anchor = (event.target as HTMLElement).closest("a");
+                      if (!anchor?.getAttribute("href")?.startsWith(raceHref(race))) return;
+                      try {
+                        sessionStorage.setItem("rundates:results", resultsHref(filters, race.id));
+                      } catch {
+                        /* The list URL remains shareable when storage is unavailable. */
+                      }
+                    }}
+                  >
                     <div className="race-date">
                       <span className="race-date-month">{Number(race.date.slice(5, 7))} 月</span>
                       <strong>{race.date.slice(8)}</strong>
@@ -564,7 +595,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                         ))}
                       </div>
                       <h3>
-                        <Link href={raceHref(race)}>{race.name}</Link>
+                        <a href={raceHref(race)}>{race.name}</a>
                       </h3>
                       <p className="race-english">{race.englishName}</p>
                       <GroupStatusList race={race} groups={groups} now={now} />
