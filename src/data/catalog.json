@@ -257,7 +257,7 @@
     "endDate": "2027-01-03",
     "region": "離島",
     "district": "大嶼山",
-    "venue": "香港迪士尼樂園旅遊巴士停車場（集合地點）",
+    "venue": "香港迪士尼樂園旅遊巴士停車場（起終點及集合地點）",
     "sport": "路跑",
     "tags": ["慈善", "多組別"],
     "status": "scheduled",
@@ -268,15 +268,20 @@
       "所列款項為最低籌款額，唔係一般賽事報名費。",
       "半馬未見於公開個人報名選單；唔單憑缺席選項推斷已額滿。"
     ],
-    "transport": "官方集合地點為香港迪士尼樂園旅遊巴士停車場；半馬集合上午 4:45–5:15，10K 一組上午 6:35–7:10。起跑線仍待核實。官方列明東涌綫首班由香港站上午 5:15、東涌站上午 5:28 開出，迪士尼綫由欣澳站上午 5:40 開出；半馬跑手須另查特別巴士，勿依賴上述列車趕赴半馬集合。車務以當日官方安排為準。",
+    "transport": "官方FAQ確認起終點及集合地點為香港迪士尼樂園旅遊巴士停車場；半馬集合上午 4:45–5:15，10K 一組上午 6:35–7:10。各組起終點均在此停車場，現場請依工作人員指示前往起跑區。官方列明東涌綫首班由香港站上午 5:15、東涌站上午 5:28 開出，迪士尼綫由欣澳站上午 5:40 開出；半馬跑手須另查特別巴士，勿依賴上述列車趕赴半馬集合。車務以當日官方安排為準。",
     "groups": [
       {
         "id": "unicef-2027-half",
         "name": "半馬拉松",
         "distanceKm": 21.0975,
         "date": "2027-01-03",
-        "sourceIds": ["unicef-race-info", "unicef-schedule", "unicef-individual"],
-        "region": null,
+        "sourceIds": [
+          "unicef-race-info",
+          "unicef-schedule",
+          "unicef-individual",
+          "unicef-start-faq"
+        ],
+        "region": "離島",
         "startTime": "2027-01-03T05:45:00+08:00",
         "limit": "2 小時 45 分鐘；須於活動日年滿 16 歲。",
         "channels": [
@@ -287,7 +292,7 @@
             "status": "unknown",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
             "registrationMethod": "個人報名",
             "registrationNote": "官方只列截止日期，未列精確時刻。目前公開選單未列半馬，未能確認是否仍接受申請，唔推斷額滿。",
             "id": "unicef-2027-half-charity",
@@ -295,17 +300,28 @@
             "name": "慈善報名（個人）",
             "currency": "HKD",
             "eligibility": "須符合組別年齡／成績要求及最低籌款額；名額以官方確認為準。",
-            "sourceIds": ["unicef-race-info", "unicef-schedule", "unicef-individual"]
+            "sourceIds": [
+              "unicef-race-info",
+              "unicef-schedule",
+              "unicef-individual",
+              "unicef-enrolment-faq"
+            ]
           }
-        ]
+        ],
+        "venue": "香港迪士尼樂園旅遊巴士停車場"
       },
       {
         "id": "unicef-2027-10k",
         "name": "10 公里賽一組",
         "distanceKm": 10,
         "date": "2027-01-03",
-        "sourceIds": ["unicef-race-info", "unicef-schedule", "unicef-individual"],
-        "region": null,
+        "sourceIds": [
+          "unicef-race-info",
+          "unicef-schedule",
+          "unicef-individual",
+          "unicef-start-faq"
+        ],
+        "region": "離島",
         "startTime": "2027-01-03T07:35:00+08:00",
         "limit": "1 小時 30 分鐘；活動日須年滿 16 歲，一組要求最佳成績多於 1 小時 10 分 01 秒，詳見官方。",
         "channels": [
@@ -316,7 +332,7 @@
             "status": "open",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
             "registrationMethod": "個人報名",
             "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，唔保證即時餘額。",
             "id": "unicef-2027-10k-charity",
@@ -324,17 +340,28 @@
             "name": "慈善報名（個人）",
             "currency": "HKD",
             "eligibility": "須符合組別年齡／成績要求及最低籌款額；名額以官方確認為準。",
-            "sourceIds": ["unicef-race-info", "unicef-schedule", "unicef-individual"]
+            "sourceIds": [
+              "unicef-race-info",
+              "unicef-schedule",
+              "unicef-individual",
+              "unicef-enrolment-faq"
+            ]
           }
-        ]
+        ],
+        "venue": "香港迪士尼樂園旅遊巴士停車場"
       },
       {
         "id": "unicef-2027-5k",
         "name": "5 公里賽",
         "distanceKm": 5,
         "date": "2027-01-03",
-        "sourceIds": ["unicef-race-info", "unicef-schedule", "unicef-individual"],
-        "region": null,
+        "sourceIds": [
+          "unicef-race-info",
+          "unicef-schedule",
+          "unicef-individual",
+          "unicef-start-faq"
+        ],
+        "region": "離島",
         "startTime": "2027-01-03T08:15:00+08:00",
         "limit": "45 分鐘；須於活動日年滿 16 歲。",
         "channels": [
@@ -345,7 +372,7 @@
             "status": "open",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
             "registrationMethod": "個人報名",
             "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，唔保證即時餘額。",
             "id": "unicef-2027-5k-charity",
@@ -353,17 +380,28 @@
             "name": "慈善報名（個人）",
             "currency": "HKD",
             "eligibility": "須符合組別年齡／成績要求及最低籌款額；名額以官方確認為準。",
-            "sourceIds": ["unicef-race-info", "unicef-schedule", "unicef-individual"]
+            "sourceIds": [
+              "unicef-race-info",
+              "unicef-schedule",
+              "unicef-individual",
+              "unicef-enrolment-faq"
+            ]
           }
-        ]
+        ],
+        "venue": "香港迪士尼樂園旅遊巴士停車場"
       },
       {
         "id": "unicef-2027-3k",
         "name": "3 公里少年賽",
         "distanceKm": 3,
         "date": "2027-01-03",
-        "sourceIds": ["unicef-race-info", "unicef-schedule", "unicef-individual"],
-        "region": null,
+        "sourceIds": [
+          "unicef-race-info",
+          "unicef-schedule",
+          "unicef-individual",
+          "unicef-start-faq"
+        ],
+        "region": "離島",
         "startTime": "2027-01-03T07:55:00+08:00",
         "limit": "35 分鐘；活動日年齡為 11–15 歲。",
         "channels": [
@@ -374,7 +412,7 @@
             "status": "open",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
             "registrationMethod": "個人報名",
             "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，唔保證即時餘額。",
             "id": "unicef-2027-3k-charity",
@@ -382,14 +420,20 @@
             "name": "慈善報名（個人）",
             "currency": "HKD",
             "eligibility": "須符合組別年齡／成績要求及最低籌款額；名額以官方確認為準。",
-            "sourceIds": ["unicef-race-info", "unicef-schedule", "unicef-individual"]
+            "sourceIds": [
+              "unicef-race-info",
+              "unicef-schedule",
+              "unicef-individual",
+              "unicef-enrolment-faq"
+            ]
           }
-        ]
+        ],
+        "venue": "香港迪士尼樂園旅遊巴士停車場"
       }
     ],
     "sourceUrl": "https://run.unicef.org.hk/powerun/zh/event-info/race-information",
     "updatedAt": "2026-10-26",
-    "verifiedAt": "2026-10-26T13:03:31+08:00",
+    "verifiedAt": "2026-10-26T13:29:09+08:00",
     "verification": "verified",
     "publication": "published",
     "sources": [
@@ -428,7 +472,7 @@
         "id": "unicef-individual",
         "title": "官方個人報名：公開可選組別",
         "url": "https://run.unicef.org.hk/powerun/zh/individual",
-        "checkedAt": "2026-10-26T13:03:31+08:00",
+        "checkedAt": "2026-10-26T13:29:09+08:00",
         "fields": ["channels.registration"],
         "note": "下拉選單列有 10K 一組、5K、3K；未列半馬及 10K 挑戰賽，不據此推斷額滿。只讀取公開選單，無提交報名或個人資料。"
       },
@@ -439,6 +483,22 @@
         "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": ["transport"],
         "note": "已讀當屆列車時間；不把集合位置當成起跑線，半馬集合早於上述迪士尼綫首班。"
+      },
+      {
+        "id": "unicef-start-faq",
+        "title": "官方一般活動FAQ：起點與終點",
+        "url": "https://run.unicef.org.hk/powerun/zh/event-info/faq/event-information",
+        "checkedAt": "2026-10-26T13:29:09+08:00",
+        "fields": ["groups.venue", "groups.region", "venue"],
+        "note": "已實際展開當屆第7題，明確寫起點及終點均在香港迪士尼樂園旅遊巴士停車場，適用本活動各組；不再只以集合地點推斷。"
+      },
+      {
+        "id": "unicef-enrolment-faq",
+        "title": "官方報名FAQ：先到先得及接納條件",
+        "url": "https://run.unicef.org.hk/powerun/zh/event-info/faq/enrolment",
+        "checkedAt": "2026-10-26T13:29:09+08:00",
+        "fields": ["channels.registration"],
+        "note": "第4題只說各組額滿可提早終止，不提供半馬現時餘額；半馬仍未列於個人選單，不能由一般說明判成接受申請或額滿。"
       }
     ],
     "changes": [
@@ -453,6 +513,10 @@
       {
         "date": "2026-10-26",
         "note": "重新閱讀賽事資料、截止日及個人組別選單：10K 一組、5K、3K 可選，半馬仍未列。補明10K一組成績門檻及列車安排；四組精確起跑線仍待核實。"
+      },
+      {
+        "date": "2026-10-26",
+        "note": "展開當屆一般活動FAQ第7題，確認四組起終點為香港迪士尼樂園旅遊巴士停車場，補齊離島地區。重讀個人選單及報名FAQ，半馬仍未列可選，狀態維持未知。"
       }
     ]
   },
@@ -663,7 +727,7 @@
     "tags": ["全馬", "半馬", "公眾抽籤"],
     "status": "scheduled",
     "organizer": "中國香港田徑總會",
-    "summary": "設全馬、半馬及十公里。一般及優先申請已截止；本地全馬住宿套票核對時有登記表。慈善按機構分列，已核對的義務工作發展局及啟勵扶青會招募均已截止；其他機構仍須另查。",
+    "summary": "設全馬、半馬及十公里。一般及優先申請已截止；本地全馬住宿套票核對時有登記表。慈善按機構及申請身份分列，已核對五間機構的招募均已截止；其他機構仍須另查。",
     "highlights": [
       "全馬及半馬起點均在尖沙咀彌敦道，10K 起點在港島東區走廊。",
       "本地費用：全馬 HK$600、半馬 HK$520、10K HK$420；非本地另計。",
@@ -731,9 +795,9 @@
             "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
             "currency": "HKD",
             "status": "unknown",
-            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
             "registrationUrl": "https://www.hkmarathon.com/marathon-charity-programme",
-            "registrationNote": "此項只提示尚未逐間核實的其他機構，不是獨立機構名額或完整名單；金額及餘額未能統一確認。11月6日23:59為大會跑手登記最後期限，機構招募可早已結束；已核對機構另列於下方。",
+            "registrationNote": "此項保留尚未逐間核實的其他機構，不是統一價格或完整名單。本站已具名核對義務工作發展局、啟勵扶青會、關注婦女性暴力協會、籽識慈善基金及樂餉社，招募期限按各機構獨立列出；不能由已查機構推斷其餘機構名額。11月6日23:59是大會跑手登記最後期限，不是各機構招募期限。",
             "sourceIds": ["schkm-channel-dates", "schkm-charity", "schkm-charity-directory"]
           },
           {
@@ -791,6 +855,42 @@
             "registrationNote": "機構招募已截止；獲選者後續大會登記期限不能用作延長招募。",
             "sourceIds": ["schkm-kely", "schkm-charity-directory"],
             "registrationClosesAt": "2026-10-16T23:59:00+08:00"
+          },
+          {
+            "id": "schkm-2027-marathon-charity-acsvaw",
+            "type": "charity",
+            "name": "慈善報名（關注婦女性暴力協會）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款／籌款要求，經機構審核確認，遞交意向不等於獲名額。",
+            "price": 4000,
+            "currency": "HKD",
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為此機構此渠道最低捐款／籌款要求；不是一般報名費，亦不適用其他機構。另列籌款目標（非最低額）為HK$10000，以較高籌款目標優先。",
+            "status": "closed",
+            "deadline": "2026-10-15",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationUrl": "https://rainlily.org.hk/chi/news/2026/scm2027",
+            "registrationNote": "機構招募已截止；獲選後的大會登記期限不延長機構招募。官方未列精確截止時刻，故只記日期。",
+            "sourceIds": ["schkm-acsvaw", "schkm-charity-directory"]
+          },
+          {
+            "id": "schkm-2027-marathon-charity-laviolet",
+            "type": "charity",
+            "name": "慈善報名（籽識慈善基金）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款／籌款要求，經機構審核確認，遞交意向不等於獲名額。",
+            "price": 3800,
+            "currency": "HKD",
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為此機構此渠道最低捐款／籌款要求；不是一般報名費，亦不適用其他機構。",
+            "status": "closed",
+            "deadline": "2026-10-14",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationUrl": "https://www.lavioletcharity.org/渣打香港馬拉松慈善計劃2027-runfordream",
+            "registrationNote": "機構招募已截止；獲選後的大會登記期限不延長機構招募。官方未列精確截止時刻，故只記日期。獲預留名額後須於通知日起7天內完成最低籌款；該相對付款期限不當成招募截止。",
+            "sourceIds": ["schkm-laviolet", "schkm-charity-directory"]
           }
         ]
       },
@@ -853,9 +953,9 @@
             "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
             "currency": "HKD",
             "status": "unknown",
-            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
             "registrationUrl": "https://www.hkmarathon.com/marathon-charity-programme",
-            "registrationNote": "此項只提示尚未逐間核實的其他機構，不是獨立機構名額或完整名單；金額及餘額未能統一確認。11月6日23:59為大會跑手登記最後期限，機構招募可早已結束；已核對機構另列於下方。",
+            "registrationNote": "此項保留尚未逐間核實的其他機構，不是統一價格或完整名單。本站已具名核對義務工作發展局、啟勵扶青會、關注婦女性暴力協會、籽識慈善基金及樂餉社，招募期限按各機構獨立列出；不能由已查機構推斷其餘機構名額。11月6日23:59是大會跑手登記最後期限，不是各機構招募期限。",
             "sourceIds": ["schkm-channel-dates", "schkm-charity", "schkm-charity-directory"]
           },
           {
@@ -894,6 +994,61 @@
             "registrationNote": "機構招募已截止；獲選者後續大會登記期限不能用作延長招募。",
             "sourceIds": ["schkm-kely", "schkm-charity-directory"],
             "registrationClosesAt": "2026-10-16T23:59:00+08:00"
+          },
+          {
+            "id": "schkm-2027-half-charity-acsvaw",
+            "type": "charity",
+            "name": "慈善報名（關注婦女性暴力協會）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款／籌款要求，經機構審核確認，遞交意向不等於獲名額。",
+            "price": 3500,
+            "currency": "HKD",
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為此機構此渠道最低捐款／籌款要求；不是一般報名費，亦不適用其他機構。另列籌款目標（非最低額）為HK$8000，以較高籌款目標優先。",
+            "status": "closed",
+            "deadline": "2026-10-15",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationUrl": "https://rainlily.org.hk/chi/news/2026/scm2027",
+            "registrationNote": "機構招募已截止；獲選後的大會登記期限不延長機構招募。官方未列精確截止時刻，故只記日期。",
+            "sourceIds": ["schkm-acsvaw", "schkm-charity-directory"]
+          },
+          {
+            "id": "schkm-2027-half-charity-laviolet",
+            "type": "charity",
+            "name": "慈善報名（籽識慈善基金）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款／籌款要求，經機構審核確認，遞交意向不等於獲名額。",
+            "price": 3800,
+            "currency": "HKD",
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為此機構此渠道最低捐款／籌款要求；不是一般報名費，亦不適用其他機構。",
+            "status": "closed",
+            "deadline": "2026-10-14",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationUrl": "https://www.lavioletcharity.org/渣打香港馬拉松慈善計劃2027-runfordream",
+            "registrationNote": "機構招募已截止；獲選後的大會登記期限不延長機構招募。官方未列精確截止時刻，故只記日期。獲預留名額後須於通知日起7天內完成最低籌款；該相對付款期限不當成招募截止。",
+            "sourceIds": ["schkm-laviolet", "schkm-charity-directory"]
+          },
+          {
+            "id": "schkm-2027-half-charity-feedinghk",
+            "type": "charity",
+            "name": "慈善報名（樂餉社）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款／籌款要求，經機構審核確認，遞交意向不等於獲名額。",
+            "price": 2500,
+            "currency": "HKD",
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為此機構此渠道最低捐款／籌款要求；不是一般報名費，亦不適用其他機構。",
+            "status": "closed",
+            "deadline": "2026-10-09",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationUrl": "https://feedinghk.org/fhk_scmhk2027/",
+            "registrationNote": "機構招募已截止；獲選後的大會登記期限不延長機構招募。",
+            "sourceIds": ["schkm-feedinghk", "schkm-charity-directory"],
+            "registrationClosesAt": "2026-10-09T23:59:00+08:00"
           }
         ]
       },
@@ -956,9 +1111,9 @@
             "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
             "currency": "HKD",
             "status": "unknown",
-            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
             "registrationUrl": "https://www.hkmarathon.com/marathon-charity-programme",
-            "registrationNote": "此項只提示尚未逐間核實的其他機構，不是獨立機構名額或完整名單；金額及餘額未能統一確認。11月6日23:59為大會跑手登記最後期限，機構招募可早已結束；已核對機構另列於下方。",
+            "registrationNote": "此項保留尚未逐間核實的其他機構，不是統一價格或完整名單。本站已具名核對義務工作發展局、啟勵扶青會、關注婦女性暴力協會、籽識慈善基金及樂餉社，招募期限按各機構獨立列出；不能由已查機構推斷其餘機構名額。11月6日23:59是大會跑手登記最後期限，不是各機構招募期限。",
             "sourceIds": ["schkm-channel-dates", "schkm-charity", "schkm-charity-directory"]
           },
           {
@@ -997,13 +1152,49 @@
             "registrationNote": "機構招募已截止；獲選者後續大會登記期限不能用作延長招募。",
             "sourceIds": ["schkm-kely", "schkm-charity-directory"],
             "registrationClosesAt": "2026-10-16T23:59:00+08:00"
+          },
+          {
+            "id": "schkm-2027-10k-charity-acsvaw",
+            "type": "charity",
+            "name": "慈善報名（關注婦女性暴力協會）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低捐款／籌款要求，經機構審核確認，遞交意向不等於獲名額。",
+            "price": 2500,
+            "currency": "HKD",
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為此機構此渠道最低捐款／籌款要求；不是一般報名費，亦不適用其他機構。另列籌款目標（非最低額）為HK$6000，以較高籌款目標優先。",
+            "status": "closed",
+            "deadline": "2026-10-15",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationUrl": "https://rainlily.org.hk/chi/news/2026/scm2027",
+            "registrationNote": "機構招募已截止；獲選後的大會登記期限不延長機構招募。官方未列精確截止時刻，故只記日期。",
+            "sourceIds": ["schkm-acsvaw", "schkm-charity-directory"]
+          },
+          {
+            "id": "schkm-2027-10k-charity-laviolet",
+            "type": "charity",
+            "name": "慈善報名（籽識慈善基金・學校代表）",
+            "registrationMethod": "學校申請及機構審核",
+            "eligibility": "只限學校安排符合大會參賽資格的學生、老師、家長、校友或校園社群代表；每校1–10位。",
+            "price": 10000,
+            "currency": "HKD",
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為此機構此渠道最低捐款／籌款要求；不是一般報名費，亦不適用其他機構。",
+            "status": "closed",
+            "deadline": "2026-10-14",
+            "registrationVerifiedAt": "2026-10-26T13:29:09+08:00",
+            "registrationUrl": "https://www.lavioletcharity.org/渣打香港馬拉松慈善計劃2027-runfordream",
+            "registrationNote": "機構招募已截止；獲選後的大會登記期限不延長機構招募。官方未列精確截止時刻，故只記日期。獲預留名額後須於通知日起7天內完成最低籌款；該相對付款期限不當成招募截止。",
+            "sourceIds": ["schkm-laviolet", "schkm-charity-directory"]
           }
         ]
       }
     ],
     "sourceUrl": "https://www.hkmarathon.com/race-information",
     "updatedAt": "2026-10-26",
-    "verifiedAt": "2026-10-26T13:03:31+08:00",
+    "verifiedAt": "2026-10-26T13:29:09+08:00",
     "verification": "verified",
     "publication": "published",
     "sources": [
@@ -1119,6 +1310,30 @@
         "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": ["channels.registration", "channels.price", "channels.eligibility"],
         "note": "全馬及半馬5000、10K3000港元最低籌款；機構招募10月16日23:59截止，10月19日通知；11月6日23:59只是獲選跑手後續大會登記。"
+      },
+      {
+        "id": "schkm-acsvaw",
+        "title": "關注婦女性暴力協會：2027慈善跑手招募",
+        "url": "https://rainlily.org.hk/chi/news/2026/scm2027",
+        "checkedAt": "2026-10-26T13:29:09+08:00",
+        "fields": ["channels.price", "channels.registration", "channels.eligibility"],
+        "note": "三距離最低捐款4000／3500／2500港元，較高目標10000／8000／6000另計；10月15日招募截止，無精確時刻，11月6日只屬後續大會登記。"
+      },
+      {
+        "id": "schkm-laviolet",
+        "title": "籽識慈善基金：2027慈善跑手招募",
+        "url": "https://www.lavioletcharity.org/渣打香港馬拉松慈善計劃2027-runfordream",
+        "checkedAt": "2026-10-26T13:29:09+08:00",
+        "fields": ["channels.price", "channels.registration", "channels.eligibility"],
+        "note": "全馬／半馬公眾跑手最低3800港元；10K只供學校安排代表，每校1–10位，每位最低10000港元；兩渠道均10月14日截止，無精確時刻。"
+      },
+      {
+        "id": "schkm-feedinghk",
+        "title": "樂餉社：2027慈善跑手招募",
+        "url": "https://feedinghk.org/fhk_scmhk2027/",
+        "checkedAt": "2026-10-26T13:29:09+08:00",
+        "fields": ["channels.price", "channels.registration", "channels.eligibility"],
+        "note": "當前頁面只明列半馬最低2500港元；意向登記10月9日23:59截止，11月6日23:59只屬獲選後大會登記；不推斷全馬或10K名額。"
       }
     ],
     "changes": [
@@ -1137,6 +1352,10 @@
       {
         "date": "2026-10-26",
         "note": "補核各距離優先報名費及挑戰組資格；本地住宿套票可開啟參賽者表，標示接受申請但不保證庫存。新增義務工作發展局及啟勵扶青會六個機構渠道，記錄不同最低籌款額與已截止的招募期，其他機構仍待核實。"
+      },
+      {
+        "date": "2026-10-26",
+        "note": "再核對其他慈善機構，新增關注婦女性暴力協會、籽識慈善基金及樂餉社共七個具名渠道。籽識10K學校代表最低額與公眾全馬／半馬分開；其他機構仍未知，不統一套用價格及招募狀態。"
       }
     ]
   }

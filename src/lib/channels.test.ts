@@ -18,8 +18,10 @@ function event(): Race {
   const race = structuredClone(source);
   // Keep these synthetic filter scenarios independent of newly researched NGO channels.
   for (const group of race.groups) {
-    group.channels = group.channels.filter(
-      (channel) => !channel.id.endsWith("-avs") && !channel.id.endsWith("-kely"),
+    group.channels = group.channels.filter((channel) =>
+      ["general", "priority", "charity", "hotel"].some(
+        (suffix) => channel.id === `${group.id}-${suffix}`,
+      ),
     );
     const hotel = group.channels.find((channel) => channel.type === "hotel");
     if (hotel) hotel.status = "unknown";
