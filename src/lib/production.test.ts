@@ -5,7 +5,7 @@ import { defaultFilters, groupStatus, channelStatus, selectRaces } from "./races
 import { releaseIssues } from "./release";
 import { raceStructuredData, safeJsonLd } from "./structured-data";
 import type { Race } from "./types";
-const now = "2026-10-25T13:30:00+08:00";
+const now = "2026-10-26T13:30:00+08:00";
 function catalog() {
   const data: unknown = structuredClone(rawCatalog);
   assertCatalog(data);
@@ -67,7 +67,11 @@ describe("real catalog publication and provenance", () => {
 describe("exact deadlines, freshness and truthful channel statuses", () => {
   it("closes the 5K ballot exactly at noon HK time", () => {
     const r = catalog().find((r) => r.id === "schkm-harbourfront-2027")!;
-    const g = { ...r.groups[0].channels[0], registrationVerifiedAt: "2026-10-26T11:00:00+08:00" };
+    const g = {
+      ...r.groups[0].channels[0],
+      status: "open" as const,
+      registrationVerifiedAt: "2026-10-26T11:00:00+08:00",
+    };
     expect(channelStatus(r, r.groups[0], g, "2026-10-26T11:59:59+08:00")).toBe("open");
     expect(channelStatus(r, r.groups[0], g, "2026-10-26T04:00:00Z")).toBe("closed");
   });
