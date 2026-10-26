@@ -5,7 +5,7 @@ import { defaultFilters, groupStatus, channelStatus, selectRaces } from "./races
 import { releaseIssues } from "./release";
 import { raceStructuredData, safeJsonLd } from "./structured-data";
 import type { Race } from "./types";
-const now = "2026-10-26T14:00:00+08:00";
+const now = "2026-10-27T01:00:00+08:00";
 function catalog() {
   const data: unknown = structuredClone(rawCatalog);
   assertCatalog(data);

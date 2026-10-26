@@ -92,3 +92,12 @@ Fitz 只用作市場／發現活動線索，唔當成本站報名狀態或費用
 | [維護家庭基金](https://www.familyvalue.org.hk/marathon.html)                                                                                                                                                  | 讀取9月30日14:00三距離名額皆0、全部額滿的明確公告，三渠道標full。每位HK$10,000或以上只稱「籌款目標」，不可當作最低費用，因此三筆price:null；沒有虛構申請截止或即時庫存                                                                              |
 
 本輪74項測試，6場／14組／44渠道。原有4項仍未有足夠證據完全結案，另新增3筆維護家庭基金最低費用未知，故review:data有7筆；新增的未知是如實保留欄位，不代表已知額滿狀態未核實。網站已覆核九間具名機構，其他機構仍不能統一概括。進一步確認個人半馬及未公開機構條件，需要官方補充公告或直接回覆；本輪沒有聯絡主辦方或代表使用者提交任何申請。
+
+## 2026-10-27 七項未知再核
+
+- UNICEF半馬：再次展開[公開個人選單](https://run.unicef.org.hk/powerun/zh/individual)及[報名FAQ第4題](https://run.unicef.org.hk/powerun/zh/event-info/faq/enrolment)。仍只列10K一組、5K、3K；FAQ允許額滿提早終止但沒有半馬當前狀態。半馬保持unknown；其餘三組只更新已查選單的核實時間。
+- 維護家庭基金三距離最低費用：重讀[官方公告](https://www.familyvalue.org.hk/marathon.html)，仍只列每位HK$10,000或以上籌款目標；再經官網連結開啟[官方報名表](https://docs.google.com/forms/d/e/1FAIpQLSci7RMYmNz_RxSP9KQ_HkDWfB-9Z_tsXtbGEg8a77Lipl12iA/closedform)，明確寫所有招募已完成。新增表格為額滿／招募完成的佐證，但三筆price仍null，無法從已關閉表格補證最低費用。官網直接瀏覽受自動驗證阻擋，官網文字由網頁查閱工具讀取；沒有解驗證或繞過限制。
+- 「其他慈善機構」三距離：重讀[大會計劃概覽](https://www.hkmarathon.com/marathon-charity-programme)、[2027條款第7及9頁](https://hkaaa.com/uploader/upload/file/Marathon_Charity_Programme/SCHKM2027/MCP2027_ProgrammeT%26C_ENG.pdf)，及[官方機構名單](https://www.hkmarathon.com/about-the-charitable-organisations)。條款的全馬2300／半馬2000／10K1900是機構每名額籌款目標要求，不證明任何特定機構向跑手收取的最低額。跑手需機構連結及代碼登記。三個查詢入口改連機構名單，unknown及price:null不變；本輪未聲稱已逐間覆核所有機構。
+- 另外覆核即將到期的[婦女動力基金公開表格](https://docs.google.com/forms/d/e/1FAIpQLSe35thpOrLu37iwDCvfADXZ1y_L9Eg7WhnZaFr52Qmra-7edw/viewform)：完成載入後半馬及10K選項均可用，最低捐款2500及11月2日日期不變。只讀取，沒有填寫或提交資料。
+
+結果：原有七項仍欠足夠證據結案，6場／14組／44渠道不變。10月27日的review:data共9筆，其中7筆含未知欄位，另外2筆只因婦女動力基金兩組進入7日內截止覆核期；不是新增兩筆未知。沒有聯絡機構或提交申請。
