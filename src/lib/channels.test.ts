@@ -12,12 +12,21 @@ import {
 } from "./races";
 import type { Race, Filters } from "./types";
 
-const now = "2026-10-25T14:00:00+08:00";
+const now = "2026-10-26T14:00:00+08:00";
 const source = races.find((race) => race.id === "standard-chartered-hk-marathon-2027")!;
 function event(): Race {
   const race = structuredClone(source);
+  // Keep these synthetic filter scenarios independent of newly researched NGO channels.
+  for (const group of race.groups) {
+    group.channels = group.channels.filter(
+      (channel) => !channel.id.endsWith("-avs") && !channel.id.endsWith("-kely"),
+    );
+    const hotel = group.channels.find((channel) => channel.type === "hotel");
+    if (hotel) hotel.status = "unknown";
+  }
   const charity = race.groups[0].channels.find((channel) => channel.type === "charity")!;
   charity.status = "open";
+  charity.registrationClosesAt = "2026-11-06T23:59:00+08:00";
   charity.registrationVerifiedAt = now;
   return race;
 }
@@ -67,7 +76,9 @@ describe("independent registration channels", () => {
       filters({ channels: ["charity"], statuses: ["open"] }),
       now,
     )[0];
-    expect(registrationCountdown(race, result.groups, now)?.channelName).toBe("慈善報名");
+    expect(registrationCountdown(race, result.groups, now)?.channelName).toBe(
+      "其他慈善機構（逐間確認）",
+    );
     expect(registrationCountdown(race, result.groups, now)?.deadline).toBe(
       "2026-11-06T23:59:00+08:00",
     );
@@ -108,7 +119,7 @@ describe("channel-specific publication contracts", () => {
       price: 2942,
       priceType: "package",
       priceUnit: "每位／一晚",
-      status: "unknown",
+      status: "open",
     });
     expect(source.groups[0]).not.toHaveProperty("price");
     expect(

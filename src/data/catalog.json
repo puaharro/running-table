@@ -268,7 +268,7 @@
       "所列款項為最低籌款額，唔係一般賽事報名費。",
       "半馬未見於公開個人報名選單；唔單憑缺席選項推斷已額滿。"
     ],
-    "transport": "官方集合地點為香港迪士尼樂園旅遊巴士停車場；半馬集合時間為上午 4:45–5:15，10K 一組為上午 6:35–7:10。集合位置唔等同已核實各組精確起跑線，特別交通安排請查看官方。",
+    "transport": "官方集合地點為香港迪士尼樂園旅遊巴士停車場；半馬集合上午 4:45–5:15，10K 一組上午 6:35–7:10。起跑線仍待核實。官方列明東涌綫首班由香港站上午 5:15、東涌站上午 5:28 開出，迪士尼綫由欣澳站上午 5:40 開出；半馬跑手須另查特別巴士，勿依賴上述列車趕赴半馬集合。車務以當日官方安排為準。",
     "groups": [
       {
         "id": "unicef-2027-half",
@@ -287,7 +287,7 @@
             "status": "unknown",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-25T13:01:03+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationMethod": "個人報名",
             "registrationNote": "官方只列截止日期，未列精確時刻。目前公開選單未列半馬，未能確認是否仍接受申請，唔推斷額滿。",
             "id": "unicef-2027-half-charity",
@@ -307,7 +307,7 @@
         "sourceIds": ["unicef-race-info", "unicef-schedule", "unicef-individual"],
         "region": null,
         "startTime": "2027-01-03T07:35:00+08:00",
-        "limit": "1 小時 30 分鐘；須於活動日年滿 16 歲，一組成績條件以官方為準。",
+        "limit": "1 小時 30 分鐘；活動日須年滿 16 歲，一組要求最佳成績多於 1 小時 10 分 01 秒，詳見官方。",
         "channels": [
           {
             "price": 550,
@@ -316,7 +316,7 @@
             "status": "open",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-25T13:01:03+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationMethod": "個人報名",
             "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，唔保證即時餘額。",
             "id": "unicef-2027-10k-charity",
@@ -345,7 +345,7 @@
             "status": "open",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-25T13:01:03+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationMethod": "個人報名",
             "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，唔保證即時餘額。",
             "id": "unicef-2027-5k-charity",
@@ -374,7 +374,7 @@
             "status": "open",
             "deadline": "2026-11-15",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
-            "registrationVerifiedAt": "2026-10-25T13:01:03+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationMethod": "個人報名",
             "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，唔保證即時餘額。",
             "id": "unicef-2027-3k-charity",
@@ -388,8 +388,8 @@
       }
     ],
     "sourceUrl": "https://run.unicef.org.hk/powerun/zh/event-info/race-information",
-    "updatedAt": "2026-10-25",
-    "verifiedAt": "2026-10-25T13:01:03+08:00",
+    "updatedAt": "2026-10-26",
+    "verifiedAt": "2026-10-26T13:03:31+08:00",
     "verification": "verified",
     "publication": "published",
     "sources": [
@@ -405,7 +405,7 @@
         "id": "unicef-race-info",
         "title": "官方賽事資料：最低籌款額與集合安排",
         "url": "https://run.unicef.org.hk/powerun/zh/event-info/race-information",
-        "checkedAt": "2026-10-25T13:01:03+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": [
           "date",
           "venue",
@@ -420,7 +420,7 @@
         "id": "unicef-schedule",
         "title": "官方超能跑首頁：報名截止日期",
         "url": "https://run.unicef.org.hk/powerun/zh",
-        "checkedAt": "2026-10-25T13:01:03+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": ["date", "venue", "channels.registration"],
         "note": "截止日為 2026-11-15，未列精確時刻。"
       },
@@ -428,9 +428,17 @@
         "id": "unicef-individual",
         "title": "官方個人報名：公開可選組別",
         "url": "https://run.unicef.org.hk/powerun/zh/individual",
-        "checkedAt": "2026-10-25T13:01:03+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": ["channels.registration"],
         "note": "下拉選單列有 10K 一組、5K、3K；未列半馬及 10K 挑戰賽，不據此推斷額滿。只讀取公開選單，無提交報名或個人資料。"
+      },
+      {
+        "id": "unicef-transport",
+        "title": "官方當屆交通：港鐵首班列車",
+        "url": "https://run.unicef.org.hk/powerun/zh/event-info/transportation/public",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
+        "fields": ["transport"],
+        "note": "已讀當屆列車時間；不把集合位置當成起跑線，半馬集合早於上述迪士尼綫首班。"
       }
     ],
     "changes": [
@@ -441,6 +449,10 @@
       {
         "date": "2026-10-25",
         "note": "補核最低籌款額、集合地點及截止日期；公開個人報名選單可選 10K 一組、5K、3K，半馬未列為可選，狀態保持待核實。"
+      },
+      {
+        "date": "2026-10-26",
+        "note": "重新閱讀賽事資料、截止日及個人組別選單：10K 一組、5K、3K 可選，半馬仍未列。補明10K一組成績門檻及列車安排；四組精確起跑線仍待核實。"
       }
     ]
   },
@@ -458,9 +470,9 @@
     "tags": ["親子", "公眾抽籤"],
     "status": "scheduled",
     "organizer": "中國香港田徑總會",
-    "summary": "主賽事前一日舉行嘅約 5 公里非競賽活動，設個人及家庭公眾抽籤。抽籤截止、結果公布與付款係不同時間，提交申請唔等於取得名額。",
+    "summary": "主賽事前一日舉行嘅約5公里非競賽活動。個人及家庭公眾抽籤已截止；第一輪10月29日下午2時公布結果，唔代表重新開放申請。輪椅渠道另按官方安排。",
     "highlights": [
-      "公眾抽籤於 10 月 26 日中午截止；另有輪椅渠道。",
+      "一般公眾抽籤已於 10 月 26 日中午截止；輪椅渠道另有期限。",
       "家庭抽籤參加者年齡要求與個人抽籤不同。",
       "全程時限 60 分鐘；以官方分配時段出發。"
     ],
@@ -471,25 +483,25 @@
         "name": "約 5 公里",
         "distanceKm": 5,
         "date": "2027-01-16",
-        "limit": "60 分鐘；個人及家庭年齡要求見官方。",
+        "limit": "60 分鐘；個人抽籤16歲或以上，家庭隊長18歲或以上、隊員6–15歲（均按2027年出生年份計）。",
         "sourceIds": ["schkm-harbour", "schkm-harbour-entry"],
         "channels": [
           {
             "price": 300,
-            "status": "open",
+            "status": "closed",
             "registrationStart": "2026-10-20",
             "deadline": "2026-10-26",
             "registrationUrl": "https://www.hkmarathon.com/harbourfront-run",
             "registrationOpensAt": "2026-10-20T12:00:00+08:00",
             "registrationClosesAt": "2026-10-26T12:00:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:01:03+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationMethod": "公眾抽籤",
             "registrationNote": "提交抽籤申請唔等於取得名額；輪椅渠道另見官方。 此處結果公布及付款期限為第一輪；第二輪安排另見官方。",
             "id": "schkm-2027-harbour5-general",
             "type": "general",
             "name": "一般報名（公眾抽籤）",
             "currency": "HKD",
-            "eligibility": "須符合此組別年齡及參賽資格，詳見官方。",
+            "eligibility": "個人抽籤：2027年按出生年份計須年滿16歲；家庭抽籤：2–4人，包括至少一名18歲或以上隊長及一名6–15歲隊員。",
             "sourceIds": ["schkm-harbour", "schkm-harbour-entry"],
             "resultAnnouncedAt": "2026-10-29T14:00:00+08:00",
             "paymentClosesAt": "2026-11-02T12:00:00+08:00",
@@ -499,8 +511,8 @@
       }
     ],
     "sourceUrl": "https://www.hkmarathon.com/harbourfront-run",
-    "updatedAt": "2026-10-25",
-    "verifiedAt": "2026-10-25T13:01:03+08:00",
+    "updatedAt": "2026-10-26",
+    "verifiedAt": "2026-10-26T13:03:31+08:00",
     "verification": "verified",
     "publication": "published",
     "sources": [
@@ -508,7 +520,7 @@
         "id": "schkm-harbour",
         "title": "官方 5 公里海濱跑資料",
         "url": "https://www.hkmarathon.com/harbourfront-run",
-        "checkedAt": "2026-10-25T13:01:03+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": [
           "date",
           "venue",
@@ -522,9 +534,9 @@
         "id": "schkm-harbour-entry",
         "title": "官方指定報名平台：現有登記渠道",
         "url": "https://hkmarathon.fringebackerevents.com/events/standard-chartered-hong-kong-marathon-2027/register/select-type/",
-        "checkedAt": "2026-10-25T13:01:03+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": ["channels.registration"],
-        "note": "核對所列渠道仍有登記入口；未提交申請，唔保證即時名額。"
+        "note": "核對時平台五公里只列輪椅入口，一般個人／家庭抽籤未列；以官方10月26日中午截止時間判斷已截止。"
       }
     ],
     "changes": [
@@ -535,6 +547,10 @@
       {
         "date": "2026-10-25",
         "note": "核對官方公眾抽籤期限及指定報名入口，5K 公眾抽籤仍可登記，截止為 10 月 26 日中午。"
+      },
+      {
+        "date": "2026-10-26",
+        "note": "一般抽籤已過10月26日中午截止；核對平台只列輪椅入口，補明個人及家庭年齡、隊伍資格，保留獨立結果／付款期限。"
       }
     ]
   },
@@ -576,7 +592,7 @@
             "registrationUrl": "https://www.hkmarathon.com/youth-run",
             "registrationOpensAt": "2026-10-20T12:00:00+08:00",
             "registrationClosesAt": "2026-11-27T23:59:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:01:03+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationMethod": "先到先得",
             "registrationNote": "名額可提前額滿；不承諾即時餘額。",
             "id": "schkm-2027-youth2-general",
@@ -590,8 +606,8 @@
       }
     ],
     "sourceUrl": "https://www.hkmarathon.com/youth-run",
-    "updatedAt": "2026-10-25",
-    "verifiedAt": "2026-10-25T13:01:03+08:00",
+    "updatedAt": "2026-10-26",
+    "verifiedAt": "2026-10-26T13:03:31+08:00",
     "verification": "verified",
     "publication": "published",
     "sources": [
@@ -599,7 +615,7 @@
         "id": "schkm-youth",
         "title": "官方少年跑資料",
         "url": "https://www.hkmarathon.com/youth-run",
-        "checkedAt": "2026-10-25T13:01:03+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": [
           "date",
           "venue",
@@ -613,7 +629,7 @@
         "id": "schkm-youth-entry",
         "title": "官方指定報名平台：現有登記渠道",
         "url": "https://hkmarathon.fringebackerevents.com/events/standard-chartered-hong-kong-marathon-2027/register/select-type/",
-        "checkedAt": "2026-10-25T13:01:03+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": ["channels.registration"],
         "note": "核對所列渠道仍有登記入口；未提交申請，唔保證即時名額。"
       }
@@ -626,6 +642,10 @@
       {
         "date": "2026-10-25",
         "note": "核對官方期限及指定報名入口，少年跑仍列有登記入口；名額可提前額滿。"
+      },
+      {
+        "date": "2026-10-26",
+        "note": "重新核對官方費用、年齡、期限及指定平台仍列少年跑登記入口；名額以大會確認為準。"
       }
     ]
   },
@@ -643,11 +663,11 @@
     "tags": ["全馬", "半馬", "公眾抽籤"],
     "status": "scheduled",
     "organizer": "中國香港田徑總會",
-    "summary": "主賽事包括全馬、半馬及十公里。一般公眾抽籤與優先申請已截止；慈善報名及全馬住宿套票另有資格、期限及名額安排，請分渠道核對。",
+    "summary": "設全馬、半馬及十公里。一般及優先申請已截止；本地全馬住宿套票核對時有登記表。慈善按機構分列，已核對的義務工作發展局及啟勵扶青會招募均已截止；其他機構仍須另查。",
     "highlights": [
       "全馬及半馬起點均在尖沙咀彌敦道，10K 起點在港島東區走廊。",
       "本地費用：全馬 HK$600、半馬 HK$520、10K HK$420；非本地另計。",
-      "公眾抽籤已截止，慈善、傷健等渠道須按資格及獨立期限另查。"
+      "慈善最低籌款額按機構獨立列出；機構招募截止與11月6日大會跑手登記期限分開。"
     ],
     "transport": "全馬及半馬由尖沙咀彌敦道起跑，10K 由港島東區走廊起跑；三項終點均為維多利亞公園。各組起跑時間及交通管制請按官方選手資料核對。",
     "groups": [
@@ -670,7 +690,7 @@
             "registrationUrl": "https://www.hkmarathon.com/race-information",
             "registrationOpensAt": "2026-09-11T14:00:00+08:00",
             "registrationClosesAt": "2026-09-20T19:00:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:01:03+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationMethod": "公眾抽籤",
             "registrationNote": "只描述公眾抽籤；其他渠道另查官方。",
             "id": "schkm-2027-marathon-general",
@@ -685,20 +705,25 @@
             "type": "priority",
             "name": "優先報名",
             "registrationMethod": "達標資格審核",
-            "eligibility": "須符合大會該組別達標成績及審核要求；提交資料唔等於獲確認名額。",
-            "price": null,
+            "eligibility": "只適用所選距離挑戰組；須以2025年1月1日至2026年8月31日獲認可賽事成績達標，並通過大會審核。",
+            "price": 600,
             "currency": "HKD",
             "status": "closed",
             "registrationOpensAt": "2026-09-04T16:00:00+08:00",
             "registrationClosesAt": "2026-09-07T19:00:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:13:12+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationUrl": "https://www.hkmarathon.com/race-information",
-            "sourceIds": ["schkm-channel-dates"]
+            "sourceIds": ["schkm-channel-dates", "schkm-main", "schkm-faq"],
+            "priceType": "entry-fee",
+            "priceUnit": "每位",
+            "priceNote": "官方該距離本地參賽費；非本地 USD 90，優先申請已截止。",
+            "resultAnnouncedAt": "2026-09-11T10:00:00+08:00",
+            "paymentClosesAt": "2026-09-14T23:59:00+08:00"
           },
           {
             "id": "schkm-2027-marathon-charity",
             "type": "charity",
-            "name": "慈善報名",
+            "name": "其他慈善機構（逐間確認）",
             "registrationMethod": "向參與慈善機構申請",
             "eligibility": "須向獲分配此距離名額的慈善機構申請，符合機構籌款及審核要求。",
             "price": null,
@@ -706,31 +731,66 @@
             "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
             "currency": "HKD",
             "status": "unknown",
-            "registrationOpensAt": "2026-09-11T14:00:00+08:00",
-            "registrationClosesAt": "2026-11-06T23:59:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:13:12+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationUrl": "https://www.hkmarathon.com/marathon-charity-programme",
-            "registrationNote": "所列為大會跑手登記期限；機構可提早截止。尚未核實個別機構現有名額，請先向機構確認。",
-            "sourceIds": ["schkm-channel-dates", "schkm-charity"]
+            "registrationNote": "此項只提示尚未逐間核實的其他機構，不是獨立機構名額或完整名單；金額及餘額未能統一確認。11月6日23:59為大會跑手登記最後期限，機構招募可早已結束；已核對機構另列於下方。",
+            "sourceIds": ["schkm-channel-dates", "schkm-charity", "schkm-charity-directory"]
           },
           {
             "id": "schkm-2027-marathon-hotel",
             "type": "hotel",
             "name": "住宿連名額套票",
-            "registrationMethod": "套票預訂",
-            "eligibility": "只適用全馬；須符合參賽資格，並確認酒店及名額供應。",
+            "registrationMethod": "先到先得套票登記",
+            "eligibility": "只適用全馬；本地套票須持香港身份證、本地電話及通訊地址，符合全馬年齡及成績要求；房間與名額須經大會確認。",
             "price": 2942,
             "priceType": "package",
             "priceUnit": "每位／一晚",
             "priceNote": "本地參賽者套票；非本地 HK$3,044。包括一個全馬名額、2027-01-16 一晚單人住宿及晚餐；額外同房人士費用唔包含名額。",
             "currency": "HKD",
-            "status": "unknown",
+            "status": "open",
             "registrationOpensAt": "2026-09-11T14:00:00+08:00",
             "registrationClosesAt": "2026-11-06T23:59:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:13:12+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationUrl": "https://www.hkmarathon.com/run-stay-food-room-package",
-            "registrationNote": "官方列明套票及保證名額內容，但本次未核實剩餘房間／套票，狀態維持待核實。",
-            "sourceIds": ["schkm-channel-dates", "schkm-hotel"]
+            "registrationNote": "核對時官方指定平台可開啟本地套票參賽者登記表，接受申請；未提交或付款，不保證即時餘房及名額。限量300個，先到先得，11月6日23:59前須完成登記及付款。",
+            "sourceIds": ["schkm-channel-dates", "schkm-hotel", "schkm-hotel-entry"]
+          },
+          {
+            "id": "schkm-2027-marathon-charity-avs",
+            "type": "charity",
+            "name": "慈善報名（義務工作發展局）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低籌款要求；較高籌款承諾獲優先考慮，遞交申請不等於獲名額。",
+            "price": 7000,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為該機構個人慈善跑手最低捐款／籌款額，非一般報名費；不適用其他機構。",
+            "currency": "HKD",
+            "status": "closed",
+            "deadline": "2026-10-15",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationUrl": "https://avs.org.hk/SCHKM2027",
+            "registrationNote": "機構招募已截止；獲選者後續大會登記期限不能用作延長招募。 官方未列精確截止時刻；只適用非挑戰組，10月22日或之前通知獲選者。",
+            "sourceIds": ["schkm-avs", "schkm-charity-directory"]
+          },
+          {
+            "id": "schkm-2027-marathon-charity-kely",
+            "type": "charity",
+            "name": "慈善報名（啟勵扶青會）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低籌款要求；較高籌款承諾獲優先考慮，遞交申請不等於獲名額。",
+            "price": 5000,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為該機構個人慈善跑手最低捐款／籌款額，非一般報名費；不適用其他機構。",
+            "currency": "HKD",
+            "status": "closed",
+            "deadline": "2026-10-16",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationUrl": "https://kely.org/cnt/get-involved/kely-support-group-marathon-charity-programme-of-the-standard-chartered-hong-kong-marathon-2027",
+            "registrationNote": "機構招募已截止；獲選者後續大會登記期限不能用作延長招募。",
+            "sourceIds": ["schkm-kely", "schkm-charity-directory"],
+            "registrationClosesAt": "2026-10-16T23:59:00+08:00"
           }
         ]
       },
@@ -753,7 +813,7 @@
             "registrationUrl": "https://www.hkmarathon.com/race-information",
             "registrationOpensAt": "2026-09-11T14:00:00+08:00",
             "registrationClosesAt": "2026-09-20T19:00:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:01:03+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationMethod": "公眾抽籤",
             "id": "schkm-2027-half-general",
             "type": "general",
@@ -767,20 +827,25 @@
             "type": "priority",
             "name": "優先報名",
             "registrationMethod": "達標資格審核",
-            "eligibility": "須符合大會該組別達標成績及審核要求；提交資料唔等於獲確認名額。",
-            "price": null,
+            "eligibility": "只適用所選距離挑戰組；須以2025年1月1日至2026年8月31日獲認可賽事成績達標，並通過大會審核。",
+            "price": 520,
             "currency": "HKD",
             "status": "closed",
             "registrationOpensAt": "2026-09-04T16:00:00+08:00",
             "registrationClosesAt": "2026-09-07T19:00:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:13:12+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationUrl": "https://www.hkmarathon.com/race-information",
-            "sourceIds": ["schkm-channel-dates"]
+            "sourceIds": ["schkm-channel-dates", "schkm-half", "schkm-faq"],
+            "priceType": "entry-fee",
+            "priceUnit": "每位",
+            "priceNote": "官方該距離本地參賽費；非本地 USD 85，優先申請已截止。",
+            "resultAnnouncedAt": "2026-09-11T10:00:00+08:00",
+            "paymentClosesAt": "2026-09-14T23:59:00+08:00"
           },
           {
             "id": "schkm-2027-half-charity",
             "type": "charity",
-            "name": "慈善報名",
+            "name": "其他慈善機構（逐間確認）",
             "registrationMethod": "向參與慈善機構申請",
             "eligibility": "須向獲分配此距離名額的慈善機構申請，符合機構籌款及審核要求。",
             "price": null,
@@ -788,12 +853,47 @@
             "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
             "currency": "HKD",
             "status": "unknown",
-            "registrationOpensAt": "2026-09-11T14:00:00+08:00",
-            "registrationClosesAt": "2026-11-06T23:59:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:13:12+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationUrl": "https://www.hkmarathon.com/marathon-charity-programme",
-            "registrationNote": "所列為大會跑手登記期限；機構可提早截止。尚未核實個別機構現有名額，請先向機構確認。",
-            "sourceIds": ["schkm-channel-dates", "schkm-charity"]
+            "registrationNote": "此項只提示尚未逐間核實的其他機構，不是獨立機構名額或完整名單；金額及餘額未能統一確認。11月6日23:59為大會跑手登記最後期限，機構招募可早已結束；已核對機構另列於下方。",
+            "sourceIds": ["schkm-channel-dates", "schkm-charity", "schkm-charity-directory"]
+          },
+          {
+            "id": "schkm-2027-half-charity-avs",
+            "type": "charity",
+            "name": "慈善報名（義務工作發展局）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低籌款要求；較高籌款承諾獲優先考慮，遞交申請不等於獲名額。",
+            "price": 6000,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為該機構個人慈善跑手最低捐款／籌款額，非一般報名費；不適用其他機構。",
+            "currency": "HKD",
+            "status": "closed",
+            "deadline": "2026-10-15",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationUrl": "https://avs.org.hk/SCHKM2027",
+            "registrationNote": "機構招募已截止；獲選者後續大會登記期限不能用作延長招募。 官方未列精確截止時刻；只適用非挑戰組，10月22日或之前通知獲選者。",
+            "sourceIds": ["schkm-avs", "schkm-charity-directory"]
+          },
+          {
+            "id": "schkm-2027-half-charity-kely",
+            "type": "charity",
+            "name": "慈善報名（啟勵扶青會）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低籌款要求；較高籌款承諾獲優先考慮，遞交申請不等於獲名額。",
+            "price": 5000,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為該機構個人慈善跑手最低捐款／籌款額，非一般報名費；不適用其他機構。",
+            "currency": "HKD",
+            "status": "closed",
+            "deadline": "2026-10-16",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationUrl": "https://kely.org/cnt/get-involved/kely-support-group-marathon-charity-programme-of-the-standard-chartered-hong-kong-marathon-2027",
+            "registrationNote": "機構招募已截止；獲選者後續大會登記期限不能用作延長招募。",
+            "sourceIds": ["schkm-kely", "schkm-charity-directory"],
+            "registrationClosesAt": "2026-10-16T23:59:00+08:00"
           }
         ]
       },
@@ -816,7 +916,7 @@
             "registrationUrl": "https://www.hkmarathon.com/race-information",
             "registrationOpensAt": "2026-09-11T14:00:00+08:00",
             "registrationClosesAt": "2026-09-20T19:00:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:01:03+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationMethod": "公眾抽籤",
             "id": "schkm-2027-10k-general",
             "type": "general",
@@ -830,20 +930,25 @@
             "type": "priority",
             "name": "優先報名",
             "registrationMethod": "達標資格審核",
-            "eligibility": "須符合大會該組別達標成績及審核要求；提交資料唔等於獲確認名額。",
-            "price": null,
+            "eligibility": "只適用所選距離挑戰組；須以2025年1月1日至2026年8月31日獲認可賽事成績達標，並通過大會審核。",
+            "price": 420,
             "currency": "HKD",
             "status": "closed",
             "registrationOpensAt": "2026-09-04T16:00:00+08:00",
             "registrationClosesAt": "2026-09-07T19:00:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:13:12+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationUrl": "https://www.hkmarathon.com/race-information",
-            "sourceIds": ["schkm-channel-dates"]
+            "sourceIds": ["schkm-channel-dates", "schkm-10k", "schkm-faq"],
+            "priceType": "entry-fee",
+            "priceUnit": "每位",
+            "priceNote": "官方該距離本地參賽費；非本地 USD 70，優先申請已截止。",
+            "resultAnnouncedAt": "2026-09-11T10:00:00+08:00",
+            "paymentClosesAt": "2026-09-14T23:59:00+08:00"
           },
           {
             "id": "schkm-2027-10k-charity",
             "type": "charity",
-            "name": "慈善報名",
+            "name": "其他慈善機構（逐間確認）",
             "registrationMethod": "向參與慈善機構申請",
             "eligibility": "須向獲分配此距離名額的慈善機構申請，符合機構籌款及審核要求。",
             "price": null,
@@ -851,19 +956,54 @@
             "priceNote": "各機構最低籌款額、報名費及可用名額須另行確認。",
             "currency": "HKD",
             "status": "unknown",
-            "registrationOpensAt": "2026-09-11T14:00:00+08:00",
-            "registrationClosesAt": "2026-11-06T23:59:00+08:00",
-            "registrationVerifiedAt": "2026-10-25T13:13:12+08:00",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
             "registrationUrl": "https://www.hkmarathon.com/marathon-charity-programme",
-            "registrationNote": "所列為大會跑手登記期限；機構可提早截止。尚未核實個別機構現有名額，請先向機構確認。",
-            "sourceIds": ["schkm-channel-dates", "schkm-charity"]
+            "registrationNote": "此項只提示尚未逐間核實的其他機構，不是獨立機構名額或完整名單；金額及餘額未能統一確認。11月6日23:59為大會跑手登記最後期限，機構招募可早已結束；已核對機構另列於下方。",
+            "sourceIds": ["schkm-channel-dates", "schkm-charity", "schkm-charity-directory"]
+          },
+          {
+            "id": "schkm-2027-10k-charity-avs",
+            "type": "charity",
+            "name": "慈善報名（義務工作發展局）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低籌款要求；較高籌款承諾獲優先考慮，遞交申請不等於獲名額。",
+            "price": 5000,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為該機構個人慈善跑手最低捐款／籌款額，非一般報名費；不適用其他機構。",
+            "currency": "HKD",
+            "status": "closed",
+            "deadline": "2026-10-15",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationUrl": "https://avs.org.hk/SCHKM2027",
+            "registrationNote": "機構招募已截止；獲選者後續大會登記期限不能用作延長招募。 官方未列精確截止時刻；只適用非挑戰組，10月22日或之前通知獲選者。",
+            "sourceIds": ["schkm-avs", "schkm-charity-directory"]
+          },
+          {
+            "id": "schkm-2027-10k-charity-kely",
+            "type": "charity",
+            "name": "慈善報名（啟勵扶青會）",
+            "registrationMethod": "機構審核及籌款",
+            "eligibility": "須符合大會此距離參賽資格及機構最低籌款要求；較高籌款承諾獲優先考慮，遞交申請不等於獲名額。",
+            "price": 3000,
+            "priceType": "minimum-donation",
+            "priceUnit": "每位",
+            "priceNote": "此為該機構個人慈善跑手最低捐款／籌款額，非一般報名費；不適用其他機構。",
+            "currency": "HKD",
+            "status": "closed",
+            "deadline": "2026-10-16",
+            "registrationVerifiedAt": "2026-10-26T13:03:31+08:00",
+            "registrationUrl": "https://kely.org/cnt/get-involved/kely-support-group-marathon-charity-programme-of-the-standard-chartered-hong-kong-marathon-2027",
+            "registrationNote": "機構招募已截止；獲選者後續大會登記期限不能用作延長招募。",
+            "sourceIds": ["schkm-kely", "schkm-charity-directory"],
+            "registrationClosesAt": "2026-10-16T23:59:00+08:00"
           }
         ]
       }
     ],
     "sourceUrl": "https://www.hkmarathon.com/race-information",
-    "updatedAt": "2026-10-25",
-    "verifiedAt": "2026-10-25T13:01:03+08:00",
+    "updatedAt": "2026-10-26",
+    "verifiedAt": "2026-10-26T13:03:31+08:00",
     "verification": "verified",
     "publication": "published",
     "sources": [
@@ -871,7 +1011,7 @@
         "id": "schkm-main",
         "title": "官方主賽事資料（已核對全馬頁籤）",
         "url": "https://www.hkmarathon.com/race-information",
-        "checkedAt": "2026-10-25T13:01:03+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": [
           "date",
           "groups.marathon.distanceKm",
@@ -884,7 +1024,7 @@
         "id": "schkm-dates",
         "title": "官方重要日期",
         "url": "https://www.hkmarathon.com/important-dates",
-        "checkedAt": "2026-10-25T13:01:03+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": ["date", "channels.registration"],
         "note": "明確分開公眾抽籤同其他報名渠道。"
       },
@@ -892,7 +1032,7 @@
         "id": "schkm-half",
         "title": "官方主賽事資料（半馬頁籤）",
         "url": "https://www.hkmarathon.com/race-information",
-        "checkedAt": "2026-10-25T13:01:03+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": [
           "date",
           "groups.half.distanceKm",
@@ -906,7 +1046,7 @@
         "id": "schkm-10k",
         "title": "官方主賽事資料（10K頁籤）",
         "url": "https://www.hkmarathon.com/race-information",
-        "checkedAt": "2026-10-25T13:01:03+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": [
           "date",
           "groups.10k.distanceKm",
@@ -920,7 +1060,7 @@
         "id": "schkm-channel-dates",
         "title": "官方重要日期：各渠道期限",
         "url": "https://www.hkmarathon.com/important-dates",
-        "checkedAt": "2026-10-25T13:13:12+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": ["channels.registration"],
         "note": "優先報名、慈善跑手登記與住宿套票分開記錄；唔將公眾抽籤期限套用其他渠道。"
       },
@@ -928,7 +1068,7 @@
         "id": "schkm-charity",
         "title": "官方慈善名額計劃",
         "url": "https://www.hkmarathon.com/marathon-charity-programme",
-        "checkedAt": "2026-10-25T13:13:12+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": ["channels.registration"],
         "note": "慈善機構可獲分配全馬、半馬及／或10K非挑戰組名額；實際可選距離、最低籌款額與申請期限須向機構確認。機構申請計劃的截止日期唔係跑手報名期限。"
       },
@@ -936,9 +1076,49 @@
         "id": "schkm-hotel",
         "title": "官方住宿連全馬名額套票",
         "url": "https://www.hkmarathon.com/run-stay-food-room-package",
-        "checkedAt": "2026-10-25T13:13:12+08:00",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
         "fields": ["channels.registration", "channels.price", "channels.eligibility"],
         "note": "本地套票 HK$2,942，非本地 HK$3,044；一人一晚連一個全馬名額及晚餐，須確認房間及名額。"
+      },
+      {
+        "id": "schkm-faq",
+        "title": "官方FAQ：優先資格與挑戰組",
+        "url": "https://www.hkmarathon.com/faq",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
+        "fields": ["channels.eligibility"],
+        "note": "實際開啟Entries頁籤及優先報名問題：須以2025-01-01至2026-08-31獲認可賽事成績申請，只適用所選距離挑戰組。"
+      },
+      {
+        "id": "schkm-hotel-entry",
+        "title": "官方指定平台：本地全馬住宿套票登記",
+        "url": "https://hkmarathon.fringebackerevents.com/events/standard-chartered-hong-kong-marathon-2027/register/run-stay-dine-room-package-42195km-marathon-for-holders-of-hkid-only/hotel-marathon_local/?choice=YMNMVZdysckkm0KfBC0Qzj",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
+        "fields": ["channels.registration", "channels.eligibility"],
+        "note": "已打開參賽者表格，三個全馬場次選項可用；只讀，無填資料或提交，未查庫存或完成付款，不保證房間／名額。"
+      },
+      {
+        "id": "schkm-charity-directory",
+        "title": "大會官方慈善機構名單",
+        "url": "https://www.hkmarathon.com/about-the-charitable-organisations",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
+        "fields": ["channels.eligibility"],
+        "note": "名單列明義務工作發展局及啟勵扶青會；星號不代表各機構招募仍然開放。"
+      },
+      {
+        "id": "schkm-avs",
+        "title": "義務工作發展局：2027個人慈善跑手",
+        "url": "https://avs.org.hk/SCHKM2027",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
+        "fields": ["channels.registration", "channels.price", "channels.eligibility"],
+        "note": "個人非挑戰組全馬7000、半馬6000、10K5000港元最低捐款；10月15日截止，未列精確時刻。籌款較高者優先，同額先登記者優先；不把11月大會登記期限當成機構招募期限。"
+      },
+      {
+        "id": "schkm-kely",
+        "title": "啟勵扶青會：2027慈善跑手招募",
+        "url": "https://kely.org/cnt/get-involved/kely-support-group-marathon-charity-programme-of-the-standard-chartered-hong-kong-marathon-2027",
+        "checkedAt": "2026-10-26T13:03:31+08:00",
+        "fields": ["channels.registration", "channels.price", "channels.eligibility"],
+        "note": "全馬及半馬5000、10K3000港元最低籌款；機構招募10月16日23:59截止，10月19日通知；11月6日23:59只是獲選跑手後續大會登記。"
       }
     ],
     "changes": [
@@ -953,6 +1133,10 @@
       {
         "date": "2026-10-25",
         "note": "將報名拆成獨立渠道；加入有官方依據的優先、慈善及全馬住宿套票，未核實餘額保持待核實。"
+      },
+      {
+        "date": "2026-10-26",
+        "note": "補核各距離優先報名費及挑戰組資格；本地住宿套票可開啟參賽者表，標示接受申請但不保證庫存。新增義務工作發展局及啟勵扶青會六個機構渠道，記錄不同最低籌款額與已截止的招募期，其他機構仍待核實。"
       }
     ]
   }
