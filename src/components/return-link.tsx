@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { safeResultsHref } from "@/lib/results-location";
 export function ReturnLink() {
-  const [href, setHref] = useState("/#race-list");
+  const [href, setHref] = useState("/races/#race-list");
   useEffect(() => {
     try {
       const saved = sessionStorage.getItem("rundates:results");
@@ -14,7 +14,7 @@ export function ReturnLink() {
   }, []);
   return (
     <Link className="text-link return-link" href={href}>
-      ← 返回賽事列表
+      ← 返回賽事搜尋／時間表
     </Link>
   );
 }

@@ -85,7 +85,8 @@ export function Header() {
             <span className="brand-wordmark">{siteName}</span>
           </Link>
           <nav aria-label="主要導航">
-            <Link href="/">賽事總覽</Link>
+            <Link href="/">首頁</Link>
+            <Link href="/races/">賽事搜尋／時間表</Link>
             <Link href="/guides/">報名及選賽指南</Link>
             <Link href="/about/">關於{siteName}</Link>
           </nav>
@@ -107,6 +108,7 @@ export function Footer() {
           <p className="muted">香港路跑資訊網站 · 官方來源整理</p>
         </div>
         <div className="footer-links">
+          <Link href="/races/">賽事搜尋／時間表</Link>
           <Link href="/guides/">原創指南</Link>
           <Link href="/about/">關於及資料政策</Link>
           <Link href="/privacy/">私隱說明</Link>
@@ -183,7 +185,7 @@ export function GuideCard({ guide }: { guide: Guide }) {
 export function Breadcrumb({ items }: { items: { label: string; href?: string }[] }) {
   return (
     <nav className="breadcrumbs" aria-label="所在位置">
-      <Link href="/">賽事總覽</Link>
+      <Link href="/">首頁</Link>
       {items.map((item, i) => (
         <span key={i}>
           <span aria-hidden="true"> / </span>

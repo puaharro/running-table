@@ -1,11 +1,15 @@
 import { clockTime, hongKongToday, type Clock } from "./races";
 import type { Filters } from "./types";
 
-export type DateShortcut = "weekend" | "month" | "next";
+export type DateShortcut = "weekend" | "month" | "next" | "year" | "next-year";
 
 export function dateShortcutRange(kind: DateShortcut, now: Clock) {
   const current = new Date(`${hongKongToday(clockTime(now))}T12:00:00Z`);
   const iso = (date: Date) => date.toISOString().slice(0, 10);
+  if (kind === "year" || kind === "next-year") {
+    const year = current.getUTCFullYear() + (kind === "next-year" ? 1 : 0);
+    return { from: `${year}-01-01`, to: `${year}-12-31` };
+  }
   if (kind === "weekend") {
     current.setUTCDate(
       current.getUTCDate() + (current.getUTCDay() === 0 ? 0 : (6 - current.getUTCDay() + 7) % 7),

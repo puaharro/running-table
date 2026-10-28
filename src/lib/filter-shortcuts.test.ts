@@ -55,7 +55,7 @@ describe("independent, reversible search shortcuts", () => {
     expect(toggleFamilyShortcut(enabled).statuses).toEqual(["open"]);
   });
 
-  it.each(["weekend", "month", "next"] as const)(
+  it.each(["weekend", "month", "next", "year", "next-year"] as const)(
     "%s can be enabled and cancelled without replacing search, region or sort",
     (kind) => {
       const enabled = toggleDateShortcut(combined, kind, now);
@@ -88,5 +88,37 @@ describe("independent, reversible search shortcuts", () => {
     expect(parseFilters(new URLSearchParams(serializeFilters(selected)))).toEqual(selected);
     expect(parseFilters(new URLSearchParams("family=false")).family).toBe(false);
     expect(parseFilters(new URLSearchParams("family=1")).family).toBe(true);
+  });
+});
+
+describe("calendar year and country search", () => {
+  it("uses the Hong Kong year at midnight and handles next year independently", () => {
+    expect(dateShortcutRange("year", "2026-12-31T16:00:00Z")).toEqual({
+      from: "2027-01-01",
+      to: "2027-12-31",
+    });
+    expect(dateShortcutRange("next-year", "2026-12-31T15:59:59Z")).toEqual({
+      from: "2027-01-01",
+      to: "2027-12-31",
+    });
+  });
+  it("combines country with dates and distance without including other countries", () => {
+    const hongKong = races.find((race) => race.id === "hzmb-half-marathon-2026")!;
+    const japan = { ...hongKong, id: "japan-fixture", country: "日本" as const };
+    const selected: Filters = {
+      ...defaultFilters,
+      countries: ["日本"],
+      distances: ["10K"],
+      from: "2026-11-01",
+      to: "2026-11-30",
+    };
+    expect(selectRaces([hongKong, japan], selected, now).map(({ race }) => race.id)).toEqual([
+      "japan-fixture",
+    ]);
+    expect(selectRaces(races, selected, now)).toEqual([]);
+    expect(parseFilters(new URLSearchParams(serializeFilters(selected)))).toEqual(selected);
+    expect(
+      parseFilters(new URLSearchParams("country=invalid&country=日本&country=日本")).countries,
+    ).toEqual(["日本"]);
   });
 });

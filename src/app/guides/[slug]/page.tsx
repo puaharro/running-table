@@ -50,9 +50,9 @@ export default async function GuidePage({ params }: Props) {
             <p>按日期、距離及地區，縮窄你嘅選擇。</p>
             <Link
               className="button button-dark"
-              href={`/${guide.relatedDistance ? `?distance=${encodeURIComponent(guide.relatedDistance)}` : ""}#race-list`}
+              href={`/races/${guide.relatedDistance ? `?distance=${encodeURIComponent(guide.relatedDistance)}` : ""}#race-list`}
             >
-              前往賽事總覽 <Icon name="arrow" />
+              前往賽事搜尋 <Icon name="arrow" />
             </Link>
             <small>賽事詳情附官方來源與核實時間。</small>
           </div>

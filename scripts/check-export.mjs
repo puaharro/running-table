@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { resolve, join } from "node:path";
+import { resolve, join, relative } from "node:path";
 const root = resolve("out");
 const files = [];
 function visit(dir) {
@@ -24,9 +24,7 @@ for (const file of files) {
   if (!html.includes("報名狀態只對應所列渠道"))
     errors.push(`${file}: missing registration scope disclosure`);
   if (
-    file.includes(
-      `${process.platform === "win32" ? "\\" : "/"}races${process.platform === "win32" ? "\\" : "/"}`,
-    ) &&
+    /^races\/\d{4}\/[^/]+\/index\.html$/.test(relative(root, file).replaceAll("\\", "/")) &&
     !html.includes("資料來源及核實範圍")
   )
     errors.push(`${file}: missing race provenance`);

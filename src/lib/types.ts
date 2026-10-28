@@ -1,4 +1,6 @@
 export const regions = ["港島", "九龍", "新界", "離島"] as const;
+export const countries = ["香港", "台灣", "日本", "韓國", "新加坡"] as const;
+export type Country = (typeof countries)[number];
 export const distanceOptions = ["5K", "10K", "半馬", "全馬", "其他"] as const;
 export const registrationLabels = {
   open: "接受申請",
@@ -69,6 +71,7 @@ export interface Race {
   date: string;
   endDate: string;
   region: Region | null;
+  country?: Country;
   district: string;
   venue: string;
   sport: "路跑";
@@ -102,6 +105,7 @@ export interface Filters {
   distances: string[];
   min: string;
   max: string;
+  countries: string[];
   regions: string[];
   sports: string[];
   statuses: RegistrationStatus[];

@@ -1,7 +1,7 @@
 "use client";
 import { registrationUncertaintyReason } from "@/lib/verification";
 
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AdSlot, Icon } from "./ui";
 import { StatusBadge } from "./status-badge";
@@ -11,7 +11,6 @@ import {
   formatTimestamp,
   distanceLabel,
   filterError,
-  groupStatus,
   channelStatus,
   parseFilters,
   registrationCountdown,
@@ -22,9 +21,6 @@ import {
 import {
   dateShortcutIsActive,
   toggleDateShortcut,
-  toggleDeadlineShortcut,
-  toggleFamilyShortcut,
-  toggleOpenShortcut,
   type DateShortcut,
 } from "@/lib/filter-shortcuts";
 import { groupLocations } from "@/lib/group-locations";
@@ -33,12 +29,11 @@ import { resultsHref } from "@/lib/results-location";
 import {
   distanceOptions,
   channelTypeLabels,
-  regions,
+  countries,
   registrationLabels,
   type Filters,
   type Race,
   type RaceGroup,
-  type RegistrationStatus,
 } from "@/lib/types";
 
 function monthLabel(date: string) {
@@ -117,16 +112,14 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [now, setNow] = useState(initialNow);
   const [ready, setReady] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [customDates, setCustomDates] = useState(false);
   const [copyMessage, setCopyMessage] = useState("");
-  const previousSort = useRef<Filters["sort"]>("date");
   useEffect(() => {
     const sync = () => {
       const next = parseFilters(new URLSearchParams(window.location.search));
       setFilters(next);
-      const query = serializeFilters(next);
       try {
-        window.sessionStorage.setItem("rundates:results", `/${query ? `?${query}` : ""}#race-list`);
+        window.sessionStorage.setItem("rundates:results", resultsHref(next));
       } catch {
         /* Browser back remains available. */
       }
@@ -153,18 +146,10 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
       `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`,
     );
     try {
-      window.sessionStorage.setItem("rundates:results", `/${query ? `?${query}` : ""}#race-list`);
+      window.sessionStorage.setItem("rundates:results", resultsHref(next));
     } catch {
       /* Sharing and browser back remain available without storage. */
     }
-  }
-  function showResults() {
-    setExpanded(false);
-    window.requestAnimationFrame(() => {
-      const toolbar = document.getElementById("results-toolbar");
-      toolbar?.focus({ preventScroll: true });
-      toolbar?.scrollIntoView({ block: "start" });
-    });
   }
   useEffect(() => {
     if (!ready || !/^#race-[a-z0-9-]+$/.test(window.location.hash)) return;
@@ -178,7 +163,10 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   function field<K extends keyof Filters>(key: K, value: Filters[K]) {
     update({ ...filters, [key]: value });
   }
-  function toggle(key: "distances" | "regions" | "statuses" | "channels", value: string) {
+  function toggle(
+    key: "distances" | "countries" | "regions" | "statuses" | "channels",
+    value: string,
+  ) {
     const values: string[] = filters[key];
     update({
       ...filters,
@@ -186,18 +174,15 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     });
   }
   function quickDate(kind: DateShortcut) {
-    update(toggleDateShortcut(filters, kind, now));
-  }
-  function quickDeadline() {
-    if (filters.sort !== "deadline") previousSort.current = filters.sort;
-    update(toggleDeadlineShortcut(filters, previousSort.current));
+    setCustomDates(false);
+    update({ ...toggleDateShortcut(filters, kind, now), view: "all" });
   }
   const results = useMemo(() => selectRaces(races, filters, now), [races, filters, now]);
-  const openCount = races.filter((r) =>
-    r.groups.some((g) => groupStatus(r, g, now) === "open"),
-  ).length;
+  const yearActive = dateShortcutIsActive(filters, "year", now);
+  const nextYearActive = dateShortcutIsActive(filters, "next-year", now);
+  const showCustomDates =
+    customDates || (!!(filters.from || filters.to) && !yearActive && !nextYearActive);
   const error = filterError(filters);
-  const onlyOpen = filters.statuses.includes("open");
   const chips: { label: string; remove: () => void }[] = [
     ...(filters.family ? [{ label: "親子同樂", remove: () => field("family", false) }] : []),
     ...(filters.q ? [{ label: `搜尋：${filters.q}`, remove: () => field("q", "") }] : []),
@@ -210,6 +195,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
         ]
       : []),
     ...filters.distances.map((x) => ({ label: x, remove: () => toggle("distances", x) })),
+    ...filters.countries.map((x) => ({ label: x, remove: () => toggle("countries", x) })),
     ...filters.regions.map((x) => ({ label: x, remove: () => toggle("regions", x) })),
     ...filters.channels.map((x) => ({
       label: channelTypeLabels[x],
@@ -239,22 +225,9 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   return (
     <section id="race-list" className="explorer shell" aria-labelledby="explorer-heading">
       <div className="section-heading explorer-heading">
-        <div>
-          <h2 id="explorer-heading">賽事月曆</h2>
-          <p>揀日期、揀距離，搵到適合自己嘅一場。</p>
-        </div>
-        <div className="stat-pair">
-          <div>
-            <strong>{races.length.toString().padStart(2, "0")}</strong>
-            <span>場已收錄賽事</span>
-          </div>
-          <div>
-            <strong>{openCount.toString().padStart(2, "0")}</strong>
-            <span>場有渠道接受申請</span>
-          </div>
-        </div>
+        <h1 id="explorer-heading">賽事搜尋／時間表</h1>
       </div>
-      <div className="filter-card">
+      <div className="filter-card search-engine">
         <div className="search-row">
           <label className="search-box">
             <Icon name="search" size={21} />
@@ -267,209 +240,80 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               placeholder="搜尋賽事、地點或主辦方"
             />
           </label>
-          <button
-            className={`filter-toggle ${expanded ? "active" : ""}`}
-            aria-expanded={expanded}
-            aria-controls="filters"
-            onClick={() => setExpanded(!expanded)}
-          >
-            <Icon name="filter" />
-            篩選{chips.length > 0 && <b className="filter-count">{chips.length}</b>}
-            <span>{expanded ? "−" : "+"}</span>
-          </button>
         </div>
-        <div className="quick-row" aria-describedby="quick-filter-note">
-          <span>快速搵：</span>
-          <button
-            className={`only-open-shortcut${onlyOpen ? " selected" : ""}`}
-            aria-pressed={onlyOpen}
-            aria-describedby="quick-filter-note"
-            onClick={() => update(toggleOpenShortcut(filters))}
-          >
-            {onlyOpen && <Icon name="check" size={14} />}
-            接受申請
-          </button>
-          <button
-            aria-pressed={filters.sort === "deadline"}
-            title="按接受申請渠道的截止時間排序；再按一次取消排序"
-            onClick={quickDeadline}
-          >
-            {filters.sort === "deadline" && <Icon name="check" size={14} />}
-            即將截止
-          </button>
-          <button
-            aria-pressed={filters.family}
-            onClick={() => update(toggleFamilyShortcut(filters))}
-          >
-            {filters.family && <Icon name="check" size={14} />}
-            親子同樂
-          </button>
-        </div>
-        <p id="quick-filter-note" className="quick-filter-note">
-          接受申請仍須符合渠道資格，名額以大會確認為準。
-        </p>
-        <div id="filters" hidden={!expanded}>
-          <div className="filter-grid">
-            <fieldset className="date-field">
-              <legend>
-                <span>比賽日期</span>
-              </legend>
-              <div className="date-shortcuts">
-                {(
-                  [
-                    ["weekend", "今個週末"],
-                    ["month", "今個月"],
-                    ["next", "下個月"],
-                  ] as const
-                ).map(([kind, label]) => (
-                  <button
-                    key={kind}
-                    aria-pressed={dateShortcutIsActive(filters, kind, now)}
-                    onClick={() => quickDate(kind)}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-              <div className="date-inputs">
-                <label>
-                  <span className="sr-only">開始日期</span>
-                  <input
-                    aria-label="開始日期"
-                    type="date"
-                    value={filters.from}
-                    onChange={(e) => field("from", e.target.value)}
-                  />
-                </label>
-                <span>—</span>
-                <label>
-                  <span className="sr-only">結束日期</span>
-                  <input
-                    aria-label="結束日期"
-                    type="date"
-                    value={filters.to}
-                    onChange={(e) => field("to", e.target.value)}
-                  />
-                </label>
-              </div>
-            </fieldset>
-            <fieldset>
-              <legend>
-                <span>距離／組別</span>
-              </legend>
-              <div className="option-row">
-                {distanceOptions.map((x) => (
-                  <button
-                    aria-pressed={filters.distances.includes(x)}
-                    key={x}
-                    onClick={() => toggle("distances", x)}
-                  >
-                    {x}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-            <fieldset>
-              <legend>
-                <span>報名渠道</span>
-              </legend>
-              <div className="option-row">
-                {Object.entries(channelTypeLabels).map(([key, label]) => (
-                  <button
-                    key={key}
-                    aria-pressed={filters.channels.includes(key as keyof typeof channelTypeLabels)}
-                    onClick={() => toggle("channels", key)}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-              <small>同欄多選；接受申請仍須符合該渠道資格</small>
-            </fieldset>
-            <fieldset>
-              <legend>
-                <span>地區</span>
-              </legend>
-              <div className="option-row">
-                {regions.map((x) => (
-                  <button
-                    aria-pressed={filters.regions.includes(x)}
-                    key={x}
-                    onClick={() => toggle("regions", x)}
-                  >
-                    {x}
-                  </button>
-                ))}
-              </div>
-              <small>按賽事起點分類</small>
-            </fieldset>
-          </div>
-          <details className="advanced-filters">
-            <summary>
-              進階篩選
-              {filters.statuses.length > 0 || filters.min || filters.max
-                ? " · 已套用"
-                : " · 報名狀態／公里範圍"}
-            </summary>
-            <div className="advanced-grid">
-              <fieldset className="status-field">
-                <legend>
-                  <span>報名狀態</span>
-                </legend>
-                <div className="option-row">
-                  {Object.entries(registrationLabels).map(([key, label]) => (
-                    <button
-                      aria-pressed={filters.statuses.includes(key as RegistrationStatus)}
-                      key={key}
-                      onClick={() => toggle("statuses", key)}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </fieldset>
-              <details className="custom-range">
-                <summary>自訂公里範圍</summary>
-                <div className="number-inputs">
-                  <input
-                    aria-label="最短距離（公里）"
-                    type="number"
-                    min="0"
-                    max="1000"
-                    step="any"
-                    placeholder="最短 km"
-                    value={filters.min}
-                    onChange={(e) => field("min", e.target.value)}
-                  />
-                  <span>–</span>
-                  <input
-                    aria-label="最長距離（公里）"
-                    type="number"
-                    min="0"
-                    max="1000"
-                    step="any"
-                    placeholder="最長 km"
-                    value={filters.max}
-                    onChange={(e) => field("max", e.target.value)}
-                  />
-                </div>
-              </details>
+        <div className="engine-options">
+          <div className="engine-option-row" role="group" aria-label="比賽日期">
+            <span className="engine-label">比賽日期</span>
+            <div className="option-row">
+              <button aria-pressed={yearActive} onClick={() => quickDate("year")}>
+                今年
+              </button>
+              <button aria-pressed={nextYearActive} onClick={() => quickDate("next-year")}>
+                明年
+              </button>
+              <button
+                aria-pressed={showCustomDates}
+                aria-expanded={showCustomDates}
+                aria-controls="custom-dates"
+                onClick={() => {
+                  setCustomDates(!showCustomDates);
+                  update({ ...filters, from: "", to: "", view: "all" });
+                }}
+              >
+                指定時間
+              </button>
             </div>
-          </details>
-          <div className="filter-hint">
-            <span>只收錄路跑 · 條件可多選，渠道及狀態須同時符合</span>
-            <button className="filter-reset" onClick={() => update({ ...defaultFilters })}>
-              重設條件
-            </button>
           </div>
-          <div className="mobile-filter-actions">
-            <button className="filter-reset" onClick={() => update({ ...defaultFilters })}>
-              重設條件
-            </button>
-            <button className="mobile-filter-done" disabled={!!error} onClick={showResults}>
-              {error ? "請修正篩選條件" : `查看 ${results.length} 場賽事`}
-              <Icon name="arrow" size={16} />
-            </button>
+          {showCustomDates && (
+            <div className="date-inputs engine-dates" id="custom-dates">
+              <label>
+                <span>開始日期</span>
+                <input
+                  aria-label="開始日期"
+                  type="date"
+                  value={filters.from}
+                  onChange={(e) => update({ ...filters, from: e.target.value, view: "all" })}
+                />
+              </label>
+              <span>—</span>
+              <label>
+                <span>結束日期</span>
+                <input
+                  aria-label="結束日期"
+                  type="date"
+                  value={filters.to}
+                  onChange={(e) => update({ ...filters, to: e.target.value, view: "all" })}
+                />
+              </label>
+            </div>
+          )}
+          <div className="engine-option-row" role="group" aria-label="國家／地區">
+            <span className="engine-label">國家／地區</span>
+            <div className="option-row">
+              {countries.map((country) => (
+                <button
+                  key={country}
+                  aria-pressed={filters.countries.includes(country)}
+                  onClick={() => toggle("countries", country)}
+                >
+                  {country}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="engine-option-row" role="group" aria-label="距離">
+            <span className="engine-label">距離</span>
+            <div className="option-row">
+              {distanceOptions.map((distance) => (
+                <button
+                  key={distance}
+                  aria-pressed={filters.distances.includes(distance)}
+                  onClick={() => toggle("distances", distance)}
+                >
+                  {distance}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -491,7 +335,13 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               <span aria-hidden="true">×</span>
             </button>
           ))}
-          <button className="clear-all" onClick={() => update({ ...defaultFilters })}>
+          <button
+            className="clear-all"
+            onClick={() => {
+              setCustomDates(false);
+              update({ ...defaultFilters });
+            }}
+          >
             清除全部
           </button>
         </div>
@@ -671,7 +521,12 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             <div className="empty-state">
               <Icon name="search" size={36} />
               <h3>{error ? "調整一下篩選範圍" : "暫時搵唔到符合條件嘅賽事"}</h3>
-              <p>試下放寬日期、移除部分條件，或者切換「全部」。</p>
+              <p>
+                {filters.countries.length &&
+                !races.some((race) => filters.countries.includes(race.country ?? "香港"))
+                  ? `暫時未收錄${filters.countries.join("、")}賽事。試下其他國家／地區。`
+                  : "試下放寬日期、移除部分條件，或者切換「全部」。"}
+              </p>
               <button
                 className="button button-dark"
                 onClick={() => update({ ...defaultFilters, view: "all" })}

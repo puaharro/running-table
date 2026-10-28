@@ -1,5 +1,5 @@
 import { hongKongToday, validDate } from "./races";
-import { channelTypeLabels, registrationLabels, regions, type Race } from "./types";
+import { channelTypeLabels, registrationLabels, regions, countries, type Race } from "./types";
 
 export function isHttpsUrl(value: unknown): value is string {
   if (typeof value !== "string") return false;
@@ -55,6 +55,8 @@ export function assertCatalog(input: unknown): asserts input is Race[] {
       !validDate(race.updatedAt)
     )
       fail(race.id, "invalid event date");
+    if (race.country !== undefined && !countries.includes(race.country))
+      fail(race.id, "invalid country");
     if (race.sport !== "路跑" || (race.region !== null && !regions.includes(race.region)))
       fail(race.id, "invalid sport or region");
     if (!["scheduled", "postponed", "cancelled", "completed"].includes(race.status))

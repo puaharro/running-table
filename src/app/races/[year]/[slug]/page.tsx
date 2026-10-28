@@ -45,7 +45,9 @@ export default async function RacePage({ params }: Props) {
           />
         )}
         <ReturnLink />
-        <Breadcrumb items={[{ label: race.name }]} />
+        <Breadcrumb
+          items={[{ label: "賽事搜尋／時間表", href: "/races/" }, { label: race.name }]}
+        />
         <div className="detail-heading">
           <div>
             <div className="eyebrow">

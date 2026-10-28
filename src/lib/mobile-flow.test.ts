@@ -20,6 +20,7 @@ describe("mobile list and registration journey", () => {
     const href = resultsHref(filters, race.id);
     const url = new URL(safeResultsHref(href), "https://test.invalid");
     expect(parseFilters(url.searchParams)).toEqual(filters);
+    expect(url.pathname).toBe("/races/");
     expect(url.hash).toBe(`#race-${race.id}`);
   });
   it("keeps stored return destinations on the local list and provides a safe direct-entry fallback", () => {
@@ -30,10 +31,12 @@ describe("mobile list and registration journey", () => {
       "/races/elsewhere/",
       "/\\evil.invalid/",
     ]) {
-      expect(safeResultsHref(unsafe)).toBe("/#race-list");
+      expect(safeResultsHref(unsafe)).toBe("/races/#race-list");
     }
-    expect(safeResultsHref("/?channel=charity#unexpected")).toBe("/?channel=charity#race-list");
-    expect(resultsHref(defaultFilters)).toBe("/#race-list");
+    expect(safeResultsHref("/?channel=charity#unexpected")).toBe(
+      "/races/?channel=charity#race-list",
+    );
+    expect(resultsHref(defaultFilters)).toBe("/races/#race-list");
   });
   it("makes each multi-channel distance collapsible while showing price, deadline and qualification together", () => {
     const html = renderToStaticMarkup(

@@ -28,6 +28,7 @@ try {
   });
   const paths = [
     "/",
+    "/races/",
     "/guides/",
     "/about/",
     "/privacy/",

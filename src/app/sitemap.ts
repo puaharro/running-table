@@ -6,7 +6,14 @@ import { releaseSettings } from "@/lib/release";
 export const dynamic = "force-static";
 export default function sitemap(): MetadataRoute.Sitemap {
   if (!releaseSettings.indexable || !releaseSettings.origin) return [];
-  return ["/", "/guides/", "/about/", "/privacy/", ...guides.map((g) => `/guides/${g.slug}/`)]
+  return [
+    "/",
+    "/races/",
+    "/guides/",
+    "/about/",
+    "/privacy/",
+    ...guides.map((g) => `/guides/${g.slug}/`),
+  ]
     .map((path) => ({ url: new URL(path, releaseSettings.origin).toString() }))
     .concat(
       races.map((r) => ({

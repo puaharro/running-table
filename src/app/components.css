@@ -723,3 +723,283 @@ time,
 .channel-comparison dd {
   font-variant-numeric: tabular-nums;
 }
+
+/* Discovery on the homepage; focused search on the race calendar. */
+.home-section {
+  padding-block: 48px;
+}
+.featured-race-grid,
+.home-notice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+.featured-race-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+.featured-race-card:hover {
+  border-color: var(--border-hover);
+}
+.featured-race-art {
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  background: var(--surface-dark);
+  color: var(--text-on-dark);
+}
+.featured-race-art::after {
+  content: "";
+  position: absolute;
+  right: -75px;
+  top: -30px;
+  width: 220px;
+  height: 220px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 14px transparent,
+    0 0 0 15px currentColor,
+    0 0 0 29px transparent,
+    0 0 0 30px currentColor;
+  opacity: 0.12;
+  pointer-events: none;
+}
+.featured-race-card--2 .featured-race-art {
+  background: #dce6df;
+  color: #294b39;
+}
+.featured-race-card--3 .featured-race-art {
+  background: #e4dfd5;
+  color: #514638;
+}
+.featured-race-art .eyebrow {
+  color: inherit;
+  letter-spacing: 0.03em;
+}
+.featured-race-art time {
+  display: block;
+  position: relative;
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-block: 12px;
+}
+.featured-race-art time > span {
+  opacity: 0.4;
+}
+.featured-race-art time small {
+  margin-left: 12px;
+  font-size: 20px;
+}
+.featured-distances {
+  font-size: var(--text-sm);
+}
+.featured-race-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 22px;
+}
+.featured-race-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+.featured-race-body h3,
+.home-notice h3 {
+  font-size: 20px;
+  line-height: 1.6;
+  margin: 0;
+}
+.featured-race-body p,
+.home-notice p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.85;
+}
+.featured-race-body > .text-link,
+.home-notice > .text-link {
+  margin-top: auto;
+  padding-top: 8px;
+}
+.home-information {
+  background: var(--surface-hero);
+}
+.home-notice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 24px;
+  background: var(--surface-card);
+  border-radius: var(--radius-card);
+  border: 1px solid transparent;
+}
+.home-notice:hover {
+  border-color: var(--border-hover);
+}
+.notice-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--action-primary-hover);
+  font-size: var(--text-sm);
+}
+.search-page .explorer {
+  padding-top: 24px;
+}
+.search-page .explorer-heading {
+  margin-bottom: 18px;
+  align-items: center;
+}
+.search-page .explorer-heading h1 {
+  font-size: 26px;
+  line-height: 1.5;
+  margin: 0;
+}
+@media (max-width: 767px) {
+  .header-inner {
+    height: auto;
+    min-height: 70px;
+    flex-wrap: wrap;
+    padding-block: 14px 0;
+  }
+  .site-header nav {
+    width: 100%;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 6px;
+  }
+  .site-header nav a {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .home-section {
+    padding-block: 32px;
+  }
+  .home-section .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .featured-race-grid,
+  .home-notice-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .featured-race-art {
+    padding: 20px;
+  }
+  .featured-race-art time {
+    font-size: 54px;
+  }
+  .search-page .explorer-heading h1 {
+    font-size: 22px;
+  }
+  .search-page .explorer-heading .stat-pair {
+    display: none;
+  }
+}
+
+.search-engine .search-row {
+  max-width: 600px;
+  padding: 0;
+  margin: 0 0 18px;
+}
+.search-engine.filter-card {
+  padding: 22px;
+}
+.engine-options {
+  display: grid;
+  gap: 10px;
+}
+.engine-option-row {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+.engine-label {
+  flex: 0 0 90px;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 44px;
+}
+.engine-options .option-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.engine-options .option-row button {
+  min-height: 40px;
+  padding: 8px 14px;
+  border-color: transparent;
+  background: transparent;
+}
+.engine-options .option-row button:hover {
+  background: var(--surface-muted);
+}
+.engine-options .option-row button[aria-pressed="true"] {
+  color: var(--action-primary-hover);
+  background: var(--action-tint);
+  border-color: var(--action-primary);
+}
+.engine-dates {
+  margin-left: 108px;
+  max-width: 430px;
+}
+.engine-dates label {
+  min-width: 0;
+  flex: 1;
+}
+.engine-dates label > span {
+  display: block;
+  font-size: var(--text-xs);
+  margin-bottom: 6px;
+  color: var(--text-secondary);
+}
+.engine-dates > span {
+  align-self: flex-end;
+  padding-bottom: 12px;
+}
+@media (max-width: 767px) {
+  .search-engine.filter-card {
+    padding: 16px;
+  }
+  .search-engine .search-row {
+    margin-bottom: 14px;
+  }
+  .engine-option-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .engine-label {
+    flex-basis: auto;
+    line-height: 32px;
+  }
+  .engine-options {
+    gap: 12px;
+  }
+  .engine-options .option-row {
+    gap: 4px;
+  }
+  .engine-options .option-row button {
+    padding-inline: 12px;
+  }
+  .engine-dates {
+    margin-left: 0;
+    width: 100%;
+  }
+}

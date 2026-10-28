@@ -1,5 +1,6 @@
 import {
   channelTypeLabels,
+  countries,
   distanceOptions,
   registrationLabels,
   regions,
@@ -19,6 +20,7 @@ export const defaultFilters: Filters = {
   distances: [],
   min: "",
   max: "",
+  countries: [],
   regions: [],
   sports: [],
   statuses: [],
@@ -205,6 +207,7 @@ export function selectRaces(races: Race[], f: Filters, now: Clock) {
   const result = races.flatMap((race) => {
     if (f.view === "upcoming" && race.endDate < today) return [];
     if (f.view === "past" && race.endDate >= today) return [];
+    if (f.countries.length && !f.countries.includes(race.country ?? "香港")) return [];
     if (f.sports.length && !f.sports.includes(race.sport)) return [];
     if (f.family && !race.tags.includes("親子")) return [];
     const raceMatchesQuery =
@@ -264,6 +267,7 @@ export function parseFilters(params: URLSearchParams): Filters {
     distances: list("distance", distanceOptions),
     min: number("min"),
     max: number("max"),
+    countries: list("country", countries),
     regions: list("region", regions),
     sports: list("sport", ["路跑"]),
     statuses: list("status", Object.keys(registrationLabels)) as RegistrationStatus[],
@@ -282,6 +286,7 @@ export function serializeFilters(f: Filters) {
   for (const key of ["q", "from", "to", "min", "max"] as const) if (f[key]) p.set(key, f[key]);
   for (const [field, key] of [
     ["distances", "distance"],
+    ["countries", "country"],
     ["regions", "region"],
     ["sports", "sport"],
     ["statuses", "status"],

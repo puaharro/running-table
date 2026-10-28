@@ -1,4 +1,5 @@
-import { RaceExplorer } from "@/components/race-explorer";
+import { HomeHighlights } from "@/components/home-highlights";
+import { LegacySearchRedirect } from "@/components/legacy-search-redirect";
 import { races } from "@/data/races";
 import { guides } from "@/data/guides";
 import { GuideCard, Icon } from "@/components/ui";
@@ -7,8 +8,8 @@ import Link from "next/link";
 import { NextRaceCard } from "@/components/next-race-card";
 
 export const metadata = pageMetadata(
-  "香港路跑賽事總覽",
-  "按日期、距離、地區及報名狀態組合篩選香港路跑賽事，查看官方來源及原創報名指南。",
+  "香港路跑精選賽事及重要資訊",
+  "發掘香港精選路跑賽事、報名重點及原創選賽指南，搵到你嘅下一場比賽。",
   "/",
 );
 
@@ -16,6 +17,7 @@ export default function Home() {
   const initialNow = new Date().toISOString();
   return (
     <main id="main">
+      <LegacySearchRedirect />
       <section className="calendar-masthead">
         <div className="shell masthead-grid">
           <div className="masthead-copy">
@@ -30,9 +32,9 @@ export default function Home() {
               由第一場 5K，到你嘅下一個全馬。
             </p>
             <div className="masthead-actions">
-              <a href="#race-list" className="button button-coral">
-                探索賽事 <Icon name="arrow" />
-              </a>
+              <Link href="/races/" className="button button-coral">
+                賽事搜尋／時間表 <Icon name="arrow" />
+              </Link>
               <Link href="/guides/" className="masthead-guide">
                 第一次報名？睇選賽指南 ↗
               </Link>
@@ -44,7 +46,7 @@ export default function Home() {
           <NextRaceCard races={races} initialNow={initialNow} />
         </div>
       </section>
-      <RaceExplorer races={races} initialNow={initialNow} />
+      <HomeHighlights races={races} initialNow={initialNow} />
       <section className="guides-section shell">
         <div className="section-heading">
           <div>
