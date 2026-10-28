@@ -1,7 +1,7 @@
 "use client";
 import { registrationUncertaintyReason } from "@/lib/verification";
 
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { AdSlot, Icon } from "./ui";
 import { StatusBadge } from "./status-badge";
@@ -13,13 +13,20 @@ import {
   filterError,
   groupStatus,
   channelStatus,
-  hongKongToday,
   parseFilters,
   registrationCountdown,
   selectRaces,
   serializeFilters,
   statusSummary,
 } from "@/lib/races";
+import {
+  dateShortcutIsActive,
+  toggleDateShortcut,
+  toggleDeadlineShortcut,
+  toggleFamilyShortcut,
+  toggleOpenShortcut,
+  type DateShortcut,
+} from "@/lib/filter-shortcuts";
 import { groupLocations } from "@/lib/group-locations";
 import { raceHref } from "@/lib/site";
 import { resultsHref } from "@/lib/results-location";
@@ -36,9 +43,6 @@ import {
 
 function monthLabel(date: string) {
   return `${date.slice(0, 4)} 年 ${Number(date.slice(5, 7))} 月`;
-}
-function dateString(date: Date) {
-  return date.toISOString().slice(0, 10);
 }
 
 function GroupStatusList({ race, groups, now }: { race: Race; groups: RaceGroup[]; now: string }) {
@@ -115,6 +119,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   const [ready, setReady] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [copyMessage, setCopyMessage] = useState("");
+  const previousSort = useRef<Filters["sort"]>("date");
   useEffect(() => {
     const sync = () => {
       const next = parseFilters(new URLSearchParams(window.location.search));
@@ -180,33 +185,21 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
       [key]: values.includes(value) ? values.filter((x) => x !== value) : [...values, value],
     });
   }
-  function quickDate(kind: "weekend" | "month" | "next") {
-    const today = hongKongToday(new Date(now));
-    const current = new Date(`${today}T12:00:00Z`);
-    let from = today,
-      to = today;
-    if (kind === "weekend") {
-      current.setUTCDate(
-        current.getUTCDate() + (current.getUTCDay() === 0 ? 0 : (6 - current.getUTCDay() + 7) % 7),
-      );
-      from = dateString(current);
-      if (current.getUTCDay() !== 0) current.setUTCDate(current.getUTCDate() + 1);
-      to = dateString(current);
-    } else {
-      const month = current.getUTCMonth() + (kind === "next" ? 1 : 0);
-      from = dateString(new Date(Date.UTC(current.getUTCFullYear(), month, 1, 12)));
-      to = dateString(new Date(Date.UTC(current.getUTCFullYear(), month + 1, 0, 12)));
-    }
-    update({ ...filters, from, to, view: "upcoming" });
+  function quickDate(kind: DateShortcut) {
+    update(toggleDateShortcut(filters, kind, now));
+  }
+  function quickDeadline() {
+    if (filters.sort !== "deadline") previousSort.current = filters.sort;
+    update(toggleDeadlineShortcut(filters, previousSort.current));
   }
   const results = useMemo(() => selectRaces(races, filters, now), [races, filters, now]);
   const openCount = races.filter((r) =>
     r.groups.some((g) => groupStatus(r, g, now) === "open"),
   ).length;
   const error = filterError(filters);
-  const onlyOpen =
-    filters.view === "upcoming" && filters.statuses.length === 1 && filters.statuses[0] === "open";
+  const onlyOpen = filters.statuses.includes("open");
   const chips: { label: string; remove: () => void }[] = [
+    ...(filters.family ? [{ label: "親子同樂", remove: () => field("family", false) }] : []),
     ...(filters.q ? [{ label: `搜尋：${filters.q}`, remove: () => field("q", "") }] : []),
     ...(filters.from || filters.to
       ? [
@@ -291,24 +284,26 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             className={`only-open-shortcut${onlyOpen ? " selected" : ""}`}
             aria-pressed={onlyOpen}
             aria-describedby="quick-filter-note"
-            onClick={() =>
-              update({ ...filters, statuses: onlyOpen ? [] : ["open"], view: "upcoming" })
-            }
+            onClick={() => update(toggleOpenShortcut(filters))}
           >
             {onlyOpen && <Icon name="check" size={14} />}
             接受申請
           </button>
           <button
-            className={
-              filters.sort === "deadline" && filters.statuses.includes("open") ? "selected" : ""
-            }
-            onClick={() =>
-              update({ ...filters, statuses: ["open"], sort: "deadline", view: "upcoming" })
-            }
+            aria-pressed={filters.sort === "deadline"}
+            title="按接受申請渠道的截止時間排序；再按一次取消排序"
+            onClick={quickDeadline}
           >
-            即將截止 <span>↗</span>
+            {filters.sort === "deadline" && <Icon name="check" size={14} />}
+            即將截止
           </button>
-          <button onClick={() => update({ ...filters, q: "親子" })}>親子同樂</button>
+          <button
+            aria-pressed={filters.family}
+            onClick={() => update(toggleFamilyShortcut(filters))}
+          >
+            {filters.family && <Icon name="check" size={14} />}
+            親子同樂
+          </button>
         </div>
         <p id="quick-filter-note" className="quick-filter-note">
           接受申請仍須符合渠道資格，名額以大會確認為準。
@@ -320,9 +315,21 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                 <span>比賽日期</span>
               </legend>
               <div className="date-shortcuts">
-                <button onClick={() => quickDate("weekend")}>今個週末</button>
-                <button onClick={() => quickDate("month")}>今個月</button>
-                <button onClick={() => quickDate("next")}>下個月</button>
+                {(
+                  [
+                    ["weekend", "今個週末"],
+                    ["month", "今個月"],
+                    ["next", "下個月"],
+                  ] as const
+                ).map(([kind, label]) => (
+                  <button
+                    key={kind}
+                    aria-pressed={dateShortcutIsActive(filters, kind, now)}
+                    onClick={() => quickDate(kind)}
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
               <div className="date-inputs">
                 <label>
@@ -617,7 +624,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                         ))}
                       </ul>
                     </div>
-                    <div className="race-status">
+                    <div className={`race-status${countdown ? " has-deadline" : ""}`}>
                       <StatusBadge status={summary.key}>{summary.label}</StatusBadge>
                       {countdown && (
                         <>

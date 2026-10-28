@@ -4,7 +4,7 @@ import { AdFrame } from "@/components/ad-frame";
 import { siteName, siteUrl } from "@/lib/site";
 import { assertReleaseReady, releaseSettings } from "@/lib/release";
 import "@fontsource-variable/noto-sans-hk";
-import "@fontsource/barlow-condensed/latin-600.css";
+import "@fontsource-variable/inter/wght.css";
 import "@fontsource/barlow-condensed/latin-700.css";
 import "./tokens.css";
 import "./globals.css";
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   robots: { index: releaseSettings.indexable, follow: true },
   ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
 };
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#183a3b" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#ffffff" };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="zh-HK">

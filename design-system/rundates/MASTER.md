@@ -1,10 +1,10 @@
 # NXTGO：設計系統
 
-2026-10-25 更新配色。依 UI UX Pro Max 查詢、現有實作及已確認草案整理；此為經篩選的專案規格，不是原始自動生成模板。
+2026-10-28 更新配色。依 UI UX Pro Max 查詢、現有實作及已確認草案整理；此為經篩選的專案規格，不是原始自動生成模板。
 
 ## 產品與風格
 
-香港路跑賽事目錄與原創選賽指南。列表以快速搜尋及比較為主，文章以閱讀理解為主。保留略縮 banner、珊瑚／深綠品牌及跑道線條；不新增會員、收藏、日曆或大型宣傳輪播。
+香港路跑賽事目錄與原創選賽指南。列表以快速搜尋及比較為主，文章以閱讀理解為主。使用略縮 banner、暖米白基礎、柔和霧藍、深墨藍文字及低對比跑道線條；不新增會員、收藏、日曆或大型宣傳輪播。
 
 ## 規格來源
 
@@ -15,35 +15,46 @@
 
 ## 配色
 
-| 角色               | token                             | 色碼    |
-| ------------------ | --------------------------------- | ------- |
-| 主文字／深底       | text-primary                      | #183A3B |
-| 次要文字           | text-secondary                    | #58676A |
-| 品牌點綴           | brand-accent                      | #E45D3C |
-| 主操作             | action-primary                    | #B7472D |
-| 主操作 hover／焦點 | action-primary-hover / focus-ring | #AA3B23 |
-| 頁面               | surface-page                      | #F4F6F3 |
-| 內容               | surface-card                      | #FFFFFF |
-| 品牌淺底           | surface-brand                     | #EEF2F1 |
-| 輕分隔             | border-subtle                     | #DCE2E2 |
-| 控制項邊界         | border-control                    | #7B8B8E |
+| 角色           | token                         | 色碼    |
+| -------------- | ----------------------------- | ------- |
+| 主文字／深底   | text-primary                  | #26364C |
+| 次要文字       | text-secondary                | #596778 |
+| 品牌／主要操作 | brand-accent / action-primary | #4C6283 |
+| 連結／hover    | action-primary-hover          | #354E73 |
+| 焦點           | focus-ring                    | #354E73 |
+| 頁面           | surface-page                  | #F6F3ED |
+| 卡片／閱讀區   | surface-card                  | #FFFFFF |
+| 選取淺底       | state-selected / action-tint  | #E8EEF6 |
+| 輕分隔         | border-subtle                 | #DDDFE2 |
+| 控制項邊界     | border-control                | #7D8895 |
 
-首頁 banner 使用白底；頁面保留 #F4F6F3，卡片白底，頁尾及次要區域使用中性灰青。大面積避免淡綠疊加；橙色限主要操作、品牌點綴及必要提示。日期月份使用深青綠底配淺字；中性快捷篩選與已選狀態分開，已選項保留文字／邊框。新增 surface-muted #F1F3F3、border-hover #91A5A5、state-selected #E3EDED。
+暖米白頁面 #F6F3ED、首頁暖底 #EEE9DF、白色內容卡，以細面積的深淺對比帶出重點。次要區域使用 surface-muted #EEF1F5。主要操作為霧藍 #4C6283，主文字深墨藍 #26364C。
 
-接受申請、未開放、候補、額滿、截止及待核實各有獨立狀態 tokens；狀態文字必須保留，不能只靠顏色判斷。輕分隔線不能代替需要辨識的輸入邊界。
+列表閱讀順序為日期、賽事名、報名／截止：日期色塊 #4C6283 配白字，賽事名桌面 19px／手機 18px；依使用者要求移除卡片左側藍線；報名狀態以文字及截止區塊提示。只有存在有效申請倒數的卡片才顯示 surface-decision #E8EEF6 小區塊；倒數加粗，精確期限與核對時間分層。緊急倒數限小面積暖沙底 #F4EAD9 配 #805827，避免整卡變成警告色。
+
+狀態仍用文字加小色點，不新增彩色膠囊。選取態以深藍邊框、文字及淺藍底表示；輕分隔線不能代替輸入邊界。賽事卡的截止面板由現有即時倒數結果決定，不能用靜態資料宣稱接受申請。
+
+### 設計依據
+
+- [NN/g：Using Color to Enhance Your Design](https://www.nngroup.com/articles/color-enhance-design/)：限制色盤、維持功能一致及用中性色承托內容。
+- [IBM Design Language：Color](https://www.ibm.com/design/language/color/)：中性灰主導，藍色作主要操作，其他顏色有目的地少量使用。本專案參考其中性基礎、操作色與狀態色分工；最終霧藍／暖底色碼按使用者要求另選。
+- [GOV.UK：Colour](https://design-system.service.gov.uk/styles/colour/)：按功能分開文字、連結、背景、焦點與錯誤色。本專案採其功能分工方法，不沿用其品牌要求。
+
+此配色是按 NXTGO 用途及使用者要求「柔和而有對比、引導重點」作出的設計判斷，不宣稱研究證明藍色是跑步網站唯一或最佳選擇。廣告示意創意素材可保留各自色彩，網站操作與廣告介面使用共用 tokens。
 
 ## 字體
 
-- Noto Sans HK Variable：中文及正文，常用 400／500／700。本文 16px，長文行高約 1.9；重要輔助資訊 13–14px；12px 限短標籤。
-- Barlow Condensed：大型日期、統計數字、少量英文展示。精確日期時間保持正文寬度，使用 tabular-nums。
-- 自託管 Fontsource 固定版本：`@fontsource-variable/noto-sans-hk@5.3.1`；Barlow 版本以 package-lock.json 為準。字體 CSS 隨本地建置輸出，使用 unicode-range 分字集及 font-display: swap；不在訪客瀏覽時向 Google Fonts 發請求。
-- 繁中字體完整資產不是單一小檔，必須保留分段載入。不要預載整套中文字型。保留 PingFang HK／Microsoft JhengHei／sans-serif fallback，新內容也能顯示。
-- 本批選擇 Fontsource 的完整分字集 CSS，而非將 CJK 子集當成多個沒有 unicode-range 的 next/font/local face，以免遺失未來內容的字形或增加首載成本。
-- 授權隨網站輸出在 `/fonts/NotoSansHK-OFL.txt`、`/fonts/BarlowCondensed-OFL.txt`。
+- Noto Sans HK Variable：中文主字體。Inter Variable：英文、數字、日期、費用及倒數；body font stack 先 Inter 再 Noto Sans HK，中文字回退到 HK 字形。Barlow Condensed 只保留 NXTGO 字標，獨立 font-brand token。
+- 三種主要字重：正文 400、操作及狀態 500、標題與日期 700。減少連串粗體；渠道名稱正常字重，倒數保留 700。
+- 字級：正文 16px、一般資料 14–15px、輔助核對時間 12px；賽事名桌面 19px／手機 18px。列表地點、渠道、資格及截止時間至少 14px。標題中文字距恢復正常，行高 1.55，長文 1.9。
+- 數字使用 tabular-nums，以便比較費用、時間及日期。保留至少 44px 主要控制項點擊範圍。
+- 自託管 Fontsource 固定版本：Noto Sans HK 5.3.1、Inter 5.3.0；Barlow 版本以 package-lock.json 為準。只載入 Barlow 700 拉丁字集，Inter 使用正常體 wght CSS；不在訪客瀏覽時向 Google Fonts 發請求。
+- 繁中文字體保留完整 unicode-range 分字集及系統 fallback，避免遺失未來內容的字形；所有網頁字體均 font-display: swap，不預載整套中文字型。
+- 授權隨網站輸出在 /fonts/NotoSansHK-OFL.txt、/fonts/Inter-OFL.txt、/fonts/BarlowCondensed-OFL.txt。
 
 ## 元件
 
-- 按鈕：主操作、深底次操作、文字連結及可切換篩選。主操作不可與廣告混淆。
+- 按鈕：霧藍主操作、深墨藍次操作、深藍文字連結及可切換篩選。主操作不可與廣告混淆。
 - 控制項圓角 8px，卡片 12px，小標籤 6px；膠囊只用於適合的短選取條件。
 - 間距以 4、8、12、16、24、32、48px 為主；同一組內較緊，段落之間較鬆。
 - 網站主要控制項採 44px 點擊範圍；不把此設計標準冒稱為各平台一致的無障礙最低要求。
@@ -52,7 +63,7 @@
 
 ## UX 規則
 
-1. 搜尋可見；日期、距離、地區及進階狀態逐步展開。已套用條件可辨識、逐個移除及重設。
+1. 搜尋可見；日期、距離、地區及進階狀態逐步展開。接受申請、親子及日期快捷同一按鈕再按一次取消，aria-pressed 與樣式同步。親子為獨立條件，不覆寫搜尋字；截止快捷只切換排序，取消還原原排序。已套用條件可辨識、逐個移除及重設。
 2. 同一組別必須同時符合日期、距離、地區及狀態；不以其他組別的開放狀態代填。
 3. 狀態維持原有 72 小時核實規則；待核實不等同未開放，也不是保證即時名額。
 4. URL、返回結果、排序、空結果復原及錯誤範圍提示維持原有功能。

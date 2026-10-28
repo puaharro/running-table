@@ -96,6 +96,7 @@ export interface Race {
 }
 export interface Filters {
   q: string;
+  family: boolean;
   from: string;
   to: string;
   distances: string[];

@@ -84,7 +84,7 @@ body {
 }
 .masthead-guide {
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: 500;
   text-underline-offset: 5px;
 }
 .masthead-guide:hover {
@@ -101,7 +101,7 @@ body {
 .masthead-trust i {
   width: 3px;
   height: 3px;
-  background: #98aa9b;
+  background: var(--border-control);
   border-radius: 50%;
   margin-inline: 4px;
 }
@@ -111,12 +111,12 @@ body {
   color: white;
   overflow: hidden;
   border-radius: var(--radius-card);
-  box-shadow: 0 12px 24px #183a3b12;
-  transform: rotate(-1deg);
+  box-shadow: 0 12px 24px #00000008;
+  transform: none;
   transition: transform 0.2s;
 }
 .next-race-card:hover {
-  transform: rotate(0deg) translateY(-3px);
+  transform: translateY(-2px);
   color: white;
 }
 .next-race-top {
@@ -126,7 +126,7 @@ body {
   gap: 14px;
   padding: 17px 22px 0;
   font-size: var(--text-sm);
-  color: #cbdccf;
+  color: var(--text-secondary);
 }
 .next-race-visual {
   height: 112px;
@@ -143,16 +143,16 @@ body {
   height: 220px;
   top: -20px;
   right: -190px;
-  border: 1px solid #6e8b7f;
+  border: 1px solid var(--border-subtle);
   border-radius: 50%;
   transform: rotate(-26deg);
   box-shadow:
     0 0 0 14px var(--surface-dark),
-    0 0 0 15px #6e8b7f,
+    0 0 0 15px var(--border-subtle),
     0 0 0 29px var(--surface-dark),
-    0 0 0 30px #6e8b7f,
+    0 0 0 30px var(--border-subtle),
     0 0 0 44px var(--surface-dark),
-    0 0 0 45px #6e8b7f;
+    0 0 0 45px var(--border-subtle);
   opacity: 0.65;
 }
 .next-race-day {
@@ -166,7 +166,7 @@ body {
 }
 .next-race-day span {
   display: block;
-  color: #b6cabb;
+  color: var(--text-secondary);
   font-size: var(--text-sm);
   font-weight: 500;
   letter-spacing: 0.12em;
@@ -250,7 +250,7 @@ body {
 .filter-card {
   border-radius: var(--radius-card);
   border-color: var(--border-subtle);
-  box-shadow: 0 4px 16px #193c2a05;
+  box-shadow: 0 4px 16px #00000000;
   overflow: hidden;
 }
 .search-row {
@@ -282,7 +282,7 @@ body {
   height: 21px;
   border-radius: 50%;
   font-size: var(--text-sm);
-  background: #193e3e;
+  background: var(--action-primary);
   color: var(--surface-card);
 }
 .quick-row {
@@ -312,9 +312,9 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: #496c3e;
+  color: var(--text-secondary);
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.7;
 }
 .deadline-countdown.urgent {
@@ -423,7 +423,7 @@ body {
 .view-tabs button[aria-pressed="true"] {
   background: white;
   color: var(--text-primary);
-  box-shadow: 0 1px 5px #1c442c0e;
+  box-shadow: 0 1px 5px #00000008;
 }
 .results-actions select {
   border: 1px solid var(--border-subtle);
@@ -465,7 +465,7 @@ body {
   border-radius: var(--radius-card);
   margin-bottom: 10px;
   padding: 22px;
-  box-shadow: 0 2px 3px #15372a02;
+  box-shadow: 0 2px 3px #00000000;
 }
 .race-row:last-child {
   border-bottom: 1px solid var(--border-subtle);
@@ -473,7 +473,7 @@ body {
 .race-row:hover {
   background: var(--surface-card);
   border-color: var(--border-hover);
-  box-shadow: 0 4px 16px #22482a08;
+  box-shadow: 0 4px 16px #00000006;
 }
 .race-date {
   width: 64px;
@@ -499,7 +499,7 @@ body {
 }
 .race-date > strong {
   font-size: 29px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.2;
   margin: 4px 0 1px;
 }
@@ -610,13 +610,13 @@ body {
   font-size: 24px;
 }
 .outer-ad-rail {
-  border-color: #cbd5c6;
+  border-color: var(--border-subtle);
   border-radius: var(--radius-control);
-  background: #eff3ea;
-  color: #7c8b74;
+  background: var(--surface-muted);
+  color: var(--text-secondary);
 }
 .bottom-ad-anchor {
-  border-color: #d6e1cf;
+  border-color: var(--border-subtle);
 }
 .anchor-ad-art {
   border-radius: var(--radius-control);
@@ -717,7 +717,7 @@ input {
   color: var(--text-secondary);
 }
 .group-channel-status b {
-  font-weight: 600;
+  font-weight: 500;
 }
 .group-status-list summary {
   color: var(--coral-dark);
@@ -800,7 +800,7 @@ input {
 .registration-summary-list dd {
   font-size: var(--text-md);
   margin: 0;
-  font-weight: 600;
+  font-weight: 500;
   overflow-wrap: anywhere;
   font-variant-numeric: tabular-nums;
 }
@@ -840,7 +840,7 @@ input {
 .verified-notice strong {
   font-size: var(--text-sm);
   line-height: 1.8;
-  color: #74521f;
+  color: var(--text-secondary);
 }
 .group-official-link {
   display: inline-flex;
@@ -1110,7 +1110,7 @@ input {
     gap: var(--space-3);
     border: 0;
     border-radius: 6px;
-    background: #193e3e;
+    background: var(--action-primary);
     color: white;
     font-size: var(--text-sm);
     font-weight: 700;
@@ -1332,7 +1332,7 @@ input {
     padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
     background: #fff;
     border-top: 1px solid var(--border-subtle);
-    box-shadow: 0 -4px 16px #193e3e14;
+    box-shadow: 0 -4px 16px #00000014;
   }
   .mobile-filter-actions .filter-reset {
     flex: 0 0 auto;

@@ -13,6 +13,7 @@ import {
 
 export const defaultFilters: Filters = {
   q: "",
+  family: false,
   from: "",
   to: "",
   distances: [],
@@ -205,6 +206,7 @@ export function selectRaces(races: Race[], f: Filters, now: Clock) {
     if (f.view === "upcoming" && race.endDate < today) return [];
     if (f.view === "past" && race.endDate >= today) return [];
     if (f.sports.length && !f.sports.includes(race.sport)) return [];
+    if (f.family && !race.tags.includes("親子")) return [];
     const raceMatchesQuery =
       !q ||
       [race.name, race.englishName, race.organizer, race.district, race.venue, ...race.tags]
@@ -256,6 +258,7 @@ export function parseFilters(params: URLSearchParams): Filters {
   return {
     ...defaultFilters,
     q: (params.get("q") ?? "").slice(0, 200),
+    family: params.get("family") === "1",
     from: validDate(params.get("from") ?? "") ? params.get("from")! : "",
     to: validDate(params.get("to") ?? "") ? params.get("to")! : "",
     distances: list("distance", distanceOptions),
@@ -275,6 +278,7 @@ export function parseFilters(params: URLSearchParams): Filters {
 }
 export function serializeFilters(f: Filters) {
   const p = new URLSearchParams();
+  if (f.family) p.set("family", "1");
   for (const key of ["q", "from", "to", "min", "max"] as const) if (f[key]) p.set(key, f[key]);
   for (const [field, key] of [
     ["distances", "distance"],

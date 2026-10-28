@@ -1,4 +1,203 @@
 /* Shared controls and data presentation; layout remains in globals/refresh. */
+/* Warm foundations, muted blue decisions, and dark anchors for quick scanning. */
+.prototype-strip {
+  background: var(--surface-page);
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.calendar-masthead {
+  background: var(--surface-hero);
+  border-bottom: 0;
+}
+.masthead-copy h1 span {
+  color: var(--text-primary);
+}
+.next-race-card {
+  background: var(--surface-dark);
+  color: var(--text-on-dark);
+  border: 0;
+  box-shadow: 0 8px 24px #26364c0c;
+}
+.next-race-card:hover {
+  color: var(--text-on-dark);
+}
+.next-race-day,
+.next-race-word {
+  color: var(--text-on-dark);
+}
+.next-race-top,
+.next-race-day span {
+  color: var(--action-on-dark);
+}
+.track-orbit {
+  border-color: var(--action-on-dark);
+  opacity: 0.25;
+  box-shadow:
+    0 0 0 14px var(--surface-dark),
+    0 0 0 15px var(--action-on-dark),
+    0 0 0 29px var(--surface-dark),
+    0 0 0 30px var(--action-on-dark);
+}
+.race-date,
+.race-date > .race-date-month {
+  background: var(--date-surface);
+  color: var(--date-text);
+  border: 0;
+}
+.race-date > .race-date-month {
+  font-weight: 500;
+  padding-top: 7px;
+}
+.race-date > strong {
+  font-size: 32px;
+}
+.race-date > span:not(.race-date-month),
+.race-date > span > small,
+.race-date .multi-day {
+  color: var(--date-text);
+}
+.race-info h3 {
+  font-size: 19px;
+  line-height: 1.55;
+}
+.race-info h3 a {
+  min-height: var(--control-size);
+  padding-block: 5px;
+}
+.race-english {
+  margin-top: 2px;
+}
+.race-tags {
+  color: var(--text-secondary);
+}
+.race-row,
+.guide-card {
+  border-color: transparent;
+  box-shadow: 0 3px 14px #26364c05;
+}
+.race-row:last-child {
+  border-bottom-color: transparent;
+}
+.race-row:hover {
+  border-top-color: var(--border-subtle);
+  border-right-color: var(--border-subtle);
+  border-bottom-color: var(--border-subtle);
+  box-shadow: 0 5px 20px #26364c0a;
+}
+.filter-card {
+  background: var(--surface-card);
+  border-color: var(--border-subtle);
+  box-shadow: none;
+}
+.race-status.has-deadline {
+  padding: 12px;
+  background: var(--surface-decision);
+  border-radius: var(--radius-control);
+}
+.race-status.has-deadline > .status-badge {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+@media (min-width: 1101px) {
+  .race-row,
+  .race-table-head {
+    grid-template-columns: 76px minmax(0, 1fr) 140px 180px 44px;
+  }
+}
+.deadline-countdown {
+  color: var(--text-primary);
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+.deadline-countdown.urgent {
+  color: var(--urgent-text);
+  background: var(--urgent-surface);
+  border-radius: 4px;
+  padding: 3px 6px;
+}
+.month-divider {
+  font-weight: 700;
+  color: var(--action-primary-hover);
+}
+.row-arrow {
+  background: var(--surface-brand);
+  color: var(--action-primary-hover);
+}
+.channel-disclosure > summary,
+.group-status-list summary,
+.return-link {
+  color: var(--text-secondary);
+}
+.text-link,
+.summary-official-link,
+.group-official-link,
+.registration-summary-heading a,
+.masthead-guide {
+  color: var(--action-primary-hover);
+}
+.registration-card .text-link {
+  color: var(--action-on-dark);
+}
+.guide-graphic,
+.blue .guide-graphic,
+.green .guide-graphic {
+  background: var(--surface-brand);
+  color: var(--action-primary-hover);
+}
+.guide-graphic > i,
+.blue .guide-graphic > i,
+.green .guide-graphic > i {
+  border-color: var(--border-hover);
+}
+.demo-notice {
+  background: var(--surface-card);
+  border: 0;
+  border-left: 3px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+.verified-notice p,
+.verified-notice strong {
+  color: var(--text-secondary);
+}
+.channel-summary-list > li,
+.channel-summary-list > li + li {
+  border-color: transparent;
+}
+.filter-toggle.active {
+  background: var(--action-tint);
+  color: var(--action-primary-hover);
+  border-color: var(--action-primary);
+}
+.quick-row button:hover {
+  background: var(--action-tint);
+  color: var(--action-primary-hover);
+}
+.compact-channels .channel-preview-row > .status-badge {
+  display: inline-flex;
+}
+.view-tabs button[aria-pressed="true"] {
+  color: var(--action-primary-hover);
+  box-shadow: inset 0 -2px 0 var(--action-primary);
+}
+.error-message {
+  color: var(--status-error-text);
+  background: var(--surface-card);
+  border-left: 3px solid var(--status-error-text);
+}
+@media (max-width: 767px) {
+  .race-info h3 {
+    font-size: 18px;
+  }
+  .race-status.has-deadline {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .race-status.has-deadline .verification-label {
+    font-size: var(--text-xs);
+  }
+}
 .quick-filter-note {
   margin: 0;
   padding: 0 20px 16px;
@@ -85,7 +284,7 @@
 }
 .brand .brand-wordmark,
 .footer-brand .brand-wordmark {
-  font-family: var(--font-display);
+  font-family: var(--font-brand);
   font-size: 36px;
   font-weight: 700;
   line-height: 1;
@@ -123,7 +322,7 @@
   color: white;
 }
 .button-dark:hover {
-  background: #295350;
+  background: #393939;
   color: white;
 }
 .status-badge {
@@ -132,20 +331,20 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border-radius: var(--radius-badge);
-  padding: 5px 8px;
+  border-radius: 0;
+  padding: 2px 0;
   font-size: var(--text-sm);
   font-weight: 500;
   line-height: 1.5;
   white-space: normal;
-  color: var(--badge-text);
-  background: var(--badge-surface);
+  color: var(--text-secondary);
+  background: transparent;
 }
 .status-badge i {
   flex-shrink: 0;
-  width: 4px;
-  height: 4px;
-  background: currentColor;
+  width: 6px;
+  height: 6px;
+  background: var(--badge-text);
   border-radius: 50%;
 }
 .status-badge.open {
@@ -173,8 +372,8 @@
   --badge-surface: var(--status-unknown-surface);
 }
 .next-race-bottom > div > .status-badge {
-  color: var(--badge-text);
-  background: var(--badge-surface);
+  color: var(--text-secondary);
+  background: transparent;
 }
 .option-row button,
 .date-shortcuts button {
@@ -184,14 +383,16 @@
 .date-shortcuts button:hover {
   background: var(--surface-brand);
 }
-.option-row button[aria-pressed="true"] {
+.option-row button[aria-pressed="true"],
+.date-shortcuts button[aria-pressed="true"] {
   background: var(--state-selected);
-  color: var(--text-primary);
-  border-color: var(--text-primary);
-  box-shadow: inset 0 0 0 1px var(--text-primary);
+  color: var(--action-primary-hover);
+  border-color: var(--action-primary);
+  box-shadow: inset 0 0 0 1px var(--action-primary);
 }
-.quick-row button[aria-pressed="true"] {
-  background: var(--text-primary);
+.quick-row button[aria-pressed="true"],
+.quick-row .only-open-shortcut[aria-pressed="true"] {
+  background: var(--action-primary);
   color: white;
 }
 .search-box,
@@ -240,7 +441,7 @@
 }
 .race-date > strong,
 .stat-pair strong {
-  font-weight: 600;
+  font-weight: 700;
 }
 .race-date > strong,
 .next-race-day,
@@ -323,7 +524,7 @@ summary:focus-visible {
   margin: 4px 0;
 }
 .verification-reason {
-  color: #76501d;
+  color: var(--text-secondary);
 }
 .correction-form {
   display: grid;
@@ -333,7 +534,7 @@ summary:focus-visible {
 .correction-form label {
   display: grid;
   gap: 8px;
-  font-weight: 600;
+  font-weight: 500;
 }
 .correction-form input,
 .correction-form select,
@@ -428,7 +629,7 @@ summary:focus-visible {
   color: var(--text-secondary);
 }
 .group-status-list .channel-list-row .verification-reason {
-  color: #76501d;
+  color: var(--text-secondary);
 }
 
 .registration-summary-list > li {
@@ -464,4 +665,61 @@ summary:focus-visible {
   .channel-summary-list {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* Let size and weight guide reading without compressing Chinese characters. */
+.race-info h3,
+.section-heading h2,
+.detail-heading h1,
+.article-heading h1,
+.guide-card h3 {
+  letter-spacing: 0;
+  font-weight: 700;
+}
+.masthead-copy h1 {
+  letter-spacing: -0.01em;
+}
+.race-english {
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  font-weight: 400;
+}
+.race-location,
+.group-status-list,
+.filter-grid small,
+.registration-verification {
+  font-size: var(--text-sm);
+  line-height: 1.75;
+}
+.race-start-list strong,
+.group-status-list .channel-list-row .group-name {
+  font-size: var(--text-sm);
+  font-weight: 400;
+}
+.race-status .deadline-exact {
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+.race-status .verification-label {
+  font-size: var(--text-xs);
+  font-weight: 400;
+}
+.channel-preview-row > span:first-child,
+.channel-summary-list .channel-comparison dd {
+  font-weight: 400;
+}
+button,
+.button,
+.status-badge {
+  font-weight: 500;
+}
+.race-date,
+.next-race-day,
+.date-stamp,
+.stat-pair,
+time,
+.deadline-countdown,
+.group-card dd,
+.channel-comparison dd {
+  font-variant-numeric: tabular-nums;
 }
