@@ -51,7 +51,14 @@
             "eligibility": "須符合此組別年齡及參賽資格，詳見官方。",
             "sourceIds": ["hzmb-info"]
           }
-        ]
+        ],
+        "ratingEvidence": {
+          "sourceIds": ["hzmb-info"],
+          "cutoffMinutes": 180,
+          "entry": "open",
+          "transport": "organizer-shuttle",
+          "note": "此為一般組別的年齡／時限基準；須到亞洲國際博覽館集合，再乘指定專車前往起跑區，各組集合期限不同。"
+        }
       },
       {
         "id": "hzmb-2026-10k",
@@ -81,11 +88,18 @@
             "eligibility": "須符合此組別年齡及參賽資格，詳見官方。",
             "sourceIds": ["hzmb-info"]
           }
-        ]
+        ],
+        "ratingEvidence": {
+          "sourceIds": ["hzmb-info"],
+          "cutoffMinutes": 90,
+          "entry": "open",
+          "transport": "organizer-shuttle",
+          "note": "此為一般組別的年齡／時限基準；須到亞洲國際博覽館集合，再乘指定專車前往起跑區，各組集合期限不同。"
+        }
       }
     ],
     "sourceUrl": "https://hzmb-halfmarathon.com/event-information",
-    "updatedAt": "2026-10-25",
+    "updatedAt": "2026-10-29",
     "verifiedAt": "2026-10-25T13:01:03+08:00",
     "verification": "verified",
     "publication": "published",
@@ -121,6 +135,10 @@
       {
         "date": "2026-10-25",
         "note": "重新核對官方賽事資訊：兩組本地費用、起終點、時限及公眾抽籤期限維持不變。"
+      },
+      {
+        "date": "2026-10-29",
+        "note": "加入按組別編輯評級：時限／資格、距離及集合／接駁分開列依據，不設總分。只重用已存來源，未重核即時資料；資料不足保留未評。"
       }
     ]
   },
@@ -218,7 +236,7 @@
       }
     ],
     "sourceUrl": "https://mizunohkrun.com/zh-hant/event-information",
-    "updatedAt": "2026-10-25",
+    "updatedAt": "2026-10-29",
     "verifiedAt": "2026-10-25T13:01:03+08:00",
     "verification": "verified",
     "publication": "published",
@@ -247,6 +265,10 @@
       {
         "date": "2026-10-25",
         "note": "重新核對活動簡介及最新消息，三個個人組別仍按官方所有組別額滿公告處理。"
+      },
+      {
+        "date": "2026-10-29",
+        "note": "加入按組別編輯評級：時限／資格、距離及集合／接駁分開列依據，不設總分。只重用已存來源，未重核即時資料；資料不足保留未評。"
       }
     ]
   },
@@ -312,7 +334,14 @@
             ]
           }
         ],
-        "venue": "香港迪士尼樂園旅遊巴士停車場"
+        "venue": "香港迪士尼樂園旅遊巴士停車場",
+        "ratingEvidence": {
+          "sourceIds": ["unicef-race-info", "unicef-transport"],
+          "cutoffMinutes": 165,
+          "entry": "open",
+          "note": "半馬集合為4:45–5:15，早於迪士尼綫欣澳站首班5:40開出；須另查特別巴士。",
+          "transport": "special-service-required"
+        }
       },
       {
         "id": "unicef-2027-10k",
@@ -352,7 +381,13 @@
             ]
           }
         ],
-        "venue": "香港迪士尼樂園旅遊巴士停車場"
+        "venue": "香港迪士尼樂園旅遊巴士停車場",
+        "ratingEvidence": {
+          "sourceIds": ["unicef-race-info"],
+          "cutoffMinutes": 90,
+          "entry": "restricted",
+          "note": "只評10K一組，除年齡條件外，最佳成績須多於1小時10分01秒，不能概括其他10K組。"
+        }
       },
       {
         "id": "unicef-2027-5k",
@@ -392,7 +427,13 @@
             ]
           }
         ],
-        "venue": "香港迪士尼樂園旅遊巴士停車場"
+        "venue": "香港迪士尼樂園旅遊巴士停車場",
+        "ratingEvidence": {
+          "sourceIds": ["unicef-race-info"],
+          "cutoffMinutes": 45,
+          "entry": "open",
+          "note": "活動日須年滿16歲，總時限45分鐘。"
+        }
       },
       {
         "id": "unicef-2027-3k",
@@ -432,11 +473,17 @@
             ]
           }
         ],
-        "venue": "香港迪士尼樂園旅遊巴士停車場"
+        "venue": "香港迪士尼樂園旅遊巴士停車場",
+        "ratingEvidence": {
+          "sourceIds": ["unicef-race-info"],
+          "cutoffMinutes": 35,
+          "entry": "youth",
+          "note": "只限11–15歲。"
+        }
       }
     ],
     "sourceUrl": "https://run.unicef.org.hk/powerun/zh/event-info/race-information",
-    "updatedAt": "2026-10-27",
+    "updatedAt": "2026-10-29",
     "verifiedAt": "2026-10-27T00:30:00+08:00",
     "verification": "verified",
     "publication": "published",
@@ -537,6 +584,10 @@
       {
         "date": "2026-10-27",
         "note": "再核個人選單及報名FAQ，半馬仍無明確現況，保持未知；其他三組仍列於公開選單。"
+      },
+      {
+        "date": "2026-10-29",
+        "note": "加入按組別編輯評級：時限／資格、距離及集合／接駁分開列依據，不設總分。只重用已存來源，未重核即時資料；資料不足保留未評。"
       }
     ]
   },
@@ -592,11 +643,17 @@
             "paymentClosesAt": "2026-11-02T12:00:00+08:00",
             "priceUnit": "每位"
           }
-        ]
+        ],
+        "ratingEvidence": {
+          "sourceIds": ["schkm-harbour"],
+          "cutoffMinutes": 60,
+          "entry": "mixed",
+          "note": "個人及家庭組的年齡資格不同，未作同一個新手分數。"
+        }
       }
     ],
     "sourceUrl": "https://www.hkmarathon.com/harbourfront-run",
-    "updatedAt": "2026-10-26",
+    "updatedAt": "2026-10-29",
     "verifiedAt": "2026-10-26T13:03:31+08:00",
     "verification": "verified",
     "publication": "published",
@@ -636,6 +693,10 @@
       {
         "date": "2026-10-26",
         "note": "一般抽籤已過10月26日中午截止；核對平台只列輪椅入口，補明個人及家庭年齡、隊伍資格，保留獨立結果／付款期限。"
+      },
+      {
+        "date": "2026-10-29",
+        "note": "加入按組別編輯評級：時限／資格、距離及集合／接駁分開列依據，不設總分。只重用已存來源，未重核即時資料；資料不足保留未評。"
       }
     ]
   },
@@ -688,11 +749,17 @@
             "eligibility": "須符合此組別年齡及參賽資格，詳見官方。",
             "sourceIds": ["schkm-youth", "schkm-youth-entry"]
           }
-        ]
+        ],
+        "ratingEvidence": {
+          "sourceIds": ["schkm-youth"],
+          "cutoffMinutes": 30,
+          "entry": "youth",
+          "note": "按2027年出生年份計10–15歲，不能當作一般成人新手組別。"
+        }
       }
     ],
     "sourceUrl": "https://www.hkmarathon.com/youth-run",
-    "updatedAt": "2026-10-26",
+    "updatedAt": "2026-10-29",
     "verifiedAt": "2026-10-26T13:03:31+08:00",
     "verification": "verified",
     "publication": "published",
@@ -732,6 +799,10 @@
       {
         "date": "2026-10-26",
         "note": "重新核對官方費用、年齡、期限及指定平台仍列少年跑登記入口；名額以大會確認為準。"
+      },
+      {
+        "date": "2026-10-29",
+        "note": "加入按組別編輯評級：時限／資格、距離及集合／接駁分開列依據，不設總分。只重用已存來源，未重核即時資料；資料不足保留未評。"
       }
     ]
   },
@@ -916,7 +987,12 @@
             "registrationNote": "官網9月30日14:00公告三距離名額均0及全部額滿；10月27日再查官網連結的官方表格，明確顯示所有慈善跑手招募已完成。保留額滿狀態；表格關閉亦不能補證最低費用，籌款目標不當成最低額。",
             "sourceIds": ["schkm-familyvalue", "schkm-charity-directory", "schkm-familyvalue-form"]
           }
-        ]
+        ],
+        "ratingEvidence": {
+          "sourceIds": ["schkm-main"],
+          "entry": "mixed",
+          "note": "挑戰組與非挑戰組、不同報名渠道的資格不完全相同；先查看對應渠道，暫不合併新手評分。"
+        }
       },
       {
         "id": "schkm-2027-half",
@@ -1130,7 +1206,12 @@
             "registrationNote": "官網9月30日14:00公告三距離名額均0及全部額滿；10月27日再查官網連結的官方表格，明確顯示所有慈善跑手招募已完成。保留額滿狀態；表格關閉亦不能補證最低費用，籌款目標不當成最低額。",
             "sourceIds": ["schkm-familyvalue", "schkm-charity-directory", "schkm-familyvalue-form"]
           }
-        ]
+        ],
+        "ratingEvidence": {
+          "sourceIds": ["schkm-half"],
+          "entry": "mixed",
+          "note": "挑戰組與非挑戰組、不同報名渠道的資格不完全相同；先查看對應渠道，暫不合併新手評分。"
+        }
       },
       {
         "id": "schkm-2027-10k",
@@ -1343,11 +1424,16 @@
             "registrationNote": "官網9月30日14:00公告三距離名額均0及全部額滿；10月27日再查官網連結的官方表格，明確顯示所有慈善跑手招募已完成。保留額滿狀態；表格關閉亦不能補證最低費用，籌款目標不當成最低額。",
             "sourceIds": ["schkm-familyvalue", "schkm-charity-directory", "schkm-familyvalue-form"]
           }
-        ]
+        ],
+        "ratingEvidence": {
+          "sourceIds": ["schkm-10k"],
+          "entry": "mixed",
+          "note": "挑戰組與非挑戰組、不同報名渠道的資格不完全相同；先查看對應渠道，暫不合併新手評分。"
+        }
       }
     ],
     "sourceUrl": "https://www.hkmarathon.com/race-information",
-    "updatedAt": "2026-10-27",
+    "updatedAt": "2026-10-29",
     "verifiedAt": "2026-10-27T00:30:00+08:00",
     "verification": "verified",
     "publication": "published",
@@ -1578,6 +1664,10 @@
       {
         "date": "2026-10-27",
         "note": "將三個「其他慈善機構」綜合提示移出各組報名渠道，合併為獨立機構查詢入口；不再參與報名狀態、篩選、渠道數量或缺失統計。具名機構資料及真正未知欄位保留。"
+      },
+      {
+        "date": "2026-10-29",
+        "note": "加入按組別編輯評級：時限／資格、距離及集合／接駁分開列依據，不設總分。只重用已存來源，未重核即時資料；資料不足保留未評。"
       }
     ],
     "enquiryLinks": [

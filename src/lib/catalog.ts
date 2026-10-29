@@ -125,6 +125,44 @@ export function assertCatalog(input: unknown): asserts input is Race[] {
       if (!group.sourceIds?.length || group.sourceIds.some((id) => !sourceIds.has(id)))
         fail(group.id, "missing source references");
       if (group.startTime && !validTimestamp(group.startTime)) fail(group.id, "invalid timestamp");
+      const rating = group.ratingEvidence;
+      if (rating !== undefined) {
+        if (
+          !rating ||
+          !rating.note?.trim() ||
+          !Array.isArray(rating.sourceIds) ||
+          !rating.sourceIds.length ||
+          rating.sourceIds.some((id) => !sourceIds.has(id))
+        )
+          fail(group.id, "invalid rating evidence sources");
+        if (
+          rating.cutoffMinutes !== undefined &&
+          (!Number.isFinite(rating.cutoffMinutes) || rating.cutoffMinutes <= 0)
+        )
+          fail(group.id, "invalid rating cutoff");
+        if (
+          rating.entry !== undefined &&
+          !["open", "restricted", "youth", "mixed"].includes(rating.entry)
+        )
+          fail(group.id, "invalid rating entry profile");
+        if (
+          rating.transport !== undefined &&
+          !["organizer-shuttle", "special-service-required"].includes(rating.transport)
+        )
+          fail(group.id, "invalid rating transport profile");
+        const evidence = race.sources!.filter((s) => rating.sourceIds.includes(s.id));
+        if (
+          (rating.cutoffMinutes !== undefined || rating.entry !== undefined) &&
+          !evidence.some(
+            (s) =>
+              group.sourceIds!.includes(s.id) &&
+              s.fields.some((f) => f === "groups.limit" || /^groups\.[^.]+\.limit$/.test(f)),
+          )
+        )
+          fail(group.id, "rating cutoff/entry lacks group limit evidence");
+        if (rating.transport !== undefined && !evidence.some((s) => s.fields.includes("transport")))
+          fail(group.id, "rating transport lacks transport evidence");
+      }
       if (!Array.isArray(group.channels) || !group.channels.length)
         fail(group.id, "channels required");
       for (const channel of group.channels) {

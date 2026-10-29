@@ -26,6 +26,7 @@ import {
 import { groupLocations } from "@/lib/group-locations";
 import { raceHref } from "@/lib/site";
 import { resultsHref } from "@/lib/results-location";
+import { GroupRatings } from "./group-ratings";
 import {
   distanceOptions,
   channelTypeLabels,
@@ -103,6 +104,15 @@ function GroupStatusList({ race, groups, now }: { race: Race; groups: RaceGroup[
             </li>
           ))}
         </ul>
+      </details>
+      <details className="channel-disclosure rating-disclosure">
+        <summary>查看符合組別評級 · 不設總分</summary>
+        {groups.map((group) => (
+          <div key={group.id}>
+            <h4>{group.name}</h4>
+            <GroupRatings race={race} group={group} />
+          </div>
+        ))}
       </details>
     </div>
   );

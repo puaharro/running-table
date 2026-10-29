@@ -27,6 +27,13 @@ export const channelTypeLabels = {
   hotel: "住宿連名額",
 } as const;
 export type ChannelType = keyof typeof channelTypeLabels;
+export interface RatingEvidence {
+  sourceIds: string[];
+  cutoffMinutes?: number;
+  entry?: "open" | "restricted" | "youth" | "mixed";
+  transport?: "organizer-shuttle" | "special-service-required";
+  note: string;
+}
 export interface RegistrationChannel {
   id: string;
   type: ChannelType;
@@ -62,6 +69,7 @@ export interface RaceGroup {
   venue?: string;
   sourceIds?: string[];
   channels: RegistrationChannel[];
+  ratingEvidence?: RatingEvidence;
 }
 export interface Race {
   id: string;
