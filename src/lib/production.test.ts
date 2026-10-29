@@ -20,7 +20,9 @@ describe("real catalog publication and provenance", () => {
   });
   it("requires registration-specific field evidence for known statuses", () => {
     const data = catalog();
-    data[0].sources![0].fields = ["date", "venue"];
+    data[0].sources![0].fields = data[0].sources![0].fields.filter(
+      (field) => field !== "channels.registration",
+    );
     expect(() => assertCatalog(data)).toThrow("field evidence");
   });
   it("publishes six source-backed real events and no fixtures", () => {

@@ -17,6 +17,7 @@ import {
   type RegistrationChannel,
 } from "@/lib/types";
 import { StatusBadge } from "./status-badge";
+import { GroupRatings } from "./group-ratings";
 import { channelPriceHeading, channelPriceLabel } from "@/lib/registration-display";
 
 export function useClock(initialNow: string) {
@@ -254,6 +255,7 @@ export function RegistrationGroups({ race, initialNow }: { race: Race; initialNo
             <strong>{distanceLabel(group.distanceKm)}</strong>
           </div>
           <h3>{group.name}</h3>
+          <GroupRatings race={race} group={group} />
           <dl>
             <div>
               <dt>比賽日期</dt>
