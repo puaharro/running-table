@@ -1,79 +1,90 @@
 import type { Race, RaceGroup, Source } from "./types";
+import { cutoffBand, distanceBand, distanceCriteria, ratingPolicy } from "./rating-policy";
 
-export const ratingMethodVersion = "2026-10-29-v1";
-export type GroupRating = {
-  title: string;
-  value: string;
-  basis: string;
-  sources: Source[];
-};
-export function groupRatings(race: Race, group: RaceGroup): GroupRating[] {
-  const sources = (ids: string[] = []) => (race.sources ?? []).filter((s) => ids.includes(s.id));
-  const evidence = group.ratingEvidence;
-  const linked = sources(evidence?.sourceIds);
-  const distanceSources = sources(group.sourceIds).filter((s) =>
-    s.fields.some((f) => f === "groups.distanceKm" || /^groups\.[^.]+\.distanceKm$/.test(f)),
-  );
-  const distanceKnown =
-    race.verification === "verified" &&
-    distanceSources.length > 0 &&
-    Number.isFinite(group.distanceKm) &&
-    group.distanceKm > 0;
-  const km = group.distanceKm;
-  let beginner = "未評";
-  let beginnerBasis = "欠缺已核對的組別時限或參賽資格，不能只按短距離推定適合新手。";
-  const limitEvidence = linked.some(
+export const ratingMethodVersion = ratingPolicy.version;
+export type GroupRating = { title: string; value: string; basis: string; sources: Source[] };
+function groupSources(race: Race, group: RaceGroup, field: "limit" | "distanceKm") {
+  if (race.verification !== "verified") return [];
+  return (race.sources ?? []).filter(
     (s) =>
       group.sourceIds?.includes(s.id) &&
-      s.fields.some((f) => f === "groups.limit" || /^groups\.[^.]+\.limit$/.test(f)),
+      s.fields.some(
+        (f) => f === `groups.${field}` || new RegExp(`^groups\\.[^.]+\\.${field}$`).test(f),
+      ),
   );
-  if (evidence?.entry === "youth") {
-    beginnerBasis = "此組只供指定年齡少年參加，不套用一般新手評分。";
-  } else if (evidence?.entry === "mixed") {
-    beginnerBasis = "同組有不同資格或時限，須先確認參加類別，暫不合併評分。";
-  } else if (distanceKnown && limitEvidence && evidence?.cutoffMinutes && evidence.entry) {
-    const pace = evidence.cutoffMinutes / km;
-    let score = pace >= 10 ? 5 : pace >= 9 ? 4 : pace >= 8 ? 3 : pace >= 7 ? 2 : 1;
-    if (km > 21.1) score = 1;
-    else if (km > 10) score = Math.min(score, 3);
-    if (evidence.entry === "restricted") score = Math.min(score, 2);
-    beginner = `${score} / 5`;
-    beginnerBasis = `${km} km，總時限${evidence.cutoffMinutes}分鐘，平均每公里約${pace.toFixed(1)}分鐘。${evidence.note}只評時限及資格，未評爬升、補給或路線安全；途中截點仍須遵守官方安排。`;
+}
+export function groupEntryLabel(race: Race, group: RaceGroup) {
+  const evidence = group.ratingEvidence;
+  if (
+    !evidence?.entry ||
+    !groupSources(race, group, "limit").some((s) => evidence.sourceIds.includes(s.id))
+  )
+    return "參加資格未完整核對";
+  return {
+    open: "須符合官方年齡及組別要求",
+    restricted: "另有成績或參賽條件",
+    youth: "只限指定年齡少年",
+    mixed: "資格依參加類別／渠道而異",
+  }[evidence.entry];
+}
+export function groupRatings(race: Race, group: RaceGroup): GroupRating[] {
+  const evidence = group.ratingEvidence;
+  const linked = (race.sources ?? []).filter((s) => evidence?.sourceIds.includes(s.id));
+  const distanceSources = groupSources(race, group, "distanceKm");
+  const distanceKnown =
+    distanceSources.length > 0 && Number.isFinite(group.distanceKm) && group.distanceKm > 0;
+  const limitSources = groupSources(race, group, "limit").filter((s) =>
+    evidence?.sourceIds.includes(s.id),
+  );
+  const cutoff = evidence?.cutoffMinutes;
+  let time = "未評";
+  let timeBasis =
+    evidence?.entry === "mixed"
+      ? "此組資格或時限依參加類別而異，尚未有適用同一比較範圍的單一已核對時限。"
+      : "缺少已核對距離或單一組別總時限，暫不比較。";
+  if (
+    distanceKnown &&
+    limitSources.length &&
+    cutoff !== undefined &&
+    Number.isFinite(cutoff) &&
+    cutoff > 0
+  ) {
+    const pace = cutoff / group.distanceKm;
+    const seconds = Math.round(pace * 60);
+    time = cutoffBand(pace);
+    timeBasis = `${group.distanceKm} km，總時限${cutoff}分鐘，平均每公里容許約${Math.floor(seconds / 60)}分${String(seconds % 60).padStart(2, "0")}秒。按未四捨五入的數值分級；只比較時限，不因距離或資格扣分。途中截點可能更嚴格，不能視作建議配速或完賽保證。`;
   }
-  let transport = "未評";
-  let transportBasis = "未有足夠的組別集合時間、公共交通或接駁安排依據；不按市區位置推定便利。";
-  if (race.verification === "verified" && linked.some((s) => s.fields.includes("transport"))) {
-    if (evidence?.transport === "organizer-shuttle") {
-      transport = "3 / 5";
-      transportBasis = `須先到指定集合點，再乘大會接駁。${evidence.note}只評接駁要求；前往集合點的路程及班次未納入評分。`;
-    } else if (evidence?.transport === "special-service-required") {
-      transport = "1 / 5";
-      transportBasis = `${evidence.note}集合早於已列常規列車可服務時段，須另作特別交通安排；未確認特別巴士班次或餘額。`;
-    }
-  }
+  const transportSources =
+    race.verification === "verified" ? linked.filter((s) => s.fields.includes("transport")) : [];
+  const profile = evidence?.transport
+    ? ratingPolicy.transportProfiles[evidence.transport]
+    : undefined;
+  const transportKnown = transportSources.length > 0 && profile;
   return [
     {
-      title: "新手友善度",
-      value: beginner,
-      basis: beginnerBasis,
+      title: "時限寬鬆度",
+      value: time,
+      basis: timeBasis,
       sources:
-        beginner === "未評"
-          ? linked
-          : [...new Map([...distanceSources, ...linked].map((s) => [s.id, s])).values()],
+        time === "未評"
+          ? limitSources
+          : [...new Map([...distanceSources, ...limitSources].map((s) => [s.id, s])).values()],
     },
     {
-      title: "體能挑戰",
-      value: distanceKnown ? (km <= 5 ? "低" : km <= 21.1 ? "中" : "高") : "未評",
+      title: "距離負荷",
+      value: distanceKnown ? distanceBand(group.distanceKm) : "未評",
       basis: distanceKnown
-        ? `${km} km；距離基準：5 km或以下為低、超過5至21.1 km為中、超過21.1 km為高。未包含爬升、路面及天氣，低不代表無需訓練。`
+        ? `${group.distanceKm} km。${distanceCriteria()}。只比較距離，未納入爬升、路面及天氣；低負荷不代表適合所有跑手。`
         : "距離缺少已核對的組別來源，暫不分級。",
       sources: distanceSources,
     },
     {
-      title: "交通便利度",
-      value: transport,
-      basis: transportBasis,
-      sources: transport === "未評" ? [] : linked.filter((s) => s.fields.includes("transport")),
+      title: "集合交通要求",
+      value: transportKnown ? profile.label : "未評",
+      basis: transportKnown
+        ? `${profile.explanation}${evidence!.note}`
+        : "未有足夠的組別集合時間及交通／接駁依據；不按市區位置估計便利程度。",
+      sources: transportKnown ? transportSources : [],
     },
   ];
 }

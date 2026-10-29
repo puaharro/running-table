@@ -1071,3 +1071,13 @@ time,
     padding-bottom: 12px;
   }
 }
+.rating-entry {
+  font-weight: 500;
+}
+.group-ratings .rating-scope {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+}
+.group-ratings .rating-grid dd {
+  text-align: left;
+}
