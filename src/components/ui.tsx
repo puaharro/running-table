@@ -87,6 +87,7 @@ export function Header() {
           <nav aria-label="主要導航">
             <Link href="/">首頁</Link>
             <Link href="/races/">賽事搜尋／時間表</Link>
+            <Link href="/ratings/">體驗評級</Link>
             <Link href="/guides/">報名及選賽指南</Link>
             <Link href="/about/">關於{siteName}</Link>
           </nav>
@@ -109,6 +110,7 @@ export function Footer() {
         </div>
         <div className="footer-links">
           <Link href="/races/">賽事搜尋／時間表</Link>
+          <Link href="/ratings/">體驗評級</Link>
           <Link href="/guides/">原創指南</Link>
           <Link href="/about/">關於及資料政策</Link>
           <Link href="/privacy/">私隱說明</Link>

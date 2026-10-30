@@ -106,7 +106,7 @@ function GroupStatusList({ race, groups, now }: { race: Race; groups: RaceGroup[
         </ul>
       </details>
       <details className="channel-disclosure rating-disclosure">
-        <summary>查看符合組別比較 · 不設總分</summary>
+        <summary>查看符合組別體驗評級 · 不設總分</summary>
         {groups.map((group) => (
           <div key={group.id}>
             <h4>{group.name}</h4>
