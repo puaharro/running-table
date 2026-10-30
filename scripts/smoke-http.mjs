@@ -31,6 +31,8 @@ try {
     "/races/",
     "/guides/",
     "/about/",
+    "/ratings/",
+    "/ratings/notebook/",
     "/privacy/",
     "/guides/choose-your-first-10k/",
     "/guides/race-registration-checklist/",

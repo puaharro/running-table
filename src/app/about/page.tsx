@@ -45,6 +45,10 @@ export default function About() {
           <p>
             本站指南提供報名同選賽嘅整理方法。內容同廣告會清楚區分，廣告版位唔會偽裝成官方報名入口。目前未投放廣告。
           </p>
+          <p>
+            賽事體驗評級由編輯按參賽紀錄或跑手訪問撰寫，年份及組別分開，評審與觀察限制清楚列明。
+            <Link href="/ratings/">了解體驗評級準則 →</Link>
+          </p>
         </section>
         <section id="corrections">
           <h2>資料更正與聯絡</h2>

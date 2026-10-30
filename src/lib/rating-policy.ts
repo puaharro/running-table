@@ -1,63 +1,75 @@
-// Editorial comparison rules. Change the version whenever criteria change.
-// These are comparison labels, not a validated model of overall race difficulty.
+// Human editorial judgments; scores are never inferred from catalog facts.
 export const ratingPolicy = {
-  version: "2026-10-30-v2",
+  version: "2026-10-30-experience-v1",
   publisher: "NXTGO 編輯",
-  cutoffBands: [
-    { minimumMinutesPerKm: 10, label: "寬鬆" },
-    { minimumMinutesPerKm: 9, label: "較寬鬆" },
-    { minimumMinutesPerKm: 8, label: "一般" },
-    { minimumMinutesPerKm: 7, label: "較緊" },
-    { minimumMinutesPerKm: 0, label: "緊" },
-  ],
-  distanceBands: [
-    { maximumKm: 5, label: "低" },
-    { maximumKm: 21.1, label: "中" },
-    { maximumKm: Infinity, label: "高" },
-  ],
-  transportProfiles: {
-    "organizer-shuttle": {
-      label: "需大會接駁",
-      explanation:
-        "須先到指定集合點，再乘大會接駁；需接駁不代表服務較差，前往集合點的路程及班次未納入比較。",
+  dimensions: {
+    course: {
+      title: "賽道體驗",
+      prompt: "起步擠塞、超車空間、折返、路面、指示、景觀及後段節奏，有咩實際感受？",
+      anchors: [
+        "多處嚴重擠塞或指示／路面問題，明顯妨礙完成賽程。",
+        "多個路段不順暢，超車、折返或指示有明顯改善需要。",
+        "整體可順暢完成，但部分路段或設計影響體驗。",
+        "大部分路段順暢、指示清楚，有值得再跑的特色。",
+        "在所觀察路段及時段，流動、指示及路線特色均表現出色，並有具體紀錄支持。",
+      ],
     },
-    "special-service-required": {
-      label: "需特別交通安排",
-      explanation: "集合早於已列常規列車服務時段，須另作安排；未確認特別巴士班次或餘額。",
+    organization: {
+      title: "大會執行",
+      prompt: "領物、寄存、廁所、起跑分流、工作人員、突發處理及離場，邊度順／唔順？",
+      anchors: [
+        "關鍵流程嚴重失效或支援不足，明顯影響參賽。",
+        "多個流程混亂、久候或指引不足，需大幅改善。",
+        "基本流程到位，仍有排隊、分流或溝通問題。",
+        "主要流程順暢，指引及支援清楚，少量細節可改善。",
+        "所觀察的賽前、賽中及賽後流程均有效率，問題處理有具體良好紀錄。",
+      ],
+    },
+    aid: {
+      title: "補給體驗",
+      prompt: "補給位置、取用動線、飲品／食物、排隊及你到站時的餘量，實際點樣？",
+      anchors: [
+        "主要補給嚴重不足或無法取用，有具體影響紀錄。",
+        "多站供應或取用不穩定，需明顯改善。",
+        "基本供應到位，但位置、取用或選擇有改善空間。",
+        "供應配合賽程，取用大致順暢，只有少量不足。",
+        "供應、位置及取用均出色，並有後段跑手到站時仍穩定供應的紀錄。",
+      ],
     },
   },
-  fullDifficultyMissing: ["路面及技術要求", "累積爬升／下降", "途中截點", "補給及環境條件"],
+} as const;
+export type RatingDimension = keyof typeof ratingPolicy.dimensions;
+export const ratingDimensions = Object.keys(ratingPolicy.dimensions) as RatingDimension[];
+export const scoreLabels = ["", "欠佳", "待改善", "合格", "出色", "卓越"] as const;
+export const evidenceLabels = {
+  participation: "親身參賽紀錄",
+  interview: "跑手訪問",
+  "course-analysis": "路線／影片分析",
+  "official-plan": "官方安排（輔助）",
+} as const;
+export const segmentLabels = {
+  front: "前段",
+  middle: "中段",
+  back: "後段",
+  unknown: "未記錄",
 } as const;
 
-export function cutoffBand(minutesPerKm: number) {
-  return ratingPolicy.cutoffBands.find((band) => minutesPerKm >= band.minimumMinutesPerKm)!.label;
-}
-export function distanceBand(km: number) {
-  return ratingPolicy.distanceBands.find((band) => km <= band.maximumKm)!.label;
-}
-export function cutoffCriteria() {
-  return ratingPolicy.cutoffBands
-    .map((band, index) => {
-      const higher = ratingPolicy.cutoffBands[index - 1];
-      const range = !higher
-        ? `${band.minimumMinutesPerKm}分鐘或以上`
-        : band.minimumMinutesPerKm === 0
-          ? `不足${higher.minimumMinutesPerKm}分鐘`
-          : `${band.minimumMinutesPerKm}至不足${higher.minimumMinutesPerKm}分鐘`;
-      return `${range}：${band.label}`;
-    })
-    .join("；");
-}
-export function distanceCriteria() {
-  return ratingPolicy.distanceBands
-    .map((band, index) => {
-      const lower = ratingPolicy.distanceBands[index - 1];
-      const range = !lower
-        ? `${band.maximumKm} km或以下`
-        : !Number.isFinite(band.maximumKm)
-          ? `超過${lower.maximumKm} km`
-          : `超過${lower.maximumKm}至${band.maximumKm} km`;
-      return `${range}：${band.label}`;
-    })
-    .join("；");
-}
+// Explicit group mappings avoid applying marathon reviews to the half or 10K.
+export const reviewTargets = [
+  {
+    id: "hzmb-half",
+    name: "港珠澳大橋半馬拉松",
+    group: "半馬",
+    raceId: "hzmb-half-marathon-2026",
+    groupId: "hzmb-2026-half",
+    draftYear: "2025",
+  },
+  {
+    id: "schkm-marathon",
+    name: "渣打香港馬拉松",
+    group: "全馬",
+    raceId: "standard-chartered-hk-marathon-2027",
+    groupId: "schkm-2027-marathon",
+    draftYear: "2026",
+  },
+] as const;
