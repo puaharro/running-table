@@ -1203,3 +1203,100 @@ time,
     width: 100%;
   }
 }
+
+/* A single card presents the four essentials of each calendar event. */
+.calendar-race-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 28px 30px;
+  margin-bottom: 16px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  scroll-margin-top: 150px;
+}
+.calendar-race-content {
+  min-width: 0;
+}
+.calendar-race-content h2 {
+  margin: 0 0 14px;
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.calendar-race-content h2 a:hover {
+  color: var(--action-primary-hover);
+}
+.calendar-race-venue,
+.calendar-race-start {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.8;
+}
+.calendar-race-venue {
+  color: var(--text-secondary);
+}
+.calendar-race-venue svg,
+.calendar-race-start svg {
+  color: #65a47e;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 5px;
+}
+.calendar-race-distances {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 16px 0;
+  padding: 0;
+}
+.calendar-race-distances li {
+  padding: 5px 12px;
+  border-radius: var(--radius-control);
+  background: #fff0d9;
+  color: #875018;
+  border: 1px solid #efd7b4;
+  font-weight: 500;
+  font-size: var(--text-sm);
+}
+.calendar-race-detail {
+  flex-shrink: 0;
+  min-width: 170px;
+  min-height: 58px;
+}
+@media (max-width: 767px) {
+  .calendar-race-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 22px;
+    padding: 22px 20px;
+  }
+  .calendar-race-detail {
+    width: 100%;
+    min-height: 52px;
+  }
+}
+
+.engine-month {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+}
+.engine-month select {
+  min-height: 40px;
+  max-width: 100%;
+  padding: 8px 30px 8px 12px;
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-control);
+  background: var(--surface-card);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}

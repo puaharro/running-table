@@ -122,3 +122,19 @@ describe("calendar year and country search", () => {
     ).toEqual(["日本"]);
   });
 });
+
+it("combines a month with a calendar year and preserves it in shared search links", () => {
+  const filters = {
+    ...defaultFilters,
+    ...dateShortcutRange("year", now),
+    month: "12",
+    view: "all" as const,
+  };
+  expect(selectRaces(races, filters, now).map(({ race }) => race.id)).toEqual([
+    "mizuno-hk-run-fest-2026",
+  ]);
+  expect(selectRaces(races, { ...filters, month: "1" }, now)).toEqual([]);
+  expect(parseFilters(new URLSearchParams(serializeFilters(filters)))).toEqual(filters);
+  expect(parseFilters(new URLSearchParams("month=13")).month).toBe("");
+  expect(parseFilters(new URLSearchParams("month=1")).month).toBe("1");
+});

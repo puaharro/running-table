@@ -1,22 +1,17 @@
 "use client";
-import { registrationUncertaintyReason } from "@/lib/verification";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AdSlot, Icon } from "./ui";
-import { StatusBadge } from "./status-badge";
 import {
   defaultFilters,
+  hongKongToday,
   displayDate,
-  formatTimestamp,
   distanceLabel,
   filterError,
-  channelStatus,
   parseFilters,
-  registrationCountdown,
   selectRaces,
   serializeFilters,
-  statusSummary,
 } from "@/lib/races";
 import {
   dateShortcutIsActive,
@@ -26,7 +21,6 @@ import {
 import { groupLocations } from "@/lib/group-locations";
 import { raceHref } from "@/lib/site";
 import { resultsHref } from "@/lib/results-location";
-import { GroupRatings } from "./group-ratings";
 import {
   distanceOptions,
   channelTypeLabels,
@@ -34,88 +28,10 @@ import {
   registrationLabels,
   type Filters,
   type Race,
-  type RaceGroup,
 } from "@/lib/types";
 
 function monthLabel(date: string) {
   return `${date.slice(0, 4)} 年 ${Number(date.slice(5, 7))} 月`;
-}
-
-function GroupStatusList({ race, groups, now }: { race: Race; groups: RaceGroup[]; now: string }) {
-  const count = groups.reduce((total, group) => total + group.channels.length, 0);
-  const groupLabel = (group: RaceGroup) =>
-    groups.filter(
-      (candidate) => distanceLabel(candidate.distanceKm) === distanceLabel(group.distanceKm),
-    ).length > 1
-      ? group.name
-      : distanceLabel(group.distanceKm);
-  return (
-    <div className="group-status-list compact-channels">
-      <ul className="group-status-preview" aria-label="符合條件的渠道摘要">
-        {groups.slice(0, 2).map((group) => (
-          <li
-            key={group.id}
-            className={`channel-preview-group${groupLabel(group) !== distanceLabel(group.distanceKm) ? " named-group" : ""}`}
-          >
-            <strong>{groupLabel(group)}</strong>
-            <ul>
-              {group.channels.slice(0, 2).map((channel) => (
-                <li key={channel.id} className="channel-preview-row">
-                  <span>{channel.name}</span>
-                  <StatusBadge status={channelStatus(race, group, channel, now)} />
-                </li>
-              ))}
-            </ul>
-            {group.channels.length > 2 && (
-              <small className="channel-more">另有 {group.channels.length - 2} 個渠道</small>
-            )}
-          </li>
-        ))}
-        {groups.length > 2 && <li className="channel-more">另有 {groups.length - 2} 個組別</li>}
-      </ul>
-      <details className="channel-disclosure">
-        <summary>
-          <span className="when-closed">查看{count > 1 ? `全部 ${count} 個` : ""}渠道及資格</span>
-          <span className="when-open">收起渠道及資格</span>
-          <span className="sr-only">：{race.name}</span>
-        </summary>
-        <ul className="channel-expanded-groups">
-          {groups.map((group) => (
-            <li key={group.id} className="channel-expanded-group">
-              <strong>{group.name}</strong>
-              <ul>
-                {group.channels.map((channel) => {
-                  const reason = registrationUncertaintyReason(race, group, channel, now);
-                  return (
-                    <li key={channel.id} className="channel-expanded-row">
-                      <div className="channel-preview-row">
-                        <strong>{channel.name}</strong>
-                        <StatusBadge status={channelStatus(race, group, channel, now)} />
-                      </div>
-                      {!channel.name.includes(channel.registrationMethod) && (
-                        <p>方式：{channel.registrationMethod}</p>
-                      )}
-                      <p>資格：{channel.eligibility}</p>
-                      {reason && <p className="verification-reason">{reason}</p>}
-                    </li>
-                  );
-                })}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      </details>
-      <details className="channel-disclosure rating-disclosure">
-        <summary>查看符合組別體驗評級 · 不設總分</summary>
-        {groups.map((group) => (
-          <div key={group.id}>
-            <h4>{group.name}</h4>
-            <GroupRatings race={race} group={group} />
-          </div>
-        ))}
-      </details>
-    </div>
-  );
 }
 
 export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow: string }) {
@@ -188,6 +104,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     update({ ...toggleDateShortcut(filters, kind, now), view: "all" });
   }
   const results = useMemo(() => selectRaces(races, filters, now), [races, filters, now]);
+  const calendarYear = Number(hongKongToday(new Date(now)).slice(0, 4));
   const yearActive = dateShortcutIsActive(filters, "year", now);
   const nextYearActive = dateShortcutIsActive(filters, "next-year", now);
   const showCustomDates =
@@ -204,6 +121,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
           },
         ]
       : []),
+    ...(filters.month ? [{ label: `${filters.month}月`, remove: () => field("month", "") }] : []),
     ...filters.distances.map((x) => ({ label: x, remove: () => toggle("distances", x) })),
     ...filters.countries.map((x) => ({ label: x, remove: () => toggle("countries", x) })),
     ...filters.regions.map((x) => ({ label: x, remove: () => toggle("regions", x) })),
@@ -256,10 +174,10 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             <span className="engine-label">比賽日期</span>
             <div className="option-row">
               <button aria-pressed={yearActive} onClick={() => quickDate("year")}>
-                今年
+                {calendarYear}
               </button>
               <button aria-pressed={nextYearActive} onClick={() => quickDate("next-year")}>
-                明年
+                {calendarYear + 1}
               </button>
               <button
                 aria-pressed={showCustomDates}
@@ -272,6 +190,21 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               >
                 指定時間
               </button>
+              <label className="engine-month">
+                <span className="sr-only">月份</span>
+                <select
+                  aria-label="月份"
+                  value={filters.month}
+                  onChange={(e) => field("month", e.target.value)}
+                >
+                  <option value="">月份</option>
+                  {Array.from({ length: 12 }, (_, index) => index + 1).map((month) => (
+                    <option key={month} value={String(month)}>
+                      {month}月
+                    </option>
+                  ))}
+                </select>
+              </label>
             </div>
           </div>
           {showCustomDates && (
@@ -397,26 +330,13 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
           {copyMessage}
         </p>
       )}
-      <p className="data-note">
-        <span className="demo-dot" />
-        列表只顯示符合條件嘅渠道，接受申請仍須符合資格；超過 72 小時未核對會顯示待核實。
-        {!ready && <span className="sr-only">正在載入你的篩選條件。</span>}
-      </p>
+      {!ready && <p className="sr-only">正在載入你的篩選條件。</p>}
       <div className="race-results-layout">
         <div className="race-results-main">
           <div className="race-list">
-            <div className="race-table-head" aria-hidden="true">
-              <span>比賽日期</span>
-              <span>賽事／組別</span>
-              <span>地區／起點</span>
-              <span>報名狀態</span>
-              <span />
-            </div>
             {results.map(({ race, groups }, index) => {
-              const summary = statusSummary(race, groups, now);
               const month = race.date.slice(0, 7);
               const previousMonth = results[index - 1]?.race.date.slice(0, 7);
-              const countdown = registrationCountdown(race, groups, now);
               return (
                 <Fragment key={race.id}>
                   {filters.sort === "date" && month !== previousMonth && (
@@ -426,7 +346,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                     </div>
                   )}
                   <article
-                    className="race-row"
+                    className="calendar-race-card"
                     id={`race-${race.id}`}
                     tabIndex={-1}
                     onClickCapture={(event) => {
@@ -439,87 +359,57 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                       }
                     }}
                   >
-                    <div className="race-date">
-                      <span className="race-date-month">{Number(race.date.slice(5, 7))} 月</span>
-                      <strong>{race.date.slice(8)}</strong>
-                      <span>
-                        {race.date.slice(0, 4)}
-                        <small>
-                          {displayDate(race.date, {
-                            weekday: "short",
-                            month: undefined,
-                            day: undefined,
-                          })}
-                        </small>
-                      </span>
-                      {race.date !== race.endDate && <small className="multi-day">多日</small>}
-                    </div>
-                    <div className="race-info">
-                      <div className="race-tags">
-                        <span className="road-tag">路跑</span>
-                        {race.tags.map((tag) => (
-                          <span key={tag}>{tag}</span>
-                        ))}
-                      </div>
-                      <h3>
-                        <a href={raceHref(race)}>{race.name}</a>
-                      </h3>
-                      <p className="race-english">{race.englishName}</p>
-                      <GroupStatusList race={race} groups={groups} now={now} />
-                      {!!race.enquiryLinks?.length && (
-                        <Link className="text-link" href={`${raceHref(race)}#enquiries`}>
-                          其他慈善機構查詢 ↗
-                        </Link>
-                      )}
-                    </div>
-                    <div className="race-location">
-                      <Icon name="pin" size={16} />
-                      <ul className="race-start-list" aria-label="符合條件的組別起點">
-                        {groupLocations(race, groups).map((location, index) => (
-                          <li key={index}>
-                            <strong>{location.distances.join("／")}起點</strong>
-                            <span>{location.venue ?? "起點待核實"}</span>
-                            {location.region && <small>{location.region}</small>}
-                          </li>
+                    <div className="calendar-race-content">
+                      <h2>
+                        <Link href={raceHref(race)}>{race.name}</Link>
+                      </h2>
+                      <p className="calendar-race-venue">
+                        <Icon name="pin" size={18} />
+                        <span>
+                          {[
+                            ...new Set(
+                              groupLocations(race, groups).map(
+                                (location) => location.venue ?? "起點待核實",
+                              ),
+                            ),
+                          ].join(" ／ ")}
+                        </span>
+                      </p>
+                      <ul className="calendar-race-distances" aria-label="比賽距離">
+                        {[
+                          ...new Set(race.groups.map((group) => distanceLabel(group.distanceKm))),
+                        ].map((distance) => (
+                          <li key={distance}>{distance}</li>
                         ))}
                       </ul>
-                    </div>
-                    <div className={`race-status${countdown ? " has-deadline" : ""}`}>
-                      <StatusBadge status={summary.key}>{summary.label}</StatusBadge>
-                      {countdown && (
-                        <>
-                          <span
-                            className={`deadline-countdown${countdown.urgent ? " urgent" : ""}`}
-                            title={`最早截止：${countdown.groupName} · ${countdown.channelName}`}
-                          >
-                            <Icon name="clock" size={13} />
-                            {countdown.label}
-                          </span>
-                          <small
-                            className="deadline-exact"
-                            title={`${countdown.groupName} · ${countdown.channelName}`}
-                          >
-                            最早截止：
-                            <time dateTime={countdown.deadline}>
-                              {countdown.deadline.includes("T")
-                                ? formatTimestamp(countdown.deadline) + " HKT"
-                                : displayDate(countdown.deadline) + " HKT"}
-                            </time>
-                          </small>
-                        </>
-                      )}
-                      <small className="verification-label">
-                        {race.verifiedAt
-                          ? `賽事資料核對 ${displayDate(race.verifiedAt.slice(0, 10))}`
-                          : "待核實"}
-                      </small>
+                      <p className="calendar-race-start">
+                        <Icon name="calendar" size={18} />
+                        <span className="sr-only">起跑日期：</span>
+                        <span>
+                          {[...new Set(groups.map((group) => group.date))]
+                            .sort()
+                            .map((date, index) => (
+                              <Fragment key={date}>
+                                {index > 0 && " ／ "}
+                                <time dateTime={date}>
+                                  {displayDate(date, {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                    weekday: "short",
+                                  })}
+                                </time>
+                              </Fragment>
+                            ))}
+                        </span>
+                      </p>
                     </div>
                     <Link
-                      className="row-arrow"
+                      className="button button-coral calendar-race-detail"
                       href={raceHref(race)}
-                      aria-label={`查看${race.name}詳情`}
+                      aria-label={`${race.name}：詳細資料`}
                     >
-                      <Icon name="arrow" size={20} />
+                      詳細資料 <Icon name="arrow" size={20} />
                     </Link>
                   </article>
                   {index === 5 && results.length > 7 && <AdSlot />}

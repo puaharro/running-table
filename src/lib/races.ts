@@ -15,6 +15,7 @@ import {
 export const defaultFilters: Filters = {
   q: "",
   family: false,
+  month: "",
   from: "",
   to: "",
   distances: [],
@@ -42,12 +43,21 @@ export function validDate(value: string) {
   return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
 }
 export function displayDate(date: string, options?: Intl.DateTimeFormatOptions) {
-  return new Intl.DateTimeFormat("zh-HK", {
-    timeZone: "Asia/Hong_Kong",
-    month: "long",
-    day: "numeric",
-    ...options,
-  }).format(new Date(`${date}T12:00:00+08:00`));
+  // Render date-only values with fixed Hong Kong labels. Runtime ICU versions
+  // disagree on weekday names and punctuation, which can break hydration.
+  const fields = { month: "long", day: "numeric", ...options };
+  const [year, month, day] = date.split("-").map(Number);
+  const padded = (value: number, style: string) =>
+    style === "2-digit" ? String(value).padStart(2, "0") : String(value);
+  let label = "";
+  if (fields.year) label += `${fields.year === "2-digit" ? String(year).slice(-2) : year}年`;
+  if (fields.month) label += `${padded(month, fields.month)}月`;
+  if (fields.day) label += `${padded(day, fields.day)}日`;
+  if (fields.weekday) {
+    const weekday = "日一二三四五六"[new Date(`${date}T12:00:00Z`).getUTCDay()];
+    label += `${fields.weekday === "long" ? "星期" : fields.weekday === "narrow" ? "" : "週"}${weekday}`;
+  }
+  return label;
 }
 export function distanceLabel(km: number) {
   return Math.abs(km - 21.0975) < 0.1 ? "半馬" : Math.abs(km - 42.195) < 0.1 ? "全馬" : `${km}K`;
@@ -220,6 +230,7 @@ export function selectRaces(races: Race[], f: Filters, now: Clock) {
       if (!raceMatchesQuery && !(g.venue ?? "").toLocaleLowerCase().includes(q)) return [];
       const region = g.region === undefined ? race.region : g.region;
       if (f.regions.length && (!region || !f.regions.includes(region))) return [];
+      if (f.month && Number(g.date.slice(5, 7)) !== Number(f.month)) return [];
       if (f.from && (g.endDate ?? g.date) < f.from) return [];
       if (f.to && g.date > f.to) return [];
       if (!distanceMatches(g.distanceKm, f.distances)) return [];
@@ -262,6 +273,7 @@ export function parseFilters(params: URLSearchParams): Filters {
     ...defaultFilters,
     q: (params.get("q") ?? "").slice(0, 200),
     family: params.get("family") === "1",
+    month: /^(?:[1-9]|1[0-2])$/.test(params.get("month") ?? "") ? params.get("month")! : "",
     from: validDate(params.get("from") ?? "") ? params.get("from")! : "",
     to: validDate(params.get("to") ?? "") ? params.get("to")! : "",
     distances: list("distance", distanceOptions),
@@ -283,7 +295,8 @@ export function parseFilters(params: URLSearchParams): Filters {
 export function serializeFilters(f: Filters) {
   const p = new URLSearchParams();
   if (f.family) p.set("family", "1");
-  for (const key of ["q", "from", "to", "min", "max"] as const) if (f[key]) p.set(key, f[key]);
+  for (const key of ["q", "month", "from", "to", "min", "max"] as const)
+    if (f[key]) p.set(key, f[key]);
   for (const [field, key] of [
     ["distances", "distance"],
     ["countries", "country"],

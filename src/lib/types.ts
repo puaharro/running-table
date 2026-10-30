@@ -108,6 +108,7 @@ export interface Race {
 export interface Filters {
   q: string;
   family: boolean;
+  month: string;
   from: string;
   to: string;
   distances: string[];
