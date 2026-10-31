@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { races } from "@/data/races";
 import { guides } from "@/data/guides";
+import { editorialReviews } from "@/data/editorial-reviews";
+import { reviewsForGroup } from "@/lib/editorial-reviews";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { ReturnLink } from "@/components/return-link";
 import {
@@ -31,6 +33,10 @@ export async function generateMetadata({ params }: Props) {
 export default async function RacePage({ params }: Props) {
   const race = await getRace(params);
   if (!race) notFound();
+  const reviewedGroups = race.groups.filter((group) => {
+    const reviews = reviewsForGroup(race, group, editorialReviews);
+    return reviews.current.length || reviews.historical.length;
+  });
   const now = new Date().toISOString();
   const schema = releaseSettings.indexable
     ? raceStructuredData(race, releaseSettings.origin)
@@ -83,6 +89,21 @@ export default async function RacePage({ params }: Props) {
             </p>
           </div>
         </div>
+        {!!reviewedGroups.length && (
+          <nav className="race-review-links" aria-label="參賽體驗快捷入口">
+            <strong>參賽體驗</strong>
+            {reviewedGroups.map((group) => {
+              const reviews = reviewsForGroup(race, group, editorialReviews);
+              return (
+                <a key={group.id} href={`#ratings-${group.id}`}>
+                  {group.name} ·{" "}
+                  {[...reviews.current, ...reviews.historical].map((r) => r.editionYear).join("、")}{" "}
+                  年評論 ↓
+                </a>
+              );
+            })}
+          </nav>
+        )}
         <RegistrationSummary race={race} initialNow={now} />
         <div className="detail-layout">
           <article className="detail-content">

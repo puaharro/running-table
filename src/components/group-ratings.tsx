@@ -120,7 +120,11 @@ function DetailedReview({ review }: { review: EditorialReview }) {
 }
 export function EditorialReviewCard({ review }: { review: EditorialReview }) {
   return (
-    <article className="review-quicklook" aria-label={`${review.editionYear}年體驗重點`}>
+    <article
+      id={`review-${review.id}`}
+      className="review-quicklook"
+      aria-label={`${review.editionYear}年體驗重點`}
+    >
       <p className="review-context">
         {review.editionYear} 年 · {reviewTargets.find((t) => t.id === review.targetId)?.group} ·
         編輯點評
@@ -169,7 +173,11 @@ export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) 
       !editorialReviews.some((r) => r.id === n.reviewId),
   );
   return (
-    <section className="group-ratings" aria-label={`${group.name}賽事體驗評級`}>
+    <section
+      id={`ratings-${group.id}`}
+      className="group-ratings"
+      aria-label={`${group.name}賽事體驗評級`}
+    >
       <h4>
         NXTGO 賽事體驗評級 <small>編輯觀察 · 不設總分</small>
       </h4>
@@ -192,13 +200,13 @@ export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) 
           </>
         )}
         {!!historical.length && (
-          <details className="historical-reviews">
-            <summary>查看往屆體驗 · {historical.map((r) => r.editionYear).join("、")}</summary>
+          <div className="historical-reviews">
+            <h5>往屆參賽體驗 · {historical.map((r) => r.editionYear).join("、")}</h5>
             <p>以下為往屆評論，不代表 {group.date.slice(0, 4)} 年安排或表現；各年份分開評分。</p>
             {historical.map((r) => (
               <EditorialReviewCard key={r.id} review={r} />
             ))}
-          </details>
+          </div>
         )}
         <details className="review-full">
           <summary>評分說明及發布紀錄</summary>

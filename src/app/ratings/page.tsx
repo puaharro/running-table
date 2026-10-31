@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { ReviewViews } from "@/components/review-views";
-import { EditorialReviewCard } from "@/components/group-ratings";
+import { races } from "@/data/races";
 import { editorialReviews } from "@/data/editorial-reviews";
 import notices from "@/data/editorial-notices.json";
 import { Breadcrumb } from "@/components/ui";
 import { ratingDimensions, ratingPolicy, scoreLabels, reviewTargets } from "@/lib/rating-policy";
-import { pageMetadata } from "@/lib/site";
+import { pageMetadata, raceHref } from "@/lib/site";
 export const metadata = pageMetadata(
-  "賽事體驗評級準則",
+  "評論索引及評分準則",
   "NXTGO 原創賽事評論：賽道體驗、大會執行與補給體驗，以參賽觀察及訪問支持每項評分。",
   "/ratings/",
 );
@@ -25,43 +24,30 @@ export default function RatingsPage() {
           <br />
           先知道嘅事。
         </h1>
-        <p>一句總結、三項評級、兩個提醒。有興趣，再睇詳細依據。</p>
+        <p>從索引前往賽事詳情頁，閱讀指定年份及組別嘅參賽體驗。</p>
       </div>
       <div className="prose narrow rating-method-page">
-        <ReviewViews>
-          {!editorialReviews.length && (
-            <div className="group-ratings">
-              <p>尚未有已發布編輯點評。</p>
-              <dl className="rating-grid quick-scores">
-                {ratingDimensions.map((key) => (
-                  <div key={key}>
-                    <dt>{ratingPolicy.dimensions[key].title}</dt>
-                    <dd>未評</dd>
-                  </div>
-                ))}
-              </dl>
-              <p>資料不足或稿件待確認，保留未評。</p>
-            </div>
-          )}
-          {!!editorialReviews.length && (
-            <section id="pilot-reviews">
-              <h2>首輪體驗評論</h2>
-              <p>
-                以下按受訪跑手實際提供的經驗整理，分數由編輯依試行準則判斷。只適用所列年份及組別。
-              </p>
-              {editorialReviews.map((review) => (
-                <div className="group-ratings" key={review.id}>
-                  <h3>
-                    {reviewTargets.find((target) => target.id === review.targetId)?.name} ·{" "}
-                    {reviewTargets.find((target) => target.id === review.targetId)?.group}
-                  </h3>
-                  <EditorialReviewCard review={review} />
-                </div>
-              ))}
-            </section>
-          )}
-        </ReviewViews>
-        <details className="rating-method-details">
+        <section aria-label="已發布評論索引">
+          <h2>評論索引</h2>
+          <p>評論重點及完整依據放在賽事詳情頁。往屆評論不代表當屆安排或表現。</p>
+          {!editorialReviews.length && <p>尚未有已發布編輯點評。</p>}
+          <ul className="review-index">
+            {editorialReviews.map((review) => {
+              const target = reviewTargets.find((t) => t.id === review.targetId);
+              const race = races.find((r) => r.id === target?.raceId);
+              if (!target || !race) return null;
+              return (
+                <li key={review.id}>
+                  <Link href={raceHref(race) + "#review-" + review.id}>
+                    {target.name} · {review.editionYear} 年 · {target.group}評論 →
+                  </Link>
+                  <small>於 {race.date.slice(0, 4)} 年賽事頁閱讀 · 編輯點評</small>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+        <details id="method" className="rating-method-details">
           <summary>了解評分準則及發布流程</summary>
           <section className="editorial-notice">
             <h2>先確認，再發布</h2>

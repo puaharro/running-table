@@ -1408,3 +1408,35 @@ time,
   font-size: 14px;
   line-height: 1.7;
 }
+
+.review-quicklook,
+[id^="ratings-"] {
+  scroll-margin-top: 120px;
+}
+.race-review-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  padding: 16px 0;
+}
+.race-review-links a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: underline;
+}
+.review-index {
+  padding-left: 20px;
+}
+.review-index li {
+  margin: 20px 0;
+}
+.review-index a {
+  display: inline-block;
+  padding: 8px 0;
+}
+.review-index small {
+  display: block;
+  font-size: 12px;
+}
