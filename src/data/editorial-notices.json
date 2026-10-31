@@ -16,5 +16,14 @@
     "date": "2026-10-31",
     "summary": "營運者已確認 v2 完整稿件、3／4／3 分、材料及觀察範圍，恢復展示 2025 年半馬評論；不套用其他年份或組別。",
     "status": "已確認發布"
+  },
+  {
+    "id": "schkm-2026-approved-v1-20261031",
+    "reviewId": "schkm-marathon-2026-participant-notes",
+    "targetId": "schkm-marathon",
+    "editionYear": 2026,
+    "date": "2026-10-31",
+    "summary": "營運者已確認 v1 完整稿件、4／4／4 分、材料及觀察範圍，發布 2026 年全馬評論；只代表一位挑戰組前段跑手的經驗，大會食物未評，不套用其他年份或組別。",
+    "status": "已確認發布"
   }
 ]
