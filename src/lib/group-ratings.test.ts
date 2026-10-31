@@ -5,6 +5,8 @@ import { races } from "@/data/races";
 import { editorialReviews } from "@/data/editorial-reviews";
 import { GroupRatings, EditorialReviewCard } from "@/components/group-ratings";
 import RatingsPage from "@/app/ratings/page";
+import RacePage from "@/app/races/[year]/[slug]/page";
+import { raceHref } from "./site";
 import { assertEditorialReviews, reviewsForGroup, type EditorialReview } from "./editorial-reviews";
 import { ratingDimensions, ratingPolicy, reviewTargets } from "./rating-policy";
 import { defaultFilters, selectRaces } from "./races";
@@ -154,7 +156,7 @@ describe("original editorial experience reviews", () => {
     expect(() => assertEditorialReviews([r], now)).toThrow("human confirmation");
     const html = renderToStaticMarkup(createElement(RatingsPage));
     expect(html).not.toContain("原有編輯試評已暫停展示");
-    expect(html).toContain("安檢及接駁流程順暢");
+    expect(html).toContain("評論索引");
   });
   it("keeps 2025 history separate from 2026 and never applies it to 10K", () => {
     const r = review();
@@ -221,7 +223,9 @@ describe("ten-second review view", () => {
     expect(() => assertEditorialReviews([r], now)).toThrow("quick take");
   });
   it("defaults to editor content and keeps reader reviews separate and honest", () => {
-    const html = renderToStaticMarkup(createElement(RatingsPage));
+    const html = renderToStaticMarkup(
+      createElement(GroupRatings, { race: main, group: main.groups[0] }),
+    );
     expect(html).toContain('aria-selected="true"');
     expect(html).toContain("編輯點評");
     expect(html).toContain("跑手心得");
@@ -242,7 +246,7 @@ describe("approved HZMB 2025 publication", () => {
     expect(r.quickTake?.reminders).toHaveLength(2);
     expect(r.runnerSegment).toBe("front");
     expect(r.observationLimits).toContain("不代表全體跑手");
-    const html = renderToStaticMarkup(createElement(RatingsPage));
+    const html = renderToStaticMarkup(createElement(EditorialReviewCard, { review: r }));
     expect(html).toContain(r.quickTake!.summary);
     for (const note of r.quickTake!.reminders) expect(html).toContain(note);
     expect(html).toContain(r.observationLimits);
@@ -257,7 +261,8 @@ describe("approved HZMB 2025 publication", () => {
       createElement(GroupRatings, { race: bridge, group: bridge.groups[0] }),
     );
     expect(html).toContain("以下為往屆評論，不代表 2026 年安排或表現");
-    expect(html).not.toContain('<details class="historical-reviews" open');
+    expect(html).not.toContain('<details class="historical-reviews"');
+    expect(html).toContain('<div class="historical-reviews">');
     const tenK = reviewsForGroup(bridge, bridge.groups[1], editorialReviews);
     expect(tenK).toEqual({ current: [], historical: [] });
     expect(
@@ -308,6 +313,42 @@ describe("approved SCHKM 2026 publication", () => {
       createElement(GroupRatings, { race: main, group: main.groups[0] }),
     );
     expect(html).toContain("以下為往屆評論，不代表 2027 年安排或表現");
-    expect(html).not.toContain('<details class="historical-reviews" open');
+    expect(html).not.toContain('<details class="historical-reviews"');
+    expect(html).toContain('<div class="historical-reviews">');
   });
+});
+
+describe("race detail as the main review reading location", () => {
+  it("indexes reviews with exact detail anchors instead of duplicating full commentary", () => {
+    const html = renderToStaticMarkup(createElement(RatingsPage));
+    expect(html).toContain("評論索引");
+    for (const review of editorialReviews) {
+      const target = reviewTargets.find((t) => t.id === review.targetId)!;
+      const race = races.find((r) => r.id === target.raceId)!;
+      expect(html).toContain(raceHref(race).replace(/\/$/, "") + "#review-" + review.id);
+      expect(html).toContain(String(review.editionYear) + " 年");
+      expect(html).not.toContain(review.assessments.course.comment);
+      expect(html).not.toContain(review.quickTake!.summary);
+    }
+    expect(html).toContain("三項獨立評分");
+  });
+  it.each([bridge, main])(
+    "renders $id highlights directly, with a year warning and reachable anchors",
+    async (race) => {
+      const html = renderToStaticMarkup(
+        await RacePage({
+          params: Promise.resolve({ year: race.date.slice(0, 4), slug: race.slug }),
+        }),
+      );
+      const review = reviewsForGroup(race, race.groups[0], editorialReviews).historical[0];
+      expect(html).toContain('href="#ratings-' + race.groups[0].id + '"');
+      expect(html).toContain('id="ratings-' + race.groups[0].id + '"');
+      expect(html).toContain('id="review-' + review.id + '"');
+      expect(html).toContain(review.quickTake!.summary);
+      for (const note of review.quickTake!.reminders) expect(html).toContain(note);
+      expect(html).toContain("不代表 " + race.date.slice(0, 4) + " 年安排或表現");
+      expect(html).not.toContain('<details class="historical-reviews"');
+      expect(html).not.toContain('<details class="review-full" open');
+    },
+  );
 });
