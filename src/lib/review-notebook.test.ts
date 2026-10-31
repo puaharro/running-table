@@ -8,7 +8,7 @@ describe("private browser notebook format", () => {
     for (const d of Object.values(n.entries[0].dimensions)) expect(d.score).toBe("");
     for (const d of Object.values(n.entries[1].dimensions))
       expect(d).toEqual({ score: "", notes: "" });
-    expect(n.entries[0].dimensions.course.notes).toContain("景觀變化少");
+    expect(n.entries[0].dimensions.course.notes).toBe("");
     expect(n.entries[0].reviewer).toBe("");
   });
   it("round-trips all drafts including multi-edition notes without losing text", () => {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { editorialReviews } from "@/data/editorial-reviews";
+import notices from "@/data/editorial-notices.json";
 import { reviewsForGroup, type EditorialReview } from "@/lib/editorial-reviews";
 import {
   evidenceLabels,
@@ -7,6 +8,7 @@ import {
   ratingPolicy,
   scoreLabels,
   segmentLabels,
+  reviewTargets,
 } from "@/lib/rating-policy";
 import { formatTimestamp } from "@/lib/races";
 import type { Race, RaceGroup } from "@/lib/types";
@@ -73,11 +75,57 @@ export function EditorialReviewCard({ review }: { review: EditorialReview }) {
       <small>
         評論更新：{formatTimestamp(review.reviewedAt)} HKT · 準則：{review.ruleVersion}
       </small>
+      <p>
+        <small>
+          確認：{review.approval.by} · {formatTimestamp(review.approval.at)} HKT · 稿件版本{" "}
+          {review.revision}
+        </small>
+      </p>
+      {!!review.organizerResponses?.length && (
+        <details>
+          <summary>大會回應</summary>
+          {review.organizerResponses.map((reply) => (
+            <div key={reply.id}>
+              <p>
+                {reply.organization} · {formatTimestamp(reply.receivedAt)} HKT
+              </p>
+              <p>{reply.text}</p>
+            </div>
+          ))}
+        </details>
+      )}
+      {!!review.changes?.length && (
+        <details>
+          <summary>修改紀錄</summary>
+          <ul>
+            {review.changes.map((change) => (
+              <li key={`${change.revision}-${change.at}`}>
+                版本 {change.revision} · {formatTimestamp(change.at)} HKT：{change.summary}
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+      <p>
+        <Link
+          className="text-link"
+          href={`/ratings/feedback/?race=${reviewTargets.find((target) => target.id === review.targetId)?.raceId ?? ""}&review=${encodeURIComponent(review.id)}&year=${review.editionYear}&group=${encodeURIComponent(reviewTargets.find((target) => target.id === review.targetId)?.group ?? "")}`}
+        >
+          提出更正／投訴／大會回應 →
+        </Link>
+      </p>
     </article>
   );
 }
 export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) {
   const { current, historical } = reviewsForGroup(race, group, editorialReviews);
+  const target = reviewTargets.find((t) => t.raceId === race.id && t.groupId === group.id);
+  const groupNotices = notices.filter(
+    (n) =>
+      n.targetId === target?.id &&
+      n.editionYear <= Number(group.date.slice(0, 4)) &&
+      !editorialReviews.some((r) => r.id === n.reviewId),
+  );
   return (
     <section className="group-ratings" aria-label={`${group.name}賽事體驗評級`}>
       <h4>
@@ -109,6 +157,12 @@ export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) 
             <EditorialReviewCard key={r.id} review={r} />
           ))}
         </details>
+      )}
+      {!!groupNotices.length && (
+        <p className="editorial-notice">
+          {groupNotices.map((n) => `${n.editionYear} 年：${n.summary}`).join(" ")}{" "}
+          <Link href="/ratings/process/#publication-history">查看處理紀錄 →</Link>
+        </p>
       )}
       <Link className="text-link" href="/ratings/">
         了解三項評分準則 →

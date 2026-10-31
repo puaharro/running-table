@@ -17,6 +17,15 @@ function review(): EditorialReview {
   return {
     id: "test-only-2025",
     status: "published",
+    revision: 1,
+    approval: {
+      by: "Test human",
+      at: now,
+      reference: "test-only-approval",
+      revision: 1,
+      contentHash: "0".repeat(64),
+      confirmed: { scores: true, wording: true, evidence: true, scope: true },
+    },
     targetId: "hzmb-half",
     editionYear: 2025,
     eventDate: "2025-01-01",
@@ -135,6 +144,16 @@ describe("original editorial experience reviews", () => {
     );
     r.evidence[0].url = "javascript:alert(1)";
     expect(() => assertEditorialReviews([r], now)).toThrow("evidence");
+  });
+  it("requires confirmation metadata and keeps pending source material out of public data", () => {
+    expect(editorialReviews).toEqual([]);
+    const r = review();
+    r.approval.confirmed.wording = false as true;
+    expect(() => assertEditorialReviews([r], now)).toThrow("human confirmation");
+    const html = renderToStaticMarkup(createElement(RatingsPage));
+    expect(html).toContain("待確認");
+    expect(html).not.toContain("3 / 5");
+    expect(html).not.toContain("斜度未如受訪者原先想像般大");
   });
   it("keeps 2025 history separate from 2026 and never applies it to 10K", () => {
     const r = review();

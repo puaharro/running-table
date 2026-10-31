@@ -49,9 +49,17 @@ export default function About() {
             賽事體驗評級由編輯按參賽紀錄或跑手訪問撰寫，年份及組別分開，評審與觀察限制清楚列明。
             <Link href="/ratings/">了解體驗評級準則 →</Link>
           </p>
+          <p>
+            <Link href="/ratings/process/">評級審閱及更正流程</Link> ·{" "}
+            <Link href="/ratings/feedback/">評級投訴／大會回應（私人電郵）</Link>
+          </p>
         </section>
         <section id="corrections">
           <h2>資料更正與聯絡</h2>
+          <p>
+            下方處理官方賽事資料更正；評級字眼、分數或體驗爭議請使用
+            <Link href="/ratings/feedback/">評級回報入口</Link>，毋須提供官方公告。
+          </p>
           {releaseSettings.operatorName && (
             <p>網站營運／資料整理：{releaseSettings.operatorName}</p>
           )}

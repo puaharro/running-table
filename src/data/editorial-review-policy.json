@@ -1,0 +1,4 @@
+{
+  "riskWords": ["騙錢", "欺詐", "違法", "罔顧安全", "fraud", "scam", "unsafe"],
+  "lowScoreThreshold": 2
+}

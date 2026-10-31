@@ -4,7 +4,7 @@ import {
   segmentLabels,
   type RatingDimension,
 } from "./rating-policy";
-import publishedReviews from "@/data/editorial-reviews.json";
+import { editorialReviews as publishedReviews } from "@/data/editorial-reviews";
 
 export const notebookFormat = "nxtgo-experience-notebook-v1";
 export const notebookStorageKey = "nxtgo:experience-notebook:v1";

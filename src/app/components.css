@@ -1186,6 +1186,39 @@ time,
 .review-notebook input[type="file"] {
   font-size: 13px;
 }
+.editorial-notice {
+  border-left: 3px solid var(--ink, #18222f);
+  padding: 16px;
+  margin: 20px 0;
+  background: var(--surface, #f6f3ed);
+  font-size: 14px;
+  line-height: 1.8;
+}
+.editorial-notices li {
+  margin-bottom: 20px;
+}
+.editorial-notices small {
+  overflow-wrap: anywhere;
+}
+.editorial-feedback input,
+.editorial-feedback select,
+.editorial-feedback textarea {
+  max-width: 100%;
+  min-width: 0;
+  font-size: 16px;
+}
+.prepared-feedback {
+  border: 1px solid var(--border-subtle);
+  padding: 16px;
+  margin-top: 20px;
+  overflow-wrap: anywhere;
+}
+.prepared-feedback textarea {
+  width: 100%;
+  resize: vertical;
+  font-size: 14px;
+  line-height: 1.7;
+}
 @media (max-width: 760px) {
   .site-header nav {
     flex-wrap: wrap;
