@@ -17,6 +17,7 @@ export function publicationDigest(record) {
 // A review prompt, not a legal finding. Human review remains necessary for unflagged text too.
 export function publicationRiskFlags(record) {
   const words = JSON.stringify({
+    quickTake: record.quickTake,
     assessments: record.assessments,
     courseNotes: record.courseNotes,
     evidence: record.evidence,

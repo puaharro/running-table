@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ReviewViews } from "./review-views";
 import { editorialReviews } from "@/data/editorial-reviews";
 import notices from "@/data/editorial-notices.json";
 import { reviewsForGroup, type EditorialReview } from "@/lib/editorial-reviews";
@@ -13,7 +14,7 @@ import {
 import { formatTimestamp } from "@/lib/races";
 import type { Race, RaceGroup } from "@/lib/types";
 
-export function EditorialReviewCard({ review }: { review: EditorialReview }) {
+function DetailedReview({ review }: { review: EditorialReview }) {
   return (
     <article className="editorial-review" aria-label={`${review.editionYear}年體驗評論`}>
       <h5>{review.editionYear} 年 · 編輯體驗評論</h5>
@@ -117,6 +118,47 @@ export function EditorialReviewCard({ review }: { review: EditorialReview }) {
     </article>
   );
 }
+export function EditorialReviewCard({ review }: { review: EditorialReview }) {
+  return (
+    <article className="review-quicklook" aria-label={`${review.editionYear}年體驗重點`}>
+      <p className="review-context">
+        {review.editionYear} 年 · {reviewTargets.find((t) => t.id === review.targetId)?.group} ·
+        編輯點評
+      </p>
+      <p className="review-summary">
+        {review.quickTake?.summary ?? "此篇未有重點摘要，可展開查看完整評論。"}
+      </p>
+      <dl className="rating-grid quick-scores">
+        {ratingDimensions.map((key) => (
+          <div key={key}>
+            <dt>{ratingPolicy.dimensions[key].title}</dt>
+            <dd>
+              {review.assessments[key].score === null ? (
+                "未評"
+              ) : (
+                <>
+                  <strong>{review.assessments[key].score}</strong>
+                  <span> / 5</span>
+                </>
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      {review.quickTake && (
+        <ul className="review-reminders" aria-label="兩個實用提醒">
+          {review.quickTake.reminders.map((note, i) => (
+            <li key={i}>{note}</li>
+          ))}
+        </ul>
+      )}
+      <details className="review-full">
+        <summary>查看詳細評論</summary>
+        <DetailedReview review={review} />
+      </details>
+    </article>
+  );
+}
 export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) {
   const { current, historical } = reviewsForGroup(race, group, editorialReviews);
   const target = reviewTargets.find((t) => t.raceId === race.id && t.groupId === group.id);
@@ -131,42 +173,46 @@ export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) 
       <h4>
         NXTGO 賽事體驗評級 <small>編輯觀察 · 不設總分</small>
       </h4>
-      {current.length ? (
-        current.map((r) => <EditorialReviewCard key={r.id} review={r} />)
-      ) : (
-        <>
-          <p>此屆此組別尚未有已發布體驗評論。</p>
-          {!historical.length && (
-            <dl className="rating-grid">
-              {ratingDimensions.map((key) => (
-                <div key={key}>
-                  <dt>{ratingPolicy.dimensions[key].title}</dt>
-                  <dd>未評</dd>
-                </div>
-              ))}
-            </dl>
+      <ReviewViews>
+        {current.length ? (
+          current.map((r) => <EditorialReviewCard key={r.id} review={r} />)
+        ) : (
+          <>
+            <p>此屆此組別尚未有已發布體驗評論。</p>
+            {!historical.length && (
+              <dl className="rating-grid quick-scores">
+                {ratingDimensions.map((key) => (
+                  <div key={key}>
+                    <dt>{ratingPolicy.dimensions[key].title}</dt>
+                    <dd>未評</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </>
+        )}
+        {!!historical.length && (
+          <details className="historical-reviews">
+            <summary>查看往屆體驗 · {historical.map((r) => r.editionYear).join("、")}</summary>
+            <p>以下為往屆評論，不代表 {group.date.slice(0, 4)} 年安排或表現；各年份分開評分。</p>
+            {historical.map((r) => (
+              <EditorialReviewCard key={r.id} review={r} />
+            ))}
+          </details>
+        )}
+        <details className="review-full">
+          <summary>評分說明及發布紀錄</summary>
+          {!!groupNotices.length && (
+            <p className="editorial-notice">
+              {groupNotices.map((n) => `${n.editionYear} 年：${n.summary}`).join(" ")}{" "}
+              <Link href="/ratings/process/#publication-history">查看處理紀錄 →</Link>
+            </p>
           )}
-          <p>待整理親身參賽或跑手訪問紀錄，再按同一準則評分。</p>
-        </>
-      )}
-      {!!historical.length && (
-        <details className="historical-reviews" open>
-          <summary>查看往屆體驗 · {historical.map((r) => r.editionYear).join("、")}</summary>
-          <p>以下為往屆評論，不代表 {group.date.slice(0, 4)} 年安排或表現；各年份分開評分。</p>
-          {historical.map((r) => (
-            <EditorialReviewCard key={r.id} review={r} />
-          ))}
+          <Link className="text-link" href="/ratings/">
+            了解三項評分準則 →
+          </Link>
         </details>
-      )}
-      {!!groupNotices.length && (
-        <p className="editorial-notice">
-          {groupNotices.map((n) => `${n.editionYear} 年：${n.summary}`).join(" ")}{" "}
-          <Link href="/ratings/process/#publication-history">查看處理紀錄 →</Link>
-        </p>
-      )}
-      <Link className="text-link" href="/ratings/">
-        了解三項評分準則 →
-      </Link>
+      </ReviewViews>
     </section>
   );
 }

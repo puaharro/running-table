@@ -34,7 +34,7 @@ describe("publication confirmation gate", () => {
       publicationDigest(r),
     );
   });
-  it.each(["score", "wording", "evidence", "scope", "rules", "response", "revision"])(
+  it.each(["score", "wording", "evidence", "scope", "rules", "response", "revision", "quickTake"])(
     "invalidates confirmation after changing %s",
     (field) => {
       const r = fixture();
@@ -44,6 +44,8 @@ describe("publication confirmation gate", () => {
       if (field === "scope") r.observationLimits += " changed";
       if (field === "rules") r.ruleVersion = "test-v2";
       if (field === "response") r.organizerResponses = [{ text: "Test reply" }];
+      if (field === "quickTake")
+        r.quickTake = { summary: "Test summary", reminders: ["One", "Two"] };
       if (field === "revision") r.revision = 2;
       expect(() => assertPublicationApproval(r, now)).toThrow();
     },
@@ -77,5 +79,8 @@ describe("publication confirmation gate", () => {
     r.assessments.course.comment = "Test allegation: fraud";
     r.approval.contentHash = publicationDigest(r);
     expect(publicationRiskFlags(r)).toContain("fraud");
+    r.assessments.course.comment = "Test neutral";
+    r.quickTake = { summary: "Test allegation: unsafe", reminders: ["One", "Two"] };
+    expect(publicationRiskFlags(r)).toContain("unsafe");
   });
 });

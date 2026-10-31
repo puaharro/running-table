@@ -194,3 +194,38 @@ describe("original editorial experience reviews", () => {
       ).toBe(true);
   });
 });
+
+describe("ten-second review view", () => {
+  it("keeps scores and approved highlights outside the closed full review", () => {
+    const r = review();
+    r.quickTake = {
+      summary: "Test-only concise verdict",
+      reminders: ["Test reminder one", "Test reminder two"],
+    };
+    const html = renderToStaticMarkup(createElement(EditorialReviewCard, { review: r }));
+    const boundary = html.indexOf('<details class="review-full">');
+    expect(boundary).toBeGreaterThan(0);
+    expect(html.slice(0, boundary)).toContain(r.quickTake.summary);
+    expect(html.slice(0, boundary)).toContain("Test reminder two");
+    expect(html.slice(0, boundary)).not.toContain(r.observationLimits);
+    expect(html).not.toContain('<details class="review-full" open');
+    expect(html.slice(boundary)).toContain(r.observationLimits);
+  });
+  it("rejects lengthy summaries and missing reminders", () => {
+    const r = review();
+    r.quickTake = { summary: "x".repeat(101), reminders: ["One", "Two"] };
+    expect(() => assertEditorialReviews([r], now)).toThrow("quick take");
+    r.quickTake.summary = "Short";
+    r.quickTake.reminders = ["One"] as unknown as [string, string];
+    expect(() => assertEditorialReviews([r], now)).toThrow("quick take");
+  });
+  it("defaults to editor content and keeps reader reviews separate and honest", () => {
+    const html = renderToStaticMarkup(createElement(RatingsPage));
+    expect(html).toContain('aria-selected="true"');
+    expect(html).toContain("編輯點評");
+    expect(html).toContain("跑手心得");
+    expect(html).toContain("暫未開放公開投稿");
+    expect(html).toContain('hidden=""');
+    expect(html).not.toContain('class="rating-method-details" open');
+  });
+});
