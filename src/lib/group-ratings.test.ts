@@ -61,7 +61,7 @@ function review(): EditorialReview {
 }
 describe("original editorial experience reviews", () => {
   it("does not manufacture reviews from race facts or the user's participation history", () => {
-    expect(() => assertEditorialReviews(editorialReviews, now)).not.toThrow();
+    expect(() => assertEditorialReviews(editorialReviews)).not.toThrow();
     for (const race of races)
       for (const group of race.groups) {
         const html = renderToStaticMarkup(createElement(GroupRatings, { race, group }));
@@ -146,14 +146,15 @@ describe("original editorial experience reviews", () => {
     expect(() => assertEditorialReviews([r], now)).toThrow("evidence");
   });
   it("requires confirmation metadata and keeps pending source material out of public data", () => {
-    expect(editorialReviews).toEqual([]);
+    expect(
+      editorialReviews.every((r) => r.status === "published" && r.approval.confirmed.wording),
+    ).toBe(true);
     const r = review();
     r.approval.confirmed.wording = false as true;
     expect(() => assertEditorialReviews([r], now)).toThrow("human confirmation");
     const html = renderToStaticMarkup(createElement(RatingsPage));
-    expect(html).toContain("待確認");
-    expect(html).not.toContain("3 / 5");
-    expect(html).not.toContain("斜度未如受訪者原先想像般大");
+    expect(html).not.toContain("原有編輯試評已暫停展示");
+    expect(html).toContain("安檢及接駁流程順暢");
   });
   it("keeps 2025 history separate from 2026 and never applies it to 10K", () => {
     const r = review();
@@ -227,5 +228,41 @@ describe("ten-second review view", () => {
     expect(html).toContain("暫未開放公開投稿");
     expect(html).toContain('hidden=""');
     expect(html).not.toContain('class="rating-method-details" open');
+  });
+});
+
+describe("approved HZMB 2025 publication", () => {
+  it("publishes the confirmed revision with highlights, evidence and front-runner scope", () => {
+    const r = editorialReviews.find((r) => r.id === "hzmb-half-2025-participant-notes")!;
+    expect(r.revision).toBe(2);
+    expect(r.approval.contentHash).toBe(
+      "15b6091369a9e4618f22e5902f42bd6ea5090f1c9414c593441dcc014eaeb4f7",
+    );
+    expect(ratingDimensions.map((key) => r.assessments[key].score)).toEqual([3, 4, 3]);
+    expect(r.quickTake?.reminders).toHaveLength(2);
+    expect(r.runnerSegment).toBe("front");
+    expect(r.observationLimits).toContain("不代表全體跑手");
+    const html = renderToStaticMarkup(createElement(RatingsPage));
+    expect(html).toContain(r.quickTake!.summary);
+    for (const note of r.quickTake!.reminders) expect(html).toContain(note);
+    expect(html).toContain(r.observationLimits);
+    expect(html).toContain("2025 年");
+    expect(html).not.toContain("原有編輯試評已暫停展示");
+  });
+  it("shows the approved review only as 2025 history, never as 2026 or 10K scores", () => {
+    const selected = reviewsForGroup(bridge, bridge.groups[0], editorialReviews);
+    expect(selected.current).toEqual([]);
+    expect(selected.historical.map((r) => r.editionYear)).toEqual([2025]);
+    const html = renderToStaticMarkup(
+      createElement(GroupRatings, { race: bridge, group: bridge.groups[0] }),
+    );
+    expect(html).toContain("以下為往屆評論，不代表 2026 年安排或表現");
+    expect(html).not.toContain('<details class="historical-reviews" open');
+    const tenK = reviewsForGroup(bridge, bridge.groups[1], editorialReviews);
+    expect(tenK).toEqual({ current: [], historical: [] });
+    expect(reviewsForGroup(main, main.groups[0], editorialReviews)).toEqual({
+      current: [],
+      historical: [],
+    });
   });
 });

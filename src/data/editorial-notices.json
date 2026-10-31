@@ -7,5 +7,14 @@
     "date": "2026-10-31",
     "summary": "原有編輯試評已暫停展示，待營運者確認完整稿件及各項分數後再發布。",
     "status": "待確認"
+  },
+  {
+    "id": "hzmb-2025-approved-v2-20261031",
+    "reviewId": "hzmb-half-2025-participant-notes",
+    "targetId": "hzmb-half",
+    "editionYear": 2025,
+    "date": "2026-10-31",
+    "summary": "營運者已確認 v2 完整稿件、3／4／3 分、材料及觀察範圍，恢復展示 2025 年半馬評論；不套用其他年份或組別。",
+    "status": "已確認發布"
   }
 ]
