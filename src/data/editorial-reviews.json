@@ -1,1 +1,78 @@
-[]
+[
+  {
+    "id": "hzmb-half-2025-participant-notes",
+    "status": "published",
+    "targetId": "hzmb-half",
+    "editionYear": 2025,
+    "eventDate": "2025-01-05",
+    "reviewer": "NXTGO 編輯（按跑手訪談評分）",
+    "reviewedAt": "2026-10-31T21:31:52+08:00",
+    "ruleVersion": "2026-10-30-experience-v1",
+    "runnerSegment": "front",
+    "disclosure": "受訪者自述曾參賽；費用或贈額關係未提供。",
+    "observationLimits": "一位前段跑手的回憶紀錄，未有實測等候時間、中後段補給或其他批次觀察，不代表全體跑手。分數是編輯按此訪談作出的判斷。",
+    "courseNotes": "受訪者描述起段及近終點有隧道，其餘多為小幅上落；未有量測坡度，亦不據此給難度分數。",
+    "evidence": [
+      {
+        "id": "participant-interview",
+        "kind": "interview",
+        "description": "受訪前段跑手提供2025年參賽回憶：安檢及接駁流程順暢，但起跑前與完賽後均需等接駁，要預留更多時間；賽道起段及近終點有隧道，其他小幅上落，斜度未如預期大，但感覺較悶、景觀變化少；其到站時補給正常。",
+        "editionYear": 2025
+      },
+      {
+        "id": "edition-date",
+        "kind": "official-plan",
+        "description": "田總當屆紀錄只用於核對2025年1月5日賽事日期，不作體驗評分依據。",
+        "editionYear": 2025,
+        "url": "https://www.hkaaa.com/en/comp_details.php?id=265"
+      }
+    ],
+    "assessments": {
+      "course": {
+        "score": 3,
+        "comment": "按受訪跑手回憶，賽道起段及近終點有隧道，其餘多為小幅上落。實際跑感冇想像中咁斜，但佢覺得較悶，沿途景觀變化少。建議 3/5，主要反映其對路線變化及趣味的感受；不是按坡度量測評分，亦沒有據此判斷擠塞、路面或指示表現。",
+        "positives": ["受訪者實際跑感的斜度較預期輕。"],
+        "concerns": ["景觀變化少，受訪者覺得較悶。"],
+        "suitedFor": "想體驗大橋路線、能接受沿途景觀變化較少的跑手。",
+        "evidenceIds": ["participant-interview"]
+      },
+      "organization": {
+        "score": 4,
+        "comment": "受訪跑手表示，所經安檢、接駁排隊及指引流程順暢。不過，起跑前要先安檢，再乘接駁巴士到起點；完賽後亦要接駁返回取行李。建議 4/5，肯定所觀察流程的順暢程度；接駁需要額外時間屬行程提醒，並非指稱安排混亂或等候過久。",
+        "positives": ["受訪者所經安檢及接駁流程順暢。"],
+        "concerns": ["賽前及賽後均需接駁，行程要預留時間；未記錄確切等候分鐘。"],
+        "suitedFor": "可提前規劃到場時間，並預留賽後接駁及取行李時間的跑手。",
+        "evidenceIds": ["participant-interview"]
+      },
+      "aid": {
+        "score": 3,
+        "comment": "受訪前段跑手只表示「補給正常」。建議 3/5，代表其到站時的基本補給體驗正常，沒有額外亮點或問題的具體紀錄；不代表確認所有站點、時段或後段供應。飲品種類、食物選擇及取用動線未有足夠資料評論。",
+        "positives": ["受訪者到站時補給正常。"],
+        "concerns": [],
+        "suitedFor": "只可供了解前段跑手的基本補給體驗；特殊飲食需求及後段供應未有足夠資料判斷。",
+        "evidenceIds": ["participant-interview"]
+      }
+    },
+    "revision": 2,
+    "quickTake": {
+      "summary": "安檢及接駁流程順暢，賽道起伏比想像中輕，但景觀變化少；賽前賽後都要預留接駁時間。",
+      "reminders": [
+        "起跑前要先安檢，再乘接駁巴士到起點，預留更多上線時間。",
+        "完賽後要乘接駁巴士返回取行李，離場行程唔好排得太緊。"
+      ]
+    },
+    "approval": {
+      "by": "網站營運者",
+      "at": "2026-10-31T21:33:06+08:00",
+      "reference": "hzmb-2025-v2-owner-20261031",
+      "revision": 2,
+      "contentHash": "15b6091369a9e4618f22e5902f42bd6ea5090f1c9414c593441dcc014eaeb4f7",
+      "confirmed": {
+        "scores": true,
+        "wording": true,
+        "evidence": true,
+        "scope": true
+      }
+    }
+  }
+]
