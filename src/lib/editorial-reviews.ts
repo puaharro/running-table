@@ -50,6 +50,7 @@ export interface EditorialReview {
     runnerSegment?: keyof typeof segmentLabels;
     url?: string;
   }[];
+  quickTake?: { summary: string; reminders: [string, string] };
   assessments: Record<RatingDimension, ExperienceAssessment>;
   changes?: { revision: number; at: string; summary: string }[];
   organizerResponses?: {
@@ -105,6 +106,16 @@ export function assertEditorialReviews(
       if (!text(value)) fail("reviewer, disclosure and limits required");
     if (!Object.hasOwn(segmentLabels, r.runnerSegment) || typeof r.courseNotes !== "string")
       fail("invalid observation scope");
+    if (
+      r.quickTake !== undefined &&
+      (!object(r.quickTake) ||
+        !text(r.quickTake.summary) ||
+        r.quickTake.summary.length > 100 ||
+        !strings(r.quickTake.reminders) ||
+        r.quickTake.reminders.length !== 2 ||
+        r.quickTake.reminders.some((v) => v.length > 70))
+    )
+      fail("quick take needs a short summary and two reminders");
     if (!Array.isArray(r.evidence)) fail("evidence required");
     const evidenceIds = new Set<string>();
     for (const e of r.evidence) {

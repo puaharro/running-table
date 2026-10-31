@@ -1333,3 +1333,78 @@ time,
   font-size: var(--text-sm);
   cursor: pointer;
 }
+
+/* Keep the first view short; evidence remains available in native disclosures. */
+.review-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin: 16px 0;
+}
+.review-tabs button {
+  font: inherit;
+  padding: 12px 16px;
+  min-height: 44px;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+.review-tabs button[aria-selected="true"] {
+  font-weight: 700;
+  border-bottom-color: currentColor;
+}
+.review-tabs button:focus-visible,
+.review-views [role="tabpanel"]:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+.review-views [hidden] {
+  display: none;
+}
+.review-context {
+  font-size: 12px;
+  opacity: 0.8;
+}
+.review-summary {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.group-ratings .quick-scores {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.group-ratings .quick-scores > div {
+  border: 0;
+  padding: 0;
+}
+.group-ratings .quick-scores dt {
+  font-size: 12px;
+}
+.quick-scores dd span {
+  font-size: 12px;
+  font-weight: 400;
+}
+.review-reminders {
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.review-full,
+.rating-method-details {
+  border-top: 1px solid var(--border-subtle);
+  margin: 16px 0;
+}
+.review-full > summary,
+.rating-method-details > summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 12px 0;
+  font-size: 14px;
+}
+.review-empty {
+  font-size: 14px;
+  line-height: 1.7;
+}
