@@ -2,19 +2,23 @@ import { describe, expect, it } from "vitest";
 import { editorialReviews } from "@/data/editorial-reviews";
 import { exportNotebook, initialNotebook, parseNotebook } from "./review-notebook";
 describe("private browser notebook format", () => {
-  it("seeds only published commentary but never invents marathon observations or draft scores", () => {
+  it("seeds only confirmed published commentary without preselecting scores or a reviewer", () => {
     const n = initialNotebook();
     expect(n.status).toBe("draft");
     expect(n.entries.map((e) => e.year)).toEqual(["2025", "2026"]);
-    for (const d of Object.values(n.entries[0].dimensions)) expect(d.score).toBe("");
-    for (const d of Object.values(n.entries[1].dimensions))
-      expect(d).toEqual({ score: "", notes: "" });
-    const published = editorialReviews.find(
-      (r) => r.targetId === "hzmb-half" && r.editionYear === 2025,
-    );
-    expect(n.entries[0].dimensions.course.notes).toBe(published?.assessments.course.comment ?? "");
-    expect(n.entries[0].observationLimits).toBe(published?.observationLimits ?? "");
-    expect(n.entries[0].reviewer).toBe("");
+    for (const entry of n.entries) {
+      const published = editorialReviews.find(
+        (r) => r.targetId === entry.targetId && String(r.editionYear) === entry.year,
+      );
+      for (const [key, dimension] of Object.entries(entry.dimensions)) {
+        expect(dimension.score).toBe("");
+        expect(dimension.notes).toBe(
+          published?.assessments[key as keyof typeof published.assessments].comment ?? "",
+        );
+      }
+      expect(entry.observationLimits).toBe(published?.observationLimits ?? "");
+      expect(entry.reviewer).toBe("");
+    }
   });
   it("round-trips all drafts including multi-edition notes without losing text", () => {
     const n = initialNotebook();

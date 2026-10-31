@@ -260,9 +260,54 @@ describe("approved HZMB 2025 publication", () => {
     expect(html).not.toContain('<details class="historical-reviews" open');
     const tenK = reviewsForGroup(bridge, bridge.groups[1], editorialReviews);
     expect(tenK).toEqual({ current: [], historical: [] });
-    expect(reviewsForGroup(main, main.groups[0], editorialReviews)).toEqual({
-      current: [],
-      historical: [],
-    });
+    expect(
+      reviewsForGroup(main, main.groups[0], editorialReviews).historical.every(
+        (r) => r.targetId !== "hzmb-half",
+      ),
+    ).toBe(true);
+  });
+});
+
+describe("approved SCHKM 2026 publication", () => {
+  it("renders the confirmed 4/4/4 review with two reminders, disclosure and limits", () => {
+    const r = editorialReviews.find((r) => r.id === "schkm-marathon-2026-participant-notes")!;
+    expect(r.revision).toBe(1);
+    expect(r.approval.contentHash).toBe(
+      "396663f1c878747dc3cd813afa77f8c2f17705830d915d23995e08b654f4dfcd",
+    );
+    expect(ratingDimensions.map((key) => r.assessments[key].score)).toEqual([4, 4, 4]);
+    expect(r.quickTake?.reminders).toHaveLength(2);
+    expect(r.runnerSegment).toBe("front");
+    expect(r.disclosure).toContain("自費報名");
+    expect(r.observationLimits).toContain("Sub-3");
+    expect(r.observationLimits).toContain("沒有取用大會食物");
+    expect(r.assessments.aid.comment).toContain("沒有中後段供應紀錄");
+    const html = renderToStaticMarkup(createElement(EditorialReviewCard, { review: r }));
+    expect(html).toContain(r.quickTake!.summary);
+    expect(html).toContain(r.observationLimits);
+    expect(html).toContain(r.disclosure);
+    expect(html).toContain("2026 年");
+    expect(html).not.toContain('<details class="review-full" open');
+  });
+  it("keeps 2026 full-marathon history separate from 2027, other distances and HZMB", () => {
+    const selected = reviewsForGroup(main, main.groups[0], editorialReviews);
+    expect(selected.current).toEqual([]);
+    expect(selected.historical.map((r) => r.editionYear)).toEqual([2026]);
+    expect(selected.historical.every((r) => r.targetId === "schkm-marathon")).toBe(true);
+    for (const group of main.groups.slice(1))
+      expect(reviewsForGroup(main, group, editorialReviews)).toEqual({
+        current: [],
+        historical: [],
+      });
+    expect(
+      reviewsForGroup(bridge, bridge.groups[0], editorialReviews).historical.every(
+        (r) => r.targetId !== "schkm-marathon",
+      ),
+    ).toBe(true);
+    const html = renderToStaticMarkup(
+      createElement(GroupRatings, { race: main, group: main.groups[0] }),
+    );
+    expect(html).toContain("以下為往屆評論，不代表 2027 年安排或表現");
+    expect(html).not.toContain('<details class="historical-reviews" open');
   });
 });
