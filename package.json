@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1",
+    "prebuild": "npm run check:editorial",
     "build": "next build",
+    "check:editorial": "node scripts/check-editorial.mjs",
     "start": "node scripts/serve.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

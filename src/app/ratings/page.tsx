@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { EditorialReviewCard } from "@/components/group-ratings";
 import { editorialReviews } from "@/data/editorial-reviews";
+import notices from "@/data/editorial-notices.json";
 import { Breadcrumb } from "@/components/ui";
 import { ratingDimensions, ratingPolicy, scoreLabels, reviewTargets } from "@/lib/rating-policy";
 import { pageMetadata } from "@/lib/site";
@@ -10,6 +11,9 @@ export const metadata = pageMetadata(
   "/ratings/",
 );
 export default function RatingsPage() {
+  const paused = notices.filter(
+    (n) => n.status === "待確認" && !editorialReviews.some((r) => r.id === n.reviewId),
+  );
   return (
     <main id="main" className="content-main shell">
       <Breadcrumb items={[{ label: "賽事體驗評級" }]} />
@@ -23,6 +27,23 @@ export default function RatingsPage() {
         <p>賽道、大會執行同補給，靠具體經驗寫出值得肯定同需要留意嘅地方。</p>
       </div>
       <div className="prose narrow rating-method-page">
+        <section className="editorial-notice">
+          <h2>先確認，再發布</h2>
+          <p>每篇稿件及分數須經營運者確認，改稿後重新審閱。待確認內容不會當成正式分數。</p>
+          {paused.map((n) => (
+            <p key={n.id}>
+              {reviewTargets.find((t) => t.id === n.targetId)?.name} {n.editionYear}：{n.summary}
+            </p>
+          ))}
+          <Link className="text-link" href="/ratings/process/">
+            審閱、更正及大會回應流程 →
+          </Link>
+          <p>
+            <Link className="text-link" href="/ratings/feedback/">
+              提出更正／投訴／大會回應 →
+            </Link>
+          </p>
+        </section>
         {!!editorialReviews.length && (
           <section id="pilot-reviews">
             <h2>首輪體驗評論</h2>

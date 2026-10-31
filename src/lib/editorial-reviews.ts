@@ -22,6 +22,16 @@ export interface ExperienceAssessment {
 export interface EditorialReview {
   id: string;
   status: "published";
+  revision: number;
+  approval: {
+    by: string;
+    at: string;
+    reference: string;
+    revision: number;
+    contentHash: string;
+    confirmed: { scores: true; wording: true; evidence: true; scope: true };
+    riskReview?: { by: string; reference: string; note: string };
+  };
   targetId: string;
   editionYear: number;
   eventDate: string;
@@ -41,6 +51,14 @@ export interface EditorialReview {
     url?: string;
   }[];
   assessments: Record<RatingDimension, ExperienceAssessment>;
+  changes?: { revision: number; at: string; summary: string }[];
+  organizerResponses?: {
+    id: string;
+    organization: string;
+    receivedAt: string;
+    text: string;
+    reference: string;
+  }[];
 }
 const text = (v: unknown): v is string => typeof v === "string" && !!v.trim();
 const strings = (v: unknown): v is string[] => Array.isArray(v) && v.every(text);
@@ -151,6 +169,56 @@ export function assertEditorialReviews(
           fail("top aid score requires back-of-field observations");
       }
     }
+    if (
+      r.changes !== undefined &&
+      (!Array.isArray(r.changes) ||
+        r.changes.some(
+          (change) =>
+            !object(change) ||
+            !Number.isInteger(change.revision) ||
+            change.revision < 1 ||
+            change.revision > r.revision ||
+            !validTimestamp(change.at) ||
+            Date.parse(change.at) > Date.parse(r.reviewedAt) ||
+            !text(change.summary),
+        ))
+    )
+      fail("invalid public change history");
+    if (
+      r.organizerResponses !== undefined &&
+      (!Array.isArray(r.organizerResponses) ||
+        new Set(r.organizerResponses.map((reply) => reply?.id)).size !==
+          r.organizerResponses.length ||
+        r.organizerResponses.some(
+          (reply) =>
+            !object(reply) ||
+            !text(reply.id) ||
+            !text(reply.organization) ||
+            !validTimestamp(reply.receivedAt) ||
+            Date.parse(reply.receivedAt) > Date.parse(r.reviewedAt) ||
+            !text(reply.text) ||
+            !text(reply.reference),
+        ))
+    )
+      fail("invalid organizer response");
+    const a = r.approval;
+    if (
+      !Number.isInteger(r.revision) ||
+      r.revision < 1 ||
+      !a ||
+      !text(a.by) ||
+      !text(a.reference) ||
+      !validTimestamp(a.at) ||
+      Date.parse(a.at) > Date.parse(now) ||
+      Date.parse(a.at) < Date.parse(r.reviewedAt) ||
+      a.revision !== r.revision ||
+      !/^[a-f0-9]{64}$/.test(a.contentHash) ||
+      !a.confirmed ||
+      ![a.confirmed.scores, a.confirmed.wording, a.confirmed.evidence, a.confirmed.scope].every(
+        (v) => v === true,
+      )
+    )
+      fail("human confirmation of current revision required");
   }
 }
 export function reviewsForGroup(race: Race, group: RaceGroup, reviews: EditorialReview[]) {

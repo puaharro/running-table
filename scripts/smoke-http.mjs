@@ -33,6 +33,8 @@ try {
     "/about/",
     "/ratings/",
     "/ratings/notebook/",
+    "/ratings/process/",
+    "/ratings/feedback/",
     "/privacy/",
     "/guides/choose-your-first-10k/",
     "/guides/race-registration-checklist/",

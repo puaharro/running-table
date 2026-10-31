@@ -1,3 +1,4 @@
+import { editorialContactEmail } from "./editorial-contact";
 export interface ReleaseSettings {
   indexable: boolean;
   origin?: string;
@@ -29,7 +30,7 @@ export function releaseIssues(settings: ReleaseSettings) {
 export const releaseSettings: ReleaseSettings = {
   indexable: process.env.SITE_INDEXABLE === "true",
   origin: process.env.NEXT_PUBLIC_SITE_URL,
-  contactEmail: process.env.SITE_CONTACT_EMAIL,
+  contactEmail: process.env.SITE_CONTACT_EMAIL || editorialContactEmail,
   operatorName: process.env.SITE_OPERATOR_NAME,
 };
 export function assertReleaseReady() {

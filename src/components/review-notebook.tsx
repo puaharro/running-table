@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { prepareReviewRequest } from "@/lib/review-request";
+import Link from "next/link";
 import {
   blankDraft,
   exportNotebook,
@@ -88,6 +90,24 @@ export function ReviewNotebook() {
       setMessage("請確認年份為四位數，再匯出筆記。");
     }
   }
+  function requestConfirmation() {
+    try {
+      const packet = prepareReviewRequest(active);
+      const url = URL.createObjectURL(
+        new Blob([JSON.stringify(packet, null, 2)], { type: "application/json" }),
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `nxtgo-review-request-${active.year}.json`;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setMessage(
+        `待確認筆記已匯出，未發布。${packet.riskHints.length ? "有低分或敏感字眼，需額外人手覆核。" : "仍需整理完整稿件並由營運者確認。"}`,
+      );
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "未能匯出待確認筆記。");
+    }
+  }
   async function importFile(file?: File) {
     if (!file) return;
     try {
@@ -107,6 +127,10 @@ export function ReviewNotebook() {
   }
   return (
     <div className="review-notebook">
+      <p>
+        筆記流程：草稿 → 整理待確認稿 → 營運者確認 → 發布。
+        <Link href="/ratings/process/">了解審閱流程 →</Link>
+      </p>
       <p className="notebook-notice">
         筆記只會儲存在目前瀏覽器，唔會傳送到網站或自動發布。清除瀏覽資料會失去草稿，請匯出備份。
       </p>
@@ -258,6 +282,9 @@ export function ReviewNotebook() {
         </button>
         <button type="button" onClick={download} disabled={!ready}>
           匯出筆記備份
+        </button>
+        <button type="button" onClick={requestConfirmation} disabled={!ready}>
+          匯出待確認筆記
         </button>
         <label className="notebook-import">
           匯入筆記備份
