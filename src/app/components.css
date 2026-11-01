@@ -1517,3 +1517,70 @@ time,
   border-top: 1px solid var(--border-subtle);
   padding-top: 12px;
 }
+
+.race-overview {
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.race-overview dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+}
+.race-overview dt {
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.race-overview dd {
+  margin: 0;
+  font-weight: 700;
+}
+.race-overview dd small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 6px;
+}
+.race-overview p {
+  font-size: 12px;
+  margin: 12px 0;
+}
+.race-overview nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.race-overview nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.registration-comparison > summary {
+  min-height: 44px;
+  padding: 12px 0;
+  cursor: pointer;
+}
+@media (max-width: 760px) {
+  .race-overview dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .race-overview dl > div:last-child {
+    grid-column: 1/-1;
+  }
+  .race-overview nav a {
+    flex: 1;
+    justify-content: center;
+    padding: 8px;
+  }
+  .detail-heading {
+    margin-bottom: 12px;
+  }
+}

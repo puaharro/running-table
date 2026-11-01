@@ -101,3 +101,28 @@ describe("collapsed detail channels", () => {
     }
   });
 });
+
+describe("consolidated race overview", () => {
+  it("keeps date, distance, status and two local actions together", async () => {
+    const { RaceOverview } = await import("@/components/live-registration");
+    const html = renderToStaticMarkup(
+      createElement(RaceOverview, {
+        race,
+        initialNow: "2026-10-27T01:00:00+08:00",
+        experienceHref: "#ratings-schkm-2027-marathon",
+        experienceLabel: "參賽體驗",
+      }),
+    );
+    for (const text of [
+      "比賽日期",
+      "參賽組別",
+      "報名概況",
+      "接受申請不代表獲得名額",
+      "#registration-groups",
+      "#ratings-schkm-2027-marathon",
+    ])
+      expect(html).toContain(text);
+    expect(html).toContain("2027");
+    expect(html).toContain("全馬 / 半馬 / 10K");
+  });
+});
