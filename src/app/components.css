@@ -1584,3 +1584,77 @@ time,
     margin-bottom: 12px;
   }
 }
+
+/* Shared navigation keeps every destination reachable on narrow screens. */
+.site-header nav a {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.site-header nav a[aria-current="page"] {
+  color: #22543f;
+  box-shadow: inset 0 -2px 0 #527d62;
+}
+@media (max-width: 1200px) {
+  .site-header .header-note {
+    display: none;
+  }
+}
+@media (max-width: 767px) {
+  .site-header nav a:last-child {
+    display: inline-flex;
+  }
+  .site-header nav {
+    gap: 20px;
+    scrollbar-width: thin;
+  }
+}
+
+@media (max-width: 767px) {
+  .site-header nav {
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 22px;
+    width: 100%;
+    font-size: 13px;
+  }
+  .footer-links a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+.nav-label-compact {
+  display: none;
+}
+@media (max-width: 767px) {
+  .site-header nav {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 4px;
+    overflow: visible;
+  }
+  .site-header nav a {
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 14px;
+    padding-inline: 2px;
+  }
+  .nav-label-full {
+    display: none;
+  }
+  .nav-label-compact {
+    display: inline;
+  }
+}

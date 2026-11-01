@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#ffffff" };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh-HK">
+    <html lang="zh-HK" data-scroll-behavior="smooth">
       <body>
         <AdFrame>
           <Header />

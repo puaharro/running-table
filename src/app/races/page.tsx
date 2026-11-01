@@ -1,3 +1,4 @@
+import "./calendar.css";
 import { RaceExplorer } from "@/components/race-explorer";
 import { races } from "@/data/races";
 import { pageMetadata } from "@/lib/site";
