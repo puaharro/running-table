@@ -1486,3 +1486,34 @@ time,
     margin: 6px 0;
   }
 }
+
+.registration-channel .channel-toggle {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 12px 0;
+  line-height: 1.6;
+}
+.registration-channel .channel-toggle h4 {
+  display: inline;
+  font-size: 15px;
+  margin: 0 8px 0 0;
+  overflow-wrap: anywhere;
+}
+.registration-channel .channel-toggle .status-badge {
+  display: inline-flex;
+  vertical-align: middle;
+}
+.registration-channel .channel-toggle-price {
+  display: block;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.registration-channel .channel-toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+.registration-channel .channel-details-body {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+}
