@@ -126,8 +126,11 @@ export function EditorialReviewCard({ review }: { review: EditorialReview }) {
       aria-label={`${review.editionYear}年體驗重點`}
     >
       <p className="review-context">
-        {review.editionYear} 年 · {reviewTargets.find((t) => t.id === review.targetId)?.group} ·
-        編輯點評
+        {review.editionYear} 年 ·{" "}
+        {review.runnerSegment === "unknown"
+          ? "一位跑手觀察（位置未記錄）"
+          : `一位${segmentLabels[review.runnerSegment]}跑手觀察`}{" "}
+        · {reviewTargets.find((t) => t.id === review.targetId)?.group}
       </p>
       <p className="review-summary">
         {review.quickTake?.summary ?? "此篇未有重點摘要，可展開查看完整評論。"}
