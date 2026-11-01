@@ -2,7 +2,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { races } from "@/data/races";
-import { RegistrationSummary } from "@/components/live-registration";
+import { RegistrationSummary, RegistrationGroups } from "@/components/live-registration";
 import { defaultFilters, parseFilters } from "./races";
 import { resultsHref, safeResultsHref } from "./results-location";
 
@@ -55,5 +55,49 @@ describe("mobile list and registration journey", () => {
     expect(html.indexOf("channel-schkm-2027-half-charity-herfund")).toBeLessThan(
       html.indexOf("channel-schkm-2027-half-general"),
     );
+  });
+});
+
+describe("collapsed detail channels", () => {
+  it("keeps every channel closed with a concise name, status and qualified price summary", () => {
+    const html = renderToStaticMarkup(
+      createElement(RegistrationGroups, { race, initialNow: "2026-10-27T01:00:00+08:00" }),
+    );
+    const disclosures = [
+      ...html.matchAll(/<details class="channel-details"([^>]*)>([\s\S]*?)<\/details>/g),
+    ];
+    expect(disclosures).toHaveLength(race.groups.reduce((n, g) => n + g.channels.length, 0));
+    for (const [, attrs, content] of disclosures) {
+      expect(attrs).not.toContain("open");
+      const summary = content.slice(0, content.indexOf("</summary>"));
+      expect(summary).toContain("status-badge");
+      expect(summary).toContain("channel-toggle-price");
+      expect(summary).not.toContain("申請資格／條件");
+      expect(summary).not.toContain("申請截止");
+      expect(content).toContain("申請資格／條件");
+      expect(content).toContain("此渠道最後核對");
+      expect(content).toContain("此渠道核實依據");
+    }
+    expect(html).toContain("最低籌款額：HK$ 4,000");
+    expect(html).toContain("套票價格：HK$ 2,942");
+    expect(html).toContain("每位／一晚");
+  });
+  it("preserves free and unverified prices without treating missing costs as zero", () => {
+    for (const [price, label] of [
+      [0, "免費"],
+      [null, "待核實"],
+    ] as const) {
+      const clone = structuredClone(race);
+      clone.groups = clone.groups.slice(0, 1);
+      clone.groups[0].channels = clone.groups[0].channels.slice(0, 1);
+      clone.groups[0].channels[0].price = price;
+      const html = renderToStaticMarkup(
+        createElement(RegistrationGroups, { race: clone, initialNow: "2026-10-27T01:00:00+08:00" }),
+      );
+      const summary = html
+        .slice(html.indexOf('<summary class="channel-toggle">'))
+        .split("</summary>")[0];
+      expect(summary).toContain(label);
+    }
   });
 });

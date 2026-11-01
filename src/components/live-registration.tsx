@@ -89,86 +89,115 @@ function ChannelCard({
   channel: RegistrationChannel;
   now: string;
 }) {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const reveal = () => {
+      if (window.location.hash === `#channel-${channel.id}`) setOpen(true);
+    };
+    const revealLink = (event: MouseEvent) => {
+      const link = event.target instanceof Element ? event.target.closest("a") : null;
+      if (link?.getAttribute("href") === `#channel-${channel.id}`) setOpen(true);
+    };
+    reveal();
+    window.addEventListener("hashchange", reveal);
+    document.addEventListener("click", revealLink);
+    return () => {
+      window.removeEventListener("hashchange", reveal);
+      document.removeEventListener("click", revealLink);
+    };
+  }, [channel.id]);
   return (
     <article className="registration-channel" aria-label={`${group.name} · ${channel.name}`}>
-      <div className="summary-group-name">
-        <h4>{channel.name}</h4>
-        <StatusBadge status={channelStatus(race, group, channel, now)} />
-        <span>
-          {channelTypeLabels[channel.type]} · {channel.registrationMethod}
-        </span>
-      </div>
-      <dl>
-        <div>
-          <dt>申請資格／條件</dt>
-          <dd>{channel.eligibility}</dd>
-        </div>
-        <div>
-          <dt>{channelPriceHeading(channel)}</dt>
-          <dd>
-            {channelPriceLabel(channel)}
+      <details
+        className="channel-details"
+        open={open}
+        onToggle={(event) => setOpen(event.currentTarget.open)}
+      >
+        <summary className="channel-toggle">
+          <h4>{channel.name}</h4>
+          <StatusBadge status={channelStatus(race, group, channel, now)} />
+          <span className="channel-toggle-price">
+            {channelPriceHeading(channel)}：{channelPriceLabel(channel)}
             {channel.priceUnit && ` · ${channel.priceUnit}`}
-            {channel.priceNote && <small>{channel.priceNote}</small>}
-          </dd>
-        </div>
-        {(channel.registrationOpensAt || channel.registrationStart) && (
-          <div>
-            <dt>申請開始</dt>
-            <dd>
-              <Timestamp value={(channel.registrationOpensAt ?? channel.registrationStart)!} />
-            </dd>
-          </div>
-        )}
-        <div>
-          <dt>申請截止 · 香港時間</dt>
-          <dd>
-            {channel.registrationClosesAt || channel.deadline ? (
-              <Timestamp value={(channel.registrationClosesAt ?? channel.deadline)!} />
-            ) : (
-              "待核實／未有已核對期限"
+          </span>
+        </summary>
+        <div className="channel-details-body">
+          <p>
+            {channelTypeLabels[channel.type]} · {channel.registrationMethod}
+          </p>
+          <dl>
+            <div>
+              <dt>申請資格／條件</dt>
+              <dd>{channel.eligibility}</dd>
+            </div>
+            <div>
+              <dt>{channelPriceHeading(channel)}</dt>
+              <dd>
+                {channelPriceLabel(channel)}
+                {channel.priceUnit && ` · ${channel.priceUnit}`}
+                {channel.priceNote && <small>{channel.priceNote}</small>}
+              </dd>
+            </div>
+            {(channel.registrationOpensAt || channel.registrationStart) && (
+              <div>
+                <dt>申請開始</dt>
+                <dd>
+                  <Timestamp value={(channel.registrationOpensAt ?? channel.registrationStart)!} />
+                </dd>
+              </div>
             )}
-          </dd>
-        </div>
-        {channel.resultAnnouncedAt && (
-          <div>
-            <dt>結果公布</dt>
-            <dd>
-              <Timestamp value={channel.resultAnnouncedAt} />
-            </dd>
-          </div>
-        )}
-        {channel.paymentClosesAt && (
-          <div>
-            <dt>獲確認後付款截止</dt>
-            <dd>
-              <Timestamp value={channel.paymentClosesAt} />
-            </dd>
-          </div>
-        )}
-      </dl>
-      {channel.registrationNote && <p className="group-note">{channel.registrationNote}</p>}
-      <RegistrationVerification race={race} group={group} channel={channel} now={now} />
-      {channel.registrationUrl && (
-        <a
-          className="text-link group-official-link"
-          href={channel.registrationUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          查看此渠道官方資料 ↗
-        </a>
-      )}
-      <div className="group-sources">
-        此渠道核實依據：
-        {channel.sourceIds.map((id) => {
-          const source = race.sources?.find((source) => source.id === id);
-          return source ? (
-            <a key={id} href={source.url} target="_blank" rel="noopener noreferrer">
-              {source.title}
+            <div>
+              <dt>申請截止 · 香港時間</dt>
+              <dd>
+                {channel.registrationClosesAt || channel.deadline ? (
+                  <Timestamp value={(channel.registrationClosesAt ?? channel.deadline)!} />
+                ) : (
+                  "待核實／未有已核對期限"
+                )}
+              </dd>
+            </div>
+            {channel.resultAnnouncedAt && (
+              <div>
+                <dt>結果公布</dt>
+                <dd>
+                  <Timestamp value={channel.resultAnnouncedAt} />
+                </dd>
+              </div>
+            )}
+            {channel.paymentClosesAt && (
+              <div>
+                <dt>獲確認後付款截止</dt>
+                <dd>
+                  <Timestamp value={channel.paymentClosesAt} />
+                </dd>
+              </div>
+            )}
+          </dl>
+          {channel.registrationNote && <p className="group-note">{channel.registrationNote}</p>}
+          <RegistrationVerification race={race} group={group} channel={channel} now={now} />
+          {channel.registrationUrl && (
+            <a
+              className="text-link group-official-link"
+              href={channel.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              查看此渠道官方資料 ↗
             </a>
-          ) : null;
-        })}
-      </div>
+          )}
+          <div className="group-sources">
+            此渠道核實依據：
+            {channel.sourceIds.map((id) => {
+              const source = race.sources?.find((source) => source.id === id);
+              return source ? (
+                <a key={id} href={source.url} target="_blank" rel="noopener noreferrer">
+                  {source.title}
+                </a>
+              ) : null;
+            })}
+          </div>
+        </div>
+      </details>
     </article>
   );
 }
