@@ -260,7 +260,7 @@ describe("approved HZMB 2025 publication", () => {
     const html = renderToStaticMarkup(
       createElement(GroupRatings, { race: bridge, group: bridge.groups[0] }),
     );
-    expect(html).toContain("以下為往屆評論，不代表 2026 年安排或表現");
+    expect(html).toContain("往屆評論 · 不代表 2026 年安排或表現");
     expect(html).not.toContain('<details class="historical-reviews"');
     expect(html).toContain('<div class="historical-reviews">');
     const tenK = reviewsForGroup(bridge, bridge.groups[1], editorialReviews);
@@ -312,7 +312,7 @@ describe("approved SCHKM 2026 publication", () => {
     const html = renderToStaticMarkup(
       createElement(GroupRatings, { race: main, group: main.groups[0] }),
     );
-    expect(html).toContain("以下為往屆評論，不代表 2027 年安排或表現");
+    expect(html).toContain("往屆評論 · 不代表 2027 年安排或表現");
     expect(html).not.toContain('<details class="historical-reviews"');
     expect(html).toContain('<div class="historical-reviews">');
   });

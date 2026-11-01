@@ -1440,3 +1440,49 @@ time,
   display: block;
   font-size: 12px;
 }
+
+/* Reduce repeated framing around the mobile review, keeping copy and touch targets intact. */
+@media (max-width: 760px) {
+  .group-ratings {
+    padding: 12px;
+  }
+  .group-ratings > h4 {
+    margin: 0 0 8px;
+  }
+  .group-ratings > h4 small {
+    display: inline;
+    margin-left: 8px;
+    font-size: 12px;
+  }
+  .group-ratings .review-tabs {
+    margin: 8px 0;
+  }
+  .group-ratings .historical-reviews {
+    border: 0;
+    margin: 0;
+  }
+  .group-ratings .review-edition-note {
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 8px 0;
+  }
+  .group-ratings .review-context {
+    margin: 8px 0;
+  }
+  .group-ratings .review-summary {
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 8px 0;
+  }
+  .group-ratings .quick-scores {
+    margin: 12px 0;
+  }
+  .group-ratings .review-reminders {
+    padding-left: 18px;
+    margin: 12px 0;
+    line-height: 1.6;
+  }
+  .group-ratings .review-reminders li {
+    margin: 6px 0;
+  }
+}
