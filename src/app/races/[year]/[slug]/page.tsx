@@ -7,11 +7,11 @@ import { reviewsForGroup } from "@/lib/editorial-reviews";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { ReturnLink } from "@/components/return-link";
 import {
-  LiveRaceStatus,
+  RaceOverview,
   RegistrationGroups,
   RegistrationSummary,
 } from "@/components/live-registration";
-import { displayDate, distanceLabel, formatTimestamp } from "@/lib/races";
+import { formatTimestamp } from "@/lib/races";
 import { pageMetadata, raceHref } from "@/lib/site";
 import { releaseSettings } from "@/lib/release";
 import { raceStructuredData, safeJsonLd } from "@/lib/structured-data";
@@ -61,24 +61,14 @@ export default async function RacePage({ params }: Props) {
             </div>
             <h1>{race.name}</h1>
             <p className="english-title">{race.englishName}</p>
-            <div className="detail-tags">
-              <LiveRaceStatus race={race} initialNow={now} />
-              <span className="tag">路跑</span>
-              {race.tags.map((t) => (
-                <span key={t} className="tag">
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="date-stamp">
-            <span>{race.date.slice(0, 4)}</span>
-            <strong>{race.date.slice(5).replace("-", " / ")}</strong>
-            <span>
-              {displayDate(race.date, { weekday: "long", month: undefined, day: undefined })}
-            </span>
           </div>
         </div>
+        <RaceOverview
+          race={race}
+          initialNow={now}
+          experienceHref={"#ratings-" + (reviewedGroups[0] ?? race.groups[0]).id}
+          experienceLabel={reviewedGroups.length ? "參賽體驗" : "參賽體驗（未評）"}
+        />
         <div className="demo-notice verified-notice">
           <Icon name="check" size={22} />
           <div>
@@ -89,42 +79,17 @@ export default async function RacePage({ params }: Props) {
             </p>
           </div>
         </div>
-        {!!reviewedGroups.length && (
-          <nav className="race-review-links" aria-label="參賽體驗快捷入口">
-            <strong>參賽體驗</strong>
-            {reviewedGroups.map((group) => {
-              const reviews = reviewsForGroup(race, group, editorialReviews);
-              return (
-                <a key={group.id} href={`#ratings-${group.id}`}>
-                  {group.name} ·{" "}
-                  {[...reviews.current, ...reviews.historical].map((r) => r.editionYear).join("、")}{" "}
-                  年評論 ↓
-                </a>
-              );
-            })}
-          </nav>
-        )}
-        <RegistrationSummary race={race} initialNow={now} />
+        <details className="registration-comparison">
+          <summary>比較各組報名概況</summary>
+          <RegistrationSummary race={race} initialNow={now} />
+        </details>
         <div className="detail-layout">
           <article className="detail-content">
             <div className="key-facts">
               <div>
-                <span>比賽日期</span>
-                <strong>
-                  {displayDate(race.date, { year: "numeric" })}
-                  {race.date !== race.endDate && ` 至 ${displayDate(race.endDate)}`}
-                </strong>
-              </div>
-              <div>
                 <span>地區／起點</span>
                 <strong>
                   {race.region ?? "多區／待核實"} · {race.venue}
-                </strong>
-              </div>
-              <div>
-                <span>參賽組別</span>
-                <strong>
-                  {[...new Set(race.groups.map((g) => distanceLabel(g.distanceKm)))].join(" / ")}
                 </strong>
               </div>
               <div>

@@ -312,3 +312,52 @@ export function RegistrationGroups({ race, initialNow }: { race: Race; initialNo
     </div>
   );
 }
+
+export function RaceOverview({
+  race,
+  initialNow,
+  experienceHref,
+  experienceLabel,
+}: {
+  race: Race;
+  initialNow: string;
+  experienceHref: string;
+  experienceLabel: string;
+}) {
+  const now = useClock(initialNow);
+  const statuses = race.groups.flatMap((g) =>
+    g.channels.map((c) => channelStatus(race, g, c, now)),
+  );
+  return (
+    <section className="race-overview" aria-label="賽事重點">
+      <dl>
+        <div>
+          <dt>比賽日期</dt>
+          <dd>
+            {displayDate(race.date, { year: "numeric" })}
+            {race.date !== race.endDate && " 至 " + displayDate(race.endDate)}
+          </dd>
+        </div>
+        <div>
+          <dt>參賽組別</dt>
+          <dd>{[...new Set(race.groups.map((g) => distanceLabel(g.distanceKm)))].join(" / ")}</dd>
+        </div>
+        <div>
+          <dt>報名概況</dt>
+          <dd>
+            <LiveRaceStatus race={race} initialNow={now} />
+            <small>
+              {statuses.filter((s) => s === "open").length} 個渠道接受申請 ·{" "}
+              {statuses.filter((s) => s === "unknown").length} 個待核實
+            </small>
+          </dd>
+        </div>
+      </dl>
+      <p>報名狀態按渠道分開，接受申請不代表獲得名額。</p>
+      <nav aria-label="賽事重點入口">
+        <a href="#registration-groups">報名渠道 ↓</a>
+        <a href={experienceHref}>{experienceLabel} ↓</a>
+      </nav>
+    </section>
+  );
+}
