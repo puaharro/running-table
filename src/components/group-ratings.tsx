@@ -179,14 +179,14 @@ export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) 
       aria-label={`${group.name}賽事體驗評級`}
     >
       <h4>
-        NXTGO 賽事體驗評級 <small>編輯觀察 · 不設總分</small>
+        參賽體驗 <small>不設總分</small>
       </h4>
       <ReviewViews>
         {current.length ? (
           current.map((r) => <EditorialReviewCard key={r.id} review={r} />)
         ) : (
           <>
-            <p>此屆此組別尚未有已發布體驗評論。</p>
+            {!historical.length && <p>此屆此組別尚未有已發布體驗評論。</p>}
             {!historical.length && (
               <dl className="rating-grid quick-scores">
                 {ratingDimensions.map((key) => (
@@ -201,8 +201,9 @@ export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) 
         )}
         {!!historical.length && (
           <div className="historical-reviews">
-            <h5>往屆參賽體驗 · {historical.map((r) => r.editionYear).join("、")}</h5>
-            <p>以下為往屆評論，不代表 {group.date.slice(0, 4)} 年安排或表現；各年份分開評分。</p>
+            <p className="review-edition-note">
+              往屆評論 · 不代表 {group.date.slice(0, 4)} 年安排或表現
+            </p>
             {historical.map((r) => (
               <EditorialReviewCard key={r.id} review={r} />
             ))}
