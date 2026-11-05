@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { AdSlot, Icon } from "./ui";
 import {
@@ -21,14 +21,7 @@ import {
 import { groupLocations } from "@/lib/group-locations";
 import { raceHref } from "@/lib/site";
 import { resultsHref } from "@/lib/results-location";
-import {
-  distanceOptions,
-  channelTypeLabels,
-  countries,
-  registrationLabels,
-  type Filters,
-  type Race,
-} from "@/lib/types";
+import { distanceOptions, countries, type Filters, type Race } from "@/lib/types";
 
 function monthLabel(date: string) {
   return `${date.slice(0, 4)} 年 ${Number(date.slice(5, 7))} 月`;
@@ -39,7 +32,14 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   const [now, setNow] = useState(initialNow);
   const [ready, setReady] = useState(false);
   const [customDates, setCustomDates] = useState(false);
-  const [copyMessage, setCopyMessage] = useState("");
+  const [copyState, setCopyState] = useState<"copied" | "manual" | null>(null);
+  const shareRequest = useRef(0);
+  const resultsCount = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    if (copyState !== "copied") return;
+    const timer = window.setTimeout(() => setCopyState(null), 2400);
+    return () => window.clearTimeout(timer);
+  }, [copyState]);
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   useEffect(() => {
     const sync = () => {
@@ -65,7 +65,8 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   }, []);
   function update(next: Filters) {
     setFilters(next);
-    setCopyMessage("");
+    shareRequest.current += 1;
+    setCopyState(null);
     const query = serializeFilters(next);
     window.history.replaceState(
       null,
@@ -82,7 +83,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     if (!ready || !/^#race-[a-z0-9-]+$/.test(window.location.hash)) return;
     const frame = window.requestAnimationFrame(() => {
       const row = document.getElementById(window.location.hash.slice(1));
-      row?.scrollIntoView({ block: "start" });
+      row?.scrollIntoView({ block: "start", behavior: "instant" });
       row?.focus({ preventScroll: true });
     });
     return () => window.cancelAnimationFrame(frame);
@@ -105,51 +106,95 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     update({ ...toggleDateShortcut(filters, kind, now), view: "all" });
   }
   const results = useMemo(() => selectRaces(races, filters, now), [races, filters, now]);
+  const resultsPanel = useRef<HTMLDivElement>(null);
+  const resultKey = JSON.stringify(
+    results.map(({ race, groups }) => [race.id, groups.map((group) => group.id)]),
+  );
+  const previousResultKey = useRef<string | null>(null);
+  useEffect(() => {
+    if (!ready) return;
+    const previous = previousResultKey.current;
+    previousResultKey.current = resultKey;
+    const panel = resultsPanel.current;
+    if (previous === null || previous === resultKey || !panel?.animate) return;
+
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (preference.matches) return;
+    const animation = panel.animate([{ opacity: 0.8 }, { opacity: 1 }], {
+      duration: 160,
+      easing: "ease-out",
+    });
+    const cancel = () => animation.cancel();
+    preference.addEventListener("change", cancel);
+    return () => {
+      cancel();
+      preference.removeEventListener("change", cancel);
+    };
+  }, [ready, resultKey]);
   const calendarYear = Number(hongKongToday(new Date(now)).slice(0, 4));
   const yearActive = dateShortcutIsActive(filters, "year", now);
   const nextYearActive = dateShortcutIsActive(filters, "next-year", now);
   const showCustomDates =
     customDates || (!!(filters.from || filters.to) && !yearActive && !nextYearActive);
   const error = filterError(filters);
-  const chips: { label: string; remove: () => void }[] = [
-    ...(filters.family ? [{ label: "親子同樂", remove: () => field("family", false) }] : []),
-    ...(filters.q ? [{ label: `搜尋：${filters.q}`, remove: () => field("q", "") }] : []),
-    ...(filters.from || filters.to
-      ? [
-          {
-            label: `${filters.from || "不限起日"} → ${filters.to || "不限止日"}`,
-            remove: () => update({ ...filters, from: "", to: "" }),
-          },
-        ]
-      : []),
-    ...(filters.month ? [{ label: `${filters.month}月`, remove: () => field("month", "") }] : []),
-    ...filters.distances.map((x) => ({ label: x, remove: () => toggle("distances", x) })),
-    ...filters.countries.map((x) => ({ label: x, remove: () => toggle("countries", x) })),
-    ...filters.regions.map((x) => ({ label: x, remove: () => toggle("regions", x) })),
-    ...filters.channels.map((x) => ({
-      label: channelTypeLabels[x],
-      remove: () => toggle("channels", x),
-    })),
-    ...filters.statuses.map((x) => ({
-      label: registrationLabels[x],
-      remove: () => toggle("statuses", x),
-    })),
-    ...(filters.min || filters.max
-      ? [
-          {
-            label: `${filters.min || "0"}–${filters.max || "不限"} km`,
-            remove: () => update({ ...filters, min: "", max: "" }),
-          },
-        ]
-      : []),
-  ];
-  async function share() {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopyMessage("已複製篩選連結");
-    } catch {
-      setCopyMessage("請複製瀏覽器網址，當中已保留篩選條件。");
+  const activeFilterCount =
+    Number(Boolean(filters.from || filters.to)) +
+    Number(Boolean(filters.month)) +
+    Number(Boolean(filters.min || filters.max)) +
+    Number(filters.family) +
+    filters.countries.length +
+    filters.regions.length +
+    filters.distances.length +
+    filters.sports.length +
+    filters.statuses.length +
+    filters.channels.length;
+  const acceptingOnly = filters.statuses.length === 1 && filters.statuses[0] === "open";
+  const selectedView = acceptingOnly
+    ? filters.view === "upcoming"
+      ? "open"
+      : undefined
+    : filters.view;
+  const relaxOptions: { label: string; next: Filters }[] = [];
+  if (!results.length) {
+    if (filters.month) relaxOptions.push({ label: "取消月份", next: { ...filters, month: "" } });
+    if (filters.from || filters.to) {
+      relaxOptions.push({ label: "取消日期範圍", next: { ...filters, from: "", to: "" } });
     }
+    if (filters.countries.length || filters.regions.length) {
+      relaxOptions.push({
+        label: "取消地點限制",
+        next: { ...filters, countries: [], regions: [] },
+      });
+    }
+    if (filters.distances.length || filters.min || filters.max) {
+      relaxOptions.push({
+        label: "取消距離限制",
+        next: { ...filters, distances: [], min: "", max: "" },
+      });
+    }
+    if (filters.family)
+      relaxOptions.push({ label: "取消組別限制", next: { ...filters, family: false } });
+    if (filters.statuses.length) {
+      relaxOptions.push({ label: "取消報名狀態限制", next: { ...filters, statuses: [] } });
+    }
+    if (filters.channels.length) {
+      relaxOptions.push({ label: "取消報名渠道限制", next: { ...filters, channels: [] } });
+    }
+    if (filters.q) relaxOptions.push({ label: "清除搜尋字詞", next: { ...filters, q: "" } });
+  }
+  const relaxOption =
+    relaxOptions.find(({ next }) => selectRaces(races, next, now).length > 0) ?? relaxOptions[0];
+
+  async function share() {
+    const request = ++shareRequest.current;
+    const url = window.location.href;
+    let state: typeof copyState = "copied";
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      state = "manual";
+    }
+    if (request === shareRequest.current && url === window.location.href) setCopyState(state);
   }
   return (
     <section id="race-list" className="explorer shell" aria-labelledby="explorer-heading">
@@ -172,7 +217,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               value={filters.q}
               maxLength={200}
               onChange={(e) => field("q", e.target.value)}
-              placeholder="賽事名稱、地點或主辦方"
+              placeholder="賽事名或地點"
               enterKeyHint="search"
             />
           </span>
@@ -184,7 +229,13 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
           onClick={() => setFiltersExpanded(!filtersExpanded)}
         >
           <Icon name="filter" size={18} /> 篩選
-          <span aria-hidden="true">{filtersExpanded ? "−" : "+"}</span>
+          <span
+            className="calendar-filter-count"
+            data-empty={activeFilterCount === 0}
+            aria-hidden={activeFilterCount === 0}
+          >
+            {activeFilterCount}
+          </span>
         </button>
       </div>
       <div className="calendar-workspace">
@@ -198,6 +249,16 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             <div className="calendar-filter-heading">
               <Icon name="filter" size={18} />
               <h2>篩選條件</h2>
+              <button
+                type="button"
+                className="calendar-reset-filters"
+                onClick={() => {
+                  setCustomDates(false);
+                  update(defaultFilters);
+                }}
+              >
+                重置條件
+              </button>
             </div>
             <div className="engine-options">
               <div className="engine-option-row" role="group" aria-label="比賽日期">
@@ -264,8 +325,8 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                   </label>
                 </div>
               )}
-              <div className="engine-option-row" role="group" aria-label="國家／地區">
-                <span className="engine-label">國家／地區</span>
+              <div className="engine-option-row" role="group" aria-label="地點">
+                <span className="engine-label">地點</span>
                 <div className="option-row">
                   {countries.map((country) => (
                     <button
@@ -292,6 +353,44 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                   ))}
                 </div>
               </div>
+              <div className="engine-option-row" role="group" aria-label="報名狀態">
+                <span className="engine-label">報名狀態</span>
+                <div className="option-row">
+                  <button
+                    aria-pressed={acceptingOnly}
+                    onClick={() => field("statuses", acceptingOnly ? [] : ["open"])}
+                  >
+                    接受申請
+                  </button>
+                </div>
+              </div>
+              <div className="engine-option-row" role="group" aria-label="參賽組別">
+                <span className="engine-label">參賽組別</span>
+                <div className="option-row">
+                  <button
+                    aria-pressed={filters.family}
+                    onClick={() => field("family", !filters.family)}
+                  >
+                    親子／少年組
+                  </button>
+                </div>
+              </div>
+              <div
+                className="engine-option-row"
+                role="group"
+                aria-label="賽事難易度"
+                aria-describedby="difficulty-note"
+              >
+                <span className="engine-label">賽事難易度</span>
+                <div className="option-row">
+                  {["困難", "適中", "容易"].map((difficulty) => (
+                    <button key={difficulty} disabled>
+                      {difficulty}
+                    </button>
+                  ))}
+                </div>
+                <small id="difficulty-note">正式難易度評級推出後開放</small>
+              </div>
             </div>
           </div>
           <button
@@ -300,8 +399,8 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               setFiltersExpanded(false);
               window.requestAnimationFrame(() => {
                 const toolbar = document.getElementById("results-toolbar");
-                toolbar?.focus({ preventScroll: true });
-                toolbar?.scrollIntoView({ block: "start" });
+                resultsCount.current?.focus({ preventScroll: true });
+                toolbar?.scrollIntoView({ block: "start", behavior: "instant" });
               });
             }}
           >
@@ -314,48 +413,40 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               {error}
             </p>
           )}
-          {!!chips.length && (
-            <div className="selected-filters">
-              <span>已選條件</span>
-              {chips.map((chip, i) => (
-                <button
-                  key={`${chip.label}-${i}`}
-                  onClick={chip.remove}
-                  aria-label={`移除${chip.label}`}
-                >
-                  {chip.label}
-                  <span aria-hidden="true">×</span>
-                </button>
-              ))}
-              <button
-                className="clear-all"
-                onClick={() => {
-                  setCustomDates(false);
-                  update({ ...defaultFilters });
-                }}
-              >
-                清除全部
-              </button>
-            </div>
-          )}
           <div className="results-toolbar" id="results-toolbar" tabIndex={-1}>
-            <div className="view-tabs" role="group" aria-label="賽事時段">
-              {[
-                ["upcoming", "即將舉行"],
-                ["past", "歷屆賽事"],
-                ["all", "全部"],
-              ].map(([key, label]) => (
+            <div
+              className="view-tabs"
+              role="group"
+              aria-label="賽事快捷篩選"
+              data-view={selectedView}
+            >
+              {(["upcoming", "open", "all"] as const).map((key) => (
                 <button
                   key={key}
-                  aria-pressed={filters.view === key}
-                  onClick={() => field("view", key as Filters["view"])}
+                  aria-pressed={selectedView === key}
+                  onClick={() =>
+                    update({
+                      ...filters,
+                      view: key === "open" ? "upcoming" : key,
+                      statuses:
+                        key === "open"
+                          ? ["open"]
+                          : filters.statuses.filter((status) => status !== "open"),
+                    })
+                  }
                 >
-                  {label}
+                  {key === "open" ? "接受申請" : key === "upcoming" ? "即將舉行" : "全部"}
                 </button>
               ))}
             </div>
             <div className="results-actions">
-              <span role="status" aria-live="polite" aria-atomic="true">
+              <span
+                ref={resultsCount}
+                tabIndex={-1}
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              >
                 共 <strong>{results.length}</strong> 場
               </span>
               <label className="calendar-sort">
@@ -370,18 +461,24 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                   <option value="recent">按最近更新</option>
                 </select>
               </label>
-              <button className="share-button" onClick={share}>
-                分享篩選 ↗
+              <button className="share-button" onClick={share} aria-label="分享篩選">
+                {copyState === "copied"
+                  ? "已複製 ✓"
+                  : copyState === "manual"
+                    ? "請複製網址"
+                    : "分享篩選 ↗"}
               </button>
             </div>
           </div>
-          {copyMessage && (
-            <p className="copy-message" role="status">
-              {copyMessage}
-            </p>
-          )}
+          <span className="sr-only" role="status">
+            {copyState === "copied"
+              ? "已複製篩選連結"
+              : copyState === "manual"
+                ? "請複製瀏覽器網址，當中已保留篩選條件。"
+                : ""}
+          </span>
           {!ready && <p className="sr-only">正在載入你的篩選條件。</p>}
-          <div className="race-results-layout">
+          <div className="race-results-layout" ref={resultsPanel}>
             <div className="race-results-main">
               <div className="race-list">
                 {results.map(({ race, groups }, index) => {
@@ -401,13 +498,14 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                         id={`race-${race.id}`}
                         tabIndex={-1}
                         onClickCapture={(event) => {
-                          const anchor = (event.target as HTMLElement).closest("a");
-                          if (!anchor?.getAttribute("href")?.startsWith(raceHref(race))) return;
+                          const anchor = (event.target as Element).closest("a");
+                          if (anchor?.getAttribute("href") !== raceHref(race)) return;
+                          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
+                            return;
+                          const returnHref = resultsHref(filters, race.id);
+                          window.history.replaceState(window.history.state, "", returnHref);
                           try {
-                            sessionStorage.setItem(
-                              "rundates:results",
-                              resultsHref(filters, race.id),
-                            );
+                            sessionStorage.setItem("rundates:results", returnHref);
                           } catch {
                             /* The list URL remains shareable when storage is unavailable. */
                           }
@@ -480,15 +578,33 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                   <p>
                     {filters.countries.length &&
                     !races.some((race) => filters.countries.includes(race.country ?? "香港"))
-                      ? `暫時未收錄${filters.countries.join("、")}賽事。試下其他國家／地區。`
+                      ? `暫時未收錄${filters.countries.join("、")}賽事。試下其他地點。`
                       : "試下放寬日期、移除部分條件，或者切換「全部」。"}
                   </p>
-                  <button
-                    className="button button-dark"
-                    onClick={() => update({ ...defaultFilters, view: "all" })}
-                  >
-                    查看全部賽事 <Icon name="arrow" />
-                  </button>
+                  <div className="calendar-empty-actions">
+                    {relaxOption && (
+                      <button
+                        className="button button-dark"
+                        onClick={() => {
+                          if (!relaxOption.next.from && !relaxOption.next.to) setCustomDates(false);
+                          update(relaxOption.next);
+                          resultsCount.current?.focus({ preventScroll: true });
+                        }}
+                      >
+                        {relaxOption.label}
+                      </button>
+                    )}
+                    <button
+                      className={relaxOption ? "button" : "button button-dark"}
+                      onClick={() => {
+                        setCustomDates(false);
+                        update({ ...defaultFilters, view: "all" });
+                        resultsCount.current?.focus({ preventScroll: true });
+                      }}
+                    >
+                      查看全部賽事 <Icon name="arrow" />
+                    </button>
+                  </div>
                 </div>
               )}
               <div className="results-footer">

@@ -8,7 +8,7 @@
   --surface-muted: var(--home-tint);
   --border-subtle: var(--home-line);
   --border-control: var(--home-control);
-  --focus-ring: var(--home-focus);
+  --focus-ring: var(--home-action);
   --ink: var(--home-ink);
   --muted: var(--home-muted);
   --coral: var(--home-action);
@@ -83,9 +83,12 @@
   padding: 0;
 }
 .search-page .search-box:focus-within {
-  outline: 2px solid var(--home-focus);
-  outline-offset: 3px;
-  border-color: var(--home-action);
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+  box-shadow: none;
+}
+.search-page .search-box input:focus-visible {
+  outline: none;
 }
 .calendar-filter-toggle,
 .calendar-apply-filters {
@@ -100,6 +103,9 @@
 .calendar-filter-panel,
 .calendar-results {
   min-width: 0;
+}
+.calendar-results {
+  container: race-results / inline-size;
 }
 .search-page .search-engine.filter-card {
   padding: 24px 20px;
@@ -117,6 +123,22 @@
 .calendar-filter-heading h2 {
   font-size: 16px;
   margin: 0;
+}
+.calendar-reset-filters {
+  min-height: 44px;
+  margin-left: auto;
+  padding: 8px 12px;
+  border: 1px solid var(--home-control);
+  border-radius: 6px;
+  background: var(--home-card);
+  color: var(--home-action-pressed);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+.calendar-reset-filters:hover {
+  border-color: var(--home-action);
+  background: var(--home-tint);
 }
 .search-page .engine-options {
   gap: 24px;
@@ -147,21 +169,24 @@
   color: var(--home-ink);
   background: var(--home-card);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   transition:
     background var(--motion-fast),
     border-color var(--motion-fast);
 }
-.search-page .engine-options .option-row button:hover {
+.search-page .engine-options .option-row button:enabled:hover {
   border-color: var(--home-action);
   background: var(--home-tint);
+}
+.search-page .engine-options .option-row button:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 .search-page .engine-options .option-row button[aria-pressed="true"] {
   color: var(--home-on-dark);
   background: var(--home-action);
   border-color: var(--home-action);
   box-shadow: inset 0 -3px 0 var(--home-action-pressed);
-  font-weight: 700;
 }
 .search-page .engine-month {
   margin: 0;
@@ -197,41 +222,22 @@
   padding: 8px;
   box-sizing: border-box;
 }
-.search-page .selected-filters {
-  margin: 0 0 20px;
-  gap: 8px;
-  align-items: center;
-  font-size: 14px;
-}
-.search-page .selected-filters button {
-  min-width: 44px;
-  min-height: 44px;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  text-align: left;
-  color: var(--home-action-pressed);
-  background: var(--home-tint);
-  border: 1px solid var(--home-line);
-  padding: 8px 12px;
-  font-size: 14px;
-}
-.search-page .selected-filters .clear-all {
-  background: transparent;
-  border: 0;
-  color: var(--home-action);
-  text-underline-offset: 4px;
-}
 .search-page .results-toolbar {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-content: stretch;
   gap: 16px;
   padding: 0 0 16px;
   border-bottom: 1px solid var(--home-line);
   scroll-margin-top: 160px;
 }
 .search-page .view-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   justify-self: start;
   background: var(--home-tint);
-  gap: 8px;
+  gap: 0;
   padding: 4px;
   border-radius: 8px;
 }
@@ -244,11 +250,44 @@
 .search-page .view-tabs button[aria-pressed="true"] {
   color: var(--home-action-pressed);
   background: var(--home-card);
-  box-shadow: 0 2px 0 var(--home-action);
+}
+.search-page .view-tabs::after {
+  content: "";
+  position: absolute;
+  inset: auto auto 4px 4px;
+  width: calc((100% - 8px) / 3);
+  height: 2px;
+  border-radius: 2px;
+  background: var(--home-action);
+  visibility: hidden;
+  pointer-events: none;
+}
+.search-page .view-tabs[data-view]::after {
+  visibility: visible;
+}
+.search-page .view-tabs[data-view="open"]::after {
+  translate: 100% 0;
+}
+.search-page .view-tabs[data-view="all"]::after {
+  translate: 200% 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .search-page .view-tabs::after {
+    transition: translate var(--motion-fast);
+  }
+}
+.search-page :is(.engine-options .option-row, .view-tabs) button:enabled:active {
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .search-page :is(.engine-options .option-row, .view-tabs) button:enabled:active {
+    translate: 0 1px;
+  }
 }
 .search-page .results-actions {
   width: 100%;
   flex-wrap: wrap;
+  justify-content: flex-start;
   gap: 8px 16px;
   font-size: 14px;
 }
@@ -256,11 +295,15 @@
   margin-right: auto;
   display: inline;
 }
+.search-page .results-actions > span:focus {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 4px;
+}
 .search-page .results-actions strong {
   font-size: 20px;
 }
 .calendar-sort {
-  margin-left: auto;
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -270,13 +313,35 @@
   font-size: 14px;
   min-height: 44px;
   max-width: 100%;
+  padding: 8px 12px;
   border-color: var(--home-control);
   border-radius: 6px;
   color: var(--home-ink);
 }
+@media (forced-colors: none) {
+  .search-page .calendar-sort select {
+    appearance: none;
+    padding-inline-end: 30px;
+  }
+  .calendar-sort::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: 12px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--home-ink);
+    border-bottom: 1.5px solid var(--home-ink);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+}
 .search-page .share-button {
   min-height: 44px;
-  padding: 8px 0 8px 8px;
+  min-width: 6.5em;
+  padding: 8px 4px;
+  white-space: nowrap;
+  text-align: center;
   color: var(--home-action);
   font-size: 14px;
 }
@@ -296,6 +361,7 @@
   background: var(--home-line);
 }
 .search-page .calendar-race-card {
+  scroll-margin-top: 12px;
   gap: 24px;
   padding: 24px;
   border-color: var(--home-line);
@@ -378,12 +444,12 @@
   color: var(--home-on-dark);
 }
 .search-page :is(button, a, select, input):focus-visible {
-  outline: 2px solid var(--home-focus);
-  outline-offset: 4px;
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
-@media (min-width: 1400px) {
+@container race-results (min-width: 44rem) {
   .search-page .results-toolbar {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
     gap: 24px;
   }
@@ -453,8 +519,18 @@
     background: var(--home-action);
     color: var(--home-on-dark);
   }
-  .calendar-filter-toggle > span {
-    display: none;
+  .calendar-filter-count {
+    min-width: 2ch;
+    line-height: 20px;
+    border-radius: 99px;
+    background: var(--home-tint);
+    color: var(--home-action);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+  .calendar-filter-count[data-empty="true"] {
+    visibility: hidden;
   }
   .calendar-workspace {
     display: grid;
@@ -473,10 +549,10 @@
     border-bottom-right-radius: 0;
   }
   .calendar-filter-heading {
-    display: none;
+    padding-bottom: 12px;
   }
   .search-page .engine-options {
-    padding-top: 0;
+    padding-top: 16px;
     gap: 20px;
   }
   .search-page .engine-dates {
@@ -499,24 +575,16 @@
     font-weight: 600;
   }
   .search-page .view-tabs {
-    justify-self: stretch;
-    width: 100%;
+    width: min(100%, 280px);
   }
   .search-page .view-tabs button {
     padding: 8px;
   }
   .search-page .results-actions {
-    gap: 8px;
+    gap: 8px 12px;
   }
   .calendar-sort > span {
     display: none;
-  }
-  .search-page .results-actions select {
-    max-width: 132px;
-    padding: 8px;
-  }
-  .search-page .share-button {
-    padding: 8px 0;
   }
   .search-page .calendar-race-card {
     padding: 20px;
@@ -541,4 +609,11 @@
     transition: none;
     scroll-behavior: auto;
   }
+}
+
+.calendar-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
 }

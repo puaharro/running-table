@@ -92,8 +92,12 @@
   color: var(--home-muted);
   opacity: 1;
 }
-.home-search:focus-within {
-  border-color: var(--home-action);
+.homepage .home-search:has(input:focus) {
+  outline: 2px solid var(--home-action);
+  outline-offset: -2px;
+}
+.homepage .home-search input:focus-visible {
+  outline: none;
 }
 .home-search button,
 .home-primary {
@@ -211,6 +215,9 @@
   font-size: 12px;
 }
 .home-agenda {
+  --agenda-date-width: 88px;
+  background: linear-gradient(var(--home-line), var(--home-line)) var(--agenda-date-width) center /
+    1px 100% no-repeat;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -219,7 +226,8 @@
   border-top: 1px solid var(--home-line);
 }
 .home-agenda a {
-  display: flex;
+  display: grid;
+  grid-template-columns: var(--agenda-date-width) minmax(0, 1fr) auto;
   align-items: center;
   gap: 20px;
   min-height: 105px;
@@ -230,9 +238,23 @@
   text-underline-offset: 5px;
 }
 .home-agenda time {
-  flex: 0 0 72px;
+  position: relative;
   padding-right: 16px;
-  border-right: 1px solid var(--home-line);
+}
+.home-agenda time::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--home-action);
+  border-radius: 50%;
+  background: var(--home-card);
+  transform: translate(-50%, -50%);
+}
+.home-agenda a:is(:hover, :focus-visible, :active) time::after {
+  background: var(--home-action);
 }
 .home-agenda time strong {
   display: block;
@@ -251,7 +273,6 @@
   white-space: nowrap;
 }
 .home-agenda a > div {
-  flex: 1;
   min-width: 0;
 }
 .home-agenda h3 {
@@ -805,18 +826,29 @@
     padding-block: 14px;
   }
   .home-agenda a {
+    align-items: start;
     gap: 14px;
     padding-block: 18px;
   }
+  .home-agenda {
+    --agenda-date-width: 61px;
+  }
   .home-agenda time {
-    flex-basis: 61px;
     padding-right: 12px;
   }
   .home-agenda time strong {
     font-size: 30px;
   }
   .home-agenda time > span {
+    display: grid;
+    gap: 2px;
     font-size: 11px;
+  }
+  .home-agenda-date-separator {
+    display: none;
+  }
+  .home-agenda time::after {
+    top: 16.5px;
   }
   .home-agenda h3 {
     font-size: 16px;
@@ -1006,6 +1038,7 @@
 @media (max-width: 767px) {
   .home-agenda-action {
     display: flex;
+    align-self: center;
   }
 }
 
@@ -1151,6 +1184,27 @@
 .focus-banner-art i:nth-of-type(3) {
   right: -78px;
 }
+.focus-banner-copy h2::after {
+  content: "";
+  display: block;
+  width: min(100%, 10rem);
+  height: 2px;
+  margin: 10px 0 0 auto;
+  background: currentColor;
+  opacity: 0.55;
+  transform-origin: right center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .home-focus-banner[data-switched="true"] .focus-banner-slide:not([inert]) h2::after {
+    animation: focus-start-line 280ms ease-out both;
+  }
+}
+@keyframes focus-start-line {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+}
 .focus-banner-controls {
   display: flex;
   align-items: center;
@@ -1186,12 +1240,12 @@
   display: block;
   width: 7px;
   height: 7px;
-  border-radius: 50%;
+  border-radius: 4px;
   background: var(--home-control);
 }
 .focus-banner-dots button[aria-pressed="true"] > span {
-  width: 22px;
-  border-radius: 4px;
+  width: 24px;
+  height: 4px;
   background: var(--home-action);
 }
 .focus-banner-arrows button {
@@ -1253,6 +1307,10 @@
   }
   .home-intro > a {
     display: none;
+  }
+  .home-focus-banner[data-multiple="true"] .focus-banner-track {
+    gap: 6px;
+    padding-inline-end: 20px;
   }
   .focus-banner-slide {
     padding: 26px 22px;
@@ -1340,5 +1398,16 @@
   }
   .focus-banner-dots {
     gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-agenda-action svg,
+  .home-pick-action svg {
+    transition: translate var(--motion-fast);
+  }
+  .home-agenda a:is(:hover, :focus-visible, :active) .home-agenda-action svg,
+  .home-pick-primary:is(:hover, :focus-visible, :active) .home-pick-action svg {
+    translate: 3px 0;
   }
 }

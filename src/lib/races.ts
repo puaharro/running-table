@@ -219,7 +219,6 @@ export function selectRaces(races: Race[], f: Filters, now: Clock) {
     if (f.view === "past" && race.endDate >= today) return [];
     if (f.countries.length && !f.countries.includes(race.country ?? "香港")) return [];
     if (f.sports.length && !f.sports.includes(race.sport)) return [];
-    if (f.family && !race.tags.includes("親子")) return [];
     const raceMatchesQuery =
       !q ||
       [race.name, race.englishName, race.organizer, race.district, race.venue, ...race.tags]
@@ -227,6 +226,7 @@ export function selectRaces(races: Race[], f: Filters, now: Clock) {
         .toLocaleLowerCase()
         .includes(q);
     const groups = race.groups.flatMap((g) => {
+      if (f.family && !race.tags.includes("親子") && !/親子|少年/.test(g.name)) return [];
       if (!raceMatchesQuery && !(g.venue ?? "").toLocaleLowerCase().includes(q)) return [];
       const region = g.region === undefined ? race.region : g.region;
       if (f.regions.length && (!region || !f.regions.includes(region))) return [];

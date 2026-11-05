@@ -18,6 +18,13 @@ export type FocusSlide = {
   validUntil?: string;
 } & ({ kind: "editorial"; category: string } | { kind: "sponsored"; sponsorName: string });
 
+function slideStep(track: HTMLDivElement) {
+  const [first, second] = track.children;
+  return second
+    ? second.getBoundingClientRect().left - first.getBoundingClientRect().left
+    : track.clientWidth;
+}
+
 export function HomeFocusBanner({
   slides,
   initialNow,
@@ -29,7 +36,11 @@ export function HomeFocusBanner({
   const today = hongKongToday(new Date(now));
   const available = slides.filter((slide) => !slide.validUntil || slide.validUntil >= today);
   const [activeId, setActiveId] = useState(slides[0]?.id);
+  const [hasSwitched, setHasSwitched] = useState(false);
   const track = useRef<HTMLDivElement>(null);
+  const measuredStep = useRef(0);
+  const currentSlide = useRef(0);
+  const targetSlide = useRef<number | null>(null);
   const active = Math.max(
     0,
     available.findIndex((slide) => slide.id === activeId),
@@ -37,17 +48,34 @@ export function HomeFocusBanner({
   const availabilityKey = available.map((slide) => slide.id).join(":");
   const firstId = available[0]?.id;
   useEffect(() => {
+    const node = track.current;
     setActiveId(firstId);
-    track.current?.scrollTo({ left: 0, behavior: "instant" });
+    setHasSwitched(false);
+    currentSlide.current = 0;
+    targetSlide.current = null;
+    if (!node) return;
+    measuredStep.current = slideStep(node);
+    node.scrollTo({ left: 0, behavior: "instant" });
+
+    const observer = new ResizeObserver(() => {
+      const step = slideStep(node);
+      if (!step || Math.abs(step - measuredStep.current) < 0.5) return;
+      measuredStep.current = step;
+      const index = targetSlide.current ?? currentSlide.current;
+      node.scrollTo({ left: index * step, behavior: "instant" });
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
   }, [availabilityKey, firstId]);
   if (!available.length) return null;
 
   function show(index: number) {
     const node = track.current;
     if (!node || !available[index]) return;
+    targetSlide.current = index;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     node.scrollTo({
-      left: index * node.clientWidth,
+      left: index * slideStep(node),
       behavior: reducedMotion ? "instant" : "smooth",
     });
   }
@@ -57,16 +85,34 @@ export function HomeFocusBanner({
       className="shell home-focus-banner"
       aria-label="焦點賽事及資訊"
       aria-roledescription="輪播"
+      data-switched={hasSwitched}
+      data-multiple={available.length > 1}
     >
       <div
         className="focus-banner-track"
         id="home-focus-track"
         ref={track}
         tabIndex={0}
+        onPointerDown={() => {
+          targetSlide.current = null;
+        }}
+        onWheel={() => {
+          targetSlide.current = null;
+        }}
         onScroll={(event) => {
           const node = event.currentTarget;
-          const index = Math.round(node.scrollLeft / node.clientWidth);
-          if (available[index]) setActiveId(available[index].id);
+          const step = slideStep(node);
+          if (!step || Math.abs(step - measuredStep.current) >= 0.5) return;
+          const index = Math.round(node.scrollLeft / step);
+          if (Math.abs(node.scrollLeft - index * step) < 1 && index === targetSlide.current) {
+            targetSlide.current = null;
+          }
+          const next = available[index];
+          if (next && index !== currentSlide.current) {
+            currentSlide.current = index;
+            setHasSwitched(true);
+            setActiveId(next.id);
+          }
         }}
         onKeyDown={(event) => {
           if (event.target !== event.currentTarget) return;

@@ -86,7 +86,9 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
                     <time dateTime={race.date}>
                       <strong>{race.date.slice(8)}</strong>
                       <span>
-                        {Number(race.date.slice(5, 7))}月 · {race.date.slice(0, 4)}
+                        <span>{Number(race.date.slice(5, 7))}月</span>
+                        <span className="home-agenda-date-separator"> · </span>
+                        <span>{race.date.slice(0, 4)}</span>
                       </span>
                     </time>
                     <div>
