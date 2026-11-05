@@ -156,7 +156,7 @@ describe("original editorial experience reviews", () => {
     expect(() => assertEditorialReviews([r], now)).toThrow("human confirmation");
     const html = renderToStaticMarkup(createElement(RatingsPage));
     expect(html).not.toContain("原有編輯試評已暫停展示");
-    expect(html).toContain("評論索引");
+    expect(html).toContain("已發布評論");
   });
   it("keeps 2025 history separate from 2026 and never applies it to 10K", () => {
     const r = review();
@@ -319,16 +319,16 @@ describe("approved SCHKM 2026 publication", () => {
 });
 
 describe("race detail as the main review reading location", () => {
-  it("indexes reviews with exact detail anchors instead of duplicating full commentary", () => {
+  it("indexes original summaries with exact detail anchors while keeping full commentary in detail", () => {
     const html = renderToStaticMarkup(createElement(RatingsPage));
-    expect(html).toContain("評論索引");
+    expect(html).toContain("已發布評論");
     for (const review of editorialReviews) {
       const target = reviewTargets.find((t) => t.id === review.targetId)!;
       const race = races.find((r) => r.id === target.raceId)!;
       expect(html).toContain(raceHref(race).replace(/\/$/, "") + "#review-" + review.id);
       expect(html).toContain(String(review.editionYear) + " 年");
       expect(html).not.toContain(review.assessments.course.comment);
-      expect(html).not.toContain(review.quickTake!.summary);
+      expect(html).toContain(review.quickTake!.summary);
     }
     expect(html).toContain("三項獨立評分");
   });

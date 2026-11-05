@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Icon } from "./ui";
 import { StatusBadge } from "./status-badge";
-import { useClock } from "./live-registration";
+import { useClock } from "@/lib/use-clock";
 import { distanceLabel, displayDate, nextScheduledRace, statusSummary } from "@/lib/races";
 import { raceHref } from "@/lib/site";
 import type { Race } from "@/lib/types";

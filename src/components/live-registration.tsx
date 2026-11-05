@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useClock } from "@/lib/use-clock";
+export { useClock } from "@/lib/use-clock";
 import {
   displayDate,
   distanceLabel,
@@ -20,22 +22,6 @@ import { StatusBadge } from "./status-badge";
 import { GroupRatings } from "./group-ratings";
 import { channelPriceHeading, channelPriceLabel } from "@/lib/registration-display";
 
-export function useClock(initialNow: string) {
-  const [now, setNow] = useState(initialNow);
-  useEffect(() => {
-    const sync = () => setNow(new Date().toISOString());
-    sync();
-    const timer = window.setInterval(sync, 30000);
-    window.addEventListener("pageshow", sync);
-    document.addEventListener("visibilitychange", sync);
-    return () => {
-      window.clearInterval(timer);
-      window.removeEventListener("pageshow", sync);
-      document.removeEventListener("visibilitychange", sync);
-    };
-  }, []);
-  return now;
-}
 export function LiveRaceStatus({ race, initialNow }: { race: Race; initialNow: string }) {
   const now = useClock(initialNow),
     summary = statusSummary(race, race.groups, now);
@@ -279,13 +265,12 @@ export function RegistrationGroups({ race, initialNow }: { race: Race; initialNo
   return (
     <div className="group-grid">
       {race.groups.map((group) => (
-        <section key={group.id} className="group-card">
+        <section key={group.id} className="group-card" id={`group-${group.id}`} tabIndex={-1}>
           <div className="group-card-top">
             <strong>{distanceLabel(group.distanceKm)}</strong>
           </div>
           <h3>{group.name}</h3>
-          <GroupRatings race={race} group={group} />
-          <dl>
+          <dl className="group-facts">
             <div>
               <dt>比賽日期</dt>
               <dd>{displayDate(group.date, { year: "numeric" })}</dd>
@@ -301,12 +286,16 @@ export function RegistrationGroups({ race, initialNow }: { race: Race; initialNo
               <dd>{group.limit ?? "待核實，請查看官方組別資料。"}</dd>
             </div>
           </dl>
+          <GroupRatings race={race} group={group} />
           <h4 className="channels-heading">報名渠道 · {group.channels.length}</h4>
           {group.channels.map((channel) => (
             <div id={`channel-${channel.id}`} key={channel.id}>
               <ChannelCard race={race} group={group} channel={channel} now={now} />
             </div>
           ))}
+          <a className="group-back-link" href="#registration-groups">
+            返回組別選單 ↑
+          </a>
         </section>
       ))}
     </div>
@@ -343,6 +332,10 @@ export function RaceOverview({
           <dd>{[...new Set(race.groups.map((g) => distanceLabel(g.distanceKm)))].join(" / ")}</dd>
         </div>
         <div>
+          <dt>地區／起點</dt>
+          <dd>{race.venue}</dd>
+        </div>
+        <div>
           <dt>報名概況</dt>
           <dd>
             <LiveRaceStatus race={race} initialNow={now} />
@@ -355,8 +348,11 @@ export function RaceOverview({
       </dl>
       <p>報名狀態按渠道分開，接受申請不代表獲得名額。</p>
       <nav aria-label="賽事重點入口">
+        <a href="#race-about">賽事概覽 ↓</a>
         <a href="#registration-groups">報名渠道 ↓</a>
         <a href={experienceHref}>{experienceLabel} ↓</a>
+        <a href="#race-transport">交通安排 ↓</a>
+        <a href="#race-sources">資料來源 ↓</a>
       </nav>
     </section>
   );

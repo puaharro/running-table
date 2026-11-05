@@ -71,3 +71,28 @@
   --line: var(--border-subtle);
   --green: var(--status-open-text);
 }
+
+/* Homepage palette: calendar-first UI UX Pro Max adaptation. */
+:root {
+  --home-ink: #203e36;
+  --home-muted: #58645e;
+  --home-action: #1d5b46;
+  --home-action-pressed: #123b2d;
+  --home-paper: #f8f7f2;
+  --home-card: #ffffff;
+  --home-line: #d9dfd6;
+  --home-control: #7b8a80;
+  --home-focus: #a95f20;
+  --home-accent: #e3edbd;
+  --home-on-dark: #ffffff;
+  --home-on-dark-muted: #d2dfd6;
+  --home-dark-line: #ffffff33;
+  --home-tint: #edf0e8;
+  --home-cover-green: #dce6d9;
+  --home-cover-orange: #f1dfcb;
+  --home-cover-blue: #dce3e8;
+  --home-orange-ink: #72461e;
+  --home-blue-ink: #30475e;
+  --home-distance-bg: #f8eddc;
+  --calendar-icon: #65a47e;
+}

@@ -1,3 +1,4 @@
+import "./race-detail.css";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { races } from "@/data/races";
@@ -42,7 +43,7 @@ export default async function RacePage({ params }: Props) {
     ? raceStructuredData(race, releaseSettings.origin)
     : null;
   return (
-    <main id="main" className="detail-main">
+    <main id="main" className="detail-main race-detail-page">
       <div className="shell">
         {schema && (
           <script
@@ -54,34 +55,49 @@ export default async function RacePage({ params }: Props) {
         <Breadcrumb
           items={[{ label: "賽事搜尋／時間表", href: "/races/" }, { label: race.name }]}
         />
-        <div className="detail-heading">
-          <div>
-            <div className="eyebrow">
-              RACE INFORMATION <span>官方來源整理</span>
+        <div className="race-hero">
+          <div className="detail-heading">
+            <div>
+              <div className="eyebrow">
+                RACE INFORMATION <span>官方來源整理</span>
+              </div>
+              <h1>{race.name}</h1>
+              <p className="english-title">{race.englishName}</p>
             </div>
-            <h1>{race.name}</h1>
-            <p className="english-title">{race.englishName}</p>
+          </div>
+          <RaceOverview
+            race={race}
+            initialNow={now}
+            experienceHref={"#ratings-" + (reviewedGroups[0] ?? race.groups[0]).id}
+            experienceLabel={reviewedGroups.length ? "參賽體驗" : "參賽體驗（未評）"}
+          />
+          <div className="registration-card race-official-panel">
+            <span className="eyebrow">OFFICIAL INFORMATION</span>
+            <h2>先核對，再報名。</h2>
+            <p>查看大會當屆資料，確認你嘅組別、名額渠道及付款安排。</p>
+            <a
+              className="button button-coral official-cta"
+              href={race.sourceUrl!}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              前往官方賽事網站 <Icon name="arrow" />
+            </a>
+            <small>將開啟大會網站。本站唔收報名費，亦唔保證即時餘額。</small>
           </div>
         </div>
-        <RaceOverview
-          race={race}
-          initialNow={now}
-          experienceHref={"#ratings-" + (reviewedGroups[0] ?? race.groups[0]).id}
-          experienceLabel={reviewedGroups.length ? "參賽體驗" : "參賽體驗（未評）"}
-        />
-        <div className="demo-notice verified-notice">
-          <Icon name="check" size={22} />
-          <div>
+        <details className="race-verification">
+          <summary>
+            <Icon name="check" size={18} />
             <strong>賽事資料按官方來源整理</strong>
+            <span>資料核對：{formatTimestamp(race.verifiedAt!)} HKT</span>
+          </summary>
+          <div>
             <p>
               賽事資料整理核對：{formatTimestamp(race.verifiedAt!)}{" "}
               HKT。核實範圍見下方來源紀錄；未知欄位保留待核實。報名狀態另按渠道列出核對時間，只對應所列渠道。
             </p>
           </div>
-        </div>
-        <details className="registration-comparison">
-          <summary>比較各組報名概況</summary>
-          <RegistrationSummary race={race} initialNow={now} />
         </details>
         <div className="detail-layout">
           <article className="detail-content">
@@ -97,7 +113,7 @@ export default async function RacePage({ params }: Props) {
                 <strong>{race.organizer}</strong>
               </div>
             </div>
-            <section>
+            <section id="race-about" tabIndex={-1}>
               <h2>賽事概覽</h2>
               <p>{race.summary}</p>
             </section>
@@ -118,6 +134,17 @@ export default async function RacePage({ params }: Props) {
                 <span>時間：香港時間 · 收費說明以各組為準</span>
               </div>
               <div id="registration-groups" tabIndex={-1}>
+                <nav className="race-group-links" aria-label="跳到參賽組別">
+                  {race.groups.map((group) => (
+                    <a key={group.id} href={`#group-${group.id}`}>
+                      {group.name} <Icon name="arrow" size={16} />
+                    </a>
+                  ))}
+                </nav>
+                <details className="registration-comparison">
+                  <summary>比較各組報名概況</summary>
+                  <RegistrationSummary race={race} initialNow={now} />
+                </details>
                 <RegistrationGroups race={race} initialNow={now} />
               </div>
             </section>
@@ -137,11 +164,11 @@ export default async function RacePage({ params }: Props) {
                 </div>
               </section>
             )}
-            <section>
+            <section id="race-transport" tabIndex={-1}>
               <h2>交通及集合安排</h2>
               <p>{race.transport}</p>
             </section>
-            <section>
+            <section id="race-sources" tabIndex={-1}>
               <h2>資料來源及核實範圍</h2>
               <p>
                 「已核對」只適用下列列明欄位。未完成核對嘅費用、資格及報名狀態，唔會用其他組別資料代填。
@@ -191,7 +218,7 @@ export default async function RacePage({ params }: Props) {
                 ))}
               </div>
             </section>
-            <section>
+            <section id="race-changes" tabIndex={-1}>
               <h2>修改紀錄</h2>
               <ul className="change-log">
                 {race.changes?.map((change) => (
@@ -211,20 +238,27 @@ export default async function RacePage({ params }: Props) {
             <ReturnLink />
           </article>
           <aside className="detail-sidebar">
-            <div className="registration-card">
-              <span className="eyebrow">OFFICIAL INFORMATION</span>
-              <h2>先核對，再報名。</h2>
-              <p>查看大會當屆資料，確認你嘅組別、名額渠道及付款安排。</p>
-              <a
-                className="button button-coral official-cta"
-                href={race.sourceUrl!}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                前往官方賽事網站 <Icon name="arrow" />
+            <nav className="race-contents" aria-label="頁內目錄">
+              <h2>頁內目錄</h2>
+              <a href="#race-about">
+                賽事概覽 <Icon name="arrow" size={16} />
               </a>
-              <small>將開啟大會網站。本站唔收報名費，亦唔保證即時餘額。</small>
-            </div>
+              <a href="#registration-groups">
+                組別及報名 <Icon name="arrow" size={16} />
+              </a>
+              <a href={"#ratings-" + (reviewedGroups[0] ?? race.groups[0]).id}>
+                參賽體驗 <Icon name="arrow" size={16} />
+              </a>
+              <a href="#race-transport">
+                交通及集合 <Icon name="arrow" size={16} />
+              </a>
+              <a href="#race-sources">
+                資料來源 <Icon name="arrow" size={16} />
+              </a>
+              <a href="#race-changes">
+                修改紀錄 <Icon name="arrow" size={16} />
+              </a>
+            </nav>
             <div className="sidebar-note">
               <Icon name="check" />
               <h3>抽籤截止，唔等於全部渠道截止。</h3>

@@ -1,5 +1,7 @@
 # 開發及交接 v0.2
 
+最新核心頁面、程式入口、驗證及剩餘工作見 [2026-11-01 交接](HANDOFF_2026-11-01.md)。舊批次記錄與本輪不一致時，以最新交接及 GitHub 狀態為準。
+
 ## 指令
 
 ```text
@@ -26,7 +28,7 @@ Node 24、Next.js 靜態輸出；package-lock.json 固定依賴。dev 啟動開�
 
 ## Git 與 CI
 
-本地開發分支 feature/production-content-foundation。程式、公開資料、指南及來源紀錄一併提交；唔放環境密鑰、私人投稿或會員資料。
+功能修改使用獨立分支及 Pull Request；本輪為 `codex/nxtgo-core-pages-redesign`，目標為 `main`。程式、公開資料、指南及來源紀錄一併提交；唔放環境密鑰、私人投稿或會員資料。
 
 GitHub Actions 會於 main 更新或 Pull Request 執行 npm ci、測試、建置、匯出及 HTTP 路由檢查。repo 已連接 GitHub；功能修改使用獨立分支與 Pull Request，發布前檢查該提交的 CI 結果。
 
@@ -45,9 +47,9 @@ GitHub Actions 會於 main 更新或 Pull Request 執行 npm ci、測試、建�
 
 ## 公開發布前剩餘工作
 
-1. 選定 GitHub repo、正式網域及部署平台，配置來源推送／部署流程。
+1. Repo 已連接 GitHub；另需確認正式網域及部署平台，經營運者指示後再配置部署流程。
 2. 補完優先資料待辦，增加已核實香港路跑覆蓋面。
-3. 完成桌面／手機瀏覽器與鍵盤操作驗證；目前有工具政策限制，未繞過。
+3. 本輪已完成多尺寸桌面／手機及主要鍵盤操作；仍需完整螢幕閱讀器、跨瀏覽器及實際網絡效能驗證。
 4. 補上真實營運者與聯絡資料，按實際託管／資料處理完成政策文件。
 5. 設定正式 origin、收錄及參數頁索引策略；核對 sitemap、canonical、活動資料。
 6. 安排人工核實及靜態重新建置頻率，唔將重建當成重新核實。

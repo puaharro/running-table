@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SiteNavigation } from "./site-navigation";
 import type { Guide } from "@/data/guides";
 import { siteName } from "@/lib/site";
 
@@ -84,13 +85,7 @@ export function Header() {
             </span>
             <span className="brand-wordmark">{siteName}</span>
           </Link>
-          <nav aria-label="主要導航">
-            <Link href="/">首頁</Link>
-            <Link href="/races/">賽事搜尋／時間表</Link>
-            <Link href="/ratings/">體驗評級</Link>
-            <Link href="/guides/">報名及選賽指南</Link>
-            <Link href="/about/">關於{siteName}</Link>
-          </nav>
+          <SiteNavigation />
           <span className="header-note">香港路跑 · 一站掌握</span>
         </div>
       </header>
