@@ -12,7 +12,11 @@ it("offers a real search form and the next three races in chronological order", 
   expect(html).toContain('name="q"');
   const agenda = html.split('<ol class="home-agenda">')[1].split("</ol>")[0];
   expect(agenda.match(/<li>/g)).toHaveLength(3);
-  const orderedIds = ["hzmb-half-marathon-2026", "mizuno-hk-run-fest-2026", "unicef-powerun-2027"];
+  const orderedIds = [
+    "rmac-gold-coast-15k-2026",
+    "hzmb-half-marathon-2026",
+    "pocari-sweat-run-fest-2026",
+  ];
   const positions = orderedIds.map((id) => agenda.indexOf(id));
   expect(positions.every((position) => position >= 0)).toBe(true);
   expect(positions).toEqual([...positions].sort((a, b) => a - b));

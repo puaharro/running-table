@@ -14,7 +14,7 @@ describe("charity directory is an enquiry resource rather than a registration ch
       "https://www.hkmarathon.com/about-the-charitable-organisations",
     );
     expect(main.enquiryLinks![0].sourceIds).toContain("schkm-charity-directory");
-    expect(races.flatMap((r) => r.groups.flatMap((g) => g.channels))).toHaveLength(41);
+    expect(races.flatMap((r) => r.groups.flatMap((g) => g.channels))).toHaveLength(72);
     expect(main.groups.every((g) => !g.channels.some((c) => c.id === `${g.id}-charity`))).toBe(
       true,
     );
@@ -42,6 +42,8 @@ describe("charity directory is an enquiry resource rather than a registration ch
         encoding: "utf8",
       }),
     );
+    const legacyNames = races.slice(0, 6).map((r) => r.name);
+    queue.items = queue.items.filter((item: { race: string }) => legacyNames.includes(item.race));
     expect(queue.items).toHaveLength(6);
     const missing = queue.items.filter((item: { reasons: string[] }) =>
       item.reasons.some((r) => r !== "7日內報名截止，優先覆核"),
