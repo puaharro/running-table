@@ -154,7 +154,7 @@ export const runnerOpinions: RunnerOpinions[] = [
         sources: [
           {
             author: "Rickie Kwong",
-            quote: "坦白講，新不如舊！\n上上落落再加陣陣逆風",
+            quote: "上上落落再加陣陣逆風",
             url: "https://rickiekwong.blogspot.com/2025/03/hk-actions-2025-standard-chartered-hong.html",
             excerpt: true,
             postedOn: "2025-03-27",
@@ -177,7 +177,7 @@ export const runnerOpinions: RunnerOpinions[] = [
         sources: [
           {
             author: "蜘蛛人校長",
-            quote: "報到領完物資後\n只有標準的水、運動飲料",
+            quote: "報到領完物資後",
             url: "https://running.biji.co/index.php?act=detail&id=57168&q=review",
             excerpt: true,
             postedOn: "2025-03-02",
@@ -185,7 +185,7 @@ export const runnerOpinions: RunnerOpinions[] = [
           },
           {
             author: "Rickie Kwong",
-            quote: "坦白講，新不如舊！\n上上落落再加陣陣逆風",
+            quote: "坦白講，新不如舊！",
             url: "https://rickiekwong.blogspot.com/2025/03/hk-actions-2025-standard-chartered-hong.html",
             excerpt: true,
             postedOn: "2025-03-27",
@@ -200,7 +200,7 @@ export const runnerOpinions: RunnerOpinions[] = [
         sources: [
           {
             author: "蜘蛛人校長",
-            quote: "報到領完物資後\n只有標準的水、運動飲料",
+            quote: "只有標準的水、運動飲料",
             url: "https://running.biji.co/index.php?act=detail&id=57168&q=review",
             excerpt: true,
             postedOn: "2025-03-02",
