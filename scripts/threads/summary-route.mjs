@@ -3,6 +3,7 @@ import { renderSummary } from "./summary-view.mjs";
 import { ReviewError } from "./review-store.mjs";
 
 export function serveSummary({
+  transformHtml = (html) => html,
   request,
   response,
   review,
@@ -31,14 +32,14 @@ export function serveSummary({
       })
       .end(summaryCsv(result));
   } else
-    response
-      .writeHead(200, { "Content-Type": "text/html; charset=utf-8" })
-      .end(
+    response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }).end(
+      transformHtml(
         renderSummary(result, {
           apiBase,
           reviewUrl,
           token,
           comparisonUrl: `${apiBase === "/api" ? "/api/compare" : "/compare"}?left=${result.dataset_id}`,
         }),
-      );
+      ),
+    );
 }

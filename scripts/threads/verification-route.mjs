@@ -2,6 +2,7 @@ import { ReviewError } from "./review-store.mjs";
 import { verificationCsv, VERIFICATION_STATUSES } from "./verification-store.mjs";
 import { renderVerification } from "./verification-view.mjs";
 export function serveVerification({
+  transformHtml = (html) => html,
   request,
   response,
   reviews,
@@ -56,5 +57,9 @@ export function serveVerification({
   else
     response
       .writeHead(200, { "Content-Type": "text/html; charset=utf-8" })
-      .end(renderVerification(data, { base, compare, token, taskId: params.get("task") }));
+      .end(
+        transformHtml(
+          renderVerification(data, { base, compare, token, taskId: params.get("task") }),
+        ),
+      );
 }

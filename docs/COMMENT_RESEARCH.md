@@ -1,4 +1,4 @@
-# 多來源跑手評論研究 v1
+# 私人內容管理與賽事研究
 
 這是本機私人研究工具，沿用 Threads 的保存、去重、逐條覆核、主題修正及摘要流程。沒有公開投稿、情緒分數、平台全量爬取或自動發布。
 
@@ -7,10 +7,22 @@
 Node.js 24+，在 repo 根目錄執行：
 
 ```sh
-npm run research:comments
+npm run content:manage
 ```
 
 開啟終端顯示的網址，預設為 `http://127.0.0.1:3334/`。如埠已使用，可加 `-- --port 0` 自選空閒埠。停止工具按 Ctrl+C。
+
+## 三個簡單分區
+
+- **賽事資料**：查看目前網站目錄、組別與官方來源。按「建立更新建議稿」預填賽事及年份，沒有直接改動正式資料。
+- **賽事研究**：搜尋入口、貼原文、清理／去重、人工覆核及摘要沿用原有流程，位於 `/research`。
+- **評論草稿**：保存評論或賽事更新建議，材料／來源與觀察範圍按需展開；保留每個版本，可下載完整稿及歷史。
+
+流程是「草稿 → 待確認 → 確認後另行發布」。正文、材料及範圍齊備才可標記待確認；這個標記不是營運者批准，沒有發布按鈕或自動建立審批紀錄。任何修改會返回草稿，須重新確認完整版本。下載後按現有營運者確認及發布流程處理，工具不會直接改動網站。研究摘要不會自動變成已批准評論，歷史已發布評論也不會自動匯入私人草稿。
+
+## 研究操作
+
+進入「賽事研究」後：
 
 1. 選賽事及目標年份，填組別／距離；可以改搜尋字詞。現有四場香港賽事 preset 沿用 Threads 工具，未知賽事需要另加 preset，不能亂用另一場。
 2. 按來源搜尋入口：Marathon’s World、Facebook、Threads、Instagram、YouTube、個人網誌、運動筆記。YouTube 開站內搜尋，其他開 Google 網站範圍搜尋；網誌為一般網頁搜尋。這些是搜尋起點，不是已讀取的搜尋結果。年份只是字詞，不是出帖日期篩選。
@@ -35,7 +47,8 @@ npm run research:comments
 ## 私人保存與相容性
 
 - 多來源原始資料：`.editorial-private/research/comments/manual.sqlite`。
-- 人工覆核：同目錄 `manual-reviews.sqlite`。兩者需要一起備份。
+- 人工覆核：同目錄 `manual-reviews.sqlite`。連同草稿資料庫一起備份。
+- 草稿與版本紀錄：`.editorial-private/content-management/manual.sqlite`，與研究資料庫分開。
 - 示範測試：`npm run research:comments -- --demo --port 0`，使用獨立的 `demo.sqlite`／`demo-reviews.sqlite`，不自動載入任何虛構內容。
 - 舊 `npm run import:threads` 保持 Threads-only，使用原來的資料庫與埠 3332。多來源與舊工作區不可混用資料庫，沒有改寫既有原始資料。
 - 全部私人內容受 `.editorial-private/` Git 忽略規則保護；不放入 `src/data/`、`public/`、網站部署封裝或提交到 Git。
