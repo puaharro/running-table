@@ -52,10 +52,24 @@ try {
   }
   const missing = await fetch(`http://127.0.0.1:${port}/missing-race/`, { method: "HEAD" });
   if (missing.status !== 404) throw new Error("Missing routes must return 404.");
+  const privatePaths = [
+    "/drafts/",
+    "/research/",
+    "/api/content/drafts/save",
+    "/api/batches",
+    "/.editorial-private/content-management/manual.sqlite",
+    "/.editorial-private/research/comments/manual.sqlite",
+    "/scripts/import-threads.mjs",
+  ];
+  for (const path of privatePaths) {
+    const response = await fetch(`http://127.0.0.1:${port}${path}`);
+    if (response.status !== 404)
+      throw new Error(`${path}: private workspace must not be served by the website.`);
+  }
   const post = await fetch(`http://127.0.0.1:${port}/`, { method: "POST" });
   if (post.status !== 405) throw new Error("Static preview must reject POST.");
   console.log(
-    `HTTP smoke passed: ${paths.length} page routes return 200; 404 and 405 handling verified.`,
+    `HTTP smoke passed: ${paths.length} page routes return 200; ${privatePaths.length} private workspace paths return 404; 404 and 405 handling verified.`,
   );
 } finally {
   server.kill();
