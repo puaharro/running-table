@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { PRESETS } from "./clean.mjs";
 import { REASONS } from "./clean-view.mjs";
-import { sourceLink } from "./report.mjs";
+import { evidenceLink, metadataText } from "../research/sources.mjs";
 const e = (value) =>
   String(value ?? "").replace(
     /[&<>"']/g,
@@ -48,10 +48,10 @@ export function renderReview(
         decision = saved?.decision ?? "pending";
       const race = saved ? (saved.race_name ?? "") : source.target.name;
       const year = saved ? (saved.event_year ?? "") : source.run.target_year;
-      const link = sourceLink(record.permalink ?? record.raw.source_post_url);
+      const link = evidenceLink(record);
       return `<article class="record" data-manual="${decision}"><header><strong>${record.kind === "comment" ? "留言" : "POST"} ${e(displayId(record.id))} · @${e(record.username ?? "作者未知")}</strong><span class="manual-badge">人工：${LABELS[decision]}</span></header>
-    <p class="text">${e(record.clean_text || "（沒有文字）")}</p><p class="meta">原始討論 ${e(displayId(record.root_post_id))} · 自動判斷：${e(LABELS[record.disposition])}${record.duplicate_of ? ` · 重複指向 ${e(record.duplicate_of)}` : ""}</p>
-    <details><summary>查看原文、自動判斷及上下文依據</summary><ul>${record.reasons.map((reason) => `<li>${e(REASONS[reason] ?? reason)}</li>`).join("")}</ul><pre>${e(JSON.stringify({ raw: record.raw, parent_id: record.parent_id, matched_aliases: record.matched_aliases, other_races: record.other_races, mentioned_years: record.mentioned_years }, null, 2))}</pre>${link ? `<a href="${e(link)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">${record.raw.link_scope === "root" ? "查看來源主帖（沒有留言獨立連結）" : "查看 Threads 原文"} ↗</a>` : ""}</details>
+    <p class="text">${e(record.clean_text || "（沒有文字）")}</p>${record.raw.source_platform ? `<p class="meta">${e(metadataText(record.raw))}</p>` : ""}<p class="meta">原始討論 ${e(displayId(record.root_post_id))} · 自動判斷：${e(LABELS[record.disposition])}${record.duplicate_of ? ` · 重複指向 ${e(record.duplicate_of)}` : ""}</p>
+    <details><summary>查看原文、自動判斷及上下文依據</summary><ul>${record.reasons.map((reason) => `<li>${e(REASONS[reason] ?? reason)}</li>`).join("")}</ul><pre>${e(JSON.stringify({ raw: record.raw, parent_id: record.parent_id, matched_aliases: record.matched_aliases, other_races: record.other_races, mentioned_years: record.mentioned_years }, null, 2))}</pre>${link ? `<a href="${e(link)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">${record.raw.link_scope === "root" ? "查看來源主帖（沒有留言獨立連結）" : "查看來源原文"} ↗</a>` : ""}</details>
     <form class="review-form" data-key="${e(record.key)}" data-dirty="false"><input type="hidden" name="revision" value="${saved?.revision ?? 0}">
     <div class="fields"><label>覆核結果<select name="decision" aria-label="${e(record.key)} 覆核結果">${["pending", "keep", "exclude"].map((value) => `<option value="${value}"${decision === value ? " selected" : ""}>${LABELS[value]}</option>`).join("")}</select></label>
     <label>賽事名稱<input name="race_name" maxlength="200" list="races" value="${e(race)}" aria-label="${e(record.key)} 賽事名稱" placeholder="留空代表未確定"></label>

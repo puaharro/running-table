@@ -1,5 +1,7 @@
 # NXTGO｜香港路跑資訊
 
+私人多來源評論研究：`npm run research:comments`，開啟本機工作區搜尋／保存 Marathon’s World、Facebook、Threads、Instagram、YouTube、網誌及運動筆記材料，再接人工覆核與摘要。[操作說明](docs/COMMENT_RESEARCH.md)。搜尋入口不會自動抓取，沒有公開發布或新增分數。
+
 正式開發 v0.2.0，2026-10-21。以主頁發掘精選賽事，另設搜尋／時間表搵賽事，連到獨立資訊頁及原創指南；開發方式參照 MTRI 嘅 Next.js、React、TypeScript 及 Git 管理。
 
 ## 最新更新：核心頁面改版（2026-11-01）

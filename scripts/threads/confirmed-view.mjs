@@ -1,3 +1,4 @@
+import { metadataText } from "../research/sources.mjs";
 import { createHash } from "node:crypto";
 import { TOPICS, TOPIC_KEYS } from "./topics.mjs";
 import { renderTopicPanel, renderTopicSummary, TOPIC_STYLES, TOPIC_SCRIPT } from "./topic-ui.mjs";
@@ -39,7 +40,8 @@ export function renderConfirmed(
     ${group.record_ids
       .map((id) => {
         const record = byId.get(id);
-        return `<article class="item" data-topic-labels="${e(record.topics.effective_labels.join(" "))}" data-topic-status="${e(record.topics.status)}" data-topic-review="${record.topics.needs_review ? "yes" : "no"}" data-search="${e([record.original_text, record.username, record.race_name, record.group_label].join(" "))}"><strong>${record.kind === "comment" ? "留言" : "POST"} · @${e(record.username ?? "作者未知")}</strong><p class="text">${e(record.original_text)}</p><p class="meta">覆核名稱 ${e(record.race_name)} · 年份 ${record.event_year} · ${record.observations.length} 份保留觀測</p>
+        return `<article class="item" data-topic-labels="${e(record.topics.effective_labels.join(" "))}" data-topic-status="${e(record.topics.status)}" data-topic-review="${record.topics.needs_review ? "yes" : "no"}" data-search="${e([record.original_text, record.username, record.race_name, record.group_label, record.source_metadata?.group, record.source_metadata?.label, record.source_metadata?.posted_date].join(" "))}"><strong>${record.kind === "comment" ? "留言" : "POST"} · @${e(record.username ?? "作者未知")}</strong><p class="text">${e(record.original_text)}</p><p class="meta">覆核名稱 ${e(record.race_name)} · 年份 ${record.event_year} · ${record.observations.length} 份保留觀測</p>
+    ${record.source_metadata ? `<p class="meta">${e(metadataText(record.source_metadata))}</p>` : ""}
     ${record.source_url ? `<a href="${e(record.source_url)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">${record.source_scope === "root" ? "查看來源主帖" : "查看來源"} ↗</a>` : ""}
     ${record.warnings.length ? `<ul>${record.warnings.map((reason) => `<li>${e(REASONS[reason] ?? reason)}</li>`).join("")}</ul>` : ""}
     <details><summary>覆核及原文追溯</summary><pre>${e(JSON.stringify({ identity: record.identity, identity_basis: record.identity_basis, observations: record.observations }, null, 2))}</pre></details>${renderTopicPanel(record, result, topicToken)}<p><a href="${e(reviewUrl)}">修改保留／排除、賽事或年份 →</a></p></article>`;

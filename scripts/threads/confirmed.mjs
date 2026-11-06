@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { PRESETS } from "./clean.mjs";
-import { sourceLink } from "./report.mjs";
+import { evidenceLink, sourceMetadata } from "../research/sources.mjs";
 import { TOPIC_RULE_VERSION, topicsForRecord, topicSummary } from "./topics.mjs";
 
 const hash = (value) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
@@ -101,7 +101,8 @@ export function buildConfirmed(review) {
       original_text: record.raw.text,
       clean_text: record.clean_text,
       username: record.username,
-      source_url: sourceLink(record.permalink ?? record.raw.source_post_url),
+      source_url: evidenceLink(record),
+      ...(record.raw.source_platform ? { source_metadata: sourceMetadata(record.raw) } : {}),
       source_scope: record.raw.link_scope ?? "item",
       identity_basis:
         record.raw.ingestion_method === "manual_paste"
@@ -211,6 +212,7 @@ export function confirmedCsv(result) {
     "topic_revision",
     "topic_note",
     "topic_evidence",
+    "source_metadata",
   ];
   const rows = result.records.map((record) => [
     result.mode,
@@ -237,6 +239,7 @@ export function confirmedCsv(result) {
     record.topics.manual?.revision ?? "",
     record.topics.manual?.note ?? "",
     JSON.stringify(record.topics.automatic.evidence),
+    record.source_metadata ? JSON.stringify(record.source_metadata) : "",
   ]);
   return (
     "\uFEFF" + [columns, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n"

@@ -1,3 +1,4 @@
+import { metadataText } from "../research/sources.mjs";
 import { createHash } from "node:crypto";
 import { TOPICS, TOPIC_KEYS } from "./topics.mjs";
 const e = (value) =>
@@ -56,9 +57,9 @@ export function renderSummary(
             const p = byId.get(id),
               manual = p.manual,
               ev = p.evidence;
-            return `<article class="point" id="point-${p.id}" data-status="${e(p.status)}" data-excluded="${p.excluded ? "yes" : "no"}" data-search="${e([ev.original_text, ev.username, p.race_name, p.topic_label].join(" "))}"><p class="meta"><span class="point-status">${e(statuses[p.status])}</span> · ${e(topicStates[p.topic_status])}</p><p class="point-text">${e(p.text)}</p>
+            return `<article class="point" id="point-${p.id}" data-status="${e(p.status)}" data-excluded="${p.excluded ? "yes" : "no"}" data-search="${e([ev.original_text, ev.username, p.race_name, p.topic_label, ev.source_metadata?.group, ev.source_metadata?.label].join(" "))}"><p class="meta"><span class="point-status">${e(statuses[p.status])}</span> · ${e(topicStates[p.topic_status])}</p><p class="point-text">${e(p.text)}</p>
     <p class="meta">${ev.kind === "comment" ? "留言" : "主帖"} · @${e(ev.username ?? "作者未知")} · 1 個來源身份${p.known_hk_preset ? "" : " · 自訂賽事，地區未確認"}</p>
-    <details open><summary>原文及來源</summary><blockquote>${e(ev.original_text)}</blockquote>${ev.source_url ? `<a href="${e(ev.source_url)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">${ev.source_scope === "root" ? "查看來源主帖（沒有留言獨立連結）" : "查看來源"} ↗</a>` : "<p>未有可用來源連結；未補造連結。</p>"}${ev.warnings.length ? `<p class="meta">${ev.warnings.includes("manual_source_unverified") ? "手動貼上來源，未經 API 驗證。 " : ""}${ev.warnings.includes("other_kept_duplicate_candidate") ? "另一來源可能重複，未自動刪除。 " : ""}身份與完整覆核記錄見下方追溯。</p>` : ""}<details><summary>原始觀測及覆核追溯</summary><pre>${e(JSON.stringify(ev, null, 2))}</pre></details></details>
+    ${ev.source_metadata ? `<p class="meta">${e(metadataText(ev.source_metadata))}</p>` : ""}<details open><summary>原文及來源</summary><blockquote>${e(ev.original_text)}</blockquote>${ev.source_url ? `<a href="${e(ev.source_url)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">${ev.source_scope === "root" ? "查看來源主帖（沒有留言獨立連結）" : "查看來源"} ↗</a>` : "<p>未有可用來源連結；未補造連結。</p>"}${ev.warnings.length ? `<p class="meta">${ev.warnings.includes("manual_source_unverified") ? "手動貼上來源，未經 API 驗證。 " : ""}${ev.warnings.includes("other_kept_duplicate_candidate") ? "另一來源可能重複，未自動刪除。 " : ""}身份與完整覆核記錄見下方追溯。</p>` : ""}<details><summary>原始觀測及覆核追溯</summary><pre>${e(JSON.stringify(ev, null, 2))}</pre></details></details>
     <details><summary>自動摘錄依據</summary><blockquote>${e(p.automatic.text)}</blockquote><p class="meta">${p.automatic.truncated ? "原文節錄，完整原文見上方。" : "完整原文。"}不合併他人意見、不判斷好壞；人工摘要修正不會改寫此摘錄。</p></details>
     <form class="summary-form" data-id="${p.id}" data-dirty="false"><input type="hidden" name="expected_revision" value="${manual?.revision ?? 0}"><input type="hidden" name="expected_evidence_digest" value="${p.evidence_digest}"><input type="hidden" name="expected_summary_fingerprint" value="${result.summary_fingerprint}">
     <label>修正摘要重點<textarea name="text" maxlength="2000" rows="3">${e(p.text)}</textarea></label><label>摘要覆核狀態<select name="status">${[

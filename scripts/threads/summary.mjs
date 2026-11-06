@@ -49,6 +49,7 @@ export function buildSummary(review) {
         kind: record.kind,
         source_url: record.source_url,
         source_scope: record.source_scope,
+        ...(record.source_metadata ? { source_metadata: record.source_metadata } : {}),
         identity_basis: record.identity_basis,
         warnings: record.warnings,
         observations: record.observations,
@@ -63,6 +64,7 @@ export function buildSummary(review) {
         kind: record.kind,
         source_url: record.source_url,
         source_scope: record.source_scope,
+        ...(record.source_metadata ? { source_metadata: record.source_metadata } : {}),
         race_key: record.race_key,
         event_year: record.event_year,
         topic,
@@ -170,6 +172,7 @@ export function summaryCsv(result) {
     "warnings",
     "revision",
     "note",
+    "source_metadata",
   ];
   return (
     "\uFEFF" +
@@ -194,6 +197,7 @@ export function summaryCsv(result) {
         p.evidence.warnings.join(";"),
         p.manual?.revision ?? 0,
         p.manual?.note ?? "",
+        p.evidence.source_metadata ? JSON.stringify(p.evidence.source_metadata) : "",
       ]),
     ]
       .map((row) => row.map(cell).join(","))

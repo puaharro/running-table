@@ -116,7 +116,7 @@ export async function startManualServer({ store, reviews, port = 0 }) {
         throw new ReviewError(405, "不支援這個操作。");
       }
       if (request.url === "/") {
-        html(renderManualImport(store.mode, token));
+        html(renderManualImport(store.mode, token, { multiSource: store.multiSource }));
         return;
       }
       if (request.url === "/api/batches") {
