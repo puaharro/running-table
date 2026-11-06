@@ -2,11 +2,6 @@ import { expect, it } from "vitest";
 import { races } from "@/data/races";
 
 it("keeps the winter expansion sourced and within the researched window without inventing registration", () => {
-  const additions = races.filter(
-    (r) =>
-      r.sources?.some((s) => s.checkedAt.startsWith("2026-11-06")) &&
-      !r.id.includes("standard-chartered"),
-  );
   // Select the new batch by its documented stable IDs rather than the test clock.
   const batch = races.filter((r) =>
     [
