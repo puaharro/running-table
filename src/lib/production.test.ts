@@ -25,9 +25,9 @@ describe("real catalog publication and provenance", () => {
     );
     expect(() => assertCatalog(data)).toThrow("field evidence");
   });
-  it("publishes six source-backed real events and no fixtures", () => {
+  it("publishes source-backed real events and no fixtures", () => {
     const data = catalog();
-    expect(publishedRaces(data)).toHaveLength(6);
+    expect(publishedRaces(data)).toHaveLength(data.length);
     expect(data.every((r) => r.verification === "verified" && r.sources!.length > 0)).toBe(true);
   });
   it("rejects duplicate IDs and broken source references", () => {
@@ -41,9 +41,9 @@ describe("real catalog publication and provenance", () => {
   it("keeps drafts and demo records out of published results", () => {
     const data = catalog();
     data[0].publication = "draft";
-    expect(publishedRaces(data)).toHaveLength(5);
+    expect(publishedRaces(data)).toHaveLength(data.length - 1);
     data[1].verification = "demo";
-    expect(publishedRaces(data)).toHaveLength(4);
+    expect(publishedRaces(data)).toHaveLength(data.length - 2);
     expect(() => assertCatalog(data)).toThrow("verified");
   });
   it("rejects unsafe links, invalid timestamps and mismatched deadlines", () => {

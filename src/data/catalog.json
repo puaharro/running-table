@@ -1679,5 +1679,1363 @@
         "sourceIds": ["schkm-charity-directory", "schkm-charity", "schkm-charity-programme-terms"]
       }
     ]
+  },
+  {
+    "id": "rmac-gold-coast-15k-2026",
+    "slug": "rmac-gold-coast-15k-2026",
+    "name": "RMAC 黃金海岸15公里賽 2026",
+    "englishName": "RMAC Gold Coast 15K 2026",
+    "date": "2026-11-08",
+    "endDate": "2026-11-08",
+    "region": null,
+    "country": "香港",
+    "district": "地區待核實",
+    "venue": "地點待核實",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "香港馬拉松推廣社",
+    "summary": "田總官方2026賽期表列明11月8日及15公里賽；主辦網站暫未能讀取，費用、起點、資格及報名渠道詳情待核實。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "rmac-gold-coast-15k-2026-0",
+        "name": "15公里",
+        "distanceKm": 15,
+        "date": "2026-11-08",
+        "sourceIds": ["rmac-gold-coast-15k-2026-official"],
+        "channels": [
+          {
+            "id": "rmac-gold-coast-15k-2026-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "費用／最低籌款額待核實。",
+            "status": "unknown",
+            "registrationUrl": "https://www.hkaaa.com/tc/template.php?menu_refid=72&refid=131",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["rmac-gold-coast-15k-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": null
+      }
+    ],
+    "sourceUrl": "https://www.hkaaa.com/tc/template.php?menu_refid=72&refid=131",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "rmac-gold-coast-15k-2026-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://www.hkaaa.com/tc/template.php?menu_refid=72&refid=131",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["date", "groups.distance", "organizer"],
+        "note": "只核對列明欄位；活動地點不等於組別起點。未知不借用往屆資料。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "pocari-sweat-run-fest-2026",
+    "slug": "pocari-sweat-run-fest-2026",
+    "name": "寶礦力水特跑步祭 2026",
+    "englishName": "Pocari Sweat Run Fest 2026",
+    "date": "2026-11-15",
+    "endDate": "2026-11-15",
+    "region": "新界",
+    "country": "香港",
+    "district": "香港科學園高錕會議中心廣場",
+    "venue": "香港科學園高錕會議中心廣場",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "香港大塚製藥",
+    "summary": "收錄10／5／3公里個人路跑；另有隊際及1公里障礙活動，本頁未收錄其費用。所列為正價，早鳥優惠不代表目前仍適用。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "pocari-sweat-run-fest-2026-0",
+        "name": "10公里 GO RUN 個人賽",
+        "distanceKm": 10,
+        "date": "2026-11-15",
+        "sourceIds": ["pocari-sweat-run-fest-2026-official"],
+        "channels": [
+          {
+            "id": "pocari-sweat-run-fest-2026-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 380,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://www.pocarisweat.hk/news/detail/?cid=73",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["pocari-sweat-run-fest-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      },
+      {
+        "id": "pocari-sweat-run-fest-2026-1",
+        "name": "5公里 GO RUN 個人賽",
+        "distanceKm": 5,
+        "date": "2026-11-15",
+        "sourceIds": ["pocari-sweat-run-fest-2026-official"],
+        "channels": [
+          {
+            "id": "pocari-sweat-run-fest-2026-1-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 380,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://www.pocarisweat.hk/news/detail/?cid=73",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["pocari-sweat-run-fest-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      },
+      {
+        "id": "pocari-sweat-run-fest-2026-2",
+        "name": "3公里 GO RUN 個人賽",
+        "distanceKm": 3,
+        "date": "2026-11-15",
+        "sourceIds": ["pocari-sweat-run-fest-2026-official"],
+        "channels": [
+          {
+            "id": "pocari-sweat-run-fest-2026-2-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 380,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://www.pocarisweat.hk/news/detail/?cid=73",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["pocari-sweat-run-fest-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      }
+    ],
+    "sourceUrl": "https://www.pocarisweat.hk/news/detail/?cid=73",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "pocari-sweat-run-fest-2026-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://www.pocarisweat.hk/news/detail/?cid=73",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["date", "groups.distance", "groups.price"],
+        "note": "只核對列明欄位；活動地點不等於組別起點。未知不借用往屆資料。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "gorun-together-2026",
+    "slug": "gorun-together-2026",
+    "name": "GOrun Together 挑戰賽 2026",
+    "englishName": "GOrun Together Challenge 2026",
+    "date": "2026-11-22",
+    "endDate": "2026-11-22",
+    "region": "新界",
+    "country": "香港",
+    "district": "大埔白石角海濱長廊",
+    "venue": "大埔白石角海濱長廊",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "聖雅各福群會",
+    "summary": "主辦新聞稿列明8公里個人／隊制及2公里親子賽，10月21日截止。本頁先列個人及親子組。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "gorun-together-2026-0",
+        "name": "8公里個人賽",
+        "distanceKm": 8,
+        "date": "2026-11-22",
+        "sourceIds": ["gorun-together-2026-official"],
+        "channels": [
+          {
+            "id": "gorun-together-2026-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 400,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "closed",
+            "registrationUrl": "https://www.sjs.org.hk/TC/media/press-detail.php?id=112",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["gorun-together-2026-official"],
+            "registrationVerifiedAt": "2026-11-06T16:43:15Z",
+            "deadline": "2026-10-21"
+          }
+        ],
+        "venue": "大埔白石角海濱長廊",
+        "region": "新界",
+        "startTime": "2026-11-22T08:30:00+08:00"
+      },
+      {
+        "id": "gorun-together-2026-1",
+        "name": "2公里親子二人賽",
+        "distanceKm": 2,
+        "date": "2026-11-22",
+        "sourceIds": ["gorun-together-2026-official"],
+        "channels": [
+          {
+            "id": "gorun-together-2026-1-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "家長及4–12歲兒童；詳見官方。",
+            "price": 540,
+            "currency": "HKD",
+            "priceNote": "每對親子二人費用；不是每人費用。",
+            "status": "closed",
+            "registrationUrl": "https://www.sjs.org.hk/TC/media/press-detail.php?id=112",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["gorun-together-2026-official"],
+            "registrationVerifiedAt": "2026-11-06T16:43:15Z",
+            "deadline": "2026-10-21"
+          }
+        ],
+        "venue": "大埔白石角海濱長廊",
+        "region": "新界",
+        "startTime": "2026-11-22T10:15:00+08:00"
+      }
+    ],
+    "sourceUrl": "https://www.sjs.org.hk/TC/media/press-detail.php?id=112",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "gorun-together-2026-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://www.sjs.org.hk/TC/media/press-detail.php?id=112",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": [
+          "date",
+          "groups.distance",
+          "groups.price",
+          "groups.startTime",
+          "channels.registration"
+        ],
+        "note": "只核對列明欄位；活動地點不等於組別起點。未知不借用往屆資料。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "disney-magic-run-fest-2026",
+    "slug": "disney-magic-run-fest-2026",
+    "name": "香港迪士尼奇妙跑步嘉年華 2026",
+    "englishName": "Hong Kong Disneyland Magic Run Fest 2026",
+    "date": "2026-11-28",
+    "endDate": "2026-11-29",
+    "region": "離島",
+    "country": "香港",
+    "district": "香港迪士尼樂園度假區",
+    "venue": "香港迪士尼樂園度假區",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "香港迪士尼樂園度假區",
+    "summary": "兩日各有不同項目；所列為正價，不含樂園門票。競賽／歡樂批次、年齡及名額須按大會最新資料核對。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "disney-magic-run-fest-2026-0",
+        "name": "Zootopia 10K",
+        "distanceKm": 10,
+        "date": "2026-11-29",
+        "sourceIds": ["disney-magic-run-fest-2026-official"],
+        "channels": [
+          {
+            "id": "disney-magic-run-fest-2026-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 680,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://news.hongkongdisneyland.com/en/hong-kong-disneyland-resort-s-acclaimed-running-event-reimagined-as-the-brand-new-magic-run-fest-presented-by-aia-vitality-registration-opens-july-29-2026/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["disney-magic-run-fest-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "離島"
+      },
+      {
+        "id": "disney-magic-run-fest-2026-1",
+        "name": "Pixar 5K",
+        "distanceKm": 5,
+        "date": "2026-11-28",
+        "sourceIds": ["disney-magic-run-fest-2026-official"],
+        "channels": [
+          {
+            "id": "disney-magic-run-fest-2026-1-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 680,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://news.hongkongdisneyland.com/en/hong-kong-disneyland-resort-s-acclaimed-running-event-reimagined-as-the-brand-new-magic-run-fest-presented-by-aia-vitality-registration-opens-july-29-2026/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["disney-magic-run-fest-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "離島"
+      },
+      {
+        "id": "disney-magic-run-fest-2026-2",
+        "name": "Duffy and Friends 3K",
+        "distanceKm": 3,
+        "date": "2026-11-28",
+        "sourceIds": ["disney-magic-run-fest-2026-official"],
+        "channels": [
+          {
+            "id": "disney-magic-run-fest-2026-2-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 680,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://news.hongkongdisneyland.com/en/hong-kong-disneyland-resort-s-acclaimed-running-event-reimagined-as-the-brand-new-magic-run-fest-presented-by-aia-vitality-registration-opens-july-29-2026/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["disney-magic-run-fest-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "離島"
+      },
+      {
+        "id": "disney-magic-run-fest-2026-3",
+        "name": "Frozen 3K",
+        "distanceKm": 3,
+        "date": "2026-11-29",
+        "sourceIds": ["disney-magic-run-fest-2026-official"],
+        "channels": [
+          {
+            "id": "disney-magic-run-fest-2026-3-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 680,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://news.hongkongdisneyland.com/en/hong-kong-disneyland-resort-s-acclaimed-running-event-reimagined-as-the-brand-new-magic-run-fest-presented-by-aia-vitality-registration-opens-july-29-2026/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["disney-magic-run-fest-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "離島"
+      }
+    ],
+    "sourceUrl": "https://news.hongkongdisneyland.com/en/hong-kong-disneyland-resort-s-acclaimed-running-event-reimagined-as-the-brand-new-magic-run-fest-presented-by-aia-vitality-registration-opens-july-29-2026/",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "disney-magic-run-fest-2026-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://news.hongkongdisneyland.com/en/hong-kong-disneyland-resort-s-acclaimed-running-event-reimagined-as-the-brand-new-magic-run-fest-presented-by-aia-vitality-registration-opens-july-29-2026/",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["date", "groups.distance", "groups.price"],
+        "note": "只核對列明欄位；活動地點不等於組別起點。未知不借用往屆資料。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "pegasus-shek-mun-10k-2026",
+    "slug": "pegasus-shek-mun-10k-2026",
+    "name": "第十七屆 PEGASUS 石門10公里賽",
+    "englishName": "17th PEGASUS Shek Mun 10K Race",
+    "date": "2026-12-06",
+    "endDate": "2026-12-06",
+    "region": "新界",
+    "country": "香港",
+    "district": "沙田石門",
+    "venue": "沙田石門",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "香港馬拉松推廣社",
+    "summary": "田總官方時間表連結此報名表。路線為石門至馬鞍山公園折返；截止只有日期，未代填時刻或聲稱即時有位。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "pegasus-shek-mun-10k-2026-0",
+        "name": "10公里",
+        "distanceKm": 10,
+        "date": "2026-12-06",
+        "sourceIds": ["pegasus-shek-mun-10k-2026-official"],
+        "channels": [
+          {
+            "id": "pegasus-shek-mun-10k-2026-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "分挑戰組及1／2／3組；挑戰組按提交成績篩選，達標不保證入圍。",
+            "price": 350,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://www.jotform.com/262529188333463",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["pegasus-shek-mun-10k-2026-official"],
+            "deadline": "2026-11-16"
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      }
+    ],
+    "sourceUrl": "https://www.jotform.com/262529188333463",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "pegasus-shek-mun-10k-2026-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://www.jotform.com/262529188333463",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["date", "groups.distance", "groups.price"],
+        "note": "只核對列明欄位；活動地點不等於組別起點。未知不借用往屆資料。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "asics-hk-half-2026",
+    "slug": "asics-hk-half-2026",
+    "name": "ASICS 香港半馬拉松錦標賽 2026",
+    "englishName": "ASICS Hong Kong Half-Marathon Championships 2026",
+    "date": "2026-12-13",
+    "endDate": "2026-12-13",
+    "region": "新界",
+    "country": "香港",
+    "district": "大埔大美督直昇機停機坪",
+    "venue": "大埔大美督直昇機停機坪",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "中國香港田徑總會",
+    "summary": "官方顯示報名名額已滿。費用按年齡及田總註冊身份不同，不能以單一金額概括。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "asics-hk-half-2026-0",
+        "name": "半馬拉松",
+        "distanceKm": 21.0975,
+        "date": "2026-12-13",
+        "sourceIds": ["asics-hk-half-2026-official"],
+        "channels": [
+          {
+            "id": "asics-hk-half-2026-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "按出生日期及田總註冊身份分組，請查官方資格表。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "按年齡及田總註冊身份分HK$150／200／300／350，沒有統一費用。",
+            "status": "full",
+            "registrationUrl": "https://www.hkaaa.com/tc/comp_details.php?id=293",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["asics-hk-half-2026-official"],
+            "registrationVerifiedAt": "2026-11-06T16:43:15Z",
+            "deadline": "2026-10-29"
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界",
+        "startTime": "2026-12-13T07:45:00+08:00",
+        "limit": "比賽時限2小時30分鐘。"
+      }
+    ],
+    "sourceUrl": "https://www.hkaaa.com/tc/comp_details.php?id=293",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "asics-hk-half-2026-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://www.hkaaa.com/tc/comp_details.php?id=293",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": [
+          "date",
+          "groups.distance",
+          "groups.startTime",
+          "groups.limit",
+          "channels.registration"
+        ],
+        "note": "只核對列明欄位；活動地點不等於組別起點。未知不借用往屆資料。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "garmin-run-hk-2026",
+    "slug": "garmin-run-hk-2026",
+    "name": "Garmin Run 馬拉松系列賽 — 香港站 2026",
+    "englishName": "Garmin Run Hong Kong 2026",
+    "date": "2026-12-20",
+    "endDate": "2026-12-20",
+    "region": "新界",
+    "country": "香港",
+    "district": "沙田運動場",
+    "venue": "沙田運動場",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "沙田體育會有限公司",
+    "summary": "官方列出12月20日沙田運動場活動及21／10／3公里項目；費用、各組資格及即時名額待核實。限定手錶優惠不能當作一般報名費。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "garmin-run-hk-2026-0",
+        "name": "21公里",
+        "distanceKm": 21,
+        "date": "2026-12-20",
+        "sourceIds": ["garmin-run-hk-2026-official", "garmin-distance"],
+        "channels": [
+          {
+            "id": "garmin-run-hk-2026-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "費用／最低籌款額待核實。",
+            "status": "unknown",
+            "registrationUrl": "https://www.garmin.com.hk/event/2026/garmin-run/news.html",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["garmin-run-hk-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      },
+      {
+        "id": "garmin-run-hk-2026-1",
+        "name": "10公里",
+        "distanceKm": 10,
+        "date": "2026-12-20",
+        "sourceIds": ["garmin-run-hk-2026-official", "garmin-distance"],
+        "channels": [
+          {
+            "id": "garmin-run-hk-2026-1-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "費用／最低籌款額待核實。",
+            "status": "unknown",
+            "registrationUrl": "https://www.garmin.com.hk/event/2026/garmin-run/news.html",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["garmin-run-hk-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      },
+      {
+        "id": "garmin-run-hk-2026-2",
+        "name": "3公里",
+        "distanceKm": 3,
+        "date": "2026-12-20",
+        "sourceIds": ["garmin-run-hk-2026-official", "garmin-distance"],
+        "channels": [
+          {
+            "id": "garmin-run-hk-2026-2-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "費用／最低籌款額待核實。",
+            "status": "unknown",
+            "registrationUrl": "https://www.garmin.com.hk/event/2026/garmin-run/news.html",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["garmin-run-hk-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      }
+    ],
+    "sourceUrl": "https://www.garmin.com.hk/event/2026/garmin-run/news.html",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "garmin-run-hk-2026-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://www.garmin.com.hk/event/2026/garmin-run/news.html",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["date", "venue", "groups.distance"],
+        "note": "只核對列明欄位；活動地點不等於組別起點。未知不借用往屆資料。"
+      },
+      {
+        "id": "garmin-distance",
+        "title": "Garmin 香港官方首頁賽事公告",
+        "url": "https://www.garmin.com.hk/",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["groups.distance"],
+        "note": "官方公告列出3K／10K／21K；不推定21K為認證半馬距離。"
+      },
+      {
+        "id": "garmin-organizer",
+        "title": "田總官方2026賽期表",
+        "url": "https://www.hkaaa.com/tc/template.php?menu_refid=72&refid=131",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["organizer", "date"],
+        "note": "列明沙田體育會及12月20日賽期。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "tai-po-half-2026",
+    "slug": "tai-po-half-2026",
+    "name": "大埔半馬 2026",
+    "englishName": "Tai Po Half Marathon 2026",
+    "date": "2026-12-27",
+    "endDate": "2026-12-27",
+    "region": "新界",
+    "country": "香港",
+    "district": "香港科學園",
+    "venue": "香港科學園",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "大埔體育會、運動版圖",
+    "summary": "官方列明四個距離及費用，起步時間仍標示暫定，本頁不視作確定時間。隊際盃登記不等於個人賽報名。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "tai-po-half-2026-0",
+        "name": "半程馬拉松個人組",
+        "distanceKm": 21.0975,
+        "date": "2026-12-27",
+        "sourceIds": ["tai-po-half-2026-official"],
+        "channels": [
+          {
+            "id": "tai-po-half-2026-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 350,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://tphm.sportsoho.com/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["tai-po-half-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      },
+      {
+        "id": "tai-po-half-2026-1",
+        "name": "10公里個人組",
+        "distanceKm": 10,
+        "date": "2026-12-27",
+        "sourceIds": ["tai-po-half-2026-official"],
+        "channels": [
+          {
+            "id": "tai-po-half-2026-1-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 250,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://tphm.sportsoho.com/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["tai-po-half-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      },
+      {
+        "id": "tai-po-half-2026-2",
+        "name": "3公里個人組",
+        "distanceKm": 3,
+        "date": "2026-12-27",
+        "sourceIds": ["tai-po-half-2026-official"],
+        "channels": [
+          {
+            "id": "tai-po-half-2026-2-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 200,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://tphm.sportsoho.com/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["tai-po-half-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      },
+      {
+        "id": "tai-po-half-2026-3",
+        "name": "1公里親子組",
+        "distanceKm": 1,
+        "date": "2026-12-27",
+        "sourceIds": ["tai-po-half-2026-official"],
+        "channels": [
+          {
+            "id": "tai-po-half-2026-3-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 280,
+            "currency": "HKD",
+            "priceNote": "親子組費用；隊伍人數及適用資格請查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://tphm.sportsoho.com/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["tai-po-half-2026-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      }
+    ],
+    "sourceUrl": "https://tphm.sportsoho.com/",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "tai-po-half-2026-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://tphm.sportsoho.com/",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["date", "groups.distance", "groups.price"],
+        "note": "只核對列明欄位；活動地點不等於組別起點。未知不借用往屆資料。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "dhk-healthy-run-2027",
+    "slug": "dhk-healthy-run-2027",
+    "name": "香港糖尿聯會健康長跑 2027",
+    "englishName": "DHK Healthy Run 2027",
+    "date": "2027-01-03",
+    "endDate": "2027-01-03",
+    "region": "新界",
+    "country": "香港",
+    "district": "上水彩園路",
+    "venue": "上水彩園路",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "香港糖尿聯會",
+    "summary": "官網顯示公開組名額暫滿，預告11月10日再公布安排。沒有因此自動標示候補或重新開放；報名費與籌款要求須分開確認。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "dhk-healthy-run-2027-0",
+        "name": "5公里",
+        "distanceKm": 5,
+        "date": "2027-01-03",
+        "sourceIds": ["dhk-healthy-run-2027-official"],
+        "channels": [
+          {
+            "id": "dhk-healthy-run-2027-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "2013年或以前出生，按出生年份計算。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "費用／最低籌款額待核實。",
+            "status": "full",
+            "registrationUrl": "https://diabetes-hk.org/healthy_run_2027/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["dhk-healthy-run-2027-official"],
+            "registrationVerifiedAt": "2026-11-06T16:43:15Z"
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界",
+        "startTime": "2027-01-03T08:15:00+08:00"
+      },
+      {
+        "id": "dhk-healthy-run-2027-1",
+        "name": "10公里",
+        "distanceKm": 10,
+        "date": "2027-01-03",
+        "sourceIds": ["dhk-healthy-run-2027-official"],
+        "channels": [
+          {
+            "id": "dhk-healthy-run-2027-1-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "2013年或以前出生，按出生年份計算。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "費用／最低籌款額待核實。",
+            "status": "full",
+            "registrationUrl": "https://diabetes-hk.org/healthy_run_2027/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["dhk-healthy-run-2027-official"],
+            "registrationVerifiedAt": "2026-11-06T16:43:15Z"
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界",
+        "startTime": "2027-01-03T08:25:00+08:00"
+      }
+    ],
+    "sourceUrl": "https://diabetes-hk.org/healthy_run_2027/",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "dhk-healthy-run-2027-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://diabetes-hk.org/healthy_run_2027/",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["date", "groups.distance", "groups.startTime", "channels.registration"],
+        "note": "只核對列明欄位；活動地點不等於組別起點。未知不借用往屆資料。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "world-heart-day-run-2027",
+    "slug": "world-heart-day-run-2027",
+    "name": "世界心臟日2026–27 健心跑暨心臟健康嘉年華",
+    "englishName": "World Heart Day Run 2026–27",
+    "date": "2027-01-10",
+    "endDate": "2027-01-10",
+    "region": "新界",
+    "country": "香港",
+    "district": "香港科學園",
+    "venue": "香港科學園",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "主辦機構待核實（詳見官方網站）",
+    "summary": "先收錄10公里及3公里個人路跑；親子接力、寵物行及隊際組不混作個人路跑費用。官方起跑時間暫定，名額待核實。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "world-heart-day-run-2027-0",
+        "name": "10公里個人組",
+        "distanceKm": 10,
+        "date": "2027-01-10",
+        "sourceIds": ["world-heart-day-run-2027-official"],
+        "channels": [
+          {
+            "id": "world-heart-day-run-2027-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 350,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://worldheartdayrun.hk/zh-hant/event-details",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["world-heart-day-run-2027-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      },
+      {
+        "id": "world-heart-day-run-2027-1",
+        "name": "3公里個人跑",
+        "distanceKm": 3,
+        "date": "2027-01-10",
+        "sourceIds": ["world-heart-day-run-2027-official"],
+        "channels": [
+          {
+            "id": "world-heart-day-run-2027-1-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 280,
+            "currency": "HKD",
+            "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
+            "status": "unknown",
+            "registrationUrl": "https://worldheartdayrun.hk/zh-hant/event-details",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["world-heart-day-run-2027-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      }
+    ],
+    "sourceUrl": "https://worldheartdayrun.hk/zh-hant/event-details",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "world-heart-day-run-2027-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://worldheartdayrun.hk/zh-hant/event-details",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["date", "groups.distance", "groups.price"],
+        "note": "只核對列明欄位；活動地點不等於組別起點。未知不借用往屆資料。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "run-with-love-2027",
+    "slug": "run-with-love-2027",
+    "name": "明愛之友慈善跑 2027",
+    "englishName": "Run With Love Friends of Caritas Charity Run 2027",
+    "date": "2027-01-31",
+    "endDate": "2027-01-31",
+    "region": "新界",
+    "country": "香港",
+    "district": "香港科學園高錕會議中心",
+    "venue": "香港科學園高錕會議中心",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "明愛之友",
+    "summary": "2027首頁列明日期、集合地點及四個距離。詳情頁仍有2026出生年份及往屆內容，故不沿用其費用、起跑時間或資格。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "run-with-love-2027-0",
+        "name": "10公里個人挑戰賽",
+        "distanceKm": 10,
+        "date": "2027-01-31",
+        "sourceIds": ["run-with-love-2027-official"],
+        "channels": [
+          {
+            "id": "run-with-love-2027-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "費用／最低籌款額待核實。",
+            "status": "unknown",
+            "registrationUrl": "https://runwithlove.org.hk/zh-hant/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["run-with-love-2027-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      },
+      {
+        "id": "run-with-love-2027-1",
+        "name": "5公里個人挑戰賽",
+        "distanceKm": 5,
+        "date": "2027-01-31",
+        "sourceIds": ["run-with-love-2027-official"],
+        "channels": [
+          {
+            "id": "run-with-love-2027-1-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "費用／最低籌款額待核實。",
+            "status": "unknown",
+            "registrationUrl": "https://runwithlove.org.hk/zh-hant/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["run-with-love-2027-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      },
+      {
+        "id": "run-with-love-2027-2",
+        "name": "3公里個人挑戰賽",
+        "distanceKm": 3,
+        "date": "2027-01-31",
+        "sourceIds": ["run-with-love-2027-official"],
+        "channels": [
+          {
+            "id": "run-with-love-2027-2-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "費用／最低籌款額待核實。",
+            "status": "unknown",
+            "registrationUrl": "https://runwithlove.org.hk/zh-hant/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["run-with-love-2027-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      },
+      {
+        "id": "run-with-love-2027-3",
+        "name": "1公里個人挑戰賽",
+        "distanceKm": 1,
+        "date": "2027-01-31",
+        "sourceIds": ["run-with-love-2027-official"],
+        "channels": [
+          {
+            "id": "run-with-love-2027-3-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "費用／最低籌款額待核實。",
+            "status": "unknown",
+            "registrationUrl": "https://runwithlove.org.hk/zh-hant/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["run-with-love-2027-official"]
+          }
+        ],
+        "venue": "組別起點待核實",
+        "region": "新界"
+      }
+    ],
+    "sourceUrl": "https://runwithlove.org.hk/zh-hant/",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "run-with-love-2027-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://runwithlove.org.hk/zh-hant/",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["date", "venue", "groups.distance"],
+        "note": "只核對列明欄位；活動地點不等於組別起點。未知不借用往屆資料。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
+  },
+  {
+    "id": "sai-kung-district-run-2026",
+    "slug": "sai-kung-district-run-2026",
+    "name": "西貢區10公里公開長跑暨2公里親子歡樂跑 2026/27",
+    "englishName": "Sai Kung District 10K and Family Fun Run 2026/27",
+    "date": "2026-12-27",
+    "endDate": "2026-12-27",
+    "region": "新界",
+    "country": "香港",
+    "district": "將軍澳運動場",
+    "venue": "將軍澳運動場",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "西貢區體育會",
+    "summary": "官方列明12月27日於將軍澳運動場舉行。10／5公里按年齡及身份收費，不以單一金額概括；親子競賽及歡樂跑分列，未核實即時名額。",
+    "highlights": [
+      "日期及所列距離按本屆官方來源整理。",
+      "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
+    ],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "sai-kung-district-run-2026-0",
+        "name": "10公里公開組",
+        "distanceKm": 10,
+        "date": "2026-12-27",
+        "region": "新界",
+        "sourceIds": ["sai-kung-official"],
+        "channels": [
+          {
+            "id": "sai-kung-district-run-2026-0-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "按年齡及身份收費，詳見官方。",
+            "status": "unknown",
+            "registrationUrl": "https://www.sksa.com.hk/5544/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["sai-kung-official"],
+            "deadline": "2026-11-18"
+          }
+        ]
+      },
+      {
+        "id": "sai-kung-district-run-2026-1",
+        "name": "5公里公開體驗組",
+        "distanceKm": 5,
+        "date": "2026-12-27",
+        "region": "新界",
+        "sourceIds": ["sai-kung-official"],
+        "channels": [
+          {
+            "id": "sai-kung-district-run-2026-1-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": null,
+            "currency": "HKD",
+            "priceNote": "按年齡及身份收費，詳見官方。",
+            "status": "unknown",
+            "registrationUrl": "https://www.sksa.com.hk/5544/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["sai-kung-official"],
+            "deadline": "2026-11-18"
+          }
+        ]
+      },
+      {
+        "id": "sai-kung-district-run-2026-2",
+        "name": "2公里親子競賽組",
+        "distanceKm": 2,
+        "date": "2026-12-27",
+        "region": "新界",
+        "sourceIds": ["sai-kung-official"],
+        "channels": [
+          {
+            "id": "sai-kung-district-run-2026-2-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 160,
+            "currency": "HKD",
+            "priceNote": "每位費用，並非每對親子費用。",
+            "status": "unknown",
+            "registrationUrl": "https://www.sksa.com.hk/5544/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["sai-kung-official"],
+            "deadline": "2026-11-18"
+          }
+        ]
+      },
+      {
+        "id": "sai-kung-district-run-2026-3",
+        "name": "2公里親子歡樂跑",
+        "distanceKm": 2,
+        "date": "2026-12-27",
+        "region": "新界",
+        "sourceIds": ["sai-kung-official"],
+        "channels": [
+          {
+            "id": "sai-kung-district-run-2026-3-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "以官方本屆安排為準",
+            "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
+            "price": 100,
+            "currency": "HKD",
+            "priceNote": "每位費用，並非每對親子費用。",
+            "status": "unknown",
+            "registrationUrl": "https://www.sksa.com.hk/5544/",
+            "registrationNote": "未核實即時名額及完整申請安排，不代表接受報名。",
+            "sourceIds": ["sai-kung-official"],
+            "deadline": "2026-11-18"
+          }
+        ]
+      }
+    ],
+    "sourceUrl": "https://www.sksa.com.hk/5544/",
+    "updatedAt": "2026-11-06",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-06T16:43:15Z",
+    "sources": [
+      {
+        "id": "sai-kung-official",
+        "title": "西貢區體育會本屆官方公告",
+        "url": "https://www.sksa.com.hk/5544/",
+        "checkedAt": "2026-11-06T16:43:15Z",
+        "fields": ["date", "venue", "groups.distance", "groups.price"],
+        "note": "截止只有日期；親子費用按每位計。"
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-06",
+        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
+      }
+    ]
   }
 ]

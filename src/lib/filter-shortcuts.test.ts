@@ -132,6 +132,11 @@ it("combines a month with a calendar year and preserves it in shared search link
   };
   expect(selectRaces(races, filters, now).map(({ race }) => race.id)).toEqual([
     "mizuno-hk-run-fest-2026",
+    "pegasus-shek-mun-10k-2026",
+    "asics-hk-half-2026",
+    "garmin-run-hk-2026",
+    "tai-po-half-2026",
+    "sai-kung-district-run-2026",
   ]);
   expect(selectRaces(races, { ...filters, month: "1" }, now)).toEqual([]);
   expect(parseFilters(new URLSearchParams(serializeFilters(filters)))).toEqual(filters);
