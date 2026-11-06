@@ -7,6 +7,7 @@ type SourceExcerpt = {
   url: string;
   excerpt?: true;
   scope?: string;
+  postedOn?: string | null;
 };
 type OpinionTopic = {
   title: string;
@@ -15,6 +16,11 @@ type OpinionTopic = {
 };
 export type RunnerOpinions = {
   targetId: string;
+  raceId?: string;
+  groupId?: string;
+  groupLabel?: string;
+  intro?: string;
+  reminders?: string[];
   editionYear: number;
   sourceName: string;
   sourceUrl: string;
@@ -127,12 +133,182 @@ export const runnerOpinions: RunnerOpinions[] = [
       },
     ],
   },
+  {
+    raceId: "standard-chartered-hk-marathon-2027",
+    editionYear: 2025,
+    sourceName: "多來源跑手意見",
+    sourceUrl: "https://www.marathonsworld.com/artapp/racedetail.php?rid=22176",
+    checkedOn: "2026-11-07",
+    targetId: "schkm-marathon",
+    groupId: "schkm-2027-marathon",
+    groupLabel: "全馬",
+    intro: "橋隧起伏有挑戰，港島尾段打氣有氣氛；啟德博覽會的體驗則有不同看法。",
+    reminders: ["按自己能力部署橋隧段配速", "個人能量補充先有計劃"],
+    scope:
+      "三位自述參加2025全馬的作者；蜘蛛人校長為馬拉松2組，其餘起跑批次未明。參賽身份未獨立核實，不代表全體或其他年份，不合併編輯評分。",
+    topics: [
+      {
+        title: "賽道",
+        summary:
+          "Rickie Kwong 提到橋隧上落及逆風辛苦，但喜歡港島市區尾段的打氣；miracle3 對突破個人紀錄感到滿足，也提到尾段打氣人群。感受與個人狀態有關，不構成客觀難度量度。",
+        sources: [
+          {
+            author: "Rickie Kwong",
+            quote: "坦白講，新不如舊！\n上上落落再加陣陣逆風",
+            url: "https://rickiekwong.blogspot.com/2025/03/hk-actions-2025-standard-chartered-hong.html",
+            excerpt: true,
+            postedOn: "2025-03-27",
+            scope: "全馬；個人狀態與賽事感受分開。",
+          },
+          {
+            author: "miracle3",
+            quote: "全馬PB紀錄，終於由3:50，改寫為 3:34。",
+            url: "https://www.threads.com/@miracle3/post/DGBF5FEylG5",
+            excerpt: true,
+            postedOn: "2025-02-13",
+            scope: "全馬；2025起跑批次未明，挑戰組目標不可視作當日起跑組別。",
+          },
+        ],
+      },
+      {
+        title: "大會安排",
+        summary:
+          "蜘蛛人校長認為啟德領物資的組別分流清楚；Rickie Kwong 則較喜歡以往博覽會安排。兩者觀察不同，不推算整體滿意度。",
+        sources: [
+          {
+            author: "蜘蛛人校長",
+            quote: "報到領完物資後\n只有標準的水、運動飲料",
+            url: "https://running.biji.co/index.php?act=detail&id=57168&q=review",
+            excerpt: true,
+            postedOn: "2025-03-02",
+            scope: "自述馬拉松2組；此節錄對應領物資段落。",
+          },
+          {
+            author: "Rickie Kwong",
+            quote: "坦白講，新不如舊！\n上上落落再加陣陣逆風",
+            url: "https://rickiekwong.blogspot.com/2025/03/hk-actions-2025-standard-chartered-hong.html",
+            excerpt: true,
+            postedOn: "2025-03-27",
+            scope: "作者對博覽會新舊安排的個人偏好。",
+          },
+        ],
+      },
+      {
+        title: "補給",
+        summary:
+          "蜘蛛人校長形容供應以基本飲品及食物為主，自己只帶兩條能量膠，後段靠糖果補充；不能據此稱大會補給不足。其餘兩篇未提供足夠補給觀察。",
+        sources: [
+          {
+            author: "蜘蛛人校長",
+            quote: "報到領完物資後\n只有標準的水、運動飲料",
+            url: "https://running.biji.co/index.php?act=detail&id=57168&q=review",
+            excerpt: true,
+            postedOn: "2025-03-02",
+            scope: "自述只帶兩條能量膠，不能推論大會供應不足。",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    raceId: "standard-chartered-hk-marathon-2027",
+    editionYear: 2025,
+    sourceName: "多來源跑手意見",
+    sourceUrl: "https://www.marathonsworld.com/artapp/racedetail.php?rid=22176",
+    checkedOn: "2026-11-07",
+    targetId: "schkm-half-opinions",
+    groupId: "schkm-2027-half",
+    groupLabel: "半馬",
+    scope:
+      "一位半馬作者自述；同日回覆確認半馬：https://www.threads.com/@_9walker_/post/DF2lFqQy-0j 。起跑批次未明，參賽身份未獨立核實，不能套用全馬。",
+    topics: [
+      {
+        title: "賽道及取水體驗",
+        summary:
+          "_9walker_（2025-02-09）表示早段人多影響配速，並希望水杯裝少一點。作者在同日回覆確認跑半馬；不能套用全馬，也不是缺水投訴。",
+        sources: [
+          {
+            author: "_9walker_",
+            quote: "塞人塞到早段俾人帶住 pacing",
+            url: "https://www.threads.com/@_9walker_/post/DF2UaD3SUK1",
+            excerpt: true,
+            postedOn: "2025-02-09",
+            scope: "半馬；水杯份量偏好不是缺水投訴。",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    raceId: "standard-chartered-hk-marathon-2027",
+    editionYear: 2025,
+    sourceName: "多來源跑手意見",
+    sourceUrl: "https://www.marathonsworld.com/artapp/racedetail.php?rid=22176",
+    checkedOn: "2026-11-07",
+    targetId: "schkm-unscoped-opinions",
+    groupLabel: "組別未明",
+    scope:
+      "四位來源作者的距離及批次未明，暫不納入組別評價。MW三項按2025專頁歸屬，未顯示出帖日期，不能當成2025年2月出帖。所有參賽身份未獨立核實，不代表2026／2027安排，不新增、轉載或合併分數。",
+    topics: [
+      {
+        title: "補充來源 · 暫不納入組別評價",
+        summary:
+          "IG peitea（2025-02-20）自述參賽並喜歡賽事，希望橋段有更多賽事攝影；距離及起跑批次未明。 MW Chris 覺得跑入西隧新鮮，但出隧道上斜辛苦；DVS 建議增加賽前洗手間；Lawrence Hui 認為受傷跑手支援基本足夠，但希望等候時間縮短。三項均可確認收錄於2025專頁，未顯示出帖日期、距離或批次，不能當作2025年2月出帖，也不能套用全馬或半馬。",
+        sources: [
+          {
+            author: "peitea",
+            quote: "I joined . I love it.\nhope in the bridge too",
+            url: "https://www.instagram.com/p/DGSiaXLCI3E/c/18020384795466442/",
+            excerpt: true,
+            postedOn: "2025-02-20",
+            scope: "距離及起跑批次未明；日期按該留言 time 欄位核對。",
+          },
+          {
+            author: "Chris",
+            quote: "出隧道好斜，好難跑",
+            url: "https://www.marathonsworld.com/artapp/rating_detail.php?rid=728509",
+            excerpt: true,
+            postedOn: null,
+            scope: "2025專頁所列評價；出帖日期、距離及起跑批次未明。",
+          },
+          {
+            author: "DVS",
+            quote: "賽前可以增加洗手間",
+            url: "https://www.marathonsworld.com/artapp/rating_detail.php?rid=699975",
+            excerpt: true,
+            postedOn: null,
+            scope: "2025專頁所列評價；出帖日期、距離及起跑批次未明。",
+          },
+          {
+            author: "Lawrence Hui",
+            quote: "支援基本充足\n縮短等候時間會更好",
+            url: "https://www.marathonsworld.com/artapp/rating_detail.php?rid=655420",
+            excerpt: true,
+            postedOn: null,
+            scope: "2025專頁所列評價；出帖日期、距離及起跑批次未明。",
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export function runnerOpinionsForGroup(race: Race, group: RaceGroup) {
   const target = reviewTargets.find((t) => t.raceId === race.id && t.groupId === group.id);
   return runnerOpinions.filter(
     (record) =>
-      record.targetId === target?.id && record.editionYear <= Number(group.date.slice(0, 4)),
+      (record.groupId
+        ? record.raceId === race.id && record.groupId === group.id
+        : record.targetId === target?.id) && record.editionYear <= Number(group.date.slice(0, 4)),
+  );
+}
+
+export function unscopedRunnerOpinionsForRace(race: Race) {
+  return runnerOpinions.filter(
+    (r) =>
+      r.raceId === race.id &&
+      !r.groupId &&
+      r.groupLabel === "組別未明" &&
+      r.editionYear <= Number(race.date.slice(0, 4)),
   );
 }
