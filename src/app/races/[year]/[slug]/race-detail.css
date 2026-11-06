@@ -462,6 +462,54 @@
   font-size: 18px;
   margin: 0 0 16px;
 }
+
+.race-detail-page .runner-opinion-topics {
+  margin: 16px 0;
+}
+.race-detail-page .runner-opinion-topics > div {
+  display: block;
+  padding: 0;
+  border: 0;
+}
+.race-detail-page .runner-opinion-topics > div + div {
+  margin-top: 16px;
+}
+.race-detail-page .runner-opinion-topics dt {
+  color: var(--home-action);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.race-detail-page .runner-opinion-topics dd {
+  margin: 0;
+  text-align: left;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.8;
+}
+.race-detail-page .runner-opinions .runner-opinion-scope,
+.race-detail-page .runner-opinions .runner-opinion-source-scope {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--home-muted);
+}
+.race-detail-page .runner-opinion-sources {
+  border: 0;
+  padding: 0;
+}
+.race-detail-page .runner-opinion-sources summary {
+  min-height: 44px;
+  padding-block: 10px;
+}
+.race-detail-page .runner-opinion-sources ul {
+  padding-left: 20px;
+}
+.race-detail-page .runner-opinion-sources li {
+  margin-bottom: 16px;
+  overflow-wrap: anywhere;
+}
+.race-detail-page .runner-opinion-sources li p {
+  margin-block: 4px;
+}
 .race-detail-page .registration-channel {
   margin: 0 0 12px;
   padding: 0;

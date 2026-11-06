@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ReviewViews } from "./review-views";
+import { RunnerOpinionSummary } from "./runner-opinions";
+import { runnerOpinionsForGroup } from "@/data/runner-opinions";
 import { editorialReviews } from "@/data/editorial-reviews";
 import notices from "@/data/editorial-notices.json";
 import { reviewsForGroup, type EditorialReview } from "@/lib/editorial-reviews";
@@ -168,6 +170,7 @@ export function EditorialReviewCard({ review }: { review: EditorialReview }) {
 }
 export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) {
   const { current, historical } = reviewsForGroup(race, group, editorialReviews);
+  const opinions = runnerOpinionsForGroup(race, group);
   const target = reviewTargets.find((t) => t.raceId === race.id && t.groupId === group.id);
   const groupNotices = notices.filter(
     (n) =>
@@ -184,7 +187,19 @@ export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) 
       <h4>
         參賽體驗 <small>不設總分</small>
       </h4>
-      <ReviewViews>
+      <ReviewViews
+        runnerContent={
+          opinions.length
+            ? opinions.map((record) => (
+                <RunnerOpinionSummary
+                  key={`${record.targetId}-${record.editionYear}`}
+                  record={record}
+                  currentYear={Number(group.date.slice(0, 4))}
+                />
+              ))
+            : undefined
+        }
+      >
         {current.length ? (
           current.map((r) => <EditorialReviewCard key={r.id} review={r} />)
         ) : (
