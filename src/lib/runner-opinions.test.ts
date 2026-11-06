@@ -15,7 +15,8 @@ describe("approved external runner opinions", () => {
     for (const race of races) {
       for (const group of race.groups) {
         const selected = runnerOpinionsForGroup(race, group);
-        expect(selected).toEqual(race.id === bridge.id && group.id === half.id ? [record] : []);
+        if (race.id === bridge.id) expect(selected).toEqual(group.id === half.id ? [record] : []);
+        else if (race.id !== "standard-chartered-hk-marathon-2027") expect(selected).toEqual([]);
       }
     }
     expect(runnerOpinionsForGroup(bridge, { ...half, date: "2024-01-01" })).toEqual([]);
@@ -82,4 +83,34 @@ describe("approved external runner opinions", () => {
     expect(html).not.toContain("Marathon’s World");
     expect(html).not.toContain("希望多加一個補給站");
   });
+});
+
+it("keeps approved SCHKM 2025 opinions on their explicit groups, unscoped sources outside every group", () => {
+  const race = races.find((r) => r.id === "standard-chartered-hk-marathon-2027")!;
+  for (const group of race.groups) {
+    const selected = runnerOpinionsForGroup(race, group);
+    expect(selected.length).toBe(group.id === "schkm-2027-10k" ? 0 : 1);
+    const html = renderToStaticMarkup(
+      createElement(RunnerOpinionSummary, { record: selected[0] ?? record, currentYear: 2027 }),
+    );
+    if (group.id === "schkm-2027-marathon") {
+      expect(html).toContain("年全馬");
+      expect(html).not.toContain("_9walker_");
+    }
+    if (group.id === "schkm-2027-half") {
+      expect(html).toContain("年半馬");
+      expect(html).toContain("_9walker_");
+      expect(html).not.toContain("Lawrence Hui");
+    }
+    expect(selected.some((r) => r.groupLabel === "組別未明")).toBe(false);
+  }
+  const unknown = runnerOpinions.find((r) => r.targetId === "schkm-unscoped-opinions")!;
+  expect(unknown.topics[0].sources.filter((s) => s.postedOn === null)).toHaveLength(3);
+  expect(unknown.topics[0].sources.find((s) => s.author === "peitea")!.postedOn).toBe("2025-02-20");
+  const html = renderToStaticMarkup(
+    createElement(RunnerOpinionSummary, { record: unknown, currentYear: 2027 }),
+  );
+  expect(html).toContain("未顯示（非賽事日期）");
+  expect(html).toContain("組別未明");
+  expect(html).not.toContain("/ 5");
 });

@@ -229,7 +229,8 @@ describe("ten-second review view", () => {
     expect(html).toContain('aria-selected="true"');
     expect(html).toContain("編輯點評");
     expect(html).toContain("跑手心得");
-    expect(html).toContain("暫未開放公開投稿");
+    expect(html).toContain("2025 年全馬");
+    expect(html).not.toContain("未有已發布跑手心得");
     expect(html).toContain('hidden=""');
     expect(html).not.toContain('class="rating-method-details" open');
   });

@@ -1,4 +1,5 @@
 import "./race-detail.css";
+import { UnscopedRunnerOpinions } from "@/components/runner-opinions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { races } from "@/data/races";
@@ -148,6 +149,7 @@ export default async function RacePage({ params }: Props) {
                 <RegistrationGroups race={race} initialNow={now} />
               </div>
             </section>
+            <UnscopedRunnerOpinions race={race} />
             <AdSlot />
             {!!race.enquiryLinks?.length && (
               <section id="enquiries" tabIndex={-1}>
