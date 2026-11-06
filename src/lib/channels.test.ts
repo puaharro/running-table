@@ -120,8 +120,8 @@ describe("independent registration channels", () => {
   });
 });
 describe("channel-specific publication contracts", () => {
-  it("preserves the 45 groups while each channel owns its own price and evidence", () => {
-    expect(races.reduce((total, race) => total + race.groups.length, 0)).toBe(45);
+  it("preserves the 55 groups while each channel owns its own price and evidence", () => {
+    expect(races.reduce((total, race) => total + race.groups.length, 0)).toBe(55);
     expect(source.groups[0].channels.find((channel) => channel.type === "hotel")).toMatchObject({
       price: 2942,
       priceType: "package",

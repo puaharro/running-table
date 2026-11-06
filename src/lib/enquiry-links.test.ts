@@ -14,7 +14,7 @@ describe("charity directory is an enquiry resource rather than a registration ch
       "https://www.hkmarathon.com/about-the-charitable-organisations",
     );
     expect(main.enquiryLinks![0].sourceIds).toContain("schkm-charity-directory");
-    expect(races.flatMap((r) => r.groups.flatMap((g) => g.channels))).toHaveLength(72);
+    expect(races.flatMap((r) => r.groups.flatMap((g) => g.channels))).toHaveLength(82);
     expect(main.groups.every((g) => !g.channels.some((c) => c.id === `${g.id}-charity`))).toBe(
       true,
     );
