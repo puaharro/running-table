@@ -2,7 +2,13 @@
 
 import { useId, useRef, useState, type ReactNode } from "react";
 
-export function ReviewViews({ children }: { children: ReactNode }) {
+export function ReviewViews({
+  children,
+  runnerContent,
+}: {
+  children: ReactNode;
+  runnerContent?: ReactNode;
+}) {
   const [active, setActive] = useState(0);
   const id = useId();
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
@@ -50,8 +56,12 @@ export function ReviewViews({ children }: { children: ReactNode }) {
         hidden={active !== 1}
         tabIndex={0}
       >
-        <p className="review-empty">暫未開放公開投稿，未有已發布跑手心得。</p>
-        <p className="review-empty">編輯點評與跑手心得分開呈現，不合併計分。</p>
+        {runnerContent ?? (
+          <>
+            <p className="review-empty">暫未開放公開投稿，未有已發布跑手心得。</p>
+            <p className="review-empty">編輯點評與跑手心得分開呈現，不合併計分。</p>
+          </>
+        )}
       </div>
     </div>
   );
