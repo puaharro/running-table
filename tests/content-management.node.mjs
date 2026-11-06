@@ -144,6 +144,11 @@ test("simple navigation, escaped drafts and workflow status render without a pub
     ])
       for (const label of ["內容管理", "賽事資料", "賽事研究", "評論草稿"])
         assert.ok(page.includes(label));
+    const original = decorateResearch(
+      '<html><head><style></style></head><body><div class="top">研究</div><a href="/">返回手動匯入</a><blockquote>原文提到返回手動匯入，應原樣保留。</blockquote></body></html>',
+    );
+    assert.ok(original.includes('<a href="/research">返回賽事研究</a>'));
+    assert.ok(original.includes("<blockquote>原文提到返回手動匯入，應原樣保留。</blockquote>"));
     for (const [, script] of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) new Script(script);
   } finally {
     store.close();

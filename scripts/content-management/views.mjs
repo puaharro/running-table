@@ -22,7 +22,7 @@ function nav(active) {
 export function decorateResearch(html) {
   return html
     .replaceAll('href="/"', 'href="/research"')
-    .replaceAll("返回手動匯入", "返回賽事研究")
+    .replaceAll(">返回手動匯入</a>", ">返回賽事研究</a>")
     .replace("每場比賽，用同一套流程研究。", "賽事研究")
     .replace(/<div class="top">[^<]*<\/div>/, nav("research"))
     .replace("</style>", `${sharedStyles}</style>`)
