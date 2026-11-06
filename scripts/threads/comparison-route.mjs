@@ -3,6 +3,7 @@ import { renderComparison } from "./comparison-view.mjs";
 import { ReviewError } from "./review-store.mjs";
 
 export function serveComparison({
+  transformHtml = (html) => html,
   request,
   response,
   reviews,
@@ -71,15 +72,17 @@ export function serveComparison({
       .end(comparisonCsv(result ?? { rows: [] }));
   else
     response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }).end(
-      renderComparison(result, {
-        catalog,
-        left,
-        right,
-        comparisonPath,
-        summaryBase,
-        token,
-        notePath,
-        verificationPath,
-      }),
+      transformHtml(
+        renderComparison(result, {
+          catalog,
+          left,
+          right,
+          comparisonPath,
+          summaryBase,
+          token,
+          notePath,
+          verificationPath,
+        }),
+      ),
     );
 }

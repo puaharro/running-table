@@ -22,7 +22,10 @@
     "check:export": "node scripts/check-export.mjs",
     "review:data": "node scripts/review-queue.mjs",
     "format": "prettier --write src tests scripts docs README.md package.json next.config.ts tsconfig.json vitest.config.ts .github .prettierrc.json",
-    "test:http": "node scripts/smoke-http.mjs"
+    "test:http": "node scripts/smoke-http.mjs",
+    "research:comments": "node scripts/import-threads.mjs --multi-source",
+    "content:manage": "node scripts/import-threads.mjs --multi-source",
+    "test:research": "node --test tests/comment-research.node.mjs tests/comment-research-http.node.mjs tests/content-management.node.mjs tests/content-management-http.node.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "5.3.0",

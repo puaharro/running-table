@@ -11,8 +11,10 @@ import { buildConfirmed, confirmedCsv } from "./confirmed.mjs";
 import { renderConfirmed } from "./confirmed-view.mjs";
 import { serveSummary } from "./summary-route.mjs";
 import { serveComparison } from "./comparison-route.mjs";
+import { serveContent } from "../content-management/routes.mjs";
+import { decorateResearch } from "../content-management/views.mjs";
 
-export async function startManualServer({ store, reviews, port = 0 }) {
+export async function startManualServer({ store, reviews, content, port = 0 }) {
   const token = randomBytes(32).toString("hex");
   let origin;
   const server = createServer(async (request, response) => {
@@ -28,7 +30,9 @@ export async function startManualServer({ store, reviews, port = 0 }) {
         .writeHead(status, { "Content-Type": "application/json; charset=utf-8" })
         .end(JSON.stringify(body));
     const html = (body) =>
-      response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }).end(body);
+      response
+        .writeHead(200, { "Content-Type": "text/html; charset=utf-8" })
+        .end(content ? decorateResearch(body) : body);
     try {
       if (request.headers.host !== new URL(origin).host)
         throw new ReviewError(403, "只接受本機匯入頁面請求。");
@@ -45,6 +49,7 @@ export async function startManualServer({ store, reviews, port = 0 }) {
           throw new ReviewError(403, "請由本機頁面提交資料。");
         if (request.headers["content-type"]?.split(";")[0].trim() !== "application/json")
           throw new ReviewError(415, "只接受 JSON。");
+        if (await serveContent({ request, response, content, token, readBody: jsonBody })) return;
         if (noteRoute) {
           const input = await jsonBody(request, 65536);
           if (request.url === "/verification-save") {
@@ -115,8 +120,9 @@ export async function startManualServer({ store, reviews, port = 0 }) {
         response.setHeader("Allow", "GET, POST");
         throw new ReviewError(405, "不支援這個操作。");
       }
-      if (request.url === "/") {
-        html(renderManualImport(store.mode, token));
+      if (await serveContent({ request, response, content, token, readBody: jsonBody })) return;
+      if (request.url === "/" || (content && request.url === "/research")) {
+        html(renderManualImport(store.mode, token, { multiSource: store.multiSource }));
         return;
       }
       if (request.url === "/api/batches") {
@@ -125,6 +131,7 @@ export async function startManualServer({ store, reviews, port = 0 }) {
       }
       if (["/compare", "/compare.json", "/compare.csv"].includes(request.url.split("?")[0])) {
         serveComparison({
+          transformHtml: content ? decorateResearch : undefined,
           request,
           response,
           reviews,
@@ -144,6 +151,7 @@ export async function startManualServer({ store, reviews, port = 0 }) {
         )
       ) {
         serveVerification({
+          transformHtml: content ? decorateResearch : undefined,
           request,
           response,
           reviews,
@@ -211,6 +219,7 @@ export async function startManualServer({ store, reviews, port = 0 }) {
       }
       if (api?.[2].startsWith("summary")) {
         serveSummary({
+          transformHtml: content ? decorateResearch : undefined,
           request,
           response,
           review: reviews.export(datasetId),

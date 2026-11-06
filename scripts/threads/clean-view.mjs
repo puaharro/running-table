@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { sourceLink } from "./report.mjs";
+import { evidenceLink, metadataText } from "../research/sources.mjs";
 const e = (value) =>
   String(value ?? "").replace(
     /[&<>"']/g,
@@ -40,12 +40,12 @@ export function renderCleanReport(result, { reviewUrl = null } = {}) {
   const labels = { keep: "保留", review: "待覆核", exclude: "排除" };
   const cards = result.records
     .map((record) => {
-      const link = sourceLink(record.permalink ?? record.raw.source_post_url);
+      const link = evidenceLink(record);
       return `<article class="record" data-disposition="${e(record.disposition)}"><header><strong>${record.kind === "post" ? "POST" : "留言"} ${e(displayId(record.id))} · @${e(record.username ?? "作者未知")}</strong><span class="badge ${e(record.disposition)}">${labels[record.disposition]}</span></header>
-      <p class="text">${e(record.clean_text || "（沒有文字）")}</p><p class="meta">討論 ${e(record.root_post_id)} · 回覆對象 ${e(record.parent_id ?? (record.kind === "post" && record.id === record.root_post_id ? "主帖" : "未知"))} · 原文年份 ${e(record.mentioned_years.join("、") || "未提及")}</p>
+      <p class="text">${e(record.clean_text || "（沒有文字）")}</p>${record.raw.source_platform ? `<p class="meta">${e(metadataText(record.raw))}</p>` : ""}<p class="meta">討論 ${e(record.root_post_id)} · 回覆對象 ${e(record.parent_id ?? (record.kind === "post" && record.id === record.root_post_id ? "主帖" : "未知"))} · 原文年份 ${e(record.mentioned_years.join("、") || "未提及")}</p>
       <ul>${record.reasons.map((reason) => `<li>${e(REASONS[reason] ?? reason)}</li>`).join("")}</ul>
       ${record.duplicate_of ? `<p class="meta">重複觀測對應：${e(record.duplicate_of)}</p>` : ""}${record.possible_duplicate_of ? `<p class="meta">可能重複，待確認：${e(record.possible_duplicate_of)}</p>` : ""}
-      ${link ? `<a href="${e(link)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">${record.raw.link_scope === "root" ? "查看來源主帖（沒有留言獨立連結）" : "查看 Threads 原文"} ↗</a>` : '<p class="meta">未有可用原文連結</p>'}
+      ${link ? `<a href="${e(link)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">${record.raw.link_scope === "root" ? "查看來源主帖（沒有留言獨立連結）" : "查看來源原文"} ↗</a>` : '<p class="meta">未有可用原文連結</p>'}
       <details><summary>查看原始欄位與規則依據</summary><pre>${e(JSON.stringify({ raw: record.raw, matched_aliases: record.matched_aliases, other_races: record.other_races, relevance: record.relevance, relevance_basis: record.relevance_basis, collected_at: record.collected_at, text_fingerprint: record.text_fingerprint }, null, 2))}</pre></details></article>`;
     })
     .join("");

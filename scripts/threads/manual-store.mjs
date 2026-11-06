@@ -5,6 +5,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { PRESETS } from "./clean.mjs";
 import { ReviewError } from "./review-store.mjs";
 import { sourceLink } from "./report.mjs";
+import { publicReference } from "../research/sources.mjs";
 
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 export function threadsReference(value) {
@@ -23,8 +24,17 @@ export function threadsReference(value) {
   };
 }
 
-export function validateManualInput(input) {
+export function validateManualInput(input, { multiSource = false } = {}) {
+  const extraFields = [
+    "source_platform",
+    "posted_date",
+    "race_group",
+    "runner_segment",
+    "experience",
+    "event_page_year",
+  ];
   const allowed = [
+    ...(multiSource ? extraFields : []),
     "preset",
     "target_year",
     "kind",
@@ -60,7 +70,44 @@ export function validateManualInput(input) {
     typeof input.parent_url !== "string"
   )
     throw new ReviewError(400, "請檢查賽事、目標年份、原文及來源欄位；原文最多 20000 字。");
-  const source = threadsReference(input.source_url);
+  let metadata = {};
+  if (multiSource) {
+    if (
+      typeof input.posted_date !== "string" ||
+      (input.posted_date !== "" &&
+        (!/^\d{4}-\d{2}-\d{2}$/.test(input.posted_date) ||
+          !Number.isFinite(Date.parse(input.posted_date)) ||
+          new Date(input.posted_date).toISOString().slice(0, 10) !== input.posted_date)) ||
+      typeof input.race_group !== "string" ||
+      input.race_group.length > 120 ||
+      !["unknown", "front", "middle", "back"].includes(input.runner_segment) ||
+      !["unknown", "self_reported", "secondhand", "organizer"].includes(input.experience) ||
+      !(
+        input.event_page_year === null ||
+        (Number.isInteger(input.event_page_year) &&
+          input.event_page_year >= 1900 &&
+          input.event_page_year <= 2200)
+      )
+    )
+      throw new ReviewError(400, "請檢查出帖日期、組別及觀察範圍；未知可以留空。");
+    metadata = {
+      source_platform: input.source_platform,
+      posted_date: input.posted_date || null,
+      race_group: input.race_group.trim() || null,
+      runner_segment: input.runner_segment,
+      experience: input.experience,
+      event_page_year: input.event_page_year,
+    };
+  }
+  const reference = (url) => {
+    if (!multiSource) return threadsReference(url);
+    try {
+      return publicReference(input.source_platform, url);
+    } catch (error) {
+      throw new ReviewError(400, error.message);
+    }
+  };
+  const source = reference(input.source_url);
   let root = source,
     parent = null,
     id = source.id;
@@ -74,11 +121,11 @@ export function validateManualInput(input) {
     )
       throw new ReviewError(400, "主帖請使用獨立連結，毋須填父回覆。");
   } else {
-    root = input.link_scope === "root" ? source : threadsReference(input.root_url);
+    root = input.link_scope === "root" ? source : reference(input.root_url);
     if (
       input.link_scope === "root" &&
       input.root_url.trim() &&
-      threadsReference(input.root_url).id !== source.id
+      reference(input.root_url).id !== source.id
     )
       throw new ReviewError(400, "只有主帖來源時，來源連結與主帖連結必須相同。");
     if (input.link_scope === "item" && source.id === root.id)
@@ -90,7 +137,7 @@ export function validateManualInput(input) {
       if (input.parent_url.trim()) throw new ReviewError(400, "直接回覆主帖時，請清空父留言連結。");
       parent = root;
     } else if (input.parent_relation === "comment") {
-      parent = threadsReference(input.parent_url);
+      parent = reference(input.parent_url);
       if (parent.id === root.id)
         throw new ReviewError(400, "這是回覆主帖，請改選「直接回覆主帖」。");
     } else if (input.parent_url.trim())
@@ -102,6 +149,7 @@ export function validateManualInput(input) {
     if (parent?.id === id) throw new ReviewError(400, "留言不能回覆自己。");
   }
   return {
+    ...metadata,
     preset: input.preset,
     target_year: input.target_year,
     kind: input.kind,
@@ -122,7 +170,7 @@ export function validateManualInput(input) {
 }
 
 export class ManualStore {
-  constructor(path, mode = "manual") {
+  constructor(path, mode = "manual", { multiSource = false } = {}) {
     if (!["manual", "demo"].includes(mode)) throw new ReviewError(400, "不支援這種手動匯入模式。");
     if (path !== ":memory:") mkdirSync(dirname(path), { recursive: true });
     this.db = new DatabaseSync(path);
@@ -135,6 +183,16 @@ export class ManualStore {
     ) {
       this.db.close();
       throw new ReviewError(400, "請使用獨立的手動匯入資料庫。");
+    }
+    const existed = this.db
+      .prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='manual_import_meta'")
+      .get();
+    const hasSourceMode = this.db
+      .prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name='manual_source_meta'")
+      .get();
+    if (multiSource && existed && !hasSourceMode) {
+      this.db.close();
+      throw new ReviewError(400, "請使用獨立多來源資料庫，保留原 Threads 工作區。");
     }
     this.db.exec(`PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;
       CREATE TABLE IF NOT EXISTS manual_import_meta (id INTEGER PRIMARY KEY CHECK(id=1),mode TEXT NOT NULL);
@@ -150,13 +208,27 @@ export class ManualStore {
       this.db.close();
       throw new ReviewError(400, "示範與手動真實資料需要獨立資料庫。");
     }
+    this.db.exec(
+      "CREATE TABLE IF NOT EXISTS manual_source_meta (id INTEGER PRIMARY KEY CHECK(id=1),source_mode TEXT NOT NULL)",
+    );
+    this.db
+      .prepare("INSERT OR IGNORE INTO manual_source_meta VALUES (1,?)")
+      .run(multiSource ? "multi" : "threads");
+    if (
+      this.db.prepare("SELECT source_mode FROM manual_source_meta WHERE id=1").get().source_mode !==
+      (multiSource ? "multi" : "threads")
+    ) {
+      this.db.close();
+      throw new ReviewError(400, "多來源與 Threads 工作區需要獨立資料庫。");
+    }
+    this.multiSource = multiSource;
     this.mode = mode;
   }
   close() {
     this.db.close();
   }
   import(input) {
-    const record = validateManualInput(input),
+    const record = validateManualInput(input, { multiSource: this.multiSource }),
       payload = JSON.stringify(record),
       fingerprint = hash(payload),
       at = new Date().toISOString();
@@ -247,13 +319,26 @@ export class ManualStore {
           id: record.id,
           text: record.text,
           username: record.username,
-          timestamp: null,
+          timestamp: record.posted_date ?? null,
+          ...(record.source_platform
+            ? {
+                source_platform: record.source_platform,
+                race_group: record.race_group,
+                runner_segment: record.runner_segment,
+                experience: record.experience,
+                event_page_year: record.event_page_year,
+              }
+            : {}),
           permalink: record.permalink,
           source_post_url: record.source_post_url,
           ingestion_method: "manual_paste",
           source_verified: false,
           manual_identity:
-            record.link_scope === "root" ? "root_text_observation" : "permalink_shortcode",
+            record.link_scope === "root"
+              ? "root_text_observation"
+              : this.multiSource
+                ? "submitted_permalink"
+                : "permalink_shortcode",
           link_scope: record.link_scope,
           source_url_submitted: record.source_url_submitted,
           root_url_submitted: record.root_url_submitted,
