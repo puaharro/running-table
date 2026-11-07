@@ -1743,3 +1743,12 @@ time,
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+.group-card:is(:target, .is-selected) {
+  outline: 2px solid #315b49;
+  outline-offset: 4px;
+  scroll-margin-top: 24px;
+}
+.selected-group-label {
+  font-size: 0.875rem;
+  color: #315b49;
+}

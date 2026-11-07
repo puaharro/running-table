@@ -19,7 +19,7 @@ import {
 } from "@/lib/filter-shortcuts";
 import { groupLocations } from "@/lib/group-locations";
 import { listDeadline, listRegistration } from "@/lib/list-registration";
-import { raceHref } from "@/lib/site";
+import { filteredRaceHref, orderSavedResults, paginateResults, pastResult } from "@/lib/list-view";
 import { resultsEntry, resultsHref } from "@/lib/results-location";
 import { FavoriteButton, useFavorites } from "./race-save";
 import { distanceOptions, countries, type Filters, type Race } from "@/lib/types";
@@ -30,10 +30,12 @@ function monthLabel(date: string) {
 
 export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow: string }) {
   const [filters, setFilters] = useState<Filters>(defaultFilters);
+  const [page, setPage] = useState(1);
   const favorites = useFavorites();
   const [savedOnly, setSavedOnly] = useState(false);
   function changeSavedOnly(value: boolean) {
     setSavedOnly(value);
+    update(value ? { ...filters, view: "all" } : filters);
     try {
       sessionStorage.setItem("nxtgo:saved-only", value ? "1" : "0");
     } catch {
@@ -66,17 +68,20 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   useEffect(() => {
     const sync = () => {
-      const { filters: next, savedOnly: requestedSaved } = resultsEntry(
-        new URLSearchParams(window.location.search),
-      );
+      const {
+        filters: next,
+        savedOnly: requestedSaved,
+        page: nextPage,
+      } = resultsEntry(new URLSearchParams(window.location.search));
       if (requestedSaved) {
         changeSavedOnly(true);
         // Consume the entry command; sharing keeps only ordinary list filters.
         window.history.replaceState(window.history.state, "", resultsHref(next));
       }
       setFilters(next);
+      setPage(nextPage);
       try {
-        window.sessionStorage.setItem("rundates:results", resultsHref(next));
+        window.sessionStorage.setItem("rundates:results", resultsHref(next, undefined, nextPage));
       } catch {
         /* Browser back remains available. */
       }
@@ -95,13 +100,14 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   }, []);
   function update(next: Filters) {
     setFilters(next);
+    setPage(1);
     shareRequest.current += 1;
     setCopyState(null);
     const query = serializeFilters(next);
     window.history.replaceState(
       null,
       "",
-      `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`,
+      `${window.location.pathname}${query ? `?${query}` : ""}#race-list`,
     );
     try {
       window.sessionStorage.setItem("rundates:results", resultsHref(next));
@@ -110,14 +116,19 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     }
   }
   useEffect(() => {
-    if (!ready || !/^#race-[a-z0-9-]+$/.test(window.location.hash)) return;
+    if (
+      !ready ||
+      window.location.hash === "#race-list" ||
+      !/^#race-[a-z0-9-]+$/.test(window.location.hash)
+    )
+      return;
     const frame = window.requestAnimationFrame(() => {
       const row = document.getElementById(window.location.hash.slice(1));
       row?.scrollIntoView({ block: "start", behavior: "instant" });
       row?.focus({ preventScroll: true });
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [ready]);
+  }, [ready, page]);
   function field<K extends keyof Filters>(key: K, value: Filters[K]) {
     update({ ...filters, [key]: value });
   }
@@ -135,18 +146,47 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     setCustomDates(false);
     update({ ...toggleDateShortcut(filters, kind, now), view: "all" });
   }
-  const results = useMemo(
-    () =>
-      selectRaces(
-        savedOnly ? races.filter((r) => favorites.ids.includes(r.id)) : races,
-        filters,
-        now,
-      ),
-    [races, filters, now, savedOnly, favorites.ids],
-  );
+  const results = useMemo(() => {
+    const selected = selectRaces(
+      savedOnly ? races.filter((r) => favorites.ids.includes(r.id)) : races,
+      filters,
+      now,
+    );
+    return savedOnly && filters.sort === "date" ? orderSavedResults(selected, now) : selected;
+  }, [races, filters, now, savedOnly, favorites.ids]);
+  const pagination = paginateResults(results, page);
+  const visibleResults = pagination.items;
+  useEffect(() => {
+    if (!ready || (savedOnly && !favorites.ready) || page === pagination.page) return;
+    setPage(pagination.page);
+    const href = resultsHref(filters, undefined, pagination.page);
+    window.history.replaceState(window.history.state, "", href);
+    try {
+      sessionStorage.setItem("rundates:results", href);
+    } catch {
+      /* Optional return memory. */
+    }
+  }, [ready, savedOnly, favorites.ready, page, pagination.page, filters]);
+  function changePage(next: number) {
+    const target = paginateResults(results, next).page;
+    setPage(target);
+    shareRequest.current += 1;
+    setCopyState(null);
+    const href = resultsHref(filters, undefined, target);
+    window.history.replaceState(window.history.state, "", href);
+    try {
+      sessionStorage.setItem("rundates:results", href);
+    } catch {
+      /* Optional return memory. */
+    }
+    window.requestAnimationFrame(() => {
+      resultsPanel.current?.scrollIntoView({ block: "start", behavior: "instant" });
+      resultsCount.current?.focus({ preventScroll: true });
+    });
+  }
   const resultsPanel = useRef<HTMLDivElement>(null);
   const resultKey = JSON.stringify(
-    results.map(({ race, groups }) => [race.id, groups.map((group) => group.id)]),
+    visibleResults.map(({ race, groups }) => [race.id, groups.map((group) => group.id)]),
   );
   const previousResultKey = useRef<string | null>(null);
   useEffect(() => {
@@ -534,13 +574,19 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
           <div className="race-results-layout" ref={resultsPanel}>
             <div className="race-results-main">
               <div className="race-list">
-                {results.map(({ race, groups }, index) => {
+                {visibleResults.map(({ race, groups }, index) => {
+                  const detailHref = filteredRaceHref(race, groups, filters);
                   const deadline = listDeadline(race, groups, now);
                   const RaceHeading = filters.sort === "date" ? "h3" : "h2";
                   const month = race.date.slice(0, 7);
-                  const previousMonth = results[index - 1]?.race.date.slice(0, 7);
+                  const previousMonth = visibleResults[index - 1]?.race.date.slice(0, 7);
+                  const pastSaved =
+                    savedOnly && filters.sort === "date" && pastResult({ race, groups }, now);
+                  const firstPast =
+                    pastSaved && (index === 0 || !pastResult(visibleResults[index - 1], now));
                   return (
                     <Fragment key={race.id}>
+                      {firstPast && <h2 className="past-saved-heading">過往收藏</h2>}
                       {filters.sort === "date" && month !== previousMonth && (
                         <div className="month-divider">
                           <h2>{monthLabel(race.date)}</h2>
@@ -553,10 +599,10 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                         tabIndex={-1}
                         onClickCapture={(event) => {
                           const anchor = (event.target as Element).closest("a");
-                          if (anchor?.getAttribute("href") !== raceHref(race)) return;
+                          if (anchor?.getAttribute("href") !== detailHref) return;
                           if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
                             return;
-                          const returnHref = resultsHref(filters, race.id);
+                          const returnHref = resultsHref(filters, race.id, pagination.page);
                           window.history.replaceState(window.history.state, "", returnHref);
                           try {
                             sessionStorage.setItem("rundates:results", returnHref);
@@ -567,7 +613,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                       >
                         <div className="calendar-race-content">
                           <RaceHeading>
-                            <Link href={raceHref(race)}>{race.name}</Link>
+                            <Link href={detailHref}>{race.name}</Link>
                           </RaceHeading>
                           <p className="calendar-race-venue">
                             <Icon name="pin" size={18} />
@@ -583,12 +629,13 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                           </p>
                           <ul className="calendar-race-distances" aria-label="比賽距離">
                             {[
-                              ...new Set(
-                                race.groups.map((group) => distanceLabel(group.distanceKm)),
-                              ),
+                              ...new Set(groups.map((group) => distanceLabel(group.distanceKm))),
                             ].map((distance) => (
                               <li key={distance}>{distance}</li>
                             ))}
+                            {groups.length < race.groups.length && (
+                              <li className="other-groups">另有組別</li>
+                            )}
                           </ul>
                           <p className="calendar-race-start">
                             <Icon name="calendar" size={18} />
@@ -628,14 +675,14 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                           <FavoriteButton race={race} />
                           <Link
                             className="button button-coral calendar-race-detail"
-                            href={raceHref(race)}
+                            href={detailHref}
                             aria-label={`${race.name}：詳細資料`}
                           >
                             詳細資料 <Icon name="arrow" size={20} />
                           </Link>
                         </div>
                       </article>
-                      {index === 5 && results.length > 7 && <AdSlot />}
+                      {index === 5 && visibleResults.length > 7 && <AdSlot />}
                     </Fragment>
                   );
                 })}
@@ -685,11 +732,34 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                 </div>
               )}
               <div className="results-footer">
-                <span>顯示全部 {results.length} 場符合條件嘅賽事</span>
+                <span role="status" aria-live="polite">
+                  顯示第 {pagination.from}–{pagination.to} 場，共 {results.length} 場
+                </span>
                 <a href="#race-list" onClick={() => setFiltersExpanded(true)}>
                   返回篩選 ↑
                 </a>
               </div>
+              {pagination.pages > 1 && (
+                <nav className="race-pagination" aria-label="賽事列表分頁">
+                  <button
+                    className="button"
+                    disabled={pagination.page === 1}
+                    onClick={() => changePage(pagination.page - 1)}
+                  >
+                    上一頁
+                  </button>
+                  <span>
+                    第 {pagination.page}／{pagination.pages} 頁
+                  </span>
+                  <button
+                    className="button"
+                    disabled={pagination.page === pagination.pages}
+                    onClick={() => changePage(pagination.page + 1)}
+                  >
+                    下一頁
+                  </button>
+                </nav>
+              )}
             </div>
           </div>
         </div>

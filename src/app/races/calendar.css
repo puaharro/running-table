@@ -667,3 +667,28 @@
   color: var(--home-ink);
   font-size: 0.875rem;
 }
+.race-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  color: var(--home-ink);
+}
+.race-pagination .button {
+  min-height: 44px;
+  padding: 10px 14px;
+}
+.race-pagination button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.search-page .calendar-race-distances .other-groups {
+  background: transparent;
+  border-color: transparent;
+  color: var(--home-muted);
+}
+.past-saved-heading {
+  margin: 24px 0 0;
+  color: var(--home-ink);
+}
