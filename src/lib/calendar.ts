@@ -1,5 +1,5 @@
 import { validDate, hongKongToday } from "./races";
-import { validTimestamp } from "./catalog";
+import { verifiedRegistrationDeadline } from "./registration-deadline";
 import type { Race } from "./types";
 
 export type CalendarItem = {
@@ -27,29 +27,10 @@ export function calendarItems(race: Race, now: string): CalendarItem[] {
     }));
   for (const group of race.groups)
     for (const channel of group.channels) {
-      const sources =
-        race.sources?.filter(
-          (s) =>
-            channel.sourceIds.includes(s.id) &&
-            s.fields.includes("channels.registration") &&
-            validTimestamp(s.checkedAt) &&
-            Date.parse(s.checkedAt) <= Date.parse(now),
-        ) ?? [];
-      if (!sources.length) continue;
-      const exact = channel.registrationClosesAt;
-      if (
-        exact &&
-        (!validTimestamp(exact) ||
-          (channel.deadline && hongKongToday(new Date(exact)) !== channel.deadline))
-      )
-        continue;
-      const date = exact ?? channel.deadline;
-      if (
-        !date ||
-        (exact ? Date.parse(exact) <= Date.parse(now) : !validDate(date) || date < today)
-      )
-        continue;
-      if ((exact ? hongKongToday(new Date(exact)) : date) > group.date) continue;
+      const deadline = verifiedRegistrationDeadline(race, group, channel, now);
+      if (!deadline) continue;
+      const { date, timed, sources } = deadline;
+      const exact = timed ? date : undefined;
       items.push({
         id: `${race.id}:${group.id}:${channel.id}:deadline`,
         label: `報名截止 · ${group.name}／${channel.name} · ${exact ? new Date(exact).toLocaleString("zh-HK", { timeZone: "Asia/Hong_Kong", hour12: false }) + " 香港時間" : date + "（時刻待核實）"}`,

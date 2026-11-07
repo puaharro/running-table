@@ -652,3 +652,18 @@
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
+.search-page .calendar-race-deadline {
+  display: grid;
+  gap: 2px;
+  margin: 10px 0 0;
+  padding-left: 10px;
+  border-left: 3px solid var(--home-orange-ink);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--home-orange-ink);
+  overflow-wrap: anywhere;
+}
+.search-page .calendar-race-deadline > span:not(.sr-only) {
+  color: var(--home-ink);
+  font-size: 0.875rem;
+}
