@@ -1,5 +1,6 @@
 import "./race-detail.css";
 import { UnscopedRunnerOpinions } from "@/components/runner-opinions";
+import { RaceSaveActions } from "@/components/race-save";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { races } from "@/data/races";
@@ -64,6 +65,7 @@ export default async function RacePage({ params }: Props) {
               </div>
               <h1>{race.name}</h1>
               <p className="english-title">{race.englishName}</p>
+              <RaceSaveActions race={race} initialNow={now} />
             </div>
           </div>
           <RaceOverview

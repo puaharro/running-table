@@ -13,13 +13,13 @@ export default function Privacy() {
       <div className="page-heading">
         <div className="eyebrow">PRIVACY NOTE</div>
         <h1>測試版私隱說明</h1>
-        <p>更新日期：2026 年 10 月 31 日。以下只描述目前測試版嘅功能。</p>
+        <p>更新日期：2026 年 11 月 7 日。以下只描述目前測試版嘅功能。</p>
       </div>
       <div className="prose narrow">
         <section>
           <h2>目前網站功能</h2>
           <p>
-            此測試版無會員登入、收藏、個人報名或付款表格，亦未加入 Google AdSense
+            此測試版無會員登入、個人報名或付款表格，亦未加入 Google AdSense
             或流量分析程式。賽事資料按公開官方來源整理；未知欄位保留待核實。
           </p>
         </section>
@@ -27,6 +27,15 @@ export default function Privacy() {
           <h2>篩選與瀏覽器儲存</h2>
           <p>
             你選擇嘅篩選條件會顯示喺網址，方便分享。請避免喺搜尋欄輸入姓名、電話等私人資料，分享連結會包含搜尋文字。
+          </p>
+          <p>
+            收藏只以賽事代號儲存在目前瀏覽器
+            localStorage，毋須登入，唔會傳送到網站或跨裝置同步。清除網站資料會移除收藏。「只看收藏」的顯示選擇保存在目前分頁
+            sessionStorage，唔會包含於分享連結。
+          </p>
+          <p>
+            加入日曆會在本機產生 .ics
+            檔案，需由你自行匯入日曆；網站唔會存取你嘅日曆帳戶。匯入後，行程由你所用嘅日曆服務處理，網站唔會自動同步大會改期或截止日期更新。
           </p>
           <p>
             瀏覽器 sessionStorage

@@ -21,6 +21,7 @@ import {
 import { groupLocations } from "@/lib/group-locations";
 import { raceHref } from "@/lib/site";
 import { resultsHref } from "@/lib/results-location";
+import { FavoriteButton, useFavorites } from "./race-save";
 import { distanceOptions, countries, type Filters, type Race } from "@/lib/types";
 
 function monthLabel(date: string) {
@@ -29,6 +30,28 @@ function monthLabel(date: string) {
 
 export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow: string }) {
   const [filters, setFilters] = useState<Filters>(defaultFilters);
+  const favorites = useFavorites();
+  const [savedOnly, setSavedOnly] = useState(false);
+  function changeSavedOnly(value: boolean) {
+    setSavedOnly(value);
+    try {
+      sessionStorage.setItem("nxtgo:saved-only", value ? "1" : "0");
+    } catch {
+      /* Filtering remains available without session storage. */
+    }
+  }
+  useEffect(() => {
+    const restore = () => {
+      try {
+        setSavedOnly(sessionStorage.getItem("nxtgo:saved-only") === "1");
+      } catch {
+        /* Optional list view memory. */
+      }
+    };
+    restore();
+    window.addEventListener("pageshow", restore);
+    return () => window.removeEventListener("pageshow", restore);
+  }, []);
   const [now, setNow] = useState(initialNow);
   const [ready, setReady] = useState(false);
   const [customDates, setCustomDates] = useState(false);
@@ -105,7 +128,15 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     setCustomDates(false);
     update({ ...toggleDateShortcut(filters, kind, now), view: "all" });
   }
-  const results = useMemo(() => selectRaces(races, filters, now), [races, filters, now]);
+  const results = useMemo(
+    () =>
+      selectRaces(
+        savedOnly ? races.filter((r) => favorites.ids.includes(r.id)) : races,
+        filters,
+        now,
+      ),
+    [races, filters, now, savedOnly, favorites.ids],
+  );
   const resultsPanel = useRef<HTMLDivElement>(null);
   const resultKey = JSON.stringify(
     results.map(({ race, groups }) => [race.id, groups.map((group) => group.id)]),
@@ -254,6 +285,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                 className="calendar-reset-filters"
                 onClick={() => {
                   setCustomDates(false);
+                  changeSavedOnly(false);
                   update(defaultFilters);
                 }}
               >
@@ -413,7 +445,21 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               {error}
             </p>
           )}
+          <p className="saved-note">
+            收藏只存於此瀏覽器，毋須登入。{savedOnly && "分享連結只包含一般篩選，不包含你嘅收藏。"}
+          </p>
+          {favorites.message && <p role="status">{favorites.message}</p>}
           <div className="results-toolbar" id="results-toolbar" tabIndex={-1}>
+            <label className="saved-only">
+              <input
+                type="checkbox"
+                checked={savedOnly}
+                onChange={(e) => {
+                  changeSavedOnly(e.target.checked);
+                }}
+              />
+              只看收藏（{races.filter((r) => favorites.ids.includes(r.id)).length}）
+            </label>
             <div
               className="view-tabs"
               role="group"
@@ -558,13 +604,16 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                             </span>
                           </p>
                         </div>
-                        <Link
-                          className="button button-coral calendar-race-detail"
-                          href={raceHref(race)}
-                          aria-label={`${race.name}：詳細資料`}
-                        >
-                          詳細資料 <Icon name="arrow" size={20} />
-                        </Link>
+                        <div className="calendar-card-actions">
+                          <FavoriteButton race={race} />
+                          <Link
+                            className="button button-coral calendar-race-detail"
+                            href={raceHref(race)}
+                            aria-label={`${race.name}：詳細資料`}
+                          >
+                            詳細資料 <Icon name="arrow" size={20} />
+                          </Link>
+                        </div>
                       </article>
                       {index === 5 && results.length > 7 && <AdSlot />}
                     </Fragment>
@@ -574,7 +623,14 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               {!results.length && (
                 <div className="empty-state">
                   <Icon name="search" size={36} />
-                  <h2>{error ? "調整一下篩選範圍" : "暫時搵唔到符合條件嘅賽事"}</h2>
+                  <h2>
+                    {error
+                      ? "調整一下篩選範圍"
+                      : savedOnly
+                        ? "未有符合篩選嘅收藏"
+                        : "暫時搵唔到符合條件嘅賽事"}
+                  </h2>
+                  {savedOnly && <p>可切換「只看收藏」查看全部賽事，再按「收藏」保存。</p>}
                   <p>
                     {filters.countries.length &&
                     !races.some((race) => filters.countries.includes(race.country ?? "香港"))
@@ -598,6 +654,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                       className={relaxOption ? "button" : "button button-dark"}
                       onClick={() => {
                         setCustomDates(false);
+                        changeSavedOnly(false);
                         update({ ...defaultFilters, view: "all" });
                         resultsCount.current?.focus({ preventScroll: true });
                       }}
