@@ -1,10 +1,11 @@
+import { favoriteResultsHref, resultsEntry, resultsHref } from "./results-location";
 import { expect, it } from "vitest";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { races } from "@/data/races";
 import { calendarFile, calendarItems, foldCalendarLine } from "./calendar";
 import { favoritesKey, parseFavorites, toggleFavorite } from "./favorites";
-import { RaceSaveActions } from "@/components/race-save";
+import { FavoriteFeedback, RaceSaveActions } from "@/components/race-save";
 const now = "2026-11-07T02:00:00Z";
 function fixture() {
   const race = structuredClone(races[0]);
@@ -124,4 +125,45 @@ it("renders without browser storage during static export and explains import and
   expect(html).toContain("加入日曆");
   expect(html).toContain("收藏只存於此瀏覽器");
   expect(html).toContain("自行匯入");
+});
+
+it("offers an inline saved-list link only after a confirmed save, without a dialog", () => {
+  const html = renderToStaticMarkup(
+    createElement(FavoriteFeedback, { saved: true, message: "已收藏於此瀏覽器。" }),
+  );
+  expect(html).toContain('class="favorite-notice"');
+  expect(html).toContain('role="status"');
+  expect(html).toContain("已收藏 ·");
+  expect(html).toContain(`href="${favoriteResultsHref}"`);
+  expect(html).toContain("查看收藏");
+  expect(html).not.toContain('role="dialog"');
+});
+it("does not claim a new save or offer a success link on initial load, cancellation or failed storage", () => {
+  for (const [saved, message] of [
+    [true, ""],
+    [false, "已取消收藏。"],
+    [false, "已收藏於此瀏覽器。"],
+    [true, "未能儲存收藏；原有收藏未被覆寫。"],
+  ] as const) {
+    const html = renderToStaticMarkup(createElement(FavoriteFeedback, { saved, message }));
+    expect(html).not.toContain("查看收藏");
+    if (message.startsWith("未能")) {
+      expect(html).toContain('class="favorite-error"');
+      expect(html).toContain(message);
+    }
+  }
+});
+it("opens all saved races regardless of earlier search, date or status filters and removes the entry flag from sharing", () => {
+  const entry = resultsEntry(
+    new URLSearchParams("saved=1&q=hidden&view=upcoming&status=open&distance=5K"),
+  );
+  expect(entry.savedOnly).toBe(true);
+  expect(entry.filters.q).toBe("");
+  expect(entry.filters.view).toBe("all");
+  expect(entry.filters.statuses).toEqual([]);
+  expect(entry.filters.distances).toEqual([]);
+  expect(resultsHref(entry.filters)).not.toContain("saved");
+  const ordinary = resultsEntry(new URLSearchParams("q=running"));
+  expect(ordinary.savedOnly).toBe(false);
+  expect(ordinary.filters.q).toBe("running");
 });
