@@ -5,6 +5,7 @@ import { calendarFile, calendarItems } from "@/lib/calendar";
 import { raceHref } from "@/lib/site";
 import { displayDate, formatTimestamp } from "@/lib/races";
 import type { Race } from "@/lib/types";
+import { favoriteResultsHref } from "@/lib/results-location";
 const changed = "nxtgo:favorites-change";
 export function useFavorites() {
   const [ids, setIds] = useState<string[]>([]),
@@ -45,6 +46,24 @@ export function useFavorites() {
   }
   return { ids, ready, message, toggle };
 }
+export function FavoriteFeedback({ saved, message }: { saved: boolean; message: string }) {
+  const confirmed = saved && message === "已收藏於此瀏覽器。";
+  const error = message.startsWith("未能") || message.startsWith("無法");
+  return (
+    <span
+      className={confirmed ? "favorite-notice" : error ? "favorite-error" : "sr-only"}
+      role="status"
+    >
+      {confirmed ? (
+        <>
+          已收藏 · <a href={favoriteResultsHref}>查看收藏</a>
+        </>
+      ) : (
+        message
+      )}
+    </span>
+  );
+}
 export function FavoriteButton({ race }: { race: Pick<Race, "id" | "name"> }) {
   const { ids, ready, message, toggle } = useFavorites();
   const saved = ids.includes(race.id);
@@ -60,14 +79,7 @@ export function FavoriteButton({ race }: { race: Pick<Race, "id" | "name"> }) {
       >
         {saved ? "★ 已收藏" : "☆ 收藏"}
       </button>
-      <span
-        className={
-          message.startsWith("未能") || message.startsWith("無法") ? "favorite-error" : "sr-only"
-        }
-        role="status"
-      >
-        {message}
-      </span>
+      <FavoriteFeedback saved={saved} message={message} />
     </span>
   );
 }

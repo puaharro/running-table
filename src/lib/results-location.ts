@@ -1,6 +1,16 @@
 import { defaultFilters, parseFilters, serializeFilters } from "./races";
 import type { Filters } from "./types";
 
+export const favoriteResultsHref = "/races/?saved=1#race-list";
+
+export function resultsEntry(params: URLSearchParams) {
+  const savedOnly = params.get("saved") === "1";
+  return {
+    savedOnly,
+    filters: savedOnly ? { ...defaultFilters, view: "all" as const } : parseFilters(params),
+  };
+}
+
 export function resultsHref(filters: Filters = defaultFilters, raceId?: string) {
   const query = serializeFilters(filters);
   const anchor = raceId && /^[a-z0-9-]+$/.test(raceId) ? `race-${raceId}` : "race-list";

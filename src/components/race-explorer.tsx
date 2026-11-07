@@ -9,7 +9,6 @@ import {
   displayDate,
   distanceLabel,
   filterError,
-  parseFilters,
   selectRaces,
   serializeFilters,
 } from "@/lib/races";
@@ -21,7 +20,7 @@ import {
 import { groupLocations } from "@/lib/group-locations";
 import { listDeadline, listRegistration } from "@/lib/list-registration";
 import { raceHref } from "@/lib/site";
-import { resultsHref } from "@/lib/results-location";
+import { resultsEntry, resultsHref } from "@/lib/results-location";
 import { FavoriteButton, useFavorites } from "./race-save";
 import { distanceOptions, countries, type Filters, type Race } from "@/lib/types";
 
@@ -67,7 +66,14 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   useEffect(() => {
     const sync = () => {
-      const next = parseFilters(new URLSearchParams(window.location.search));
+      const { filters: next, savedOnly: requestedSaved } = resultsEntry(
+        new URLSearchParams(window.location.search),
+      );
+      if (requestedSaved) {
+        changeSavedOnly(true);
+        // Consume the entry command; sharing keeps only ordinary list filters.
+        window.history.replaceState(window.history.state, "", resultsHref(next));
+      }
       setFilters(next);
       try {
         window.sessionStorage.setItem("rundates:results", resultsHref(next));

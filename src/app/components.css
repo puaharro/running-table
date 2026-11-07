@@ -1725,3 +1725,21 @@ time,
   color: #8b2525;
   margin-top: 6px;
 }
+.favorite-notice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+  color: #244638;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.favorite-notice a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
