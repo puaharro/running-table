@@ -644,3 +644,11 @@
   font-size: 14px;
   color: #46564f;
 }
+.search-page .calendar-race-registration {
+  margin: 10px 0 0;
+  color: var(--forest, #244638);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}

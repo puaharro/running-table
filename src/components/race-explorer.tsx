@@ -19,6 +19,7 @@ import {
   type DateShortcut,
 } from "@/lib/filter-shortcuts";
 import { groupLocations } from "@/lib/group-locations";
+import { listRegistration } from "@/lib/list-registration";
 import { raceHref } from "@/lib/site";
 import { resultsHref } from "@/lib/results-location";
 import { FavoriteButton, useFavorites } from "./race-save";
@@ -602,6 +603,9 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                                   </Fragment>
                                 ))}
                             </span>
+                          </p>
+                          <p className="calendar-race-registration" aria-label="報名概況">
+                            {listRegistration(race, groups, now)}
                           </p>
                         </div>
                         <div className="calendar-card-actions">
