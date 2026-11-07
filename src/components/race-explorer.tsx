@@ -19,7 +19,7 @@ import {
   type DateShortcut,
 } from "@/lib/filter-shortcuts";
 import { groupLocations } from "@/lib/group-locations";
-import { listRegistration } from "@/lib/list-registration";
+import { listDeadline, listRegistration } from "@/lib/list-registration";
 import { raceHref } from "@/lib/site";
 import { resultsHref } from "@/lib/results-location";
 import { FavoriteButton, useFavorites } from "./race-save";
@@ -529,6 +529,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
             <div className="race-results-main">
               <div className="race-list">
                 {results.map(({ race, groups }, index) => {
+                  const deadline = listDeadline(race, groups, now);
                   const RaceHeading = filters.sort === "date" ? "h3" : "h2";
                   const month = race.date.slice(0, 7);
                   const previousMonth = results[index - 1]?.race.date.slice(0, 7);
@@ -607,6 +608,15 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                           <p className="calendar-race-registration" aria-label="報名概況">
                             {listRegistration(race, groups, now)}
                           </p>
+                          {deadline && (
+                            <p className="calendar-race-deadline">
+                              <span className="sr-only">最近已核實報名截止：</span>
+                              <strong>
+                                <time dateTime={deadline.date}>{deadline.label}</time>
+                              </strong>
+                              <span>{deadline.scope}</span>
+                            </p>
+                          )}
                         </div>
                         <div className="calendar-card-actions">
                           <FavoriteButton race={race} />
