@@ -1658,3 +1658,70 @@ time,
     display: inline;
   }
 }
+.race-save-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
+  margin-block: 16px;
+}
+.race-save-actions small {
+  flex-basis: 100%;
+  color: var(--text-secondary, #46564f);
+}
+.race-save-actions summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+}
+.calendar-download {
+  padding-block: 12px;
+  max-width: 680px;
+}
+.calendar-download label {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+}
+.calendar-download select {
+  width: 100%;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 10px;
+  color: #172f2b;
+  background: #fff;
+  border: 1px solid #6b7d72;
+  border-radius: 6px;
+}
+.calendar-download p {
+  font-size: 14px;
+  color: #46564f;
+  margin-block: 10px;
+}
+.calendar-download button {
+  margin-top: 12px;
+}
+.favorite-control button[aria-pressed="true"] {
+  background: #173e32;
+  color: #fff;
+}
+.favorite-control button:disabled {
+  opacity: 0.6;
+}
+@media (max-width: 600px) {
+  .race-save-actions details {
+    width: 100%;
+  }
+  .calendar-download {
+    width: 100%;
+  }
+}
+.favorite-error {
+  display: block;
+  max-width: 30rem;
+  font-size: 14px;
+  color: #8b2525;
+  margin-top: 6px;
+}
