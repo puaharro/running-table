@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { motion, useReducedMotion } from "motion/react";
 import { AdSlot, Icon } from "./ui";
 import {
   defaultFilters,
@@ -22,7 +23,7 @@ import { listDeadline, listRegistration } from "@/lib/list-registration";
 import { filteredRaceHref, orderSavedResults, paginateResults, pastResult } from "@/lib/list-view";
 import { resultsEntry, resultsHref } from "@/lib/results-location";
 import { FavoriteButton, useFavorites } from "./race-save";
-import { distanceOptions, countries, type Filters, type Race } from "@/lib/types";
+import { distanceOptions, regions, type Filters, type Race } from "@/lib/types";
 
 function monthLabel(date: string) {
   return `${date.slice(0, 4)} 年 ${Number(date.slice(5, 7))} 月`;
@@ -33,9 +34,9 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   const [page, setPage] = useState(1);
   const favorites = useFavorites();
   const [savedOnly, setSavedOnly] = useState(false);
-  function changeSavedOnly(value: boolean) {
+  function changeSavedOnly(value: boolean, next = filters) {
     setSavedOnly(value);
-    update(value ? { ...filters, view: "all" } : filters);
+    update(value ? { ...next, view: "all" } : next);
     try {
       sessionStorage.setItem("nxtgo:saved-only", value ? "1" : "0");
     } catch {
@@ -133,12 +134,13 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     update({ ...filters, [key]: value });
   }
   function toggle(
-    key: "distances" | "countries" | "regions" | "statuses" | "channels",
+    key: "distances" | "regions",
     value: string,
   ) {
     const values: string[] = filters[key];
     update({
       ...filters,
+      countries: key === "regions" ? [] : filters.countries,
       [key]: values.includes(value) ? values.filter((x) => x !== value) : [...values, value],
     });
   }
@@ -188,27 +190,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   const resultKey = JSON.stringify(
     visibleResults.map(({ race, groups }) => [race.id, groups.map((group) => group.id)]),
   );
-  const previousResultKey = useRef<string | null>(null);
-  useEffect(() => {
-    if (!ready) return;
-    const previous = previousResultKey.current;
-    previousResultKey.current = resultKey;
-    const panel = resultsPanel.current;
-    if (previous === null || previous === resultKey || !panel?.animate) return;
-
-    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (preference.matches) return;
-    const animation = panel.animate([{ opacity: 0.8 }, { opacity: 1 }], {
-      duration: 160,
-      easing: "ease-out",
-    });
-    const cancel = () => animation.cancel();
-    preference.addEventListener("change", cancel);
-    return () => {
-      cancel();
-      preference.removeEventListener("change", cancel);
-    };
-  }, [ready, resultKey]);
+  const reduceMotion = useReducedMotion();
   const calendarYear = Number(hongKongToday(new Date(now)).slice(0, 4));
   const yearActive = dateShortcutIsActive(filters, "year", now);
   const nextYearActive = dateShortcutIsActive(filters, "next-year", now);
@@ -227,11 +209,17 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
     filters.statuses.length +
     filters.channels.length;
   const acceptingOnly = filters.statuses.length === 1 && filters.statuses[0] === "open";
-  const selectedView = acceptingOnly
-    ? filters.view === "upcoming"
+  const selectedView = savedOnly
+    ? "saved"
+    : acceptingOnly && filters.view === "upcoming"
       ? "open"
-      : undefined
-    : filters.view;
+      : filters.view;
+  const quickViews = [
+    ["upcoming", "即將舉行"],
+    ["open", "接受申請"],
+    ["saved", "我的收藏"],
+    ["all", "全部"],
+  ] as const;
   const relaxOptions: { label: string; next: Filters }[] = [];
   if (!results.length) {
     if (filters.month) relaxOptions.push({ label: "取消月份", next: { ...filters, month: "" } });
@@ -407,13 +395,13 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               <div className="engine-option-row" role="group" aria-label="地點">
                 <span className="engine-label">地點</span>
                 <div className="option-row">
-                  {countries.map((country) => (
+                  {regions.map((region) => (
                     <button
-                      key={country}
-                      aria-pressed={filters.countries.includes(country)}
-                      onClick={() => toggle("countries", country)}
+                      key={region}
+                      aria-pressed={filters.regions.includes(region)}
+                      onClick={() => toggle("regions", region)}
                     >
-                      {country}
+                      {region === "港島" ? "香港島" : region}
                     </button>
                   ))}
                 </div>
@@ -492,35 +480,16 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
               {error}
             </p>
           )}
-          <p className="saved-note">
-            收藏只存於此瀏覽器，毋須登入。{savedOnly && "分享連結只包含一般篩選，不包含你嘅收藏。"}
-          </p>
-          {favorites.message && <p role="status">{favorites.message}</p>}
           <div className="results-toolbar" id="results-toolbar" tabIndex={-1}>
-            <label className="saved-only">
-              <input
-                type="checkbox"
-                checked={savedOnly}
-                onChange={(e) => {
-                  changeSavedOnly(e.target.checked);
-                }}
-              />
-              只看收藏（{races.filter((r) => favorites.ids.includes(r.id)).length}）
-            </label>
-            <div
-              className="view-tabs"
-              role="group"
-              aria-label="賽事快捷篩選"
-              data-view={selectedView}
-            >
-              {(["upcoming", "open", "all"] as const).map((key) => (
+            <div className="calendar-view-tabs" role="group" aria-label="賽事快捷篩選">
+              {quickViews.map(([key, label]) => (
                 <button
                   key={key}
                   aria-pressed={selectedView === key}
                   onClick={() =>
-                    update({
+                    changeSavedOnly(key === "saved", {
                       ...filters,
-                      view: key === "open" ? "upcoming" : key,
+                      view: key === "open" ? "upcoming" : key === "saved" ? "all" : key,
                       statuses:
                         key === "open"
                           ? ["open"]
@@ -528,20 +497,21 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                     })
                   }
                 >
-                  {key === "open" ? "接受申請" : key === "upcoming" ? "即將舉行" : "全部"}
+                  {label}
                 </button>
               ))}
             </div>
+            <span
+              ref={resultsCount}
+              className="calendar-result-count"
+              tabIndex={-1}
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              共 <strong>{results.length}</strong> 場
+            </span>
             <div className="results-actions">
-              <span
-                ref={resultsCount}
-                tabIndex={-1}
-                role="status"
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                共 <strong>{results.length}</strong> 場
-              </span>
               <label className="calendar-sort">
                 <span>排序</span>
                 <select
@@ -562,6 +532,11 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                     : "分享篩選 ↗"}
               </button>
             </div>
+            {favorites.message && (
+              <p className="saved-note" role="status">
+                {favorites.message}
+              </p>
+            )}
           </div>
           <span className="sr-only" role="status">
             {copyState === "copied"
@@ -577,6 +552,15 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                 {visibleResults.map(({ race, groups }, index) => {
                   const detailHref = filteredRaceHref(race, groups, filters);
                   const deadline = listDeadline(race, groups, now);
+                  const distances = [
+                    ...new Set(race.groups.map((group) => distanceLabel(group.distanceKm))),
+                  ];
+                  const matchedDistances = new Set(
+                    groups.map((group) => distanceLabel(group.distanceKm)),
+                  );
+                  const hasDistanceFilter = Boolean(
+                    filters.distances.length || filters.min || filters.max,
+                  );
                   const RaceHeading = filters.sort === "date" ? "h3" : "h2";
                   const month = race.date.slice(0, 7);
                   const previousMonth = visibleResults[index - 1]?.race.date.slice(0, 7);
@@ -593,7 +577,10 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                           <i />
                         </div>
                       )}
-                      <article
+                      <motion.article
+                        layout={ready && !reduceMotion ? "position" : false}
+                        layoutDependency={resultKey}
+                        transition={{ layout: { duration: 0.22, ease: "easeOut" } }}
                         className="calendar-race-card"
                         id={`race-${race.id}`}
                         tabIndex={-1}
@@ -628,14 +615,20 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                             </span>
                           </p>
                           <ul className="calendar-race-distances" aria-label="比賽距離">
-                            {[
-                              ...new Set(groups.map((group) => distanceLabel(group.distanceKm))),
-                            ].map((distance) => (
-                              <li key={distance}>{distance}</li>
-                            ))}
-                            {groups.length < race.groups.length && (
-                              <li className="other-groups">另有組別</li>
-                            )}
+                            {distances.map((distance) => {
+                              const matched = matchedDistances.has(distance);
+                              return (
+                                <li
+                                  key={distance}
+                                  data-distance-match={hasDistanceFilter ? matched : undefined}
+                                >
+                                  {distance}
+                                  {hasDistanceFilter && matched && (
+                                    <span className="sr-only">（符合篩選）</span>
+                                  )}
+                                </li>
+                              );
+                            })}
                           </ul>
                           <p className="calendar-race-start">
                             <Icon name="calendar" size={18} />
@@ -647,12 +640,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                                   <Fragment key={date}>
                                     {index > 0 && " ／ "}
                                     <time dateTime={date}>
-                                      {displayDate(date, {
-                                        year: "numeric",
-                                        month: "long",
-                                        day: "numeric",
-                                        weekday: "short",
-                                      })}
+                                      {displayDate(date, { year: "numeric" })}
                                     </time>
                                   </Fragment>
                                 ))}
@@ -681,7 +669,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                             詳細資料 <Icon name="arrow" size={20} />
                           </Link>
                         </div>
-                      </article>
+                      </motion.article>
                       {index === 5 && visibleResults.length > 7 && <AdSlot />}
                     </Fragment>
                   );
@@ -697,7 +685,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                         ? "未有符合篩選嘅收藏"
                         : "暫時搵唔到符合條件嘅賽事"}
                   </h2>
-                  {savedOnly && <p>可切換「只看收藏」查看全部賽事，再按「收藏」保存。</p>}
+                  {savedOnly && <p>可切換到「全部」，再按賽事旁嘅「收藏」。</p>}
                   <p>
                     {filters.countries.length &&
                     !races.some((race) => filters.countries.includes(race.country ?? "香港"))

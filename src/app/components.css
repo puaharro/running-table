@@ -1503,12 +1503,6 @@ time,
   display: inline-flex;
   vertical-align: middle;
 }
-.registration-channel .channel-toggle-price {
-  display: block;
-  margin-top: 6px;
-  font-size: 14px;
-  font-weight: 600;
-}
 .registration-channel .channel-toggle:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 4px;

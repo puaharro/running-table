@@ -7,6 +7,22 @@ const race = races.find((race) => race.id === "standard-chartered-hk-marathon-20
 const now = "2026-10-25T12:00:00+08:00";
 
 describe("locations of the matching groups", () => {
+  it("matches Hong Kong Island by group start and keeps out Kowloon groups", () => {
+    const filters = { ...defaultFilters, regions: ["港島"] };
+    const result = selectRaces([race], filters, now)[0];
+    expect(result.groups.map((group) => group.distanceKm)).toEqual([10]);
+    expect(selectRaces([race], { ...filters, distances: ["全馬"] }, now)).toEqual([]);
+  });
+
+  it("filters the outlying islands separately from the New Territories", () => {
+    const islandRaces = selectRaces(races, { ...defaultFilters, regions: ["離島"] }, now);
+    expect(islandRaces.map(({ race }) => race.id)).toEqual(
+      expect.arrayContaining(["hzmb-half-marathon-2026", "unicef-powerun-2027"]),
+    );
+    const newTerritories = selectRaces(races, { ...defaultFilters, regions: ["新界"] }, now);
+    expect(newTerritories.map(({ race }) => race.id)).not.toContain("hzmb-half-marathon-2026");
+  });
+
   it("shows Nathan Road for a search or a Kowloon marathon filter", () => {
     for (const filters of [
       { ...defaultFilters, q: "彌敦道" },

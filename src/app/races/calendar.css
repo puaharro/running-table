@@ -223,84 +223,75 @@
   box-sizing: border-box;
 }
 .search-page .results-toolbar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  justify-content: stretch;
-  gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: start;
+  gap: 8px 12px;
   padding: 0 0 16px;
   border-bottom: 1px solid var(--home-line);
   scroll-margin-top: 160px;
 }
-.search-page .view-tabs {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  justify-self: start;
+.search-page .calendar-view-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  min-width: 0;
   background: var(--home-tint);
   gap: 0;
   padding: 4px;
   border-radius: 8px;
 }
-.search-page .view-tabs button {
+.search-page .calendar-view-tabs button {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--home-muted);
   min-height: 44px;
-  padding: 8px 16px;
+  padding: 8px 14px;
   font-size: 14px;
+  font-weight: 600;
   border-radius: 5px;
+  white-space: nowrap;
+  line-height: 1.4;
 }
-.search-page .view-tabs button[aria-pressed="true"] {
+.search-page .calendar-view-tabs button[aria-pressed="true"] {
   color: var(--home-action-pressed);
   background: var(--home-card);
+  box-shadow: inset 0 -2px 0 var(--home-action);
 }
-.search-page .view-tabs::after {
-  content: "";
-  position: absolute;
-  inset: auto auto 4px 4px;
-  width: calc((100% - 8px) / 3);
-  height: 2px;
-  border-radius: 2px;
-  background: var(--home-action);
-  visibility: hidden;
-  pointer-events: none;
-}
-.search-page .view-tabs[data-view]::after {
-  visibility: visible;
-}
-.search-page .view-tabs[data-view="open"]::after {
-  translate: 100% 0;
-}
-.search-page .view-tabs[data-view="all"]::after {
-  translate: 200% 0;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .search-page .view-tabs::after {
-    transition: translate var(--motion-fast);
-  }
-}
-.search-page :is(.engine-options .option-row, .view-tabs) button:enabled:active {
+.search-page :is(.engine-options .option-row, .calendar-view-tabs) button:enabled:active {
   box-shadow: inset 0 0 0 2px currentColor;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .search-page :is(.engine-options .option-row, .view-tabs) button:enabled:active {
+  .search-page .engine-options .option-row button:enabled:active {
     translate: 0 1px;
   }
 }
 .search-page .results-actions {
-  width: 100%;
-  flex-wrap: wrap;
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
   justify-content: flex-start;
-  gap: 8px 16px;
+  gap: 12px;
   font-size: 14px;
 }
-.search-page .results-actions > span {
-  margin-right: auto;
-  display: inline;
+.search-page .calendar-result-count {
+  white-space: nowrap;
+  font-size: 14px;
+  color: var(--home-muted);
 }
-.search-page .results-actions > span:focus {
+.search-page .calendar-result-count:focus {
   outline: 2px solid var(--focus-ring);
   outline-offset: 4px;
 }
-.search-page .results-actions strong {
+.search-page .calendar-result-count strong {
+  display: inline-block;
+  min-width: 2ch;
   font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--home-ink);
 }
 .calendar-sort {
   position: relative;
@@ -354,7 +345,8 @@
 }
 .search-page .month-divider h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 800;
   white-space: nowrap;
 }
 .search-page .month-divider i {
@@ -376,6 +368,7 @@
   letter-spacing: -0.02em;
   color: var(--home-ink);
   overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 .search-page .calendar-race-content :is(h2, h3) a:hover {
   color: var(--home-action);
@@ -403,6 +396,17 @@
   padding: 4px 10px;
   font-size: 14px;
   border-radius: 5px;
+}
+.search-page .calendar-race-distances li[data-distance-match="true"] {
+  background: var(--home-action);
+  border-color: var(--home-action);
+  color: var(--home-on-dark);
+  font-weight: 700;
+}
+.search-page .calendar-race-distances li[data-distance-match="false"] {
+  background: var(--home-tint);
+  border-color: var(--home-line);
+  color: var(--home-muted);
 }
 .search-page .calendar-race-detail {
   min-width: 136px;
@@ -446,13 +450,6 @@
 .search-page :is(button, a, select, input):focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
-}
-@container race-results (min-width: 44rem) {
-  .search-page .results-toolbar {
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: center;
-    gap: 24px;
-  }
 }
 @media (max-width: 1000px) {
   .calendar-workspace {
@@ -574,17 +571,9 @@
     font-size: 16px;
     font-weight: 600;
   }
-  .search-page .view-tabs {
-    width: min(100%, 280px);
-  }
-  .search-page .view-tabs button {
-    padding: 8px;
-  }
-  .search-page .results-actions {
-    gap: 8px 12px;
-  }
-  .calendar-sort > span {
-    display: none;
+  .search-page .calendar-view-tabs button {
+    padding: 6px 5px;
+    font-size: 13px;
   }
   .search-page .calendar-race-card {
     padding: 20px;
@@ -594,12 +583,21 @@
     line-height: 1.5;
   }
   .search-page .month-divider {
-    padding-top: 24px;
+    padding-top: 28px;
   }
   .search-page .results-footer {
     align-items: flex-start;
     gap: 8px;
     padding-top: 16px;
+  }
+}
+@container race-results (max-width: 335px) {
+  .search-page .results-toolbar {
+    column-gap: 8px;
+  }
+  .search-page .calendar-view-tabs button {
+    padding-inline: 4px;
+    font-size: 12px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -627,22 +625,11 @@
   width: 100%;
   min-height: 44px;
 }
-.saved-only {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  min-height: 44px;
-  cursor: pointer;
-  color: #173e32;
-}
-.saved-only input {
-  width: 20px;
-  height: 20px;
-  accent-color: #173e32;
-}
 .saved-note {
-  font-size: 14px;
-  color: #46564f;
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 13px;
+  color: var(--home-muted);
 }
 .search-page .calendar-race-registration {
   margin: 10px 0 0;
@@ -682,11 +669,6 @@
 .race-pagination button:disabled {
   opacity: 0.45;
   cursor: default;
-}
-.search-page .calendar-race-distances .other-groups {
-  background: transparent;
-  border-color: transparent;
-  color: var(--home-muted);
 }
 .past-saved-heading {
   margin: 24px 0 0;

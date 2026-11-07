@@ -59,7 +59,7 @@ describe("mobile list and registration journey", () => {
 });
 
 describe("collapsed detail channels", () => {
-  it("keeps every channel closed with a concise name, status and qualified price summary", () => {
+  it("keeps every channel closed with status, price and deadline in its summary", () => {
     const html = renderToStaticMarkup(
       createElement(RegistrationGroups, { race, initialNow: "2026-10-27T01:00:00+08:00" }),
     );
@@ -71,7 +71,8 @@ describe("collapsed detail channels", () => {
       expect(attrs).not.toContain("open");
       const summary = content.slice(0, content.indexOf("</summary>"));
       expect(summary).toContain("status-badge");
-      expect(summary).toContain("channel-toggle-price");
+      expect(summary).toContain("channel-toggle-facts");
+      expect(summary).toMatch(/截止：(?:<time dateTime="[^"]+">|待核實)/);
       expect(summary).not.toContain("申請資格／條件");
       expect(summary).not.toContain("申請截止");
       expect(content).toContain("申請資格／條件");
@@ -81,6 +82,7 @@ describe("collapsed detail channels", () => {
     expect(html).toContain("最低籌款額：HK$ 4,000");
     expect(html).toContain("套票價格：HK$ 2,942");
     expect(html).toContain("每位／一晚");
+    expect(html).toContain('截止：<time dateTime="2026-09-20T19:00:00+08:00">');
   });
   it("preserves free and unverified prices without treating missing costs as zero", () => {
     for (const [price, label] of [

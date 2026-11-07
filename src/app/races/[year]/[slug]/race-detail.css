@@ -510,27 +510,34 @@
 .race-detail-page .runner-opinion-sources li p {
   margin-block: 4px;
 }
-.race-detail-page .registration-channel {
-  margin: 0 0 12px;
+.race-detail-page .registration-channel-list {
+  list-style: none;
+  margin: 0 0 16px;
   padding: 0;
-  border: 1px solid var(--home-line);
-  border-radius: 8px;
-  background: var(--home-card);
+  border-bottom: 1px solid var(--home-line);
+}
+.race-detail-page .registration-channel {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--home-line);
 }
 .race-detail-page .registration-channel .channel-toggle {
   min-height: 60px;
-  padding: 16px;
+  padding: 12px 8px;
   font-size: 16px;
 }
 .race-detail-page .registration-channel .channel-toggle h4 {
   font-size: 16px;
   line-height: 1.7;
 }
-.race-detail-page .registration-channel .channel-toggle-price {
+.race-detail-page .channel-toggle-facts {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 16px;
   color: var(--home-muted);
   font-size: 14px;
   line-height: 1.7;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 .race-detail-page .registration-channel .channel-details[open] > summary {
   background: var(--home-tint);
@@ -783,9 +790,6 @@
   }
   .race-detail-page .group-ratings .rating-grid dd {
     font-size: 22px;
-  }
-  .race-detail-page .registration-channel .channel-toggle {
-    padding: 16px 12px;
   }
   .race-detail-page .registration-channel .channel-details-body {
     padding: 16px 12px;

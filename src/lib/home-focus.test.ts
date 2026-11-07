@@ -12,8 +12,10 @@ it("provides editorial banner controls without implying sponsorship", () => {
     }),
   );
   expect(html).toContain("渣打香港馬拉松 2027");
-  expect(html).toContain('aria-label="下一張焦點"');
-  expect(html).toContain('aria-label="上一張焦點"');
+  expect(html).toContain('aria-label="選擇焦點內容"');
+  expect(html).toContain('aria-label="顯示第 2 張：');
+  expect(html).not.toContain('aria-label="下一張焦點"');
+  expect(html).not.toContain('aria-label="上一張焦點"');
   expect(html).toContain('aria-roledescription="輪播"');
   expect(html).toContain("inert");
   expect(html).not.toContain("贊助 ·");

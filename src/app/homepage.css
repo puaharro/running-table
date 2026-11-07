@@ -1195,7 +1195,7 @@
   transform-origin: right center;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .home-focus-banner[data-switched="true"] .focus-banner-slide:not([inert]) h2::after {
+  .focus-banner-slide[data-settled="true"]:not([inert]) h2::after {
     animation: focus-start-line 280ms ease-out both;
   }
 }
@@ -1206,9 +1206,9 @@
   }
 }
 .focus-banner-controls {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   padding: 7px 16px;
 }
@@ -1218,8 +1218,8 @@
   font-variant-numeric: tabular-nums;
   min-width: 80px;
 }
-.focus-banner-dots,
-.focus-banner-arrows {
+.focus-banner-dots {
+  grid-column: 2;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1236,6 +1236,9 @@
   color: var(--home-ink);
   cursor: pointer;
 }
+.focus-banner-dots button {
+  position: relative;
+}
 .focus-banner-dots button > span {
   display: block;
   width: 7px;
@@ -1243,20 +1246,19 @@
   border-radius: 4px;
   background: var(--home-control);
 }
-.focus-banner-dots button[aria-pressed="true"] > span {
+.focus-banner-dots button[aria-pressed="true"] > span:first-child {
+  opacity: 0;
+}
+.focus-banner-dots button > .focus-banner-active-marker {
+  position: absolute;
+  inset: 0;
+  margin: auto;
   width: 24px;
   height: 4px;
   background: var(--home-action);
 }
-.focus-banner-arrows button {
-  border-color: var(--home-line);
-}
 .focus-banner-controls button:hover:enabled {
   background: var(--home-tint);
-}
-.focus-prev {
-  display: flex;
-  transform: rotate(180deg);
 }
 .home-search-strip {
   display: flex;
@@ -1345,12 +1347,6 @@
   }
   .focus-banner-controls button {
     min-width: 36px;
-  }
-  .focus-banner-arrows {
-    gap: 6px;
-  }
-  .focus-banner-arrows button {
-    min-width: 44px;
   }
   .focus-banner-dots {
     gap: 0;

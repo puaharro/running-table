@@ -92,6 +92,7 @@ function ChannelCard({
       document.removeEventListener("click", revealLink);
     };
   }, [channel.id]);
+  const deadline = channel.registrationClosesAt ?? channel.deadline;
   return (
     <article className="registration-channel" aria-label={`${group.name} · ${channel.name}`}>
       <details
@@ -102,9 +103,12 @@ function ChannelCard({
         <summary className="channel-toggle">
           <h4>{channel.name}</h4>
           <StatusBadge status={channelStatus(race, group, channel, now)} />
-          <span className="channel-toggle-price">
-            {channelPriceHeading(channel)}：{channelPriceLabel(channel)}
-            {channel.priceUnit && ` · ${channel.priceUnit}`}
+          <span className="channel-toggle-facts">
+            <span>
+              {channelPriceHeading(channel)}：{channelPriceLabel(channel)}
+              {channel.priceUnit && ` · ${channel.priceUnit}`}
+            </span>
+            <span>截止：{deadline ? <Timestamp value={deadline} /> : "待核實"}</span>
           </span>
         </summary>
         <div className="channel-details-body">
@@ -135,8 +139,8 @@ function ChannelCard({
             <div>
               <dt>申請截止 · 香港時間</dt>
               <dd>
-                {channel.registrationClosesAt || channel.deadline ? (
-                  <Timestamp value={(channel.registrationClosesAt ?? channel.deadline)!} />
+                {deadline ? (
+                  <Timestamp value={deadline} />
                 ) : (
                   "待核實／未有已核對期限"
                 )}
@@ -321,11 +325,13 @@ export function RegistrationGroups({ race, initialNow }: { race: Race; initialNo
           </dl>
           <GroupRatings race={race} group={group} />
           <h4 className="channels-heading">報名渠道 · {group.channels.length}</h4>
-          {group.channels.map((channel) => (
-            <div id={`channel-${channel.id}`} key={channel.id}>
-              <ChannelCard race={race} group={group} channel={channel} now={now} />
-            </div>
-          ))}
+          <ul className="registration-channel-list" role="list">
+            {group.channels.map((channel) => (
+              <li id={`channel-${channel.id}`} key={channel.id}>
+                <ChannelCard race={race} group={group} channel={channel} now={now} />
+              </li>
+            ))}
+          </ul>
           <a className="group-back-link" href="#registration-groups">
             返回組別選單 ↑
           </a>
