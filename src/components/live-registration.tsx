@@ -262,14 +262,47 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
 }
 export function RegistrationGroups({ race, initialNow }: { race: Race; initialNow: string }) {
   const now = useClock(initialNow);
+  const [selectedGroup, setSelectedGroup] = useState("");
+  useEffect(() => {
+    const sync = () => {
+      const hash = window.location.hash.slice(1);
+      setSelectedGroup(race.groups.some((group) => `group-${group.id}` === hash) ? hash : "");
+    };
+    sync();
+    window.addEventListener("hashchange", sync);
+    window.addEventListener("popstate", sync);
+    return () => {
+      window.removeEventListener("hashchange", sync);
+      window.removeEventListener("popstate", sync);
+    };
+  }, [race.groups]);
+  useEffect(() => {
+    if (!selectedGroup) return;
+    const frame = window.requestAnimationFrame(() => {
+      const group = document.getElementById(selectedGroup);
+      group?.scrollIntoView({ block: "start", behavior: "instant" });
+      group?.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [selectedGroup]);
   return (
     <div className="group-grid">
       {race.groups.map((group) => (
-        <section key={group.id} className="group-card" id={`group-${group.id}`} tabIndex={-1}>
+        <section
+          key={group.id}
+          className={`group-card${selectedGroup === `group-${group.id}` ? " is-selected" : ""}`}
+          id={`group-${group.id}`}
+          tabIndex={-1}
+        >
           <div className="group-card-top">
             <strong>{distanceLabel(group.distanceKm)}</strong>
           </div>
-          <h3>{group.name}</h3>
+          <h3>
+            {group.name}
+            {selectedGroup === `group-${group.id}` && (
+              <span className="selected-group-label"> · 所選組別</span>
+            )}
+          </h3>
           <dl className="group-facts">
             <div>
               <dt>比賽日期</dt>
