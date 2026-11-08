@@ -98,3 +98,103 @@ test("three content areas preserve private drafts, pending versions and existing
   assert.equal((await fetch(url + "/drafts?id=missing")).status, 404);
   assert.equal((await fetch(url + "/drafts?race=missing")).status, 400);
 });
+
+test("material routes require CSRF, retain scope in draft exports and do not expose backups", async (t) => {
+  const { rmSync } = await import("node:fs");
+  const store = new ManualStore(":memory:", "demo", { multiSource: true }),
+    reviews = new ReviewStore(":memory:"),
+    content = new ContentStore(":memory:", "demo");
+  const { server, url } = await startManualServer({ store, reviews, content });
+  t.after(async () => {
+    await new Promise((r) => server.close(r));
+    content.close();
+    reviews.close();
+    store.close();
+  });
+  const html = await (await fetch(url + "/materials")).text();
+  const token = html.match(/name="import-token" content="([^"]+)"/)[1];
+  const post = (path, body, extra = {}) =>
+    fetch(url + path, {
+      method: "POST",
+      headers: {
+        Origin: url,
+        "Content-Type": "application/json",
+        "X-Import-Token": token,
+        ...extra,
+      },
+      body: JSON.stringify(body),
+    });
+  const row = {
+    race_id: raceCatalog[0].id,
+    year: 2025,
+    group: "半馬",
+    platform: "blog",
+    url: "https://example.com/source",
+    text: "<script>虛構測試</script>",
+    posted_at: null,
+    scope: "只限虛構測試",
+    topic: "course",
+  };
+  assert.equal(
+    (await post("/api/content/materials/import", [row], { "X-Import-Token": "bad" })).status,
+    403,
+  );
+  assert.equal(
+    (await post("/api/content/materials/import", [row, { ...row, year: 0 }])).status,
+    400,
+  );
+  assert.deepEqual(await (await post("/api/content/materials/import", [row, row])).json(), {
+    added: 1,
+    duplicates: 1,
+  });
+  const list = await (await fetch(url + "/api/content/materials")).json();
+  const draft = await (await post("/api/content/materials/draft", { ids: [list[0].id] })).json();
+  const exported = await (await fetch(url + `/api/content/drafts/${draft.id}/export`)).json();
+  assert.equal(exported.materials[0].text, row.text);
+  assert.equal(exported.confirmation_required, true);
+  assert.equal(exported.published, false);
+  assert.ok((await (await fetch(url + "/materials")).text()).includes("&lt;script&gt;"));
+  const legacy = store.import({
+    preset: "hzmb-half",
+    target_year: 2025,
+    kind: "post",
+    text: "虛構舊研究",
+    source_url: "https://example.com/legacy",
+    username: "fixture",
+    note: "虛構測試",
+    link_scope: "item",
+    root_url: "",
+    parent_relation: "unknown",
+    parent_url: "",
+    source_platform: "blog",
+    posted_date: "",
+    race_group: "半馬",
+    runner_segment: "unknown",
+    experience: "unknown",
+    event_page_year: 2025,
+  });
+  const linked = await post("/api/content/materials/legacy", {
+    batch_id: legacy.batch_id,
+    race_id: raceCatalog[0].id,
+    year: 2025,
+  });
+  assert.equal(linked.status, 200);
+  assert.equal((await linked.json()).added, 1);
+  const linkedRows = await (await fetch(url + "/api/content/materials")).json();
+  assert.ok(linkedRows.some((r) => r.text === "虛構舊研究" && r.scope.includes("仍待覆核")));
+  const b = await (await post("/api/content/backup", {})).json();
+  try {
+    assert.equal(b.files.length, 3);
+    assert.equal(
+      (
+        await fetch(
+          url + "/.editorial-private/backups/" + b.directory.split("/").pop() + "/content.sqlite",
+        )
+      ).status,
+      404,
+    );
+  } finally {
+    rmSync(b.directory, { recursive: true });
+  }
+  assert.equal((await post("/api/content/publish", {})).status, 404);
+});

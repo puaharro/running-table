@@ -49,7 +49,18 @@ export async function startManualServer({ store, reviews, content, port = 0 }) {
           throw new ReviewError(403, "請由本機頁面提交資料。");
         if (request.headers["content-type"]?.split(";")[0].trim() !== "application/json")
           throw new ReviewError(415, "只接受 JSON。");
-        if (await serveContent({ request, response, content, token, readBody: jsonBody })) return;
+        if (
+          await serveContent({
+            request,
+            response,
+            content,
+            store,
+            reviews,
+            token,
+            readBody: jsonBody,
+          })
+        )
+          return;
         if (noteRoute) {
           const input = await jsonBody(request, 65536);
           if (request.url === "/verification-save") {
@@ -120,7 +131,18 @@ export async function startManualServer({ store, reviews, content, port = 0 }) {
         response.setHeader("Allow", "GET, POST");
         throw new ReviewError(405, "不支援這個操作。");
       }
-      if (await serveContent({ request, response, content, token, readBody: jsonBody })) return;
+      if (
+        await serveContent({
+          request,
+          response,
+          content,
+          store,
+          reviews,
+          token,
+          readBody: jsonBody,
+        })
+      )
+        return;
       if (request.url === "/" || (content && request.url === "/research")) {
         html(renderManualImport(store.mode, token, { multiSource: store.multiSource }));
         return;

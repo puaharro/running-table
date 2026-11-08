@@ -1,3 +1,4 @@
+import { materials } from "./materials.mjs";
 import { createHash } from "node:crypto";
 
 const e = (value) =>
@@ -15,7 +16,7 @@ function nav(active) {
   ]
     .map(
       ([key, label]) =>
-        `<a href="/${key}"${active === key ? ' aria-current="page"' : ""}>${label}</a>`,
+        `<a href="/${key === "research" ? "materials" : key}"${active === key ? ' aria-current="page"' : ""}>${label}</a>`,
     )
     .join("")}</nav></header>`;
 }
@@ -30,7 +31,7 @@ export function decorateResearch(html) {
 }
 function shell(active, mode, token, body, script = "") {
   const hash = createHash("sha256").update(script).digest("base64");
-  return `<!doctype html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="import-token" content="${e(token)}"><meta http-equiv="Content-Security-Policy" content="default-src 'none';connect-src 'self';style-src 'unsafe-inline';script-src 'sha256-${hash}';base-uri 'none';form-action 'none'"><title>內容管理 · ${active === "races" ? "賽事資料" : "評論草稿"}</title><style>${sharedStyles}*{box-sizing:border-box}body{margin:0;background:#f5f6f0;color:#172f2b;font:16px/1.7 system-ui,sans-serif}.shell{max-width:1100px;margin:auto;padding:28px 22px 60px}h1{font-size:30px;margin:0 0 8px}h2{font-size:21px}h3{font-size:18px;margin-top:0}.meta{font-size:14px;color:#53655c}.panel,.race{background:#fff;border:1px solid #d9e2db;border-radius:10px;padding:22px;margin:18px 0}.banner{background:#fff1cf;padding:14px;border-radius:8px}.grid,.races{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.race{margin:0}.wide{grid-column:1/-1}label{display:block;font-size:14px}input,select,textarea{display:block;width:100%;font:inherit;padding:10px;margin:5px 0 14px;border:1px solid #afc1b4;border-radius:6px;min-width:0;color:inherit;background:#fff}button,.button{display:inline-block;background:#166746;color:#fff;border:0;border-radius:6px;padding:10px 16px;font:inherit;text-decoration:none;cursor:pointer;min-height:44px}button:disabled{opacity:.55;cursor:default}a{color:#166746}a,pre,p{overflow-wrap:anywhere}a:focus-visible,input:focus,textarea:focus,select:focus,button:focus-visible,summary:focus-visible{outline:2px solid #166746;outline-offset:3px}summary{cursor:pointer;padding-block:8px;min-height:44px}pre{white-space:pre-wrap;font-size:13px}.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.draft-list{padding-left:20px}.draft-list li{margin-block:12px}.status{display:inline-block;background:#e9eee6;padding:2px 10px;border-radius:12px;font-size:13px}.status.pending{background:#fff1cf}footer{margin-top:24px;font-size:14px;color:#53655c}@media(max-width:650px){.grid,.races{grid-template-columns:1fr}.panel,.race{padding:16px}.shell{padding:22px 16px}.content-manager-nav{gap:4px;padding:12px 16px}.content-manager-nav nav{gap:0}.content-manager-nav a{padding:10px 12px}}</style></head><body>${nav(active)}<main class="shell">${mode === "demo" ? '<p class="banner">虛構資料測試工作區 · 不代表真實稿件或發布確認。</p>' : ""}${body}<footer>私人內容管理 · 草稿 → 待確認 → 確認後另行發布。此後台不會直接發布或修改網站。</footer></main>${script ? `<script>${script}</script>` : ""}</body></html>`;
+  return `<!doctype html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="import-token" content="${e(token)}"><meta http-equiv="Content-Security-Policy" content="default-src 'none';connect-src 'self';style-src 'unsafe-inline';script-src 'sha256-${hash}';base-uri 'none';form-action 'none'"><title>內容管理 · ${active === "races" ? "賽事資料" : active === "research" ? "賽事研究" : "評論草稿"}</title><style>${sharedStyles}*{box-sizing:border-box}body{margin:0;background:#f5f6f0;color:#172f2b;font:16px/1.7 system-ui,sans-serif}.shell{max-width:1100px;margin:auto;padding:28px 22px 60px}h1{font-size:30px;margin:0 0 8px}h2{font-size:21px}h3{font-size:18px;margin-top:0}.meta{font-size:14px;color:#53655c}.panel,.race{background:#fff;border:1px solid #d9e2db;border-radius:10px;padding:22px;margin:18px 0}.banner{background:#fff1cf;padding:14px;border-radius:8px}.grid,.races{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.race{margin:0}.wide{grid-column:1/-1}label{display:block;font-size:14px}input,select,textarea{display:block;width:100%;font:inherit;padding:10px;margin:5px 0 14px;border:1px solid #afc1b4;border-radius:6px;min-width:0;color:inherit;background:#fff}button,.button{display:inline-block;background:#166746;color:#fff;border:0;border-radius:6px;padding:10px 16px;font:inherit;text-decoration:none;cursor:pointer;min-height:44px}button:disabled{opacity:.55;cursor:default}a{color:#166746}a,pre,p{overflow-wrap:anywhere}a:focus-visible,input:focus,textarea:focus,select:focus,button:focus-visible,summary:focus-visible{outline:2px solid #166746;outline-offset:3px}summary{cursor:pointer;padding-block:8px;min-height:44px}pre{white-space:pre-wrap;font-size:13px}.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.draft-list{padding-left:20px}.draft-list li{margin-block:12px}.status{display:inline-block;background:#e9eee6;padding:2px 10px;border-radius:12px;font-size:13px}.status.pending{background:#fff1cf}footer{margin-top:24px;font-size:14px;color:#53655c}@media(max-width:650px){.grid,.races{grid-template-columns:1fr}.panel,.race{padding:16px}.shell{padding:22px 16px}.content-manager-nav{gap:4px;padding:12px 16px}.content-manager-nav nav{gap:0}.content-manager-nav a{padding:10px 12px}}</style></head><body>${nav(active)}<main class="shell">${mode === "demo" ? '<p class="banner">虛構資料測試工作區 · 不代表真實稿件或發布確認。</p>' : ""}${body}<footer>私人內容管理 · 草稿 → 待確認 → 確認後另行發布。此後台不會直接發布或修改網站。</footer></main>${script ? `<script>${script}</script>` : ""}</body></html>`;
 }
 const safeLink = (value) => {
   try {
@@ -46,7 +47,7 @@ export function renderRaces(content, token) {
     "races",
     content.mode,
     token,
-    `<h1>賽事資料</h1><p class="meta">查看網站現有資料。要更新先建立建議稿，確認後再按發布流程處理；此頁沒有重新核對官方資料。</p><div class="races">${content.catalog.map((r) => `<article class="race"><h2>${e(r.name)}</h2><p>${e(r.date)} · ${e(r.groups.map((g) => g.name).join("／"))}</p><p class="meta">資料核對：${e(r.verifiedAt ?? "未記錄")}</p><details><summary>查看目前資料及來源</summary><p>${e(r.summary)}</p><p>起點：${e(r.venue)}</p><ul>${r.groups.map((g) => `<li>${e(g.name)} · ${e(g.distanceKm)} 公里 · ${g.channels?.length ?? 0} 個報名渠道</li>`).join("")}</ul>${safeLink(r.sourceUrl) ? `<a href="${e(safeLink(r.sourceUrl))}" target="_blank" rel="noopener noreferrer">官方賽事資料 ↗</a>` : ""}</details><p><a class="button" href="/drafts?kind=race-data&amp;race=${encodeURIComponent(r.id)}">建立更新建議稿</a></p></article>`).join("")}</div>`,
+    `<h1>賽事資料</h1><p class="meta">查看網站現有資料。要更新先建立建議稿，確認後再按發布流程處理；此頁沒有重新核對官方資料。</p><div class="races">${content.catalog.map((r) => `<article class="race"><h2>${e(r.name)}</h2><p>${e(r.date)} · ${e(r.groups.map((g) => g.name).join("／"))}</p><p class="meta">資料核對：${e(r.verifiedAt ?? "未記錄")}</p><details><summary>查看目前資料及來源</summary><p>${e(r.summary)}</p><p>起點：${e(r.venue)}</p><ul>${r.groups.map((g) => `<li>${e(g.name)} · ${e(g.distanceKm)} 公里 · ${g.channels?.length ?? 0} 個報名渠道</li>`).join("")}</ul>${safeLink(r.sourceUrl) ? `<a href="${e(safeLink(r.sourceUrl))}" target="_blank" rel="noopener noreferrer">官方賽事資料 ↗</a>` : ""}</details><p><a href="/materials?race=${encodeURIComponent(r.id)}">研究材料（${materials(content, r.id).length}）</a> · <a href="/drafts?race=${encodeURIComponent(r.id)}">相關草稿</a></p><p><a class="button" href="/drafts?kind=race-data&amp;race=${encodeURIComponent(r.id)}">建立更新建議稿</a></p></article>`).join("")}</div>`,
   );
 }
 
@@ -54,7 +55,7 @@ const draftScript = `const form=document.querySelector('#draft-form'),status=doc
 const token=document.querySelector('meta[name=import-token]').content;
 async function post(path,input){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json','X-Import-Token':token},body:JSON.stringify(input)});const body=await r.json();if(!r.ok)throw Error(body.error||'儲存失敗');return body;}
 function dirty(){form.dataset.dirty='true';pending.disabled=true;status.textContent='有未儲存修改；先儲存，再標記待確認。';}form.addEventListener('input',dirty);form.addEventListener('change',dirty);
-form.addEventListener('submit',async event=>{event.preventDefault();const data=new FormData(form);const input={id:data.get('id')||null,expected_revision:Number(data.get('revision')),kind:data.get('kind'),race_id:data.get('race_id'),year:Number(data.get('year')),group:data.get('group'),title:data.get('title'),body:data.get('body'),sources:data.get('sources'),scope:data.get('scope')};for(const field of form.elements)field.disabled=true;pending.disabled=true;status.textContent='儲存中…';try{const result=await post('/api/content/drafts/save',input);form.dataset.dirty='false';location.href='/drafts?id='+encodeURIComponent(result.id);}catch(error){status.textContent=error.message;for(const field of form.elements)field.disabled=false;}});
+form.addEventListener('submit',async event=>{event.preventDefault();const data=new FormData(form);const input={id:data.get('id')||null,expected_revision:Number(data.get('revision')),kind:data.get('kind'),race_id:data.get('race_id'),year:Number(data.get('year')),group:data.get('group'),title:data.get('title'),body:data.get('body'),sources:data.get('sources'),scope:data.get('scope'),material_ids:JSON.parse(data.get('material_ids')||'[]')};for(const field of form.elements)field.disabled=true;pending.disabled=true;status.textContent='儲存中…';try{const result=await post('/api/content/drafts/save',input);form.dataset.dirty='false';location.href='/drafts?id='+encodeURIComponent(result.id);}catch(error){status.textContent=error.message;for(const field of form.elements)field.disabled=false;}});
 pending.addEventListener('click',async()=>{if(form.dataset.dirty==='true')return;pending.disabled=true;status.textContent='更新狀態中…';try{await post('/api/content/drafts/pending',{id:form.elements.id.value,expected_revision:Number(form.elements.revision.value)});location.reload();}catch(error){status.textContent=error.message;pending.disabled=false;}});
 window.addEventListener('beforeunload',event=>{if(form.dataset.dirty==='true'){event.preventDefault();event.returnValue='';}});`;
 
@@ -77,16 +78,16 @@ export function renderDrafts(content, token, selected = null, initial = {}) {
     sources: "",
     scope: "",
   };
-  const list = content.list();
+  const list = content.list().filter((d) => !initial.race_id || d.race_id === initial.race_id);
   const history = selected ? content.history(selected.id) : [];
   return shell(
     "drafts",
     content.mode,
     token,
-    `<h1>評論草稿</h1><p class="meta">評論及賽事更新建議集中放喺呢度。標記「待確認」只整理工作進度，不代表營運者已批准發布。</p>
+    `<h1>評論草稿</h1>${selected ? `<p><a href="/materials?race=${encodeURIComponent(row.race_id)}">查看對應賽事材料（${row.material_ids?.length ?? 0}則已連結）</a></p>` : ""}<p class="meta">評論及賽事更新建議集中放喺呢度。標記「待確認」只整理工作進度，不代表營運者已批准發布。</p>
   <section class="panel"><h2>已保存草稿</h2>${list.length ? `<ul class="draft-list">${list.map((d) => `<li><a href="/drafts?id=${encodeURIComponent(d.id)}">${e(d.title)}</a> <span class="status ${d.status}">${d.status === "pending" ? "待確認" : "草稿"}</span><br><small>${names[d.kind]} · ${d.year} 年 · ${e(d.group || "範圍未填")} · 第 ${d.revision} 版</small></li>`).join("")}</ul>` : '<p class="meta">暫時未有草稿。</p>'}<a href="/drafts">新增草稿 →</a></section>
   <section class="panel"><h2>${selected ? "編輯草稿" : "新增草稿"}</h2>${selected ? `<p><span class="status ${row.status}">${row.status === "pending" ? "待確認" : "草稿"}</span> · 第 ${row.revision} 版</p>` : ""}
-  <form id="draft-form" data-dirty="false"><input type="hidden" name="id" value="${e(row.id ?? "")}"><input type="hidden" name="revision" value="${row.revision}"><div class="grid">
+  <form id="draft-form" data-dirty="false"><input type="hidden" name="id" value="${e(row.id ?? "")}"><input type="hidden" name="material_ids" value="${e(JSON.stringify(row.material_ids ?? []))}"><input type="hidden" name="revision" value="${row.revision}"><div class="grid">
   <label>稿件類型<select name="kind">${Object.entries(names)
     .map(
       ([key, label]) =>
@@ -103,4 +104,36 @@ export function renderDrafts(content, token, selected = null, initial = {}) {
   ${history.length ? `<details><summary>版本紀錄 · ${history.length} 版</summary>${history.map((v) => `<details><summary>第 ${v.revision} 版 · ${v.status === "pending" ? "待確認" : "草稿"} · ${e(v.created_at)}</summary><pre>${e(JSON.stringify(v.content, null, 2))}</pre></details>`).join("")}</details>` : ""}</section>`,
     draftScript,
   );
+}
+
+const materialScript = `const token=document.querySelector('meta[name=import-token]').content,status=document.querySelector('#material-status');
+async function post(path,input){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json','X-Import-Token':token},body:JSON.stringify(input)});const b=await r.json();if(!r.ok)throw Error(b.error||'操作失敗');return b;}
+document.querySelector('#legacy-form').addEventListener('submit',async e=>{e.preventDefault();try{const f=new FormData(e.target);const b=await post('/api/content/materials/legacy',{batch_id:f.get('batch_id'),race_id:f.get('race_id'),year:Number(f.get('year'))});status.textContent='已連接舊研究：新增 '+b.added+'，重複 '+b.duplicates+'。請重新載入查看。';}catch(e){status.textContent=e.message;}});
+document.querySelector('#batch-form').addEventListener('submit',async e=>{e.preventDefault();try{const b=await post('/api/content/materials/import',JSON.parse(document.querySelector('#batch').value));status.textContent='新增 '+b.added+' 則，重複 '+b.duplicates+' 則。請重新載入查看。';}catch(e){status.textContent=e.message;}});
+document.querySelector('#make-draft').addEventListener('click',async()=>{try{const ids=Array.from(document.querySelectorAll('input[name=material]:checked')).map(x=>x.value);const d=await post('/api/content/materials/draft',{ids});location.href='/drafts?id='+d.id;}catch(e){status.textContent=e.message;}});
+document.querySelector('#backup').addEventListener('click',async()=>{try{const b=await post('/api/content/backup',{});status.textContent='私人備份已保存：'+b.directory;}catch(e){status.textContent=e.message;}});`;
+export function renderMaterials(content, token, race, batches = []) {
+  const rows = materials(content, race);
+  const example = [
+    {
+      race_id: race || content.catalog[0]?.id,
+      year: Number(
+        content.catalog.find((r) => r.id === race)?.date.slice(0, 4) ?? new Date().getFullYear(),
+      ),
+      group: "",
+      platform: "blog",
+      url: "https://example.com/article",
+      text: "請替換成實際原文；不要匯入示例",
+      posted_at: null,
+      scope: "請填實際觀察範圍",
+      topic: "other",
+    },
+  ];
+  return shell(
+    "research",
+    content.mode,
+    token,
+    `<h1>賽事研究材料庫</h1><p class="meta">原文只作研究材料；未覆核、未批准發布。修改過的材料另存一項，舊草稿保留原有材料。</p><div class="actions"><a href="/research">原有多平台搜尋及逐條覆核 →</a><button id="backup">建立私人備份</button></div><p class="meta">備份包含材料、草稿及既有研究／覆核資料庫，只存於 .editorial-private/backups。不是雲端備份，請另行保存一份。</p><form method="get" action="/materials"><label>對應賽事<select name="race"><option value="">全部賽事</option>${content.catalog.map((r) => `<option value="${e(r.id)}"${r.id === race ? " selected" : ""}>${e(r.name)}</option>`).join("")}</select></label><button type="submit">查看賽事材料</button></form><details class="panel"><summary>連接原有研究批次（保留原始覆核記錄）</summary><form id="legacy-form"><label>研究批次<select name="batch_id">${batches.map((b) => `<option value="${e(b.id)}">${e(b.name)} · ${e(b.target_year)}</option>`).join("")}</select></label><label>對應賽事<select name="race_id">${content.catalog.map((r) => `<option value="${e(r.id)}"${r.id === race ? " selected" : ""}>${e(r.name)}</option>`).join("")}</select></label><label>目標研究屆次（不是已核實年份）<input name="year" type="number" required min="1900" max="2200"></label><button>連接研究材料</button></form></details><section class="panel"><h2>研究材料 · ${rows.length}</h2>${rows.map((r) => `<article><label><input style="width:auto;display:inline" type="checkbox" name="material" value="${r.id}">${e(r.year)} · ${e(r.group || "組別未知")} · ${e(r.topic)}</label><p>${e(r.text)}</p><p class="meta">出帖：${e(r.posted_at ?? "未知")} · ${e(r.scope)}</p><a href="${e(r.url)}" target="_blank" rel="noopener noreferrer">原始來源 ↗</a></article>`).join("") || "<p>未有材料。</p>"}<button id="make-draft">由所選材料建立草稿</button></section><details class="panel"><summary>批次匯入 JSON（最多100則）</summary><p>platform：threads／marathonsworld／facebook／instagram／youtube／biji／blog；topic：course／organization／supplies／other。posted_at 未知填 null。整批有效才寫入，不自動讀取網址。</p><form id="batch-form"><label>材料陣列<textarea id="batch" rows="12" placeholder="${e(JSON.stringify(example, null, 2))}"></textarea></label><button type="submit">驗證及匯入</button></form></details><p id="material-status" role="status"></p>`,
+    materialScript,
+  ).replace("form-action 'none'", "form-action 'self'");
 }
