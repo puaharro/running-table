@@ -43,10 +43,10 @@ describe("approved external runner opinions", () => {
     const highlights = html.slice(0, html.indexOf("<details"));
     for (const title of ["賽道", "大會安排", "補給"]) expect(highlights).toContain(title);
     expect(highlights).toContain("建議擴闊頭 3 公里");
-    expect(highlights).toContain("比前屆進步");
+    expect(highlights).toContain("較前屆改善");
     expect(highlights).toContain("時間安排");
-    expect(highlights).toContain("希望增加一個補給站");
-    expect(highlights).toContain("第一槍出發的跑手覺得水站數量足夠");
+    expect(highlights).toContain("希望加站");
+    expect(highlights).toContain("第一槍跑手覺得水站夠用");
     expect(highlights).toContain("不代表 2026 年安排或表現");
     expect(html).toContain("不代表其他批次或後段供應");
     expect(html).toContain("出帖日期未顯示");
@@ -83,6 +83,26 @@ describe("approved external runner opinions", () => {
     expect(html).not.toContain("Marathon’s World");
     expect(html).not.toContain("希望多加一個補給站");
   });
+});
+
+it("keeps the mobile overview to three short topics with the full take and reminders disclosed on demand", () => {
+  for (const item of runnerOpinions) {
+    const html = renderToStaticMarkup(
+      createElement(RunnerOpinionSummary, { record: item, currentYear: 2027 }),
+    );
+    const overview = html.slice(0, html.indexOf('<details class="runner-opinion-sources">'));
+    expect(item.topics.map((topic) => topic.title)).toEqual(["賽道", "大會安排", "補給"]);
+    expect(item.topics.every((topic) => topic.summary.length <= 32)).toBe(true);
+    expect(overview).not.toContain("一句總結");
+    expect(overview).not.toContain("兩個提醒");
+    expect(item.intro).toBeUndefined();
+    expect(item.reminders).toBeUndefined();
+  }
+  const full = runnerOpinions.find((item) => item.targetId === "schkm-marathon")!;
+  expect(full.fullText).toContain("全馬留言肯定港島尾段打氣");
+  expect(full.fullText).toContain("全馬橋隧段按能力部署配速，個人能量補充先有計劃。");
+  expect(record.fullText).toContain("賽前查清當屆交通流程及水站位置，預先安排個人能量補充。");
+  expect(record.topics.map((t) => t.summary).join("")).toContain("第一槍跑手");
 });
 
 it("keeps approved SCHKM 2025 opinions on their explicit groups, unscoped sources outside every group", () => {
