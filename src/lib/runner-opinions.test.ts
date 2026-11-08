@@ -32,7 +32,7 @@ describe("approved external runner opinions", () => {
     expect(runnerPanel).not.toContain("rating-grid");
     expect(runnerPanel).not.toContain("/ 5");
     expect(runnerPanel).not.toContain("編輯評分</");
-    expect(runnerPanel).toContain("不合併編輯評分");
+    expect(runnerPanel).toContain("與編輯評論分開，不新增分數");
     expect(html).not.toContain("未有已發布跑手心得");
   });
 
@@ -43,10 +43,10 @@ describe("approved external runner opinions", () => {
     const highlights = html.slice(0, html.indexOf("<details"));
     for (const title of ["賽道", "大會安排", "補給"]) expect(highlights).toContain(title);
     expect(highlights).toContain("建議擴闊頭 3 公里");
-    expect(highlights).toContain("較前屆改善");
+    expect(highlights).toContain("比前屆進步");
     expect(highlights).toContain("時間安排");
-    expect(highlights).toContain("希望加站");
-    expect(highlights).toContain("第一槍跑手覺得水站足夠");
+    expect(highlights).toContain("希望增加一個補給站");
+    expect(highlights).toContain("第一槍出發的跑手覺得水站數量足夠");
     expect(highlights).toContain("不代表 2026 年安排或表現");
     expect(html).toContain("不代表其他批次或後段供應");
     expect(html).toContain("出帖日期未顯示");
@@ -105,12 +105,64 @@ it("keeps approved SCHKM 2025 opinions on their explicit groups, unscoped source
     expect(selected.some((r) => r.groupLabel === "組別未明")).toBe(false);
   }
   const unknown = runnerOpinions.find((r) => r.targetId === "schkm-unscoped-opinions")!;
-  expect(unknown.topics[0].sources.filter((s) => s.postedOn === null)).toHaveLength(3);
-  expect(unknown.topics[0].sources.find((s) => s.author === "peitea")!.postedOn).toBe("2025-02-20");
+  const sources = unknown.topics.flatMap((topic) => topic.sources);
+  expect(sources.filter((s) => s.postedOn === null)).toHaveLength(3);
+  expect(sources.find((s) => s.author === "peitea")!.postedOn).toBe("2025-02-20");
   const html = renderToStaticMarkup(
     createElement(RunnerOpinionSummary, { record: unknown, currentYear: 2027 }),
   );
   expect(html).toContain("未顯示（非賽事日期）");
   expect(html).toContain("組別未明");
   expect(html).not.toContain("/ 5");
+});
+
+it("keeps names in the source disclosure, with approved anonymous prose and no scores", () => {
+  for (const item of runnerOpinions) {
+    const html = renderToStaticMarkup(
+      createElement(RunnerOpinionSummary, { record: item, currentYear: 2027 }),
+    );
+    const body = html.slice(0, html.indexOf('<details class="runner-opinion-sources">'));
+    const prose = [
+      item.intro,
+      item.fullText,
+      item.scope,
+      ...item.topics.map((t) => t.summary),
+    ].join(" ");
+    for (const name of [
+      "Rocky",
+      "Rickie Kwong",
+      "蜘蛛人校長",
+      "miracle3",
+      "_9walker_",
+      "peitea",
+      "Lawrence Hui",
+      "DVS",
+    ]) {
+      expect(body).not.toContain(name);
+      expect(prose).not.toContain(name);
+    }
+    expect(item).not.toHaveProperty("score");
+    expect(html).not.toContain("/ 5");
+    expect(html).not.toContain(".editorial-private");
+    expect(html).not.toContain("pfbid02pz");
+    expect(html).toContain(`閱讀完整整理稿 · ${item.publicationVersion}`);
+    expect(html).not.toMatch(/<details[^>]+open/);
+  }
+});
+
+it("retains all 20 HZMB references and the half-marathon confirmation without inferring dates", () => {
+  const sources = record.topics.flatMap((t) => t.sources);
+  expect(new Set(sources.map((s) => s.url)).size).toBe(20);
+  expect(new Set(sources.map((s) => s.reference))).toEqual(
+    new Set(Array.from({ length: 20 }, (_, i) => `H${String(i + 1).padStart(2, "0")}`)),
+  );
+  expect(sources.every((s) => s.postedOn === null)).toBe(true);
+  const half = runnerOpinions.find((r) => r.groupLabel === "半馬")!;
+  const html = renderToStaticMarkup(
+    createElement(RunnerOpinionSummary, { record: half, currentYear: 2027 }),
+  );
+  expect(html).toContain('href="https://www.threads.com/@_9walker_/post/DF2lFqQy-0j"');
+  expect(half.topics.map((t) => t.title)).toEqual(["賽道", "大會安排", "補給"]);
+  expect(half.fullText).not.toContain("西隧");
+  expect(half.fullText).not.toContain("受傷跑手");
 });

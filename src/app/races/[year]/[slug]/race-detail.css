@@ -496,6 +496,9 @@
   border: 0;
   padding: 0;
 }
+.race-detail-page .runner-opinion-full-text {
+  white-space: pre-line;
+}
 .race-detail-page .runner-opinion-sources summary {
   min-height: 44px;
   padding-block: 10px;
