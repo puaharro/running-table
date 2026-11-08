@@ -33,6 +33,14 @@ export function RunnerOpinionSummary({
       )}
       <p className="runner-opinion-scope">個別跑手感受；批次及完賽位置多數未明，不代表全體。</p>
       <details className="runner-opinion-sources">
+        <summary>閱讀完整整理稿 · {record.publicationVersion}</summary>
+        {record.fullText.split("\n\n").map((paragraph, index) => (
+          <p className="runner-opinion-full-text" key={index}>
+            {paragraph}
+          </p>
+        ))}
+      </details>
+      <details className="runner-opinion-sources">
         <summary>查看原文、來源及觀察範圍</summary>
         <p>{record.scope}</p>
         <p>
@@ -41,27 +49,43 @@ export function RunnerOpinionSummary({
           </a>
           {" · "}查閱：<time dateTime={record.checkedOn}>{record.checkedOn}</time>
         </p>
-        {record.topics.map((topic) => (
-          <section key={topic.title} aria-label={`${topic.title}跑手原文及來源`}>
-            <h5>{topic.title}</h5>
-            <ul>
-              {topic.sources.map((source) => (
-                <li key={source.url}>
-                  <a href={source.url} target="_blank" rel="noopener noreferrer">
-                    {source.author} · 原帖 ↗
-                  </a>
-                  {source.postedOn !== undefined && (
-                    <p>出帖日期：{source.postedOn ?? "未顯示（非賽事日期）"}</p>
-                  )}
-                  <p>
-                    {source.excerpt ? "原文節錄" : "原文"}：「{source.quote}」
-                  </p>
-                  {source.scope && <p className="runner-opinion-source-scope">{source.scope}</p>}
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
+        {record.topics.map(
+          (topic) =>
+            topic.sources.length > 0 && (
+              <section key={topic.title} aria-label={`${topic.title}跑手原文及來源`}>
+                <h5>{topic.title}</h5>
+                <ul>
+                  {topic.sources.map((source) => (
+                    <li key={source.url}>
+                      <a href={source.url} target="_blank" rel="noopener noreferrer">
+                        {source.reference} · {source.author} · 原帖 ↗
+                      </a>
+                      {source.postedOn !== undefined && (
+                        <p>出帖日期：{source.postedOn ?? "未顯示（非賽事日期）"}</p>
+                      )}
+                      <p>
+                        {source.excerpt ? "原文節錄" : "原文"}：「{source.quote}」
+                      </p>
+                      {source.scope && (
+                        <p className="runner-opinion-source-scope">{source.scope}</p>
+                      )}
+                      {source.confirmationUrl && (
+                        <p>
+                          <a
+                            href={source.confirmationUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            S04a · 同日半馬組別確認 ↗
+                          </a>
+                        </p>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ),
+        )}
       </details>
     </article>
   );
