@@ -1,3 +1,4 @@
+import { initMaterials, materials } from "./materials.mjs";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
@@ -33,6 +34,7 @@ export class ContentStore {
     }
     this.mode = mode;
     this.catalog = catalog;
+    initMaterials(this);
   }
   close() {
     this.db.close();
@@ -78,6 +80,7 @@ export class ContentStore {
       "body",
       "sources",
       "scope",
+      "material_ids",
     ];
     if (
       !input ||
@@ -102,12 +105,25 @@ export class ContentStore {
       !input.title.trim()
     )
       throw new ReviewError(400, "請填寫標題、賽事及年份，並檢查內容長度。");
+    const ids = input.material_ids ?? [];
+    if (
+      !Array.isArray(ids) ||
+      ids.length > 30 ||
+      ids.some(
+        (id) =>
+          !materials(this).some(
+            (r) => r.id === id && r.race_id === input.race_id && r.year === input.year,
+          ),
+      )
+    )
+      throw new ReviewError(400, "材料與賽事／年份不符。");
     const payload = Object.fromEntries(
       ["kind", "race_id", "year", "group", "title", "body", "sources", "scope"].map((k) => [
         k,
         input[k],
       ]),
     );
+    payload.material_ids = [...new Set(ids)];
     this.db.exec("BEGIN IMMEDIATE");
     try {
       const prior = input.id ? this.get(input.id) : null;

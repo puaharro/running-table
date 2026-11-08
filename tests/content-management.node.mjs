@@ -154,3 +154,62 @@ test("simple navigation, escaped drafts and workflow status render without a pub
     store.close();
   }
 });
+
+test("batch material import is atomic, deduplicated, scoped and immutable in drafts", async () => {
+  const { importMaterials, materials, draftFromMaterials } =
+    await import("../scripts/content-management/materials.mjs");
+  const s = new ContentStore(":memory:", "demo");
+  const row = {
+    race_id: raceCatalog[0].id,
+    year: 2025,
+    group: "半馬",
+    platform: "blog",
+    url: "https://example.com/test",
+    text: "虛構材料",
+    posted_at: null,
+    scope: "虛構測試",
+    topic: "course",
+  };
+  try {
+    assert.throws(() => importMaterials(s, [row, { ...row, year: 0 }]));
+    assert.equal(materials(s).length, 0);
+    assert.deepEqual(importMaterials(s, [row, row]), { added: 1, duplicates: 1 });
+    const first = materials(s)[0];
+    const d = draftFromMaterials(s, { ids: [first.id] });
+    assert.equal(d.status, "draft");
+    assert.deepEqual(d.material_ids, [first.id]);
+    importMaterials(s, [{ ...row, text: "虛構修訂" }]);
+    assert.equal(materials(s).length, 2);
+    assert.ok(s.get(d.id).body.includes("虛構材料"));
+    const pending = s.markPending({ id: d.id, expected_revision: 1 });
+    assert.equal(pending.status, "pending");
+    assert.throws(() => s.save({ ...input(), material_ids: [first.id], year: 2026 }));
+    assert.throws(() => importMaterials(s, [{ ...row, posted_at: "2025-02-30" }]));
+  } finally {
+    s.close();
+  }
+});
+test("private backup retains history and verifies checksums in independently readable sqlite files", async () => {
+  const { privateBackup, importMaterials } =
+    await import("../scripts/content-management/materials.mjs");
+  const { DatabaseSync } = await import("node:sqlite");
+  const { createHash } = await import("node:crypto");
+  const s = new ContentStore(":memory:", "demo");
+  try {
+    const d = s.save(input());
+    s.markPending({ id: d.id, expected_revision: 1 });
+    const result = await privateBackup({ content: s });
+    assert.equal(result.published, false);
+    assert.equal(result.confirmation_required, true);
+    for (const f of result.files) {
+      const path = join(result.directory, f.name);
+      assert.equal(createHash("sha256").update(readFileSync(path)).digest("hex"), f.sha256);
+      const db = new DatabaseSync(path, { readOnly: true });
+      assert.equal(db.prepare("SELECT count(*) as n FROM content_versions").get().n, 2);
+      db.close();
+    }
+    rmSync(result.directory, { recursive: true });
+  } finally {
+    s.close();
+  }
+});
