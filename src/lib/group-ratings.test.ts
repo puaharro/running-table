@@ -209,8 +209,10 @@ describe("ten-second review view", () => {
     const boundary = html.indexOf('<details class="review-full">');
     expect(boundary).toBeGreaterThan(0);
     expect(html.slice(0, boundary)).toContain(r.quickTake.summary);
-    expect(html.slice(0, boundary)).toContain("Test reminder two");
-    expect(html.slice(0, boundary)).not.toContain(r.observationLimits);
+    expect(html.slice(0, boundary)).not.toContain("Test reminder two");
+    expect(html.slice(boundary)).toContain("Test reminder two");
+    expect(html.slice(0, boundary)).not.toContain("資料量及觀察限制</summary>");
+    expect(html).not.toContain("<details open><summary>資料量及觀察限制");
     expect(html).not.toContain('<details class="review-full" open');
     expect(html.slice(boundary)).toContain(r.observationLimits);
   });
@@ -356,7 +358,7 @@ describe("race detail as the main review reading location", () => {
 
 describe("concise observer context", () => {
   it.each(["front", "middle", "back", "unknown"] as const)(
-    "shows the recorded %s position before the summary",
+    "preserves the recorded %s position in the collapsed review",
     (position) => {
       const r = review();
       r.runnerSegment = position;
@@ -371,7 +373,8 @@ describe("concise observer context", () => {
           : { front: "一位前段跑手觀察", middle: "一位中段跑手觀察", back: "一位後段跑手觀察" }[
               position
             ];
-      expect(context).toContain(label);
+      expect(context).not.toContain(label);
+      expect(html.slice(html.indexOf('<details class="review-full">'))).toContain(label);
       expect(context).toContain(String(r.editionYear));
       if (position !== "front") expect(context).not.toContain("一位前段跑手觀察");
     },

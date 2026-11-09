@@ -91,6 +91,12 @@ it("keeps the mobile overview to three short topics with the full take and remin
       createElement(RunnerOpinionSummary, { record: item, currentYear: 2027 }),
     );
     const overview = html.slice(0, html.indexOf('<details class="runner-opinion-sources">'));
+    expect(overview).toContain('aria-label="主題留言數"');
+    for (const topic of ["交通", "寄存", "水站", "賽道", "賽事組織"])
+      expect(overview).toContain(`${topic}（`);
+    expect(overview).not.toContain("原帖 ↗");
+    expect(overview).not.toContain("選擇主題查看原文及來源");
+    expect(html).toContain("按主題查看留言原文及來源</summary>");
     expect(item.topics.map((topic) => topic.title)).toEqual(["賽道", "大會安排", "補給"]);
     expect(item.topics.every((topic) => topic.summary.length <= 32)).toBe(true);
     expect(overview).not.toContain("一句總結");
@@ -103,6 +109,18 @@ it("keeps the mobile overview to three short topics with the full take and remin
   expect(full.fullText).toContain("全馬橋隧段按能力部署配速，個人能量補充先有計劃。");
   expect(record.fullText).toContain("賽前查清當屆交通流程及水站位置，預先安排個人能量補充。");
   expect(record.topics.map((t) => t.summary).join("")).toContain("第一槍跑手");
+});
+
+it("keeps comparison and manual notes inside a closed disclosure after the overview", () => {
+  const html = renderToStaticMarkup(createElement(GroupRatings, { race: bridge, group: half }));
+  const start = html.indexOf(
+    '<details class="runner-opinion-sources"><summary>跨年份主題比較及人工備註</summary>',
+  );
+  expect(start).toBeGreaterThan(html.indexOf('class="runner-opinions"'));
+  expect(html.slice(start)).toContain('class="opinion-year-comparison"');
+  expect(html.slice(start)).toContain("留言差異");
+  expect(html.slice(start)).toContain("待核實事項");
+  expect(html.slice(start)).toContain("修改歷史");
 });
 
 it("keeps approved SCHKM 2025 opinions on their explicit groups, unscoped sources outside every group", () => {

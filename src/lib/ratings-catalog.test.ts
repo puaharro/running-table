@@ -22,6 +22,14 @@ it("keeps the original summaries and independent scores tied to the reviewed yea
     );
     expect(html).toContain(summary);
     const card = html.split(`aria-labelledby="index-${review.id}"`)[1].split("</article>")[0];
+    const overview = card.slice(0, card.indexOf("<details"));
+    expect(overview).toContain("編輯總評分");
+    expect(overview).toContain(review.quickTake!.summary);
+    expect(overview).not.toContain("評論更新");
+    expect(overview).not.toContain("受訪跑手數");
+    expect(overview).not.toContain("計分說明：");
+    expect(card).toContain("計分說明及資料範圍</summary>");
+    expect(card).not.toMatch(/<details[^>]* open/);
     for (const key of ratingDimensions) {
       expect(card).toContain(`<strong>${review.assessments[key].score}</strong><span> / 5</span>`);
     }

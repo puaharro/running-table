@@ -1,6 +1,7 @@
 import "./calendar.css";
 import { RaceExplorer } from "@/components/race-explorer";
 import { races } from "@/data/races";
+import { editorialReviews } from "@/data/editorial-reviews";
 import { pageMetadata } from "@/lib/site";
 
 export const metadata = pageMetadata(
@@ -12,7 +13,11 @@ export const metadata = pageMetadata(
 export default function RaceSearchPage() {
   return (
     <main id="main" className="search-page">
-      <RaceExplorer races={races} initialNow={new Date().toISOString()} />
+      <RaceExplorer
+        races={races}
+        reviews={editorialReviews}
+        initialNow={new Date().toISOString()}
+      />
     </main>
   );
 }

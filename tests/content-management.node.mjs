@@ -113,7 +113,10 @@ test("separate private content databases persist and reject wrong workspace mode
     manual.close();
     assert.throws(() => new ContentStore(old), /獨立/);
     const options = parseImportOptions(["--multi-source"]);
-    assert.match(options.contentDb, /\.editorial-private\/content-management\/manual.sqlite$/);
+    assert.match(
+      options.contentDb.replaceAll("\\", "/"),
+      /\.editorial-private\/content-management\/manual.sqlite$/,
+    );
     assert.throws(() => parseImportOptions(["--content-db", options.contentDb]));
     assert.throws(() => parseImportOptions(["--multi-source", "--content-db", options.db]));
   } finally {

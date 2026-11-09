@@ -23,13 +23,23 @@ import { listDeadline, listRegistration } from "@/lib/list-registration";
 import { filteredRaceHref, orderSavedResults, paginateResults, pastResult } from "@/lib/list-view";
 import { resultsEntry, resultsHref } from "@/lib/results-location";
 import { FavoriteButton, useFavorites } from "./race-save";
+import { RaceOverallRating } from "./race-overall-rating";
+import type { EditorialReview } from "@/lib/editorial-reviews";
 import { distanceOptions, regions, type Filters, type Race } from "@/lib/types";
 
 function monthLabel(date: string) {
   return `${date.slice(0, 4)} 年 ${Number(date.slice(5, 7))} 月`;
 }
 
-export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow: string }) {
+export function RaceExplorer({
+  races,
+  initialNow,
+  reviews = [],
+}: {
+  races: Race[];
+  initialNow: string;
+  reviews?: EditorialReview[];
+}) {
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [page, setPage] = useState(1);
   const favorites = useFavorites();
@@ -133,10 +143,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
   function field<K extends keyof Filters>(key: K, value: Filters[K]) {
     update({ ...filters, [key]: value });
   }
-  function toggle(
-    key: "distances" | "regions",
-    value: string,
-  ) {
+  function toggle(key: "distances" | "regions", value: string) {
     const values: string[] = filters[key];
     update({
       ...filters,
@@ -668,6 +675,7 @@ export function RaceExplorer({ races, initialNow }: { races: Race[]; initialNow:
                           >
                             詳細資料 <Icon name="arrow" size={20} />
                           </Link>
+                          <RaceOverallRating race={race} groups={groups} reviews={reviews} />
                         </div>
                       </motion.article>
                       {index === 5 && visibleResults.length > 7 && <AdSlot />}

@@ -199,7 +199,10 @@ test("separate persistent workspaces preserve old Threads evidence and multi-sou
     store.close();
     assert.throws(() => new ManualStore(old, "manual", { multiSource: true }));
     const opts = parseImportOptions(["--multi-source"]);
-    assert.match(opts.db, /\.editorial-private\/research\/comments\/manual.sqlite$/);
+    assert.match(
+      opts.db.replaceAll("\\", "/"),
+      /\.editorial-private\/research\/comments\/manual.sqlite$/,
+    );
     assert.notEqual(opts.db, parseImportOptions([]).db);
   } finally {
     rmSync(dir, { recursive: true, force: true });

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ReviewOverallScore } from "./review-overall-score";
 import { Icon } from "./ui";
 import { reviewsForGroup, type EditorialReview } from "@/lib/editorial-reviews";
 import {
@@ -46,11 +47,8 @@ export function PublishedReviewCards({ races, reviews }: Props) {
               <h3 id={`index-${review.id}`}>
                 <Link href={href}>{target.name}</Link>
               </h3>
-              <p className="ratings-edition-context">於 {year} 年賽事頁閱讀 · 編輯點評</p>
-              {historical && (
-                <p className="ratings-year-notice">往屆評論 · 不代表 {year} 年安排或表現</p>
-              )}
-              <dl className="ratings-score-grid" aria-label="三項獨立評分，不設總分">
+              <ReviewOverallScore review={review} compact />
+              <dl className="ratings-score-grid" aria-label="三項獨立評分">
                 {ratingDimensions.map((key) => {
                   const score = review.assessments[key].score;
                   return (
@@ -74,16 +72,26 @@ export function PublishedReviewCards({ races, reviews }: Props) {
               {review.quickTake && (
                 <p className="ratings-review-summary">{review.quickTake.summary}</p>
               )}
-              <p className="ratings-runner-context">
-                {review.runnerSegment === "unknown"
-                  ? "一位跑手觀察（位置未記錄）"
-                  : `一位${segmentLabels[review.runnerSegment]}跑手觀察`}
-              </p>
               <details className="ratings-observation">
-                <summary>評審及觀察範圍</summary>
+                <summary>計分說明及資料範圍</summary>
+                <p className="ratings-edition-context">於 {year} 年賽事頁閱讀 · 編輯點評</p>
+                {historical && (
+                  <p className="ratings-year-notice">往屆評論 · 不代表 {year} 年安排或表現</p>
+                )}
+                <ReviewOverallScore review={review} />
+                <p className="ratings-runner-context">
+                  {review.runnerSegment === "unknown"
+                    ? "一位跑手觀察（位置未記錄）"
+                    : `一位${segmentLabels[review.runnerSegment]}跑手觀察`}
+                </p>
+                <h4>評審及觀察範圍</h4>
                 <p>評審：{review.reviewer}</p>
                 <p>參賽／利益關係：{review.disclosure}</p>
                 <p>觀察範圍：{review.observationLimits}</p>
+                <small>
+                  評論更新：
+                  <time dateTime={review.reviewedAt}>{formatTimestamp(review.reviewedAt)} HKT</time>
+                </small>
               </details>
               <div className="ratings-review-footer">
                 <Link
@@ -93,10 +101,6 @@ export function PublishedReviewCards({ races, reviews }: Props) {
                 >
                   查看完整評論 <Icon name="arrow" size={18} />
                 </Link>
-                <small>
-                  評論更新：
-                  <time dateTime={review.reviewedAt}>{formatTimestamp(review.reviewedAt)} HKT</time>
-                </small>
               </div>
             </article>
           );

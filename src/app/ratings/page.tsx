@@ -46,20 +46,22 @@ export default function RatingsPage() {
                 </h2>
                 <span>按評論年份，由近至遠</span>
               </div>
-              <p className="ratings-section-intro">
-                評論按年份及組別分開，三項獨立評分，不設總分。
-              </p>
               {!editorialReviews.length && <p className="ratings-empty">尚未有已發布編輯點評。</p>}
               <PublishedReviewCards races={races} reviews={editorialReviews} />
             </section>
             <EditionReviewCoverage races={races} reviews={editorialReviews} />
           </div>
-          <aside className="ratings-explainer" aria-labelledby="ratings-explainer-heading">
+          <details className="ratings-explainer">
+            <summary>點樣睇評分？</summary>
+            <p>評論按年份及組別分開，保留三項獨立評分，總評分為三項等權平均。</p>
             <span className="eyebrow">HOW TO READ</span>
             <h2 id="ratings-explainer-heading">
               三個角度，<span>分開睇體驗。</span>
             </h2>
-            <p>每項 1–5 分；資料不足保留未評，不當零分，不設總分。</p>
+            <p>
+              每項 1–5 分；資料不足保留未評，不當零分；三項齊備才計算總評分，滿分 5
+              分，顯示一位小數。
+            </p>
             <ol>
               {ratingDimensions.map((key, index) => (
                 <li key={key}>
@@ -77,7 +79,7 @@ export default function RatingsPage() {
             <Link className="ratings-process-link" href="/ratings/process/">
               審閱、更正及大會回應流程 →
             </Link>
-          </aside>
+          </details>
         </div>
         <div className="ratings-method-section prose">
           <RatingMethodDisclosure>
@@ -103,7 +105,8 @@ export default function RatingsPage() {
               <h2>三項獨立評分，每項 1–5 分</h2>
               <p>
                 由 {ratingPolicy.publisher}{" "}
-                制定試行準則，評審按親身參賽紀錄或跑手訪問作編輯判斷。每項有短評、觀察依據及適合對象；資料不足保留未評，不當零分，不設總分。
+                制定試行準則，評審按親身參賽紀錄或跑手訪問作編輯判斷。每項有短評、觀察依據及適合對象；資料不足保留未評，不當零分；三項齊備才計算總評分，滿分
+                5 分，顯示一位小數。
               </p>
               <p>
                 距離、時限及官方安排繼續在賽事資料列出；賽道挑戰特性獨立描述，難跑唔等於體驗差。

@@ -625,6 +625,50 @@
   width: 100%;
   min-height: 44px;
 }
+.calendar-race-overall {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--home-line);
+  color: var(--home-muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.calendar-race-overall strong {
+  color: var(--home-ink);
+  font-size: 1rem;
+  font-weight: 700;
+}
+.calendar-overall-entry {
+  flex-basis: 100%;
+}
+.calendar-overall-entry a {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-decoration: none;
+}
+.calendar-overall-entry a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.calendar-overall-entry strong {
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+.calendar-overall-entry strong small {
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+.calendar-overall-entry > small,
+.calendar-overall-method {
+  display: block;
+  flex-basis: 100%;
+  font-size: 0.75rem;
+}
 .saved-note {
   grid-column: 1 / -1;
   margin: 0;

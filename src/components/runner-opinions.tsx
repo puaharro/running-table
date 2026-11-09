@@ -1,4 +1,6 @@
 import { unscopedRunnerOpinionsForRace, type RunnerOpinions } from "@/data/runner-opinions";
+import { OpinionTopicFilter } from "./opinion-topic-filter";
+import { opinionTopics, topicComments } from "@/lib/opinion-topic-filter";
 
 export function RunnerOpinionSummary({
   record,
@@ -7,6 +9,7 @@ export function RunnerOpinionSummary({
   record: RunnerOpinions;
   currentYear: number;
 }) {
+  const comments = topicComments(record);
   return (
     <article className="runner-opinions" aria-label={`${record.editionYear}年外站跑手意見`}>
       <p className="review-context">
@@ -15,7 +18,13 @@ export function RunnerOpinionSummary({
       {record.editionYear < currentYear && (
         <p className="review-edition-note">往屆意見 · 不代表 {currentYear} 年安排或表現</p>
       )}
-      {record.intro && <p>{record.intro}</p>}
+      <ul className="runner-topic-counts" aria-label="主題留言數">
+        {opinionTopics.map((topic) => (
+          <li key={topic}>
+            {topic}（{comments.filter((entry) => entry.topics.includes(topic)).length}）
+          </li>
+        ))}
+      </ul>
       <dl className="runner-opinion-topics">
         {record.topics.map((topic) => (
           <div key={topic.title}>
@@ -24,16 +33,20 @@ export function RunnerOpinionSummary({
           </div>
         ))}
       </dl>
-      {record.reminders && (
-        <ul>
-          {record.reminders.map((note) => (
-            <li key={note}>{note}</li>
-          ))}
-        </ul>
-      )}
-      <p className="runner-opinion-scope">個別跑手感受；批次及完賽位置多數未明，不代表全體。</p>
+      <details className="runner-opinion-sources">
+        <summary>按主題查看留言原文及來源</summary>
+        <OpinionTopicFilter record={record} />
+      </details>
       <details className="runner-opinion-sources">
         <summary>閱讀完整整理稿 · {record.publicationVersion}</summary>
+        {record.intro && <p>{record.intro}</p>}
+        {record.reminders && (
+          <ul>
+            {record.reminders.map((note) => (
+              <li key={note}>{note}</li>
+            ))}
+          </ul>
+        )}
         {record.fullText.split("\n\n").map((paragraph, index) => (
           <p className="runner-opinion-full-text" key={index}>
             {paragraph}
@@ -42,6 +55,7 @@ export function RunnerOpinionSummary({
       </details>
       <details className="runner-opinion-sources">
         <summary>查看原文、來源及觀察範圍</summary>
+        <p className="runner-opinion-scope">個別跑手感受；批次及完賽位置多數未明，不代表全體。</p>
         <p>{record.scope}</p>
         <p>
           <a href={record.sourceUrl} target="_blank" rel="noopener noreferrer">

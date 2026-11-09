@@ -64,7 +64,7 @@
 }
 .ratings-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 276px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 32px;
   align-items: start;
 }
@@ -259,6 +259,15 @@
   padding: 24px;
   background: var(--home-tint);
   border-radius: 10px;
+}
+.ratings-explainer > summary {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--home-ink);
+  cursor: pointer;
+}
+.ratings-review-grid {
+  margin-top: 20px;
 }
 .ratings-explainer .eyebrow {
   font-size: 11px;
