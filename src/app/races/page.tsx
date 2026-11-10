@@ -1,6 +1,6 @@
 import "./calendar.css";
 import { RaceExplorer } from "@/components/race-explorer";
-import { races } from "@/data/races";
+import { publicRaces as races } from "@/data/races";
 import { editorialReviews } from "@/data/editorial-reviews";
 import { pageMetadata } from "@/lib/site";
 

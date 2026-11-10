@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { races } from "@/data/races";
+import { publicRaces as races } from "@/data/races";
 import { guides } from "@/data/guides";
 import { raceHref } from "@/lib/site";
 import { releaseSettings } from "@/lib/release";

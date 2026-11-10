@@ -3,7 +3,7 @@ import { UnscopedRunnerOpinions } from "@/components/runner-opinions";
 import { RaceSaveActions } from "@/components/race-save";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { races } from "@/data/races";
+import { publicRaces as races } from "@/data/races";
 import { guides } from "@/data/guides";
 import { editorialReviews } from "@/data/editorial-reviews";
 import { reviewsForGroup } from "@/lib/editorial-reviews";
@@ -192,6 +192,7 @@ export default async function RacePage({ params }: Props) {
                         .map(
                           (field) =>
                             ({
+                              charityEntry: "慈善名額",
                               date: "日期",
                               venue: "地點",
                               organizer: "主辦／統籌",

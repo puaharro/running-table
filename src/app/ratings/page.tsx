@@ -1,6 +1,6 @@
 import "./ratings.css";
 import Link from "next/link";
-import { races } from "@/data/races";
+import { publicRaces as races } from "@/data/races";
 import { editorialReviews } from "@/data/editorial-reviews";
 import notices from "@/data/editorial-notices.json";
 import { EditionReviewCoverage, PublishedReviewCards } from "@/components/ratings-catalog";

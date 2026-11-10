@@ -22,6 +22,7 @@ import {
 import { StatusBadge } from "./status-badge";
 import { GroupRatings } from "./group-ratings";
 import { Icon } from "./ui";
+import { CharityEntry } from "./charity-entry";
 import { channelPriceHeading, channelPriceLabel } from "@/lib/registration-display";
 
 export function PublicRegistrationCountdown({
@@ -181,13 +182,7 @@ function ChannelCard({
             )}
             <div>
               <dt>申請截止 · 香港時間</dt>
-              <dd>
-                {deadline ? (
-                  <Timestamp value={deadline} />
-                ) : (
-                  "待核實／未有已核對期限"
-                )}
-              </dd>
+              <dd>{deadline ? <Timestamp value={deadline} /> : "待核實／未有已核對期限"}</dd>
             </div>
             {channel.resultAnnouncedAt && (
               <div>
@@ -248,11 +243,14 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
       <ul className="registration-summary-list">
         {race.groups.map((group) => (
           <li key={group.id}>
-            <details className="summary-distance" open={group.channels.length === 1}>
+            <details
+              className="summary-distance"
+              open={group.channels.length + Number(!!group.charityEntry) === 1}
+            >
               <summary>
                 <h3>{group.name}</h3>
                 <span>
-                  {group.channels.length} 個渠道 ·{" "}
+                  {group.channels.length + Number(!!group.charityEntry)} 個渠道 ·{" "}
                   {
                     group.channels.filter((c) => channelStatus(race, group, c, now) === "open")
                       .length
@@ -299,6 +297,11 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
                       </a>
                     </li>
                   ))}
+                {group.charityEntry && (
+                  <li>
+                    <CharityEntry group={group} />
+                  </li>
+                )}
               </ul>
             </details>
           </li>
@@ -367,13 +370,20 @@ export function RegistrationGroups({ race, initialNow }: { race: Race; initialNo
             </div>
           </dl>
           <GroupRatings race={race} group={group} />
-          <h4 className="channels-heading">報名渠道 · {group.channels.length}</h4>
+          <h4 className="channels-heading">
+            報名渠道 · {group.channels.length + Number(!!group.charityEntry)}
+          </h4>
           <ul className="registration-channel-list" role="list">
             {group.channels.map((channel) => (
               <li id={`channel-${channel.id}`} key={channel.id}>
                 <ChannelCard race={race} group={group} channel={channel} now={now} />
               </li>
             ))}
+            {group.charityEntry && (
+              <li id={"channel-" + group.id + "-charity"}>
+                <CharityEntry group={group} />
+              </li>
+            )}
           </ul>
           <a className="group-back-link" href="#registration-groups">
             返回組別選單 ↑
@@ -420,11 +430,17 @@ export function RaceOverview({
         <div>
           <dt>報名概況</dt>
           <dd>
-            <LiveRaceStatus race={race} initialNow={now} />
-            <small>
-              {statuses.filter((s) => s === "open").length} 個渠道接受申請 ·{" "}
-              {statuses.filter((s) => s === "unknown").length} 個待核實
-            </small>
+            {statuses.length ? (
+              <LiveRaceStatus race={race} initialNow={now} />
+            ) : (
+              "詳情請參閱大會網站"
+            )}
+            {!!statuses.length && (
+              <small>
+                {statuses.filter((s) => s === "open").length} 個渠道接受申請 ·{" "}
+                {statuses.filter((s) => s === "unknown").length} 個待核實
+              </small>
+            )}
           </dd>
         </div>
       </dl>

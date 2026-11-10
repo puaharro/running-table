@@ -4,7 +4,7 @@ import { homeFocusSlides } from "@/data/home-focus";
 import { HomeHighlights } from "@/components/home-highlights";
 import { LegacySearchRedirect } from "@/components/legacy-search-redirect";
 import { Icon } from "@/components/ui";
-import { races } from "@/data/races";
+import { publicRaces as races } from "@/data/races";
 import { guides } from "@/data/guides";
 import { editorialReviews } from "@/data/editorial-reviews";
 import { reviewTargets } from "@/lib/rating-policy";
@@ -132,7 +132,7 @@ export default function Home() {
       </section>
       <section className="shell home-service-links" aria-label="報名重點及資料政策">
         <Link href="/races/?channel=charity">
-          比較慈善報名渠道 <Icon name="arrow" size={16} />
+          查看設有慈善名額嘅賽事 <Icon name="arrow" size={16} />
         </Link>
         <Link href="/races/?status=open&sort=deadline">
           按報名截止搵賽事 <Icon name="arrow" size={16} />

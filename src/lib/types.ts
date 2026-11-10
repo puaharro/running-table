@@ -69,6 +69,7 @@ export interface RaceGroup {
   venue?: string;
   sourceIds?: string[];
   channels: RegistrationChannel[];
+  charityEntry?: { officialUrl: string };
   ratingEvidence?: RatingEvidence;
 }
 export interface Race {
@@ -97,6 +98,7 @@ export interface Race {
     description: string;
     sourceIds: string[];
   }[];
+  charityEntry?: { available: boolean; officialUrl: string };
   sourceUrl: string | null;
   updatedAt: string;
   verification: "demo" | "verified" | "pending";

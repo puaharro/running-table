@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { EditorialFeedback } from "@/components/editorial-feedback";
 import { Breadcrumb } from "@/components/ui";
-import { races } from "@/data/races";
+import { publicRaces as races } from "@/data/races";
 import { editorialContactEmail } from "@/lib/editorial-contact";
 import { reviewTargets } from "@/lib/rating-policy";
 import { pageMetadata } from "@/lib/site";

@@ -2,7 +2,7 @@ import "../guides.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { guides } from "@/data/guides";
-import { races } from "@/data/races";
+import { publicRaces as races } from "@/data/races";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { displayDate, distanceLabel } from "@/lib/races";
 import { pageMetadata, raceHref, siteName } from "@/lib/site";

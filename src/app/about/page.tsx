@@ -1,5 +1,5 @@
 import { CorrectionForm } from "@/components/correction-form";
-import { races } from "@/data/races";
+import { publicRaces as races } from "@/data/races";
 import { raceHref } from "@/lib/site";
 import Link from "next/link";
 import { Breadcrumb } from "@/components/ui";

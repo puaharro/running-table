@@ -86,6 +86,7 @@ export function listRegistration(race: Race, groups: RaceGroup[], now: Clock): s
       };
     }),
   );
+  if (!entries.length && race.charityEntry?.available) return "報名詳情請參閱大會網站";
   if (!entries.length || entries.every((entry) => entry.status === "unknown")) return "報名待核實";
   const priority = (type: string) => {
     const statuses = entries.filter((entry) => entry.type === type).map((entry) => entry.status);

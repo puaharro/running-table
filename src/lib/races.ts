@@ -228,6 +228,7 @@ export function selectRaces(races: Race[], f: Filters, now: Clock) {
         .join(" ")
         .toLocaleLowerCase()
         .includes(q);
+    const charityFilter = f.channels.includes("charity") && race.charityEntry?.available === true;
     const groups = race.groups.flatMap((g) => {
       if (f.family && !race.tags.includes("親子") && !/親子|少年/.test(g.name)) return [];
       if (!raceMatchesQuery && !(g.venue ?? "").toLocaleLowerCase().includes(q)) return [];
@@ -241,10 +242,13 @@ export function selectRaces(races: Race[], f: Filters, now: Clock) {
       if (f.max && g.distanceKm > Number(f.max)) return [];
       const channels = g.channels.filter(
         (channel) =>
-          (!f.channels.length || f.channels.includes(channel.type)) &&
+          (!f.channels.length || charityFilter || f.channels.includes(channel.type)) &&
           (!f.statuses.length || f.statuses.includes(channelStatus(race, g, channel, now))),
       );
-      return channels.length ? [{ ...g, channels }] : [];
+      return channels.length ||
+        (!g.channels.length && !f.statuses.length && (!f.channels.length || charityFilter))
+        ? [{ ...g, channels }]
+        : [];
     });
     return groups.length ? [{ race, groups }] : [];
   });
