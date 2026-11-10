@@ -33,7 +33,7 @@ describe("official channel review on 26 October", () => {
     ]);
   });
 
-  it("limits currently actionable hotel results to the verified full-marathon application", () => {
+  it("keeps the expired hotel package out of actionable results after the November deadline", () => {
     const results = selectRaces(
       [main],
       {
@@ -43,13 +43,13 @@ describe("official channel review on 26 October", () => {
       },
       now,
     );
-    expect(results).toHaveLength(1);
-    expect(results[0].groups.map((group) => group.distanceKm)).toEqual([42.195]);
-    const hotel = results[0].groups[0].channels[0];
+    expect(results).toEqual([]);
+    const hotel = main.groups[0].channels.find((channel) => channel.type === "hotel")!;
+    expect(channelStatus(main, main.groups[0], hotel, "2026-11-10T14:00:00+08:00")).toBe("closed");
     expect(hotel.price).toBe(2942);
     expect(hotel.priceType).toBe("package");
     expect(hotel.sourceIds).toContain("schkm-hotel-entry");
-    expect(hotel.registrationNote).toContain("不保證");
+    expect(hotel.registrationNote).toContain("11月6日23:59截止");
     expect(
       selectRaces(
         [main],

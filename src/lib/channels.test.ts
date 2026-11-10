@@ -126,7 +126,7 @@ describe("channel-specific publication contracts", () => {
       price: 2942,
       priceType: "package",
       priceUnit: "每位／一晚",
-      status: "open",
+      status: "closed",
     });
     expect(source.groups[0]).not.toHaveProperty("price");
     expect(

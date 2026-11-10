@@ -23,7 +23,17 @@ it("keeps the winter expansion sourced and within the researched window without 
   for (const race of batch) {
     expect(race.date >= "2026-11-07" && race.endDate <= "2027-02-07").toBe(true);
     expect(race.sources?.length).toBeGreaterThan(0);
-    expect(race.groups.every((g) => g.channels.every((c) => c.status !== "open"))).toBe(true);
+    for (const group of race.groups)
+      for (const channel of group.channels.filter((c) => c.status === "open")) {
+        expect(
+          channel.sourceIds.some((id) =>
+            race.sources?.some(
+              (source) => source.id === id && source.fields.includes("channels.registration"),
+            ),
+          ),
+        ).toBe(true);
+        expect(channel.registrationVerifiedAt?.startsWith("2026-11-10T")).toBe(true);
+      }
   }
   expect(
     batch

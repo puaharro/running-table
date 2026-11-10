@@ -20,9 +20,10 @@ describe("real catalog publication and provenance", () => {
   });
   it("requires registration-specific field evidence for known statuses", () => {
     const data = catalog();
-    data[0].sources![0].fields = data[0].sources![0].fields.filter(
-      (field) => field !== "channels.registration",
-    );
+    for (const source of data[0].sources!)
+      source.fields = source.fields.filter((field) => field !== "channels.registration").length
+        ? source.fields.filter((field) => field !== "channels.registration")
+        : ["date"];
     expect(() => assertCatalog(data)).toThrow("field evidence");
   });
   it("publishes source-backed real events and no fixtures", () => {
@@ -102,7 +103,9 @@ describe("exact deadlines, freshness and truthful channel statuses", () => {
   });
   it("honours an official sold-out notice rather than a directory tag", () => {
     const r = catalog().find((r) => r.id === "mizuno-hk-run-fest-2026")!;
-    expect(r.groups.every((g) => groupStatus(r, g, now) === "full")).toBe(true);
+    expect(r.groups.every((g) => groupStatus(r, g, "2026-11-10T14:00:00+08:00") === "full")).toBe(
+      true,
+    );
   });
   it("matches the region and distance on the same group", () => {
     const r = catalog().find((r) => r.id === "standard-chartered-hk-marathon-2027")!;

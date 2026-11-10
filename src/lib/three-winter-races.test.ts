@@ -23,7 +23,7 @@ it("separates Ocean Park timed running, family fees and unknown wave times from 
   expect(race.groups.map((g) => g.channels[0].price)).toEqual([798, 798, 1950, 1950]);
   expect(race.groups.every((g) => !g.startTime && !g.name.includes("健步行"))).toBe(true);
   for (const g of race.groups) {
-    expect(g.channels[0].status).toBe("unknown");
-    expect(g.channels[0].registrationClosesAt).toBe("2026-11-27T23:59:00+08:00");
+    expect(g.channels[0].status).toBe("open");
+    expect(g.channels[0].registrationClosesAt).toBe("2026-11-29T23:59:00+08:00");
   }
 });
