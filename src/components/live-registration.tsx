@@ -8,6 +8,7 @@ import {
   distanceLabel,
   formatTimestamp,
   channelStatus,
+  registrationCountdown,
   statusSummary,
 } from "@/lib/races";
 import { groupLocations } from "@/lib/group-locations";
@@ -20,7 +21,49 @@ import {
 } from "@/lib/types";
 import { StatusBadge } from "./status-badge";
 import { GroupRatings } from "./group-ratings";
+import { Icon } from "./ui";
 import { channelPriceHeading, channelPriceLabel } from "@/lib/registration-display";
+
+export function PublicRegistrationCountdown({
+  race,
+  initialNow,
+}: {
+  race: Race;
+  initialNow: string;
+}) {
+  const now = useClock(initialNow);
+  const groups = race.groups.map((group) => ({
+    ...group,
+    channels: group.channels.filter((channel) => channel.type === "general"),
+  }));
+  const countdown = registrationCountdown(race, groups, now);
+  const status = groups.some((group) => group.channels.length)
+    ? statusSummary(race, groups, now).label
+    : "未有一般公眾報名資料";
+
+  return (
+    <section className="public-registration-countdown" aria-label="一般公眾報名">
+      <h2>
+        <Icon name="clock" size={18} /> 一般公眾報名
+      </h2>
+      {countdown ? (
+        <>
+          <p className="public-registration-state" data-urgent={countdown.urgent}>
+            {countdown.deadline.includes("T") ? countdown.label : "接受申請"}
+          </p>
+          <p className="public-registration-deadline">
+            截止 <Timestamp value={countdown.deadline} />
+          </p>
+          <a href={`#channel-${countdown.channelId}`}>
+            {countdown.groupName} · {countdown.channelName} <Icon name="arrow" size={16} />
+          </a>
+        </>
+      ) : (
+        <p className="public-registration-state">{status}</p>
+      )}
+    </section>
+  );
+}
 
 export function LiveRaceStatus({ race, initialNow }: { race: Race; initialNow: string }) {
   const now = useClock(initialNow),

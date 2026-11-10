@@ -10,6 +10,7 @@ import { reviewsForGroup } from "@/lib/editorial-reviews";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { ReturnLink } from "@/components/return-link";
 import {
+  PublicRegistrationCountdown,
   RaceOverview,
   RegistrationGroups,
   RegistrationSummary,
@@ -65,9 +66,10 @@ export default async function RacePage({ params }: Props) {
               </div>
               <h1>{race.name}</h1>
               <p className="english-title">{race.englishName}</p>
-              <RaceSaveActions race={race} initialNow={now} />
             </div>
           </div>
+          <PublicRegistrationCountdown race={race} initialNow={now} />
+          <RaceSaveActions race={race} initialNow={now} />
           <RaceOverview
             race={race}
             initialNow={now}

@@ -15,6 +15,7 @@ import {
 export const defaultFilters: Filters = {
   q: "",
   family: false,
+  themed: false,
   month: "",
   from: "",
   to: "",
@@ -160,6 +161,7 @@ export function registrationCountdown(race: Race, groups: RaceGroup[], now: Cloc
     label,
     urgent: remaining < day,
     deadline: channel.registrationClosesAt ?? channel.deadline!,
+    channelId: channel.id,
     channelName: channel.name,
     groupName: group.name,
   };
@@ -217,6 +219,7 @@ export function selectRaces(races: Race[], f: Filters, now: Clock) {
   const result = races.flatMap((race) => {
     if (f.view === "upcoming" && race.endDate < today) return [];
     if (f.view === "past" && race.endDate >= today) return [];
+    if (f.themed && !race.tags.includes("主題跑")) return [];
     if (f.countries.length && !f.countries.includes(race.country ?? "香港")) return [];
     if (f.sports.length && !f.sports.includes(race.sport)) return [];
     const raceMatchesQuery =
@@ -273,6 +276,7 @@ export function parseFilters(params: URLSearchParams): Filters {
     ...defaultFilters,
     q: (params.get("q") ?? "").slice(0, 200),
     family: params.get("family") === "1",
+    themed: params.get("themed") === "1",
     month: /^(?:[1-9]|1[0-2])$/.test(params.get("month") ?? "") ? params.get("month")! : "",
     from: validDate(params.get("from") ?? "") ? params.get("from")! : "",
     to: validDate(params.get("to") ?? "") ? params.get("to")! : "",
@@ -295,6 +299,7 @@ export function parseFilters(params: URLSearchParams): Filters {
 export function serializeFilters(f: Filters) {
   const p = new URLSearchParams();
   if (f.family) p.set("family", "1");
+  if (f.themed) p.set("themed", "1");
   for (const key of ["q", "month", "from", "to", "min", "max"] as const)
     if (f[key]) p.set(key, f[key]);
   for (const [field, key] of [

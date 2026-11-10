@@ -70,10 +70,17 @@ it("keeps historical scores labelled and never applies them to another group or 
   expect(render()).not.toContain("評論更新");
   expect(render()).not.toContain("計分說明");
   expect(render()).not.toContain("受訪跑手數");
-  expect(render()).toContain(`#review-${review.id}`);
-  expect(render([{ ...group, id: "unreviewed-group" }])).toContain("未評分");
+  expect(render()).not.toContain("href=");
+  [
+    review.assessments.course.score,
+    review.assessments.organization.score,
+    review.assessments.aid.score,
+  ] = [3, 4, 4];
+  expect(render()).toContain("3.5／5 星");
+  expect(render()).toContain('<svg width="10" height="20"');
+  expect(render([{ ...group, id: "unreviewed-group" }])).toContain("N/A");
   const future = { ...review, editionYear: Number(group.date.slice(0, 4)) + 1 };
-  expect(render([group], [future])).toContain("未評分");
+  expect(render([group], [future])).toContain("N/A");
   const current = {
     ...review,
     id: "display-only-current",
@@ -81,6 +88,6 @@ it("keeps historical scores labelled and never applies them to another group or 
     assessments: { ...review.assessments, aid: { ...review.assessments.aid, score: null } },
   };
   const html = render([group], [review, current]);
-  expect(html).toContain("未評分");
+  expect(html).toContain("N/A");
   expect(html).not.toContain("往屆");
 });

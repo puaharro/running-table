@@ -49,6 +49,10 @@
   grid-column: 1;
   margin: 0;
 }
+.race-hero > .race-save-actions {
+  grid-column: 1;
+  margin: 0;
+}
 .race-detail-page .detail-heading .eyebrow {
   color: var(--home-muted);
   font-size: 12px;
@@ -120,9 +124,50 @@
   background: var(--home-tint);
   border-color: var(--home-action);
 }
+.public-registration-countdown {
+  grid-column: 2;
+  padding: 16px;
+  border: 1px solid var(--home-line);
+  border-radius: 10px;
+  background: var(--home-tint);
+  overflow-wrap: anywhere;
+}
+.public-registration-countdown h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--home-action);
+  font-size: 14px;
+}
+.public-registration-countdown svg {
+  flex: none;
+}
+.public-registration-countdown .public-registration-state {
+  margin: 8px 0 0;
+  font-size: clamp(17px, 1.5vw, 22px);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+.public-registration-state[data-urgent="true"] {
+  color: var(--home-orange-ink);
+}
+.public-registration-countdown .public-registration-deadline {
+  margin: 4px 0 0;
+  color: var(--home-muted);
+  font-size: 14px;
+}
+.public-registration-countdown a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--home-action);
+  font-size: 14px;
+}
 .race-detail-page .race-official-panel {
   grid-column: 2;
-  grid-row: 1 / 3;
+  grid-row: 2 / 4;
   background: var(--home-ink);
   border: 0;
   border-radius: 10px;

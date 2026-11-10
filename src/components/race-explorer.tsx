@@ -209,6 +209,7 @@ export function RaceExplorer({
     Number(Boolean(filters.month)) +
     Number(Boolean(filters.min || filters.max)) +
     Number(filters.family) +
+    Number(filters.themed) +
     filters.countries.length +
     filters.regions.length +
     filters.distances.length +
@@ -245,6 +246,8 @@ export function RaceExplorer({
         next: { ...filters, distances: [], min: "", max: "" },
       });
     }
+    if (filters.themed)
+      relaxOptions.push({ label: "取消主題跑限制", next: { ...filters, themed: false } });
     if (filters.family)
       relaxOptions.push({ label: "取消組別限制", next: { ...filters, family: false } });
     if (filters.statuses.length) {
@@ -438,14 +441,14 @@ export function RaceExplorer({
                   </button>
                 </div>
               </div>
-              <div className="engine-option-row" role="group" aria-label="參賽組別">
-                <span className="engine-label">參賽組別</span>
+              <div className="engine-option-row" role="group" aria-label="賽事類型">
+                <span className="engine-label">賽事類型</span>
                 <div className="option-row">
                   <button
-                    aria-pressed={filters.family}
-                    onClick={() => field("family", !filters.family)}
+                    aria-pressed={filters.themed}
+                    onClick={() => update({ ...filters, themed: !filters.themed, family: false })}
                   >
-                    親子／少年組
+                    主題跑
                   </button>
                 </div>
               </div>
@@ -668,14 +671,16 @@ export function RaceExplorer({
                         </div>
                         <div className="calendar-card-actions">
                           <FavoriteButton race={race} />
-                          <Link
-                            className="button button-coral calendar-race-detail"
-                            href={detailHref}
-                            aria-label={`${race.name}：詳細資料`}
-                          >
-                            詳細資料 <Icon name="arrow" size={20} />
-                          </Link>
-                          <RaceOverallRating race={race} groups={groups} reviews={reviews} />
+                          <div className="calendar-card-detail">
+                            <Link
+                              className="button button-coral calendar-race-detail"
+                              href={detailHref}
+                              aria-label={`${race.name}：詳細資料`}
+                            >
+                              詳細資料 <Icon name="arrow" size={20} />
+                            </Link>
+                            <RaceOverallRating race={race} groups={groups} reviews={reviews} />
+                          </div>
                         </div>
                       </motion.article>
                       {index === 5 && visibleResults.length > 7 && <AdSlot />}

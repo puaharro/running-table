@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { PublicRegistrationCountdown } from "@/components/live-registration";
 import { races } from "../../tests/fixtures/races";
 import { registrationCountdown } from "./races";
 import type { Race, RegistrationChannel } from "./types";
@@ -32,6 +35,27 @@ function event(overrides: Partial<RegistrationChannel> = {}): Race {
   };
 }
 const countdown = (race: Race, time = now) => registrationCountdown(race, race.groups, time);
+
+it("counts down only a confirmed public channel and keeps date-only deadlines date-only", () => {
+  const race = event({ type: "general" });
+  race.groups[0].channels.push(
+    ...event({
+      type: "charity",
+      name: "慈善測試",
+      registrationClosesAt: "2026-10-25T12:00:00+08:00",
+    }).groups[0].channels,
+  );
+  const render = () =>
+    renderToStaticMarkup(createElement(PublicRegistrationCountdown, { race, initialNow: now }));
+  expect(render()).toContain("仲有 3 日截止");
+  expect(render()).not.toContain("慈善測試");
+  race.groups[0].channels[0].registrationClosesAt = undefined;
+  expect(render()).toContain('dateTime="2026-10-27"');
+  expect(render()).not.toContain("仲有");
+  race.groups[0].channels[0].status = "closed";
+  expect(render()).toContain("已截止");
+  expect(render()).not.toContain("仲有");
+});
 
 describe("registration deadline countdown", () => {
   it("counts complete remaining days, not calendar-day boundaries", () => {

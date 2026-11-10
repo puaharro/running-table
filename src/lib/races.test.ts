@@ -16,6 +16,15 @@ const today = "2026-10-21";
 const choose = (overrides: Partial<Filters>) =>
   selectRaces(races, { ...defaultFilters, ...overrides }, today);
 describe("matching a race and its groups", () => {
+  it("shares the theme filter and matches tagged races independently of family groups", () => {
+    const tagged = { ...races[0], tags: ["主題跑"] };
+    const filters = { ...defaultFilters, themed: true };
+    const shared = parseFilters(new URLSearchParams(serializeFilters(filters)));
+    expect(shared).toEqual(filters);
+    expect(
+      selectRaces([tagged, ...races.slice(1)], shared, today).map(({ race }) => race.id),
+    ).toEqual([tagged.id]);
+  });
   it("combines region, distance, date and registration on the same group", () => {
     const result = choose({
       regions: ["新界"],
