@@ -5,7 +5,7 @@ import Link from "next/link";
 import { LayoutGroup, motion, useReducedMotion } from "motion/react";
 import { Icon } from "./ui";
 import { useClock } from "@/lib/use-clock";
-import { hongKongToday } from "@/lib/races";
+import { displayDate, hongKongToday } from "@/lib/races";
 
 export type FocusSlide = {
   id: string;
@@ -17,6 +17,7 @@ export type FocusSlide = {
   location: string;
   tone: "green" | "blue" | "sand";
   validUntil?: string;
+  date?: string;
 } & ({ kind: "editorial"; category: string } | { kind: "sponsored"; sponsorName: string });
 
 function slideStep(track: HTMLDivElement) {
@@ -157,6 +158,12 @@ export function HomeFocusBanner({
                 {slide.kind === "sponsored" ? `贊助 · ${slide.sponsorName}` : slide.category}
               </span>
               <h2>{slide.title}</h2>
+              {slide.date && (
+                <time className="focus-banner-date" dateTime={slide.date}>
+                  <Icon name="calendar" size={16} />
+                  {displayDate(slide.date, { year: "numeric" })}
+                </time>
+              )}
               <p>{slide.description}</p>
               <Link href={slide.href} className="focus-banner-cta">
                 {slide.action}

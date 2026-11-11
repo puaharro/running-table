@@ -58,7 +58,7 @@ function DetailedReview({ review }: { review: EditorialReview }) {
                     .map((e) => (
                       <p key={e.id}>
                         <a href={`#review-${review.id}-evidence-${e.id}`}>
-                          {evidenceLabels[e.kind]} · {e.editionYear}：查看原文依據 →
+                          {evidenceLabels[e.kind]} · {e.editionYear}：查看原文依據
                         </a>
                       </p>
                     ))}
@@ -133,7 +133,7 @@ function DetailedReview({ review }: { review: EditorialReview }) {
           className="text-link"
           href={`/ratings/feedback/?race=${reviewTargets.find((target) => target.id === review.targetId)?.raceId ?? ""}&review=${encodeURIComponent(review.id)}&year=${review.editionYear}&group=${encodeURIComponent(reviewTargets.find((target) => target.id === review.targetId)?.group ?? "")}`}
         >
-          提出更正／投訴／大會回應 →
+          提出更正／投訴／大會回應
         </Link>
       </p>
     </article>
@@ -268,11 +268,11 @@ export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) 
           {!!groupNotices.length && (
             <p className="editorial-notice">
               {groupNotices.map((n) => `${n.editionYear} 年：${n.summary}`).join(" ")}{" "}
-              <Link href="/ratings/process/#publication-history">查看處理紀錄 →</Link>
+              <Link href="/ratings/process/#publication-history">查看處理紀錄</Link>
             </p>
           )}
           <Link className="text-link" href="/ratings/">
-            了解三項評分準則 →
+            了解三項評分準則
           </Link>
         </details>
       </ReviewViews>

@@ -8,11 +8,11 @@
   --action-primary: #4c6283;
   --action-primary-hover: #354e73;
   --surface-page: #f6f3ed;
-  --surface-card: #fff;
+  --surface-card: #fffefa;
   --surface-brand: #e8eef6;
   --surface-muted: #eef1f5;
   --surface-dark: #26364c;
-  --text-on-dark: #ffffff;
+  --text-on-dark: #f8f7f2;
   --border-subtle: #dddfe2;
   --border-control: #7d8895;
   --border-hover: #7d8895;
@@ -36,7 +36,7 @@
   --surface-hero: #eee9df;
   --surface-decision: #e8eef6;
   --date-surface: #4c6283;
-  --date-text: #ffffff;
+  --date-text: #f8f7f2;
   --urgent-text: #805827;
   --urgent-surface: #f4ead9;
   --font-body:
@@ -51,9 +51,25 @@
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
+  --space-5: 20px;
   --space-6: 24px;
+  --space-7: 28px;
   --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 40px;
+  --space-11: 44px;
   --space-12: 48px;
+  --space-13: 52px;
+  --space-14: 56px;
+  --space-15: 60px;
+  --space-16: 64px;
+  --space-18: 72px;
+  --space-19: 76px;
+  --space-20: 80px;
+  --space-22: 88px;
+  --space-25: 100px;
+  --space-27: 108px;
+  --space-36: 144px;
   --radius-control: 8px;
   --radius-card: 12px;
   --radius-badge: 6px;
@@ -70,6 +86,18 @@
   --white: var(--surface-card);
   --line: var(--border-subtle);
   --green: var(--status-open-text);
+  --shadow-card-ink: #26364c0c;
+  --shadow-soft-ink: #26364c05;
+  --shadow-hover-ink: #26364c0a;
+  --shadow-ticket-ink: #00131f55;
+  --shadow-filter-ink: #15372a04;
+  --shadow-guide-ink: #173b1b0a;
+  --guide-track-sand: #9d4b3466;
+  --guide-track-blue: #244c5f55;
+  --guide-track-green: #3a5f4366;
+  --shadow-ad-ink: #102d3b18;
+  --shadow-mobile-ad-ink: #102d3b12;
+  --ad-scrim: #102d3bd9;
 }
 
 /* Homepage palette: calendar-first UI UX Pro Max adaptation. */
@@ -79,12 +107,14 @@
   --home-action: #1d5b46;
   --home-action-pressed: #123b2d;
   --home-paper: #f8f7f2;
-  --home-card: #ffffff;
+  --home-card: var(--surface-card);
   --home-line: #d9dfd6;
   --home-control: #7b8a80;
   --home-focus: #a95f20;
   --home-accent: #e3edbd;
-  --home-on-dark: #ffffff;
+  --home-accent-hover: #d4e3a4;
+  --home-metadata: #f2f0ea;
+  --home-on-dark: var(--text-on-dark);
   --home-on-dark-muted: #d2dfd6;
   --home-dark-line: #ffffff33;
   --home-tint: #edf0e8;

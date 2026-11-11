@@ -1,6 +1,5 @@
 import { races } from "./races";
 import { guides } from "./guides";
-import { displayDate } from "@/lib/races";
 import { raceHref } from "@/lib/site";
 import type { FocusSlide } from "@/components/home-focus-banner";
 
@@ -27,7 +26,8 @@ export const homeFocusSlides: FocusSlide[] = [
           {
             id: race.id,
             kind: "editorial" as const,
-            category: `焦點賽事 · ${displayDate(race.date, { year: "numeric" })}`,
+            category: "焦點賽事",
+            date: race.date,
             title: race.name,
             description: entry.description,
             href: raceHref(race),

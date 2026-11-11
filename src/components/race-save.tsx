@@ -77,7 +77,14 @@ export function FavoriteButton({ race }: { race: Pick<Race, "id" | "name"> }) {
         aria-label={`${saved ? "取消收藏" : "收藏"}：${race.name}`}
         onClick={() => toggle(race.id)}
       >
-        {saved ? "★ 已收藏" : "☆ 收藏"}
+        <span
+          className="favorite-icon"
+          aria-hidden="true"
+          data-confirmed={saved && message === "已收藏於此瀏覽器。"}
+        >
+          {saved ? "★" : "☆"}
+        </span>{" "}
+        {saved ? "已收藏" : "收藏"}
       </button>
       <FavoriteFeedback saved={saved} message={message} />
     </span>
@@ -149,7 +156,7 @@ export function RaceSaveActions({ race, initialNow }: { race: Race; initialNow: 
             </p>
           )}
           <button type="button" className="button" disabled={!item} onClick={download}>
-            下載日曆檔 (.ics)
+            下載日曆檔
           </button>
           <p>比賽日為全日行程；只提供有來源依據、尚未過期嘅報名截止。未列出嘅期限仍待核實。</p>
           <p>下載後需自行匯入；改期或截止日更新唔會自動同步。</p>

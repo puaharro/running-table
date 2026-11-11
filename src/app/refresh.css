@@ -6,7 +6,7 @@ body {
   background: var(--surface-dark);
   color: var(--text-on-dark);
   font-size: var(--text-sm);
-  padding-block: 8px;
+  padding-block: var(--space-2);
   letter-spacing: 0;
 }
 .site-header {
@@ -24,11 +24,11 @@ body {
   letter-spacing: 0.2em;
 }
 .site-header nav {
-  gap: 28px;
+  gap: var(--space-7);
   font-size: var(--text-sm);
 }
 .header-note {
-  padding: 8px 12px;
+  padding: var(--space-2) var(--space-3);
   border: 1px solid var(--border-subtle);
   border-radius: 30px;
   color: var(--text-secondary);
@@ -41,9 +41,9 @@ body {
 .masthead-grid {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
-  gap: clamp(30px, 4vw, 70px);
+  gap: clamp(var(--space-8), 4vw, var(--space-18));
   align-items: center;
-  padding-block: 28px;
+  padding-block: var(--space-7);
 }
 .masthead-kicker {
   display: flex;
@@ -51,7 +51,6 @@ body {
   gap: var(--space-2);
   color: var(--text-secondary);
   font-size: var(--text-sm);
-  letter-spacing: 0.14em;
   font-weight: 700;
 }
 .masthead-kicker > span {
@@ -64,7 +63,7 @@ body {
   font-size: clamp(34px, 3.5vw, 46px);
   letter-spacing: -0.03em;
   line-height: 1.27;
-  margin: 18px 0 14px;
+  margin: var(--space-5) 0 var(--space-4);
   font-weight: 700;
 }
 .masthead-copy h1 span {
@@ -73,7 +72,7 @@ body {
 .masthead-copy > p {
   font-size: var(--text-md);
   line-height: 1.9;
-  margin: 0 0 22px;
+  margin: 0 0 var(--space-6);
   color: var(--text-secondary);
 }
 .masthead-actions {
@@ -93,38 +92,38 @@ body {
 .masthead-trust {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: var(--space-2);
   color: var(--text-secondary);
   font-size: var(--text-sm);
-  margin-top: 21px;
+  margin-top: var(--space-5);
 }
 .masthead-trust i {
   width: 3px;
   height: 3px;
   background: var(--border-control);
   border-radius: 50%;
-  margin-inline: 4px;
+  margin-inline: var(--space-1);
 }
 .next-race-card {
   display: block;
   background: var(--surface-dark);
-  color: white;
+  color: var(--text-on-dark);
   overflow: hidden;
   border-radius: var(--radius-card);
-  box-shadow: 0 12px 24px #00000008;
+  box-shadow: 0 12px 24px var(--shadow-hover-ink);
   transform: none;
   transition: transform 0.2s;
 }
 .next-race-card:hover {
   transform: translateY(-2px);
-  color: white;
+  color: var(--text-on-dark);
 }
 .next-race-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 14px;
-  padding: 17px 22px 0;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6) 0;
   font-size: var(--text-sm);
   color: var(--text-secondary);
 }
@@ -135,7 +134,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 25px;
+  padding: var(--space-5) var(--space-6);
 }
 .track-orbit {
   position: absolute;
@@ -169,8 +168,7 @@ body {
   color: var(--text-secondary);
   font-size: var(--text-sm);
   font-weight: 500;
-  letter-spacing: 0.12em;
-  margin-top: 9px;
+  margin-top: var(--space-2);
 }
 .next-race-word {
   z-index: 1;
@@ -184,7 +182,7 @@ body {
 .next-race-bottom {
   background: var(--surface-card);
   color: var(--ink);
-  padding: 17px 22px 20px;
+  padding: var(--space-4) var(--space-6) var(--space-5);
 }
 .next-race-bottom small {
   font-size: var(--text-sm);
@@ -193,17 +191,17 @@ body {
 .next-race-bottom h2 {
   font-size: 19px;
   line-height: 1.55;
-  margin: 6px 0 12px;
+  margin: var(--space-2) 0 var(--space-3);
 }
 .next-race-bottom > div {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-2);
 }
 .next-race-bottom > div > span {
   border-radius: 4px;
-  padding: 4px 8px;
+  padding: var(--space-1) var(--space-2);
   font-size: var(--text-sm);
   background: var(--surface-muted);
   color: var(--text-primary);
@@ -215,29 +213,28 @@ body {
   padding-right: 0;
 }
 .explorer {
-  padding-top: 28px;
+  padding-top: var(--space-7);
 }
 .eyebrow {
   color: var(--text-secondary);
   font-size: var(--text-sm);
-  letter-spacing: 0.13em;
 }
 .section-heading h2 {
   font-size: 28px;
   letter-spacing: -0.04em;
 }
 .explorer-heading {
-  margin-bottom: 22px;
+  margin-bottom: var(--space-6);
 }
 .section-heading p {
   font-size: var(--text-sm);
   line-height: 1.8;
 }
 .stat-pair {
-  gap: 20px;
+  gap: var(--space-5);
 }
 .stat-pair > div {
-  padding-left: 18px;
+  padding-left: var(--space-5);
 }
 .stat-pair strong {
   font-size: 30px;
@@ -254,7 +251,7 @@ body {
   overflow: hidden;
 }
 .search-row {
-  padding: 20px 20px 0;
+  padding: var(--space-5) var(--space-5) 0;
 }
 .search-box {
   background: var(--surface-card);
@@ -286,7 +283,7 @@ body {
   color: var(--surface-card);
 }
 .quick-row {
-  padding: 12px 20px 18px;
+  padding: var(--space-3) var(--space-5) var(--space-5);
   gap: var(--space-2);
 }
 .quick-row button {
@@ -294,24 +291,24 @@ body {
   min-height: var(--control-size);
   font-size: var(--text-sm);
   border-radius: 5px;
-  padding: 6px 12px;
+  padding: var(--space-2) var(--space-3);
 }
 .quick-row .only-open-shortcut {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--space-1);
   background: var(--surface-muted);
   color: var(--ink);
 }
 .quick-row .only-open-shortcut[aria-pressed="true"] {
   background: var(--text-primary);
-  color: white;
+  color: var(--text-on-dark);
   box-shadow: none;
 }
 .deadline-countdown {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-1);
   color: var(--text-secondary);
   font-size: var(--text-sm);
   font-weight: 500;
@@ -327,7 +324,7 @@ body {
 .filter-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-6);
-  padding: 22px 20px;
+  padding: var(--space-6) var(--space-5);
   background: var(--surface-card);
 }
 .filter-grid .date-field {
@@ -341,7 +338,7 @@ body {
 }
 .date-inputs {
   flex-direction: row;
-  gap: 6px;
+  gap: var(--space-2);
   align-items: center;
 }
 .date-inputs > label {
@@ -352,18 +349,18 @@ body {
 }
 .date-inputs input {
   min-height: var(--control-size);
-  padding: 6px;
+  padding: var(--space-2);
   font-size: var(--text-sm);
   border-radius: 5px;
 }
 .option-row {
-  gap: 6px;
+  gap: var(--space-2);
 }
 .option-row button {
   border-radius: 5px;
   min-height: var(--control-size);
   font-size: var(--text-sm);
-  padding: 6px 10px;
+  padding: var(--space-2) var(--space-3);
 }
 .filter-grid small {
   font-size: var(--text-sm);
@@ -372,7 +369,7 @@ body {
   font-size: var(--text-sm);
 }
 .custom-range summary {
-  padding-block: 5px;
+  padding-block: var(--space-1);
 }
 .number-inputs input {
   min-height: var(--control-size);
@@ -383,9 +380,9 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  padding: 12px 20px;
+  padding: var(--space-3) var(--space-5);
   font-size: var(--text-sm);
-  background: white;
+  background: var(--surface-card);
 }
 .filter-reset {
   border: 0;
@@ -393,7 +390,7 @@ body {
   color: var(--text-secondary);
   text-decoration: underline;
   text-underline-offset: 4px;
-  padding: 5px;
+  padding: var(--space-1);
   font-size: var(--text-sm);
   white-space: nowrap;
 }
@@ -407,13 +404,13 @@ body {
 .results-toolbar {
   padding-top: var(--space-6);
   border-bottom: 0;
-  padding-bottom: 5px;
+  padding-bottom: var(--space-1);
 }
 .view-tabs {
   border-radius: var(--radius-control);
   background: var(--surface-muted);
-  padding: 4px;
-  gap: 3px;
+  padding: var(--space-1);
+  gap: var(--space-1);
 }
 .view-tabs button {
   min-height: var(--control-size);
@@ -421,16 +418,16 @@ body {
   font-size: var(--text-sm);
 }
 .view-tabs button[aria-pressed="true"] {
-  background: white;
+  background: var(--surface-card);
   color: var(--text-primary);
-  box-shadow: 0 1px 5px #00000008;
+  box-shadow: 0 1px 5px var(--shadow-hover-ink);
 }
 .results-actions select {
   border: 1px solid var(--border-subtle);
   border-radius: 5px;
   padding: var(--space-2);
   font-size: var(--text-sm);
-  background: white;
+  background: var(--surface-card);
   min-height: var(--control-size);
 }
 .share-button {
@@ -440,7 +437,7 @@ body {
 .data-note {
   font-size: var(--text-sm);
   line-height: 1.7;
-  margin: 10px 0 14px;
+  margin: var(--space-3) 0 var(--space-4);
 }
 .race-list {
   border: 0;
@@ -451,11 +448,11 @@ body {
 .race-table-head,
 .race-row {
   grid-template-columns: 76px minmax(0, 1fr) 140px 168px 44px;
-  gap: 20px;
+  gap: var(--space-5);
 }
 .race-table-head {
   background: transparent;
-  padding: 12px 22px;
+  padding: var(--space-3) var(--space-6);
   font-size: var(--text-sm);
   color: var(--text-secondary);
 }
@@ -463,8 +460,8 @@ body {
   background: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-card);
-  margin-bottom: 10px;
-  padding: 22px;
+  margin-bottom: var(--space-3);
+  padding: var(--space-6);
   box-shadow: 0 2px 3px #00000000;
 }
 .race-row:last-child {
@@ -473,7 +470,7 @@ body {
 .race-row:hover {
   background: var(--surface-card);
   border-color: var(--border-hover);
-  box-shadow: 0 4px 16px #00000006;
+  box-shadow: 0 4px 16px var(--shadow-soft-ink);
 }
 .race-date {
   width: 64px;
@@ -484,7 +481,7 @@ body {
   border-radius: var(--radius-control);
   background: var(--surface-card);
   overflow: hidden;
-  padding: 0 0 6px;
+  padding: 0 0 var(--space-2);
 }
 .race-date > .race-date-month {
   width: 100%;
@@ -494,14 +491,14 @@ body {
   font-size: var(--text-sm);
   font-weight: 700;
   background: var(--surface-dark);
-  padding: 4px 0;
+  padding: var(--space-1) 0;
   line-height: 1.2;
 }
 .race-date > strong {
   font-size: 29px;
   font-weight: 500;
   line-height: 1.2;
-  margin: 4px 0 1px;
+  margin: var(--space-1) 0 1px;
 }
 .race-date > span:not(.race-date-month) {
   font-size: var(--text-sm);
@@ -524,17 +521,17 @@ body {
   font-size: var(--text-sm);
   line-height: 1.6;
   color: var(--text-secondary);
-  margin-bottom: 9px;
+  margin-bottom: var(--space-2);
 }
 .race-tags {
   font-size: var(--text-sm);
-  margin-bottom: 5px;
+  margin-bottom: var(--space-1);
 }
 .distance-tags span {
   font-size: var(--text-sm);
   border: 0;
   border-radius: 4px;
-  padding: 4px 8px;
+  padding: var(--space-1) var(--space-2);
   background: var(--surface-brand);
   color: var(--text-primary);
 }
@@ -553,7 +550,7 @@ body {
   font-size: var(--text-sm);
 }
 .month-divider {
-  padding: 16px 0 12px;
+  padding: var(--space-4) 0 var(--space-3);
   background: transparent;
   border: 0;
   font-size: var(--text-sm);
@@ -569,23 +566,23 @@ body {
 }
 .results-footer {
   font-size: var(--text-sm);
-  padding-top: 10px;
+  padding-top: var(--space-3);
 }
 .guides-section {
   padding-top: var(--space-12);
-  padding-bottom: 60px;
+  padding-bottom: var(--space-15);
 }
 .guide-card {
   border-radius: var(--radius-card);
   overflow: hidden;
   border-color: var(--border-subtle);
-  background: white;
+  background: var(--surface-card);
 }
 .guide-card h3 {
   line-height: 1.6;
 }
 .guide-card-body {
-  padding: 22px;
+  padding: var(--space-6);
 }
 .guide-card-body p {
   font-size: var(--text-sm);
@@ -643,20 +640,20 @@ input {
   display: flex;
   gap: var(--space-2);
   flex-wrap: wrap;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
 }
 .date-shortcuts button {
   border: 1px solid var(--line);
-  background: white;
+  background: var(--surface-card);
   color: var(--ink);
   border-radius: 6px;
   min-height: var(--control-size);
-  padding: 7px 10px;
+  padding: var(--space-2) var(--space-3);
   font-size: var(--text-sm);
 }
 .advanced-filters {
   border-top: 1px solid var(--line);
-  padding: 0 20px;
+  padding: 0 var(--space-5);
 }
 .advanced-filters > summary,
 .custom-range > summary,
@@ -672,7 +669,7 @@ input {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-6);
-  padding-bottom: 20px;
+  padding-bottom: var(--space-5);
 }
 .advanced-grid fieldset {
   border: 0;
@@ -683,7 +680,7 @@ input {
 .advanced-grid legend {
   font-size: var(--text-md);
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
 }
 .number-inputs {
   flex-wrap: wrap;
@@ -694,7 +691,7 @@ input {
   width: 90px;
 }
 .group-status-list {
-  margin-top: 10px;
+  margin-top: var(--space-3);
   font-size: var(--text-sm);
   line-height: 1.65;
 }
@@ -704,7 +701,7 @@ input {
   padding: 0;
 }
 .group-status-list li + li {
-  margin-top: 7px;
+  margin-top: var(--space-2);
 }
 .group-status-list li > span {
   display: block;
@@ -727,8 +724,8 @@ input {
   min-width: 0;
 }
 .registration-summary {
-  margin: 0 0 32px;
-  padding-block: 8px;
+  margin: 0 0 var(--space-8);
+  padding-block: var(--space-2);
 }
 .registration-summary-heading {
   display: flex;
@@ -751,7 +748,7 @@ input {
 .registration-summary > p {
   font-size: var(--text-md);
   color: var(--text-secondary);
-  margin: 8px 0 16px;
+  margin: var(--space-2) 0 var(--space-4);
   line-height: 1.8;
 }
 .registration-summary-list {
@@ -764,7 +761,7 @@ input {
   display: grid;
   grid-template-columns: 1fr 1.2fr auto;
   gap: var(--space-6);
-  padding: 18px 0;
+  padding: var(--space-5) 0;
   align-items: center;
 }
 .registration-summary-list > li + li {
@@ -795,7 +792,7 @@ input {
 .registration-summary-list dt {
   font-size: var(--text-sm);
   color: var(--text-secondary);
-  margin-bottom: 6px;
+  margin-bottom: var(--space-2);
 }
 .registration-summary-list dd {
   font-size: var(--text-md);
@@ -807,7 +804,7 @@ input {
 .registration-summary-list dd small {
   display: block;
   font-weight: 400;
-  margin-top: 5px;
+  margin-top: var(--space-1);
   font-size: var(--text-sm);
   line-height: 1.6;
 }
@@ -875,13 +872,13 @@ input {
   .race-row {
     grid-template-columns: 64px minmax(0, 1fr) 110px 146px 44px;
     gap: var(--space-3);
-    padding-inline: 16px;
+    padding-inline: var(--space-4);
   }
   .race-info h3 {
     font-size: var(--text-base);
   }
   .masthead-grid {
-    gap: 26px;
+    gap: var(--space-7);
   }
 }
 @media (max-width: 767px) {
@@ -890,7 +887,7 @@ input {
   }
   .prototype-strip {
     font-size: var(--text-sm);
-    padding: 7px 12px;
+    padding: var(--space-2) var(--space-3);
   }
   .prototype-strip span {
     display: none;
@@ -901,7 +898,7 @@ input {
   }
   .brand {
     font-size: 25px;
-    gap: 9px;
+    gap: var(--space-2);
   }
   .brand-en {
     font-size: var(--text-xs);
@@ -921,29 +918,28 @@ input {
   }
   .masthead-grid {
     grid-template-columns: 1fr;
-    padding-block: 22px 20px;
+    padding-block: var(--space-6) var(--space-5);
     gap: var(--space-6);
   }
   .masthead-kicker {
     font-size: var(--text-sm);
-    letter-spacing: 0.12em;
   }
   .masthead-copy h1 {
     font-size: 36px;
-    margin: 14px 0 12px;
+    margin: var(--space-4) 0 var(--space-3);
   }
   .masthead-copy > p {
     font-size: var(--text-sm);
     line-height: 1.8;
-    margin-bottom: 18px;
+    margin-bottom: var(--space-5);
   }
   .masthead-actions {
     gap: var(--space-3);
   }
   .masthead-actions .button {
-    padding: 11px 17px;
+    padding: var(--space-3) var(--space-4);
     font-size: var(--text-sm);
-    gap: 14px;
+    gap: var(--space-4);
   }
   .masthead-guide {
     font-size: var(--text-sm);
@@ -973,17 +969,16 @@ input {
   }
   .next-race-day span {
     font-size: var(--text-sm);
-    letter-spacing: 0;
   }
   .next-race-word {
     display: none;
   }
   .next-race-bottom {
-    padding: 15px;
+    padding: var(--space-4);
   }
   .next-race-bottom h2 {
     font-size: var(--text-md);
-    margin: 5px 0 10px;
+    margin: var(--space-1) 0 var(--space-3);
   }
   .next-race-bottom small {
     font-size: var(--text-sm);
@@ -995,7 +990,7 @@ input {
     display: none;
   }
   .explorer {
-    padding-top: 28px;
+    padding-top: var(--space-7);
     scroll-margin-top: var(--space-3);
   }
   .section-heading h2 {
@@ -1005,9 +1000,9 @@ input {
     font-size: var(--text-sm);
   }
   .explorer-heading {
-    gap: 10px;
+    gap: var(--space-3);
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: var(--space-5);
   }
   .stat-pair {
     padding-top: 0;
@@ -1019,14 +1014,14 @@ input {
     font-size: var(--text-sm);
   }
   .stat-pair > div {
-    padding-left: 12px;
+    padding-left: var(--space-3);
   }
   .search-row {
-    padding: 14px 14px 0;
+    padding: var(--space-4) var(--space-4) 0;
     gap: var(--space-2);
   }
   .search-box {
-    padding-inline: 10px;
+    padding-inline: var(--space-3);
     gap: var(--space-2);
   }
   .search-box input {
@@ -1035,9 +1030,9 @@ input {
     width: 100%;
   }
   .filter-toggle {
-    padding: 8px 11px;
+    padding: var(--space-2) var(--space-3);
     min-height: var(--control-size);
-    gap: 6px;
+    gap: var(--space-2);
     font-size: var(--text-sm);
   }
   .filter-count {
@@ -1048,8 +1043,8 @@ input {
   .quick-row {
     flex-wrap: wrap;
     overflow-x: visible;
-    padding: 10px 14px 6px;
-    gap: 7px;
+    padding: var(--space-3) var(--space-4) var(--space-2);
+    gap: var(--space-2);
     scrollbar-width: thin;
   }
   .quick-row > span {
@@ -1058,13 +1053,13 @@ input {
   .quick-row button {
     flex-shrink: 0;
     min-height: var(--control-size);
-    padding: 7px 10px;
+    padding: var(--space-2) var(--space-3);
     font-size: var(--text-sm);
   }
   .filter-grid {
     grid-template-columns: minmax(0, 1fr);
-    padding: 18px 14px;
-    gap: 22px;
+    padding: var(--space-5) var(--space-4);
+    gap: var(--space-6);
   }
   .filter-grid .date-field,
   .filter-grid .sport-field,
@@ -1072,7 +1067,7 @@ input {
     font-size: var(--text-sm);
   }
   .date-inputs {
-    gap: 7px;
+    gap: var(--space-2);
   }
   .date-inputs input {
     min-height: var(--control-size);
@@ -1083,7 +1078,7 @@ input {
   }
   .option-row button {
     min-height: var(--control-size);
-    padding: 9px 12px;
+    padding: var(--space-2) var(--space-3);
     font-size: var(--text-sm);
   }
   .number-inputs input {
@@ -1092,7 +1087,7 @@ input {
   }
   .filter-hint {
     flex-wrap: wrap;
-    padding: 12px 14px;
+    padding: var(--space-3) var(--space-4);
   }
   .filter-hint > span {
     font-size: var(--text-sm);
@@ -1111,19 +1106,19 @@ input {
     border: 0;
     border-radius: 6px;
     background: var(--action-primary);
-    color: white;
+    color: var(--text-on-dark);
     font-size: var(--text-sm);
     font-weight: 700;
-    padding: 13px;
+    padding: var(--space-3);
     min-height: 46px;
   }
   .results-toolbar {
     gap: var(--space-3);
-    padding-top: 18px;
+    padding-top: var(--space-5);
   }
   .view-tabs {
     width: 100%;
-    gap: 3px;
+    gap: var(--space-1);
   }
   .view-tabs button {
     flex: 1;
@@ -1133,12 +1128,12 @@ input {
   }
   .results-actions {
     font-size: var(--text-sm);
-    gap: 10px;
+    gap: var(--space-3);
   }
   .results-actions select {
     min-height: var(--control-size);
     font-size: var(--text-sm);
-    padding: 7px;
+    padding: var(--space-2);
   }
   .share-button {
     font-size: var(--text-sm);
@@ -1146,16 +1141,16 @@ input {
   }
   .data-note {
     font-size: var(--text-sm);
-    margin-block: 10px 14px;
+    margin-block: var(--space-3) var(--space-4);
   }
   .race-table-head {
     display: none;
   }
   .race-row {
     grid-template-columns: 54px minmax(0, 1fr) 44px;
-    gap: 8px 12px;
-    padding: 16px 13px;
-    margin-bottom: 10px;
+    gap: var(--space-2) var(--space-3);
+    padding: var(--space-4) var(--space-3);
+    margin-bottom: var(--space-3);
   }
   .race-date {
     width: 54px;
@@ -1181,7 +1176,7 @@ input {
   }
   .distance-tags span {
     font-size: var(--text-sm);
-    padding: 3px 7px;
+    padding: var(--space-1) var(--space-2);
   }
   .race-location {
     font-size: var(--text-sm);
@@ -1190,7 +1185,7 @@ input {
     font-size: var(--text-sm);
   }
   .race-status {
-    gap: 7px;
+    gap: var(--space-2);
   }
   .race-status small {
     font-size: var(--text-sm);
@@ -1204,10 +1199,10 @@ input {
     height: 44px;
   }
   .guides-section {
-    padding-block: 32px 44px;
+    padding-block: var(--space-8) var(--space-11);
   }
   .guide-card-body {
-    padding: 20px;
+    padding: var(--space-5);
   }
   .detail-content > section > h2,
   .article-content h2 {
@@ -1223,11 +1218,11 @@ input {
     grid-column: auto;
   }
   .advanced-filters {
-    padding-inline: 14px;
+    padding-inline: var(--space-4);
   }
   .advanced-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 18px;
+    gap: var(--space-5);
   }
   .registration-summary-list > li {
     grid-template-columns: minmax(0, 1fr);
@@ -1280,12 +1275,12 @@ input {
 }
 .summary-distance > summary {
   cursor: pointer;
-  padding: 12px 0;
+  padding: var(--space-3) 0;
   min-height: 48px;
 }
 .summary-distance > summary h3 {
   display: inline;
-  margin: 0 12px 0 0;
+  margin: 0 var(--space-3) 0 0;
   font-size: var(--text-lg);
 }
 .summary-distance > summary span {
@@ -1294,15 +1289,15 @@ input {
 }
 .channel-summary-list .channel-comparison {
   display: grid;
-  gap: 10px;
-  margin: 14px 0;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
 }
 .channel-comparison > div {
   min-width: 0;
 }
 .channel-summary-list .channel-comparison dt {
   font-size: var(--text-xs);
-  margin-bottom: 3px;
+  margin-bottom: var(--space-1);
 }
 .channel-summary-list .channel-comparison dd {
   margin: 0;
@@ -1316,7 +1311,7 @@ input {
 }
 @media (max-width: 760px) {
   #filters:not([hidden]) {
-    padding-bottom: 88px;
+    padding-bottom: var(--space-22);
   }
   .filter-hint > .filter-reset {
     display: none;
@@ -1328,30 +1323,31 @@ input {
     left: 0;
     right: 0;
     z-index: 60;
-    gap: 12px;
-    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-    background: #fff;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
+    background: var(--surface-card);
     border-top: 1px solid var(--border-subtle);
-    box-shadow: 0 -4px 16px #00000014;
+    box-shadow: 0 -4px 16px var(--shadow-ad-ink);
   }
   .mobile-filter-actions .filter-reset {
     flex: 0 0 auto;
-    padding: 8px;
+    padding: var(--space-2);
   }
   .mobile-filter-actions .mobile-filter-done {
     flex: 1;
     width: auto;
   }
   .mobile-filter-done:disabled {
-    opacity: 0.6;
+    cursor: not-allowed;
+    border: 1px dashed currentColor;
   }
   .summary-distance > summary span {
     display: block;
-    margin: 6px 0 0 18px;
+    margin: var(--space-2) 0 0 var(--space-5);
   }
   .registration-summary-heading {
     flex-wrap: wrap;
-    gap: 12px;
+    gap: var(--space-3);
   }
   .channel-summary-list .text-link,
   .group-official-link {

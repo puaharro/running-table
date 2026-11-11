@@ -15,7 +15,6 @@ export default function About() {
     <main id="main" className="content-main shell">
       <Breadcrumb items={[{ label: `關於${siteName}` }]} />
       <div className="page-heading">
-        <div className="eyebrow">ABOUT {siteName}</div>
         <h1>
           每一個起點，
           <br />
@@ -47,7 +46,7 @@ export default function About() {
           </p>
           <p>
             賽事體驗評級由編輯按參賽紀錄或跑手訪問撰寫，年份及組別分開，評審與觀察限制清楚列明。
-            <Link href="/ratings/">了解體驗評級準則 →</Link>
+            <Link href="/ratings/">了解體驗評級準則</Link>
           </p>
           <p>
             <Link href="/ratings/process/">評級審閱及更正流程</Link> ·{" "}
@@ -69,7 +68,7 @@ export default function About() {
           />
         </section>
         <Link className="text-link" href="/guides/">
-          閱讀原創指南 →
+          閱讀原創指南
         </Link>
       </div>
     </main>

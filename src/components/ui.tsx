@@ -166,11 +166,11 @@ export function GuideCard({ guide }: { guide: Guide }) {
         <i />
       </div>
       <div className="guide-card-body">
+        <h3>{guide.title}</h3>
         <div className="eyebrow">
           {guide.category}
           <span>{guide.readMinutes} 分鐘閱讀</span>
         </div>
-        <h3>{guide.title}</h3>
         <p>{guide.description}</p>
         <span className="text-link">
           閱讀指南 <Icon name="arrow" size={16} />

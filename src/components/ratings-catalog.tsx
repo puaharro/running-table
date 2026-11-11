@@ -35,6 +35,9 @@ export function PublishedReviewCards({ races, reviews }: Props) {
               className="ratings-review-card"
               aria-labelledby={`index-${review.id}`}
             >
+              <h3 id={`index-${review.id}`}>
+                <Link href={href}>{target.name}</Link>
+              </h3>
               <div className="ratings-review-meta">
                 <span className="ratings-edition">
                   <span className="sr-only">評論年份及組別：</span>
@@ -44,9 +47,6 @@ export function PublishedReviewCards({ races, reviews }: Props) {
                   {historical ? "往屆評論" : current ? "當屆評論" : "其他年份評論"}
                 </span>
               </div>
-              <h3 id={`index-${review.id}`}>
-                <Link href={href}>{target.name}</Link>
-              </h3>
               <ReviewOverallScore review={review} compact />
               <dl className="ratings-score-grid" aria-label="三項獨立評分">
                 {ratingDimensions.map((key) => {

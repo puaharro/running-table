@@ -1,3 +1,4 @@
+/* Hallmark · built: NXTGO · redesign: polish */
 /* NXTGO editorial guides; original prose stays in src/data/guides.ts. */
 .guides-page {
   --text-primary: var(--home-ink);
@@ -11,10 +12,10 @@
   --focus-ring: var(--home-focus);
   color: var(--home-ink);
   background: var(--home-paper);
-  padding-block: 24px 56px;
+  padding-block: var(--space-6) var(--space-14);
 }
 .guides-page .breadcrumbs {
-  margin: 0 0 24px;
+  margin: 0 0 var(--space-6);
   font-size: 13px;
 }
 .guides-page .breadcrumbs a {
@@ -23,22 +24,22 @@
   min-height: 32px;
 }
 .guides-heading {
-  margin-bottom: 32px;
+  margin-bottom: var(--space-8);
   border-bottom: 1px solid var(--home-line);
-  padding-bottom: 24px;
+  padding-bottom: var(--space-6);
 }
 .guides-page .eyebrow {
   color: var(--home-muted);
   font-size: 12px;
-  letter-spacing: 0.07em;
 }
 .guides-heading h1,
 .guides-article-heading h1 {
   font-size: clamp(30px, 3.2vw, 42px);
   line-height: 1.4;
   letter-spacing: -0.03em;
-  margin: 12px 0;
+  margin: var(--space-3) 0;
   overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 .guides-heading > p,
 .guides-article-heading > p {
@@ -51,15 +52,15 @@
 .guides-heading nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 20px;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
 }
 .guides-heading nav a {
   display: inline-flex;
   align-items: center;
-  gap: 24px;
+  gap: var(--space-6);
   min-height: 48px;
-  padding: 10px 16px;
+  padding: var(--space-3) var(--space-4);
   color: var(--home-action);
   background: var(--home-card);
   border: 1px solid var(--home-action);
@@ -71,15 +72,15 @@
   background: var(--home-tint);
 }
 .guides-category {
-  margin-bottom: 40px;
+  margin-bottom: var(--space-10);
 }
 .guides-section-heading {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 8px 16px;
-  margin-bottom: 8px;
+  gap: var(--space-2) var(--space-4);
+  margin-bottom: var(--space-2);
 }
 .guides-section-heading h2 {
   font-size: 26px;
@@ -95,7 +96,7 @@
 .guides-section-heading > a {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   min-height: 44px;
   color: var(--home-action);
 }
@@ -104,12 +105,12 @@
   font-size: 16px;
   line-height: 1.8;
   color: var(--home-muted);
-  margin: 8px 0 20px;
+  margin: var(--space-2) 0 var(--space-5);
 }
 .guides-page .guide-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
+  gap: var(--space-6);
 }
 .guides-page .guide-card {
   min-width: 0;
@@ -126,7 +127,7 @@
 }
 .guides-page .guide-graphic {
   height: 112px;
-  padding: 20px 24px;
+  padding: var(--space-5) var(--space-6);
   background: var(--home-cover-orange);
   color: var(--home-orange-ink);
 }
@@ -145,23 +146,23 @@
   line-height: 1;
 }
 .guides-page .guide-card-body {
-  padding: 24px;
+  padding: var(--space-6);
 }
 .guides-page .guide-card-body .eyebrow {
   font-size: 13px;
   letter-spacing: 0;
-  gap: 16px;
+  gap: var(--space-4);
 }
 .guides-page .guide-card h3 {
   font-size: 24px;
   line-height: 1.5;
-  margin: 16px 0 12px;
+  margin: var(--space-4) 0 var(--space-3);
   color: var(--home-ink);
 }
 .guides-page .guide-card-body > p {
   font-size: 16px;
   line-height: 1.85;
-  margin: 0 0 20px;
+  margin: 0 0 var(--space-5);
   color: var(--home-muted);
 }
 .guides-page .guide-card .text-link {
@@ -169,7 +170,7 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  gap: 12px;
+  gap: var(--space-3);
   font-size: 16px;
 }
 .guides-registration .guide-grid {
@@ -188,13 +189,13 @@
 .guides-next-step {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 280px;
-  gap: 32px;
+  gap: var(--space-8);
   align-items: center;
   background: var(--home-ink);
   color: var(--home-on-dark);
-  padding: 32px;
+  padding: var(--space-8);
   border-radius: 10px;
-  margin-top: 48px;
+  margin-top: var(--space-12);
 }
 .guides-next-step .eyebrow {
   color: var(--home-on-dark-muted);
@@ -202,7 +203,7 @@
 .guides-next-step h2 {
   font-size: 28px;
   line-height: 1.5;
-  margin: 12px 0;
+  margin: var(--space-3) 0;
 }
 .guides-next-step p {
   color: var(--home-on-dark-muted);
@@ -213,15 +214,15 @@
 }
 .guides-next-actions {
   display: grid;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .guides-primary-link {
   display: inline-flex;
   justify-content: center;
   align-items: center;
   min-height: 52px;
-  padding: 12px 20px;
-  gap: 16px;
+  padding: var(--space-3) var(--space-5);
+  gap: var(--space-4);
   background: var(--home-action);
   color: var(--home-on-dark);
   font-size: 16px;
@@ -251,20 +252,20 @@
   font-size: 14px;
   line-height: 1.85;
   color: var(--home-muted);
-  margin: 24px 0 0;
+  margin: var(--space-6) 0 0;
 }
 .guide-back-link {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5);
   color: var(--home-action);
   font-size: 14px;
 }
 .guides-article-heading {
-  padding-bottom: 32px;
+  padding-bottom: var(--space-8);
   border-bottom: 1px solid var(--home-line);
-  margin-bottom: 32px;
+  margin-bottom: var(--space-8);
 }
 .guides-article-heading h1 {
   max-width: 22em;
@@ -274,7 +275,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 20px;
+  gap: var(--space-2) var(--space-5);
   font-size: 14px;
   letter-spacing: 0;
 }
@@ -282,19 +283,19 @@
   font-size: 13px;
   line-height: 1.8;
   color: var(--home-muted);
-  margin-top: 20px;
+  margin-top: var(--space-5);
 }
 .guides-reading-layout {
   display: grid;
   grid-template-columns: minmax(0, 760px) 272px;
   justify-content: space-between;
   align-items: start;
-  gap: 48px;
+  gap: var(--space-12);
 }
 .guides-toc {
   grid-column: 2;
   grid-row: 1;
-  padding: 24px;
+  padding: var(--space-6);
   border: 1px solid var(--home-line);
   border-radius: 10px;
   background: var(--home-card);
@@ -303,10 +304,10 @@
 }
 .guides-toc h2 {
   font-size: 18px;
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-4);
 }
 .guides-toc h2 > span {
-  margin-left: 8px;
+  margin-left: var(--space-2);
   font-size: 13px;
   font-weight: 400;
   color: var(--home-muted);
@@ -322,9 +323,9 @@
 .guides-toc a {
   display: flex;
   align-items: baseline;
-  gap: 10px;
+  gap: var(--space-3);
   min-height: 44px;
-  padding: 12px 0;
+  padding: var(--space-3) 0;
   color: var(--home-action);
   font-size: 14px;
   line-height: 1.7;
@@ -346,17 +347,17 @@
   line-height: 1.85;
 }
 .guides-article-body > section {
-  padding-bottom: 24px;
-  margin-bottom: 32px;
+  padding-bottom: var(--space-6);
+  margin-bottom: var(--space-8);
   border-bottom: 1px solid var(--home-line);
 }
 .guides-article-body > section > h2 {
   display: flex;
   align-items: baseline;
-  gap: 16px;
+  gap: var(--space-4);
   font-size: 26px;
   line-height: 1.6;
-  margin: 0 0 20px;
+  margin: 0 0 var(--space-5);
   letter-spacing: -0.02em;
 }
 .guides-article-body > section > h2 > span {
@@ -368,17 +369,57 @@
 .guides-article-body > section > p {
   font-size: 18px;
   line-height: 1.85;
-  margin: 0 0 24px;
+  margin: 0 0 var(--space-6);
 }
 .guides-article-body > section:last-of-type {
   border: 0;
   border-left: 3px solid var(--home-action);
-  padding: 24px;
+  padding: var(--space-6);
   background: var(--home-tint);
   border-radius: 0 8px 8px 0;
 }
 .guides-article-body > section > p:last-child {
   margin-bottom: 0;
+}
+.guides-article-body > .guide-checklist {
+  padding: clamp(14px, 3vw, 24px);
+  border: 1px solid var(--home-line);
+  border-radius: 10px;
+  background: var(--home-tint);
+}
+.guides-article-body > .guide-checklist > :is(h2, p) {
+  margin-bottom: var(--space-2);
+}
+.guide-checklist progress {
+  display: block;
+  width: 100%;
+  height: 12px;
+  accent-color: var(--home-action);
+}
+.guide-checklist ul {
+  list-style: none;
+  margin: var(--space-4) 0;
+  padding: 0;
+}
+.guide-checklist label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding-block: 6px;
+  border-top: 1px solid var(--home-line);
+  font-size: 16px;
+  cursor: pointer;
+}
+.guide-checklist input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--home-action);
+}
+.guide-checklist button {
+  min-height: 44px;
 }
 .guide-return-contents {
   display: inline-flex;
@@ -391,46 +432,46 @@
 }
 .guides-article-cta {
   background: var(--home-tint);
-  padding: 28px;
-  margin-top: 24px;
+  padding: var(--space-7);
+  margin-top: var(--space-6);
   border-radius: 10px;
 }
 .guides-article-cta h2 {
   font-size: 26px;
   line-height: 1.5;
-  margin: 0 0 12px;
+  margin: 0 0 var(--space-3);
 }
 .guides-article-cta p {
   font-size: 16px;
   line-height: 1.8;
-  margin: 0 0 20px;
+  margin: 0 0 var(--space-5);
 }
 .guides-article-cta small {
   display: block;
   font-size: 13px;
   line-height: 1.8;
   color: var(--home-muted);
-  margin-top: 16px;
+  margin-top: var(--space-4);
 }
 .guides-related-races,
 .guides-read-next {
-  margin-top: 48px;
+  margin-top: var(--space-12);
   border-top: 1px solid var(--home-line);
-  padding-top: 32px;
+  padding-top: var(--space-8);
 }
 .guides-read-next .guide-grid {
-  margin-top: 20px;
+  margin-top: var(--space-5);
 }
 .guides-race-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  gap: var(--space-2);
 }
 .guides-race-card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
   border: 1px solid var(--home-line);
   border-radius: 10px;
   background: var(--home-card);
@@ -441,7 +482,7 @@
 .guides-race-card > span:first-child {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   color: var(--home-muted);
   font-size: 14px;
   line-height: 1.7;
@@ -451,27 +492,34 @@
   flex-shrink: 0;
 }
 .guides-race-card h3 {
+  grid-column: 1;
   font-size: 20px;
   line-height: 1.6;
   margin: 0;
+  text-wrap: balance;
 }
 .guides-race-card p {
   font-size: 14px;
   color: var(--home-orange-ink);
-  margin: 0 0 12px;
+  margin: 0 0 var(--space-3);
 }
 .guides-race-card .guides-race-action {
+  grid-column: 2;
+  grid-row: 1 / span 3;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
   min-height: 44px;
   margin-top: auto;
   font-size: 16px;
   color: var(--home-action);
 }
 .guides-page :is(a, [tabindex]):focus-visible {
-  outline: 2px solid var(--home-focus);
+  outline: 3px solid var(--home-action-pressed);
   outline-offset: 4px;
+}
+.guides-page .guides-next-step a:focus-visible {
+  outline-color: var(--home-accent);
 }
 .guides-page :is(#choosing, #registration, #guide-contents, [id^="section-"]) {
   scroll-margin-top: 160px;
@@ -479,56 +527,53 @@
 @media (max-width: 1000px) {
   .guides-reading-layout {
     grid-template-columns: minmax(0, 1fr) 240px;
-    gap: 32px;
+    gap: var(--space-8);
   }
   .guides-toc {
-    padding: 20px;
-  }
-  .guides-race-grid {
-    grid-template-columns: minmax(0, 1fr);
+    padding: var(--space-5);
   }
 }
 @media (max-width: 767px) {
   .guides-page {
-    padding-block: 24px 40px;
+    padding-block: var(--space-6) var(--space-10);
   }
   .guides-page .breadcrumbs {
     display: none;
   }
   .guides-heading {
-    margin-bottom: 24px;
+    margin-bottom: var(--space-6);
   }
   .guides-heading h1,
   .guides-article-heading h1 {
     font-size: 30px;
   }
   .guides-heading nav {
-    margin-top: 16px;
+    margin-top: var(--space-4);
   }
   .guides-heading nav a {
-    gap: 16px;
-    padding-inline: 12px;
+    gap: var(--space-4);
+    padding-inline: var(--space-3);
   }
   .guides-section-heading h2 {
     font-size: 24px;
   }
   .guides-page .guide-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
+    gap: var(--space-5);
   }
   .guides-page .guide-graphic {
     height: 88px;
-    padding: 16px 20px;
+    padding: var(--space-4) var(--space-5);
   }
   .guides-page .guide-graphic > span {
     font-size: 56px;
   }
   .guides-page .guide-card-body {
-    padding: 20px;
+    padding: var(--space-5);
   }
   .guides-page .guide-card h3 {
     font-size: 22px;
-    margin-top: 12px;
+    margin-top: var(--space-3);
   }
   .guides-registration .guide-card {
     display: block;
@@ -538,14 +583,14 @@
   }
   .guides-next-step {
     display: block;
-    padding: 24px;
-    margin-top: 32px;
+    padding: var(--space-6);
+    margin-top: var(--space-8);
   }
   .guides-next-step h2 {
     font-size: 26px;
   }
   .guides-next-actions {
-    margin-top: 24px;
+    margin-top: var(--space-6);
   }
   .guides-heading nav a,
   .guides-primary-link {
@@ -556,72 +601,77 @@
     flex-shrink: 0;
   }
   .guide-article {
-    padding-top: 12px;
+    padding-top: var(--space-3);
   }
   .guide-back-link {
-    margin-bottom: 16px;
+    margin-bottom: var(--space-4);
   }
   .guides-article-heading {
-    padding-bottom: 24px;
-    margin-bottom: 24px;
+    padding-bottom: var(--space-6);
+    margin-bottom: var(--space-6);
   }
   .guides-article-heading h1 {
     text-wrap: wrap;
-    margin-block: 12px;
+    margin-block: var(--space-3);
   }
   .guides-reading-layout {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: var(--space-7);
   }
   .guides-toc {
     position: static;
     width: 100%;
-    padding: 20px;
+    padding: var(--space-5);
     background: var(--home-tint);
     border: 0;
   }
   .guides-toc h2 {
-    margin-bottom: 8px;
+    margin-bottom: var(--space-2);
   }
   .guides-toc a {
     font-size: 16px;
-    padding: 12px 0;
+    padding: var(--space-3) 0;
   }
   .guides-article-body {
     max-width: 100%;
     font-size: 16px;
   }
   .guides-article-body > section {
-    margin-bottom: 28px;
-    padding-bottom: 24px;
+    margin-bottom: var(--space-7);
+    padding-bottom: var(--space-6);
   }
   .guides-article-body > section > h2 {
     font-size: 23px;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
   }
   .guides-article-body > section > p {
     font-size: 16px;
     line-height: 1.9;
-    margin-bottom: 20px;
+    margin-bottom: var(--space-5);
   }
   .guides-article-body > section:last-of-type {
-    padding: 20px 16px;
+    padding: var(--space-5) var(--space-4);
   }
   .guides-article-cta {
-    padding: 24px 20px;
+    padding: var(--space-6) var(--space-5);
   }
   .guides-article-cta h2 {
     font-size: 24px;
   }
   .guides-related-races,
   .guides-read-next {
-    margin-top: 32px;
-    padding-top: 24px;
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
   }
   .guides-race-card {
-    padding: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--space-5);
+  }
+  .guides-race-card .guides-race-action {
+    grid-column: 1;
+    grid-row: auto;
   }
 }
 @media (max-height: 650px) {

@@ -11,7 +11,6 @@ export default function Privacy() {
     <main id="main" className="content-main shell">
       <Breadcrumb items={[{ label: "測試版私隱說明" }]} />
       <div className="page-heading">
-        <div className="eyebrow">PRIVACY NOTE</div>
         <h1>測試版私隱說明</h1>
         <p>更新日期：2026 年 11 月 7 日。以下只描述目前測試版嘅功能。</p>
       </div>

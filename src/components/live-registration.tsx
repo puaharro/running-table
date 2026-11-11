@@ -49,12 +49,19 @@ export function PublicRegistrationCountdown({
       </h2>
       {countdown ? (
         <>
-          <p className="public-registration-state" data-urgent={countdown.urgent}>
+          <p
+            className="public-registration-state"
+            data-timed={countdown.deadline.includes("T")}
+            data-urgent={countdown.urgent}
+          >
             {countdown.deadline.includes("T") ? countdown.label : "接受申請"}
           </p>
-          <p className="public-registration-deadline">
-            截止 <Timestamp value={countdown.deadline} />
-          </p>
+          <dl className="public-registration-deadline">
+            <dt>報名截止</dt>
+            <dd>
+              <Timestamp value={countdown.deadline} />
+            </dd>
+          </dl>
           <a href={`#channel-${countdown.channelId}`}>
             {countdown.groupName} · {countdown.channelName} <Icon name="arrow" size={16} />
           </a>
@@ -108,6 +115,18 @@ function Timestamp({ value }: { value: string }) {
     </time>
   );
 }
+function RegistrationTerm({ term }: { term: "公眾抽籤" | "最低籌款額" }) {
+  return (
+    <details className="registration-term">
+      <summary>{term} <span aria-hidden="true">?</span></summary>
+      <p>
+        {term === "公眾抽籤"
+          ? "提交抽籤申請後，要等大會公布結果先知有冇名額。中籤後如有付款期限，要按時完成付款。"
+          : "參加該渠道所需達到嘅最低籌款金額。如另有參賽費，請按主辦方條款核對。"}
+      </p>
+    </details>
+  );
+}
 function ChannelCard({
   race,
   group,
@@ -157,15 +176,23 @@ function ChannelCard({
         </summary>
         <div className="channel-details-body">
           <p>
-            {channelTypeLabels[channel.type]} · {channel.registrationMethod}
+            {channelTypeLabels[channel.type]}
+            {channel.registrationMethod !== "公眾抽籤" && ` · ${channel.registrationMethod}`}
           </p>
+          {channel.registrationMethod === "公眾抽籤" && <RegistrationTerm term="公眾抽籤" />}
           <dl>
             <div>
               <dt>申請資格／條件</dt>
               <dd>{channel.eligibility}</dd>
             </div>
             <div>
-              <dt>{channelPriceHeading(channel)}</dt>
+              <dt>
+                {channel.priceType === "minimum-donation" ? (
+                  <RegistrationTerm term="最低籌款額" />
+                ) : (
+                  channelPriceHeading(channel)
+                )}
+              </dt>
               <dd>
                 {channelPriceLabel(channel)}
                 {channel.priceUnit && ` · ${channel.priceUnit}`}
@@ -231,6 +258,27 @@ function ChannelCard({
 }
 export function RegistrationSummary({ race, initialNow }: { race: Race; initialNow: string }) {
   const now = useClock(initialNow);
+  const [sort, setSort] = useState<"ascending" | "descending">();
+  const groups = sort
+    ? [...race.groups].sort(
+        (a, b) => (a.distanceKm - b.distanceKm) * (sort === "ascending" ? 1 : -1),
+      )
+    : race.groups;
+  const fields = ["距離", "起點", "資格／時限", "公眾報名"];
+  const rows = groups.map((group) => {
+    const publicChannels = group.channels.filter((channel) => channel.type === "general");
+    return {
+      group,
+      values: [
+        distanceLabel(group.distanceKm),
+        groupLocations(race, [group])[0].venue ?? "起點待核實",
+        group.limit ?? "待核實",
+        publicChannels.length
+          ? statusSummary(race, [{ ...group, channels: publicChannels }], now).label
+          : "未有公眾報名資料",
+      ],
+    };
+  });
   return (
     <section className="registration-summary" aria-labelledby="registration-summary-heading">
       <div className="registration-summary-heading">
@@ -240,6 +288,59 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
       <p>
         每個渠道有獨立資格、價格及期限；接受申請唔等於已確認名額。結果公布及付款期限另列，唔等同申請截止。
       </p>
+      <div className="group-compare">
+        <button
+          type="button"
+          className="button group-compare-sort"
+          onClick={() => setSort(sort === "ascending" ? "descending" : "ascending")}
+        >
+          {sort === "ascending"
+            ? "距離：短至長"
+            : sort === "descending"
+              ? "距離：長至短"
+              : "按距離排序"}
+        </button>
+        <table className="group-compare-table">
+          <caption className="sr-only">各組起點、資格及公眾報名比較</caption>
+          <thead>
+            <tr>
+              <th scope="col">組別</th>
+              {fields.map((field, index) => (
+                <th key={field} scope="col" aria-sort={index === 0 ? sort : undefined}>
+                  {field}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(({ group, values }) => (
+              <tr key={group.id}>
+                <th scope="row">
+                  <a href={`#group-${group.id}`}>{group.name}</a>
+                </th>
+                {values.map((value, index) => (
+                  <td key={fields[index]}>{value}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <ul className="group-compare-list" role="list">
+          {rows.map(({ group, values }) => (
+            <li key={group.id}>
+              <a href={`#group-${group.id}`}>{group.name}</a>
+              <dl>
+                {values.map((value, index) => (
+                  <div key={fields[index]}>
+                    <dt>{fields[index]}</dt>
+                    <dd>{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </li>
+          ))}
+        </ul>
+      </div>
       <ul className="registration-summary-list">
         {race.groups.map((group) => (
           <li key={group.id}>

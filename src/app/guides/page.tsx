@@ -28,7 +28,6 @@ export default function GuidesPage() {
       <div className="shell">
         <Breadcrumb items={[{ label: "報名及選賽指南" }]} />
         <header className="guides-heading">
-          <div className="eyebrow">THE RUNNER'S READING LIST</div>
           <h1>報名及選賽指南</h1>
           <p>由第一場路跑到下一場半馬，整理實用嘅報名及選賽方法。</p>
           <nav aria-label="指南分類">
@@ -64,7 +63,6 @@ export default function GuidesPage() {
         })}
         <div className="guides-next-step">
           <div>
-            <span className="eyebrow">YOUR NEXT RACE</span>
             <h2>有咗方向，就搵下一場。</h2>
             <p>按賽期同距離縮窄選擇，再睇賽事資料及指定年份嘅參賽體驗。</p>
           </div>
@@ -73,7 +71,7 @@ export default function GuidesPage() {
               查看路跑時間表 <Icon name="arrow" />
             </Link>
             <Link className="guides-secondary-link" href="/ratings/">
-              睇體驗評級 →
+              睇體驗評級
             </Link>
           </div>
         </div>

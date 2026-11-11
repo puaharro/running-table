@@ -66,7 +66,6 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
       <section className="shell home-calendar-section" aria-labelledby="home-calendar-heading">
         <div className="home-calendar-section-head">
           <div>
-            <span className="home-kicker">RACE CALENDAR</span>
             <h2 id="home-calendar-heading">近期路跑時間表</h2>
           </div>
           <Link href="/races/">
@@ -112,10 +111,6 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
             </Link>
           </div>
           <aside className="home-calendar-focus" aria-labelledby="home-focus-heading">
-            <div className="home-focus-top">
-              <Icon name="calendar" size={20} />
-              <span>PLAN YOUR NEXT START</span>
-            </div>
             <h2 id="home-focus-heading">
               一場比賽，
               <br />
@@ -142,8 +137,7 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
       <section className="shell home-block" aria-labelledby="featured-heading">
         <div className="home-section-head">
           <div>
-            <span className="home-kicker">01 / RACE PICKS</span>
-            <h2 id="featured-heading">呢幾場，放入你嘅計劃。</h2>
+            <h2 id="featured-heading">精選賽事</h2>
             <p>由大橋半馬到城市全馬，先睇日期，再了解每場特色。</p>
           </div>
           <Link href="/races/">

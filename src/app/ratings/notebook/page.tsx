@@ -15,7 +15,6 @@ export default function NotebookPage() {
     <main id="main" className="content-main shell">
       <Breadcrumb items={[{ label: "賽事體驗評級", href: "/ratings/" }, { label: "參賽筆記" }]} />
       <div className="page-heading">
-        <div className="eyebrow">EXPERIENCE NOTEBOOK</div>
         <h1>
           先記低，
           <br />
@@ -25,7 +24,7 @@ export default function NotebookPage() {
       </div>
       <div className="prose narrow">
         <Link className="text-link" href="/ratings/">
-          查看評分準則 →
+          查看評分準則
         </Link>
         <ReviewNotebook />
       </div>

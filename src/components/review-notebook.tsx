@@ -128,8 +128,8 @@ export function ReviewNotebook() {
   return (
     <div className="review-notebook">
       <p>
-        筆記流程：草稿 → 整理待確認稿 → 營運者確認 → 發布。
-        <Link href="/ratings/process/">了解審閱流程 →</Link>
+        筆記流程：由草稿整理成待確認稿，經營運者確認後發布。
+        <Link href="/ratings/process/">了解審閱流程</Link>
       </p>
       <p className="notebook-notice">
         筆記只會儲存在目前瀏覽器，唔會傳送到網站或自動發布。清除瀏覽資料會失去草稿，請匯出備份。
@@ -143,7 +143,7 @@ export function ReviewNotebook() {
               const t = reviewTargets.find((t) => t.id === e.targetId)!;
               return (
                 <option key={e.id} value={e.id}>
-                  {t.name} · {t.group} · {e.year || "年份待填"} · 筆記 {i + 1}
+                  {t.name}（{t.group}，{e.year || "年份待填"}），筆記 {i + 1}
                 </option>
               );
             })}

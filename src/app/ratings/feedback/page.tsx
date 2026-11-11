@@ -20,7 +20,6 @@ export default function FeedbackPage() {
         items={[{ label: "體驗評級", href: "/ratings/" }, { label: "更正、投訴及回應" }]}
       />
       <div className="page-heading">
-        <div className="eyebrow">EDITORIAL FEEDBACK</div>
         <h1>
           指出具體內容，
           <br />
@@ -30,7 +29,7 @@ export default function FeedbackPage() {
       </div>
       <div className="prose narrow">
         <Link className="text-link" href="/ratings/process/">
-          了解審閱及更正流程 →
+          了解審閱及更正流程
         </Link>
         <EditorialFeedback
           races={races.map((r) => ({

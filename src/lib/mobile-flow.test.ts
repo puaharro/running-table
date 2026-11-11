@@ -64,7 +64,7 @@ describe("collapsed detail channels", () => {
       createElement(RegistrationGroups, { race, initialNow: "2026-10-27T01:00:00+08:00" }),
     );
     const disclosures = [
-      ...html.matchAll(/<details class="channel-details"([^>]*)>([\s\S]*?)<\/details>/g),
+      ...html.matchAll(/<details class="channel-details"([^>]*)>([\s\S]*?)<\/article>/g),
     ];
     expect(disclosures).toHaveLength(race.groups.reduce((n, g) => n + g.channels.length, 0));
     for (const [, attrs, content] of disclosures) {

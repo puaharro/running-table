@@ -30,6 +30,17 @@
 - 螢幕閱讀順序跟視覺一致；單一 h1；可見 label；裝飾 SVG aria-hidden；不以顏色獨自傳遞狀態。
 - 焦點 banner 只手動切換，不自動輪播；微互動採 160ms 色彩回饋，尊重 reduced-motion。保持放大及窄畫面自然換行。
 
+## Refero Styles 研究筆記
+
+2026-11-11。用案例拆解視覺層次、資訊密度和品牌表達，作為後續設計評審的參考。
+
+- [Nike](https://styles.refero.design/style/d7ace114-0548-41f5-a2ff-2afbf32be94d) 用大幅運動攝影與低調介面建立節奏。NXTGO 有合適的真實賽事素材時，可在首頁焦點集中呈現，讓下方賽期區更容易掃讀。
+- [Strava](https://styles.refero.design/style/efdd6d8f-4488-4312-86a7-4ee8e016c83a) 以平面底色和單一主色把操作放在視線焦點。NXTGO 可沿用現有品牌色與狀態色，讓主要按鈕、選中篩選及報名狀態各有清楚角色。
+- [Linear](https://styles.refero.design/style/90ce5883-bb24-4466-93f7-801cd617b0d1) 用對齊、細線和穩定間距整理密集資訊。賽事列表可借鑑其對齊方式，讓日期、距離和報名狀態容易逐列比較，並在窄屏檢查長中文賽名。
+- [AREA 17](https://styles.refero.design/style/143d553e-d71f-4e86-98ed-b80b9ef78ea9) 用大標題、留白和少量亮色做出主次。首頁可把最大對比留給焦點賽事，讓搜尋入口和近期賽期有各自清楚的位置。
+
+評審時先看手機與桌面各一屏，確認焦點、下一步操作，以及日期與報名狀態是否一眼可辨。測試長中文標題自然換行。互動以選中、切換和結果變化為主，並檢查減少動態效果時的狀態是否同樣清楚。
+
 ## 元件及授權選擇
 
 沿用 React 19.3.0、Next.js 16.4.3（MIT）、本地 Fontsource 字體（SIL OFL 1.1）及既有 SVG Icon，使用 Next Link 和原生 GET form。已檢查本地授權檔與 Next 16 文件；沒有新增第三方套件或外部字體請求。

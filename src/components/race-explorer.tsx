@@ -31,6 +31,24 @@ function monthLabel(date: string) {
   return `${date.slice(0, 4)} 年 ${Number(date.slice(5, 7))} 月`;
 }
 
+function highlightMatch(text: string, query: string) {
+  const term = query.trim();
+  if (!term) return text;
+  const literal = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return text
+    .split(new RegExp(`(${literal})`, "iu"))
+    .map((part, index) => (index % 2 === 0 ? part : <mark key={index}>{part}</mark>));
+}
+
+function FilterOptionCount({ count }: { count: number }) {
+  return (
+    <span className="calendar-option-count">
+      {count}
+      <span className="sr-only"> 場</span>
+    </span>
+  );
+}
+
 export function RaceExplorer({
   races,
   initialNow,
@@ -77,6 +95,23 @@ export function RaceExplorer({
     return () => window.clearTimeout(timer);
   }, [copyState]);
   const [filtersExpanded, setFiltersExpanded] = useState(false);
+  useEffect(() => {
+    if (!filtersExpanded) return;
+    const panel = document.getElementById("calendar-filter-panel");
+    if (!(panel instanceof HTMLDialogElement)) return;
+    const mobile = window.matchMedia("(max-width: 767px)");
+    if (!mobile.matches) {
+      setFiltersExpanded(false);
+      return;
+    }
+    if (!panel.open) panel.showModal();
+    const closeOnDesktop = () => {
+      if (!mobile.matches) panel.close();
+    };
+    mobile.addEventListener("change", closeOnDesktop);
+    return () => mobile.removeEventListener("change", closeOnDesktop);
+  }, [filtersExpanded]);
+  const FilterPanel = filtersExpanded ? "dialog" : "aside";
   useEffect(() => {
     const sync = () => {
       const {
@@ -155,14 +190,26 @@ export function RaceExplorer({
     setCustomDates(false);
     update({ ...toggleDateShortcut(filters, kind, now), view: "all" });
   }
+  const searchableRaces = useMemo(
+    () => (savedOnly ? races.filter((race) => favorites.ids.includes(race.id)) : races),
+    [races, savedOnly, favorites.ids],
+  );
   const results = useMemo(() => {
-    const selected = selectRaces(
-      savedOnly ? races.filter((r) => favorites.ids.includes(r.id)) : races,
-      filters,
-      now,
-    );
+    const selected = selectRaces(searchableRaces, filters, now);
     return savedOnly && filters.sort === "date" ? orderSavedResults(selected, now) : selected;
-  }, [races, filters, now, savedOnly, favorites.ids]);
+  }, [searchableRaces, filters, now, savedOnly]);
+  const optionCounts = useMemo(() => {
+    if (!filtersExpanded) return null;
+    return {
+      regions: regions.map(
+        (region) =>
+          selectRaces(searchableRaces, { ...filters, countries: [], regions: [region] }, now).length,
+      ),
+      distances: distanceOptions.map(
+        (distance) => selectRaces(searchableRaces, { ...filters, distances: [distance] }, now).length,
+      ),
+    };
+  }, [filtersExpanded, searchableRaces, filters, now]);
   const pagination = paginateResults(results, page);
   const visibleResults = pagination.items;
   useEffect(() => {
@@ -204,6 +251,7 @@ export function RaceExplorer({
   const showCustomDates =
     customDates || (!!(filters.from || filters.to) && !yearActive && !nextYearActive);
   const error = filterError(filters);
+  const dateErrorId = filtersExpanded ? "calendar-date-range-error" : "calendar-filter-error";
   const activeFilterCount =
     Number(Boolean(filters.from || filters.to)) +
     Number(Boolean(filters.month)) +
@@ -275,13 +323,7 @@ export function RaceExplorer({
   return (
     <section id="race-list" className="explorer shell" aria-labelledby="explorer-heading">
       <header className="section-heading explorer-heading">
-        <div>
-          <p className="calendar-eyebrow">HONG KONG RUNNING CALENDAR</p>
-          <h1 id="explorer-heading">賽事搜尋／時間表</h1>
-        </div>
-        <span className="calendar-scope">
-          <Icon name="pin" size={16} /> 香港路跑
-        </span>
+        <h1 id="explorer-heading">香港路跑時間表</h1>
       </header>
       <div className="calendar-search-bar">
         <label className="calendar-keyword">
@@ -299,7 +341,9 @@ export function RaceExplorer({
           </span>
         </label>
         <button
+          type="button"
           className="calendar-filter-toggle"
+          aria-haspopup="dialog"
           aria-expanded={filtersExpanded}
           aria-controls="calendar-filter-panel"
           onClick={() => setFiltersExpanded(!filtersExpanded)}
@@ -315,12 +359,28 @@ export function RaceExplorer({
         </button>
       </div>
       <div className="calendar-workspace">
-        <aside
+        <FilterPanel
           className="calendar-filter-panel"
           id="calendar-filter-panel"
           data-expanded={filtersExpanded}
           aria-label="賽事篩選"
+          onClose={(event) => {
+            const panel = event.currentTarget;
+            setFiltersExpanded(false);
+            if (!(panel instanceof HTMLDialogElement) || panel.returnValue !== "results") return;
+            window.requestAnimationFrame(() => {
+              resultsCount.current?.focus({ preventScroll: true });
+              document
+                .getElementById("results-toolbar")
+                ?.scrollIntoView({ block: "start", behavior: "instant" });
+            });
+          }}
         >
+          {filtersExpanded && (
+            <form method="dialog" className="calendar-sheet-dismiss">
+              <button type="submit">關閉篩選</button>
+            </form>
+          )}
           <div className="filter-card search-engine">
             <div className="calendar-filter-heading">
               <Icon name="filter" size={18} />
@@ -376,56 +436,72 @@ export function RaceExplorer({
                 </div>
               </div>
               {showCustomDates && (
-                <div className="date-inputs engine-dates" id="custom-dates">
+                <fieldset className="date-inputs engine-dates" id="custom-dates">
+                  <legend>指定日期範圍</legend>
                   <label>
                     <span>開始日期</span>
                     <input
                       aria-label="開始日期"
                       type="date"
                       aria-invalid={error ? true : undefined}
-                      aria-describedby={error ? "calendar-filter-error" : undefined}
+                      aria-describedby={error ? dateErrorId : undefined}
                       value={filters.from}
                       onChange={(e) => update({ ...filters, from: e.target.value, view: "all" })}
                     />
                   </label>
-                  <span>—</span>
+                  <span aria-hidden="true">至</span>
                   <label>
                     <span>結束日期</span>
                     <input
                       aria-label="結束日期"
                       type="date"
                       aria-invalid={error ? true : undefined}
-                      aria-describedby={error ? "calendar-filter-error" : undefined}
+                      aria-describedby={error ? dateErrorId : undefined}
                       value={filters.to}
                       onChange={(e) => update({ ...filters, to: e.target.value, view: "all" })}
                     />
                   </label>
-                </div>
+                  {error && filtersExpanded && (
+                    <p className="calendar-date-range-error" id="calendar-date-range-error" role="alert">
+                      {error}
+                    </p>
+                  )}
+                  {!error && (filters.from || filters.to) && (
+                    <p className="calendar-date-range-summary" role="status">
+                      {filters.from && displayDate(filters.from, { year: "numeric" })}
+                      {filters.from && filters.to && " "}
+                      {filters.to && `至 ${displayDate(filters.to, { year: "numeric" })}`}
+                      {!filters.to && "起"}
+                    </p>
+                  )}
+                </fieldset>
               )}
               <div className="engine-option-row" role="group" aria-label="地點">
                 <span className="engine-label">地點</span>
-                <div className="option-row">
-                  {regions.map((region) => (
+                <div className="option-row option-row-checkmarks">
+                  {regions.map((region, index) => (
                     <button
                       key={region}
                       aria-pressed={filters.regions.includes(region)}
                       onClick={() => toggle("regions", region)}
                     >
                       {region === "港島" ? "香港島" : region}
+                      {optionCounts && <FilterOptionCount count={optionCounts.regions[index]} />}
                     </button>
                   ))}
                 </div>
               </div>
               <div className="engine-option-row" role="group" aria-label="距離">
                 <span className="engine-label">距離</span>
-                <div className="option-row">
-                  {distanceOptions.map((distance) => (
+                <div className="option-row option-row-checkmarks">
+                  {distanceOptions.map((distance, index) => (
                     <button
                       key={distance}
                       aria-pressed={filters.distances.includes(distance)}
                       onClick={() => toggle("distances", distance)}
                     >
                       {distance}
+                      {optionCounts && <FilterOptionCount count={optionCounts.distances[index]} />}
                     </button>
                   ))}
                 </div>
@@ -443,7 +519,7 @@ export function RaceExplorer({
               </div>
               <div className="engine-option-row" role="group" aria-label="賽事類型">
                 <span className="engine-label">賽事類型</span>
-                <div className="option-row">
+                <div className="option-row option-row-checkmarks">
                   <button
                     aria-pressed={filters.themed}
                     onClick={() => update({ ...filters, themed: !filters.themed, family: false })}
@@ -470,22 +546,16 @@ export function RaceExplorer({
               </div>
             </div>
           </div>
-          <button
-            className="calendar-apply-filters"
-            onClick={() => {
-              setFiltersExpanded(false);
-              window.requestAnimationFrame(() => {
-                const toolbar = document.getElementById("results-toolbar");
-                resultsCount.current?.focus({ preventScroll: true });
-                toolbar?.scrollIntoView({ block: "start", behavior: "instant" });
-              });
-            }}
-          >
-            顯示 {results.length} 場賽事 <Icon name="arrow" size={18} />
-          </button>
-        </aside>
+          {filtersExpanded && (
+            <form method="dialog" className="calendar-sheet-footer">
+              <button type="submit" value="results" className="calendar-apply-filters">
+                顯示 {results.length} 場賽事 <Icon name="arrow" size={18} />
+              </button>
+            </form>
+          )}
+        </FilterPanel>
         <div className="calendar-results">
-          {error && (
+          {error && !filtersExpanded && (
             <p className="error-message" id="calendar-filter-error" role="alert">
               {error}
             </p>
@@ -534,12 +604,20 @@ export function RaceExplorer({
                   <option value="recent">按最近更新</option>
                 </select>
               </label>
-              <button className="share-button" onClick={share} aria-label="分享篩選">
-                {copyState === "copied"
-                  ? "已複製 ✓"
-                  : copyState === "manual"
-                    ? "請複製網址"
-                    : "分享篩選 ↗"}
+              <button
+                type="button"
+                className="share-button"
+                onClick={share}
+                aria-label="分享篩選"
+                data-copied={copyState === "copied"}
+              >
+                {copyState === "copied" ? (
+                  <>已複製 <Icon name="check" size={16} /></>
+                ) : copyState === "manual" ? (
+                  "請複製網址"
+                ) : (
+                  "分享篩選 ↗"
+                )}
               </button>
             </div>
             {favorites.message && (
@@ -610,18 +688,21 @@ export function RaceExplorer({
                       >
                         <div className="calendar-race-content">
                           <RaceHeading>
-                            <Link href={detailHref}>{race.name}</Link>
+                            <Link href={detailHref}>{highlightMatch(race.name, filters.q)}</Link>
                           </RaceHeading>
                           <p className="calendar-race-venue">
                             <Icon name="pin" size={18} />
                             <span>
-                              {[
-                                ...new Set(
-                                  groupLocations(race, groups).map(
-                                    (location) => location.venue ?? "起點待核實",
+                              {highlightMatch(
+                                [
+                                  ...new Set(
+                                    groupLocations(race, groups).map(
+                                      (location) => location.venue ?? "起點待核實",
+                                    ),
                                   ),
-                                ),
-                              ].join(" ／ ")}
+                                ].join(" ／ "),
+                                filters.q,
+                              )}
                             </span>
                           </p>
                           <ul className="calendar-race-distances" aria-label="比賽距離">
@@ -734,9 +815,16 @@ export function RaceExplorer({
               )}
               <div className="results-footer">
                 <span role="status" aria-live="polite">
-                  顯示第 {pagination.from}–{pagination.to} 場，共 {results.length} 場
+                  顯示第 {pagination.from} 至 {pagination.to} 場，共 {results.length} 場
                 </span>
-                <a href="#race-list" onClick={() => setFiltersExpanded(true)}>
+                <a
+                  href="#race-list"
+                  onClick={(event) => {
+                    if (!window.matchMedia("(max-width: 767px)").matches) return;
+                    event.preventDefault();
+                    setFiltersExpanded(true);
+                  }}
+                >
                   返回篩選 ↑
                 </a>
               </div>

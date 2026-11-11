@@ -177,7 +177,7 @@ export function EditorialFeedback({
           <h3>電郵草稿已準備，尚未寄出</h3>
           <p>網站尚未收到此回報。請自行開啟電郵程式、確認收件人及內容，再按寄出。</p>
           <a className="text-link" href={prepared.url}>
-            開啟電郵草稿 →
+            開啟電郵草稿
           </a>
           <label>
             電郵內容（可複製）

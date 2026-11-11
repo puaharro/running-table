@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { guides } from "@/data/guides";
 import { publicRaces as races } from "@/data/races";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
+import { RegistrationChecklist } from "@/components/registration-checklist";
 import { displayDate, distanceLabel } from "@/lib/races";
 import { pageMetadata, raceHref, siteName } from "@/lib/site";
 export const dynamicParams = false;
@@ -39,14 +40,11 @@ export default async function GuidePage({ params }: Props) {
           ← 返回指南列表
         </Link>
         <header className="guides-article-heading">
-          <div className="eyebrow">
-            {guide.category}
-            <span>{guide.readMinutes} 分鐘閱讀</span>
-          </div>
           <h1>{guide.title}</h1>
           <p>{guide.description}</p>
           <div className="guides-byline">
-            {siteName}編輯整理 · 原創內容 · <time dateTime="2026-10-21">2026 年 10 月 21 日</time>
+            {guide.category}，約 {guide.readMinutes} 分鐘閱讀。{siteName}編輯整理，原創內容。{" "}
+            <time dateTime="2026-10-21">2026 年 10 月 21 日</time>
           </div>
         </header>
         <div className="guides-reading-layout">
@@ -71,6 +69,7 @@ export default async function GuidePage({ params }: Props) {
             </ol>
           </nav>
           <article className="guides-article-body" aria-label={guide.title}>
+            {slug === "race-registration-checklist" && <RegistrationChecklist />}
             {guide.sections.map((section, index) => (
               <section key={section.title} id={`section-${index + 1}`} tabIndex={-1}>
                 <h2>

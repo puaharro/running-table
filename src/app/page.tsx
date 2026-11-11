@@ -24,8 +24,8 @@ export default function Home() {
       <LegacySearchRedirect />
       <header className="shell home-intro">
         <div>
-          <div className="home-kicker">香港路跑 · 賽期、資料與體驗</div>
           <h1>你嘅下一場，由呢度起跑。</h1>
+          <p>香港路跑賽期、報名資料同跑手體驗。</p>
         </div>
         <Link href="/races/">
           查看完整時間表 <Icon name="arrow" size={18} />
@@ -37,8 +37,7 @@ export default function Home() {
         <div className="shell home-block">
           <div className="home-section-head">
             <div>
-              <span className="home-kicker">02 / BEYOND THE FINISH LINE</span>
-              <h2 id="home-review-heading">賽期以外，跑過先知。</h2>
+              <h2 id="home-review-heading">跑手體驗評論</h2>
               <p>從跑手訪談了解賽道、大會執行同補給體驗，揀賽事多一個角度。</p>
             </div>
             <Link href="/ratings/">
@@ -52,18 +51,18 @@ export default function Home() {
               if (!target || !race) return null;
               return (
                 <article className="home-review-card" key={review.id}>
-                  <div className="home-review-meta">
-                    <span>編輯點評 · 跑手訪談</span>
-                    <span>
-                      {review.editionYear} 年 · {target.group}
-                    </span>
-                  </div>
                   <h3>
                     <Link href={`${raceHref(race)}#review-${review.id}`}>
                       {target.name}
                       <Icon name="arrow" size={23} />
                     </Link>
                   </h3>
+                  <div className="home-review-meta">
+                    <span>編輯點評 · 跑手訪談</span>
+                    <span>
+                      {review.editionYear} 年 · {target.group}
+                    </span>
+                  </div>
                   {review.quickTake && (
                     <p className="home-review-summary">{review.quickTake.summary}</p>
                   )}
@@ -94,8 +93,7 @@ export default function Home() {
       <section className="shell home-block home-guides" aria-labelledby="home-guide-heading">
         <div className="home-section-head">
           <div>
-            <span className="home-kicker">03 / RUN PREPARED</span>
-            <h2 id="home-guide-heading">做足準備，先好出發。</h2>
+            <h2 id="home-guide-heading">報名及選賽指南</h2>
             <p>第一場 10K，或者下一場半馬，從一份實用指南開始。</p>
           </div>
           <Link href="/guides/">
@@ -103,10 +101,9 @@ export default function Home() {
           </Link>
         </div>
         <div className="home-guide-grid">
-          {guides.map((guide, index) => (
+          {guides.map((guide) => (
             <Link className="home-guide" href={`/guides/${guide.slug}/`} key={guide.slug}>
               <div className="home-guide-top">
-                <span>0{index + 1}</span>
                 <span>
                   {guide.category} · {guide.readMinutes} 分鐘
                 </span>
@@ -122,7 +119,6 @@ export default function Home() {
       </section>
       <section className="shell home-help" aria-labelledby="home-help-heading">
         <div>
-          <span className="home-kicker">YOUR NEXT START</span>
           <h2 id="home-help-heading">揀好目標，下一步就出發。</h2>
           <p>按日期、距離同地點，搵一場啱自己嘅比賽。</p>
         </div>

@@ -14,7 +14,6 @@ export default function EditorialProcessPage() {
     <main id="main" className="content-main shell">
       <Breadcrumb items={[{ label: "體驗評級", href: "/ratings/" }, { label: "審閱及更正流程" }]} />
       <div className="page-heading">
-        <div className="eyebrow">EDITORIAL PROCESS</div>
         <h1>
           有依據，
           <br />
@@ -59,7 +58,7 @@ export default function EditorialProcessPage() {
           </ol>
           <p>收到回報不會自動改分或公開內容。處理進度由電郵回覆，請勿將私人材料放到公開 GitHub。</p>
           <Link className="text-link" href="/ratings/feedback/">
-            準備私人電郵回報 →
+            準備私人電郵回報
           </Link>
           <p>
             收件電郵：<a href={`mailto:${editorialContactEmail}`}>{editorialContactEmail}</a>

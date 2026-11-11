@@ -22,7 +22,6 @@ export default function RatingsPage() {
       <div className="shell">
         <Breadcrumb items={[{ label: "賽事體驗評級" }]} />
         <header className="ratings-heading">
-          <div className="eyebrow">NXTGO RACE EXPERIENCE</div>
           <h1>賽事體驗評級</h1>
           <p>跑過之後，先知道嘅事。閱讀指定年份及組別嘅參賽體驗。</p>
           <nav aria-label="評級頁入口">
@@ -54,7 +53,7 @@ export default function RatingsPage() {
           <details className="ratings-explainer">
             <summary>點樣睇評分？</summary>
             <p>評論按年份及組別分開，保留三項獨立評分，總評分為三項等權平均。</p>
-            <span className="eyebrow">HOW TO READ</span>
+
             <h2 id="ratings-explainer-heading">
               三個角度，<span>分開睇體驗。</span>
             </h2>
@@ -77,7 +76,7 @@ export default function RatingsPage() {
               了解評分準則及發布流程 <Icon name="arrow" size={16} />
             </a>
             <Link className="ratings-process-link" href="/ratings/process/">
-              審閱、更正及大會回應流程 →
+              審閱、更正及大會回應流程
             </Link>
           </details>
         </div>
@@ -93,11 +92,11 @@ export default function RatingsPage() {
                 </p>
               ))}
               <Link className="text-link" href="/ratings/process/">
-                審閱、更正及大會回應流程 →
+                審閱、更正及大會回應流程
               </Link>
               <p>
                 <Link className="text-link" href="/ratings/feedback/">
-                  提出更正／投訴／大會回應 →
+                  提出更正／投訴／大會回應
                 </Link>
               </p>
             </section>
@@ -144,7 +143,7 @@ export default function RatingsPage() {
                 首輪整理港珠澳半馬及渣打全馬。先記低具體經驗、年份同觀察範圍，再完成編輯審閱及發布；未有材料的年份或項目保留未評。
               </p>
               <Link className="text-link" href="/ratings/notebook/">
-                開啟參賽筆記 →
+                開啟參賽筆記
               </Link>
             </section>
             <p>
@@ -152,7 +151,7 @@ export default function RatingsPage() {
             </p>
           </RatingMethodDisclosure>
           <Link className="text-link" href="/races/">
-            返回賽事搜尋／時間表 →
+            返回賽事搜尋／時間表
           </Link>
         </div>
       </div>

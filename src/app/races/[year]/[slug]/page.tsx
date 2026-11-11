@@ -9,6 +9,7 @@ import { editorialReviews } from "@/data/editorial-reviews";
 import { reviewsForGroup } from "@/lib/editorial-reviews";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { ReturnLink } from "@/components/return-link";
+import { RaceChapterNav } from "@/components/race-chapter-nav";
 import {
   PublicRegistrationCountdown,
   RaceOverview,
@@ -42,6 +43,14 @@ export default async function RacePage({ params }: Props) {
     return reviews.current.length || reviews.historical.length;
   });
   const now = new Date().toISOString();
+  const chapters = [
+    { id: "race-about", label: "賽事概覽" },
+    { id: "registration-groups", label: "組別及報名" },
+    { id: "ratings-" + (reviewedGroups[0] ?? race.groups[0]).id, label: "參賽體驗" },
+    { id: "race-transport", label: "交通及集合" },
+    { id: "race-sources", label: "資料來源" },
+    { id: "race-changes", label: "修改紀錄" },
+  ];
   const schema = releaseSettings.indexable
     ? raceStructuredData(race, releaseSettings.origin)
     : null;
@@ -61,9 +70,6 @@ export default async function RacePage({ params }: Props) {
         <div className="race-hero">
           <div className="detail-heading">
             <div>
-              <div className="eyebrow">
-                RACE INFORMATION <span>官方來源整理</span>
-              </div>
               <h1>{race.name}</h1>
               <p className="english-title">{race.englishName}</p>
             </div>
@@ -77,8 +83,7 @@ export default async function RacePage({ params }: Props) {
             experienceLabel={reviewedGroups.length ? "參賽體驗" : "參賽體驗（未評）"}
           />
           <div className="registration-card race-official-panel">
-            <span className="eyebrow">OFFICIAL INFORMATION</span>
-            <h2>先核對，再報名。</h2>
+            <h2>官方報名資料</h2>
             <p>查看大會當屆資料，確認你嘅組別、名額渠道及付款安排。</p>
             <a
               className="button button-coral official-cta"
@@ -105,6 +110,7 @@ export default async function RacePage({ params }: Props) {
           </div>
         </details>
         <div className="detail-layout">
+          <RaceChapterNav chapters={chapters} compact />
           <article className="detail-content">
             <div className="key-facts">
               <div>
@@ -245,27 +251,7 @@ export default async function RacePage({ params }: Props) {
             <ReturnLink />
           </article>
           <aside className="detail-sidebar">
-            <nav className="race-contents" aria-label="頁內目錄">
-              <h2>頁內目錄</h2>
-              <a href="#race-about">
-                賽事概覽 <Icon name="arrow" size={16} />
-              </a>
-              <a href="#registration-groups">
-                組別及報名 <Icon name="arrow" size={16} />
-              </a>
-              <a href={"#ratings-" + (reviewedGroups[0] ?? race.groups[0]).id}>
-                參賽體驗 <Icon name="arrow" size={16} />
-              </a>
-              <a href="#race-transport">
-                交通及集合 <Icon name="arrow" size={16} />
-              </a>
-              <a href="#race-sources">
-                資料來源 <Icon name="arrow" size={16} />
-              </a>
-              <a href="#race-changes">
-                修改紀錄 <Icon name="arrow" size={16} />
-              </a>
-            </nav>
+            <RaceChapterNav chapters={chapters} />
             <div className="sidebar-note">
               <Icon name="check" />
               <h3>抽籤截止，唔等於全部渠道截止。</h3>
@@ -278,7 +264,6 @@ export default async function RacePage({ params }: Props) {
         </div>
         <section className="related-section">
           <div className="section-heading">
-            <div className="eyebrow">MAKE YOUR NEXT MOVE</div>
             <h2>幫你作決定嘅實用指南</h2>
           </div>
           <div className="guide-grid">
