@@ -287,6 +287,7 @@ export async function startManualServer({ store, reviews, content, port = 0 }) {
       throw new ReviewError(404, "找不到這個頁面。");
     } catch (error) {
       json(error instanceof ReviewError ? error.status : 500, {
+        code: error.code ?? (error.status === 409 ? "VERSION_CONFLICT" : error.status === 403 ? "FORBIDDEN" : error.status === 400 ? "INVALID_INPUT" : "REQUEST_FAILED"),
         error: error instanceof ReviewError ? error.message : "本機保存或讀取失敗，請稍後再試。",
       });
     }

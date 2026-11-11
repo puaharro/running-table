@@ -1,3 +1,5 @@
+import { ProposalService } from "./proposals.mjs";
+import { renderProposals } from "./proposal-view.mjs";
 import { materials, importMaterials, draftFromMaterials, privateBackup } from "./materials.mjs";
 import { renderMaterials } from "./views.mjs";
 import { ReviewError } from "../threads/review-store.mjs";
@@ -21,6 +23,14 @@ export async function serveContent({
       .end(JSON.stringify(body));
   const html = (body) =>
     response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }).end(body);
+  if (url.pathname === "/proposals" && request.method === "GET") {
+    html(renderProposals(content, new ProposalService(content), token));
+    return true;
+  }
+  if (url.pathname === "/api/content/proposals/decide" && request.method === "POST") {
+    json(new ProposalService(content).decide(await readBody(request)));
+    return true;
+  }
   if (request.method === "POST" && url.pathname === "/api/content/materials/legacy") {
     const input = await readBody(request);
     const batch = store?.batches().find((b) => b.id === input.batch_id);

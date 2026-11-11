@@ -71,3 +71,49 @@ npm run test:threads:http
 勾選同一賽事、年份的材料可建立未審閱草稿。草稿保存材料ID及當時文字；匯出含對應材料。舊草稿不會被新材料覆寫。標記待確認仍不等於發布批准。
 
 「建立私人備份」保存三個 SQLite 資料庫的完整快照（包含版本紀錄），及 SHA-256 manifest，存於忽略的 `.editorial-private/backups/<UUID>/`，目錄權限700、檔案600。這是本機備份，不是異地備援；請將完成的整個目錄另存私人離線位置。恢復前停止後台，先另備份當前資料，核對manifest的SHA-256及每個SQLite的 `PRAGMA integrity_check`，再將content.sqlite、materials.sqlite、reviews.sqlite分別複製到啟動時的content-db、db、review-db路徑。保留原mode，恢復不會授予發布批准。
+
+## AI 私人草稿建議（第一版）
+
+沿用現有 SQLite、材料庫及草稿版本。第一版只處理私人草稿建議，不會自動確認留言／屆次／主題、核實事實、產生評分或批准發布；原有人工研究流程保持可用。
+
+1. 啟動 `npm run content:manage`（示範：`npm run content:manage -- --demo`）。
+2. `npm run content:agent -- context` 讀取賽事、材料及目前草稿；輸出是私人資料，勿放入公開目錄或提交。示範指令另加 `--demo`。
+3. 將以下 JSON 存在 `.editorial-private/` 內，使用 context 中的真實 race_id／材料 ID。更新既有草稿時，填草稿 id 及當前 expected_revision；新增用 null／0。
+4. `npm run content:agent -- propose .editorial-private/proposal.json`。
+5. 在後台導覽「AI 建議覆核」查看目前完整版本、建議完整版本、依據原文、模型資料及 audit。輸入覆核備註，接受或拒絕。接受只保存 draft；之後仍需原有待確認及營運者完整指定版本的發布批准。
+
+```json
+{
+  "idempotency_key": "unique-task-item-attempt",
+  "agent": {
+    "provider": "your-provider",
+    "model": "your-model-version",
+    "task_version": "draft-v1",
+    "prompt_version": "prompt-v1"
+  },
+  "reason": "整理材料作私人草稿；未核實部分保留未知。",
+  "draft": {
+    "id": null,
+    "expected_revision": 0,
+    "kind": "review",
+    "race_id": "replace-with-context-race-id",
+    "year": 2026,
+    "group": "未知",
+    "title": "待覆核草稿",
+    "body": "待覆核內容",
+    "sources": "材料來源及限制",
+    "scope": "觀察範圍及未知事項",
+    "material_ids": []
+  }
+}
+```
+
+`list` 列出建議，`audit <proposal-id>` 讀取紀錄。CLI 輸出 schema_version=1，status=success/rejected；錯誤 code 包括 INVALID_INPUT、VERSION_CONFLICT、STALE_BASIS、IDEMPOTENCY_CONFLICT。模型身份是提交者提供的 metadata，不是供應商認證。
+
+每份建議不可變，保存目標與所選不可變材料的 digest；目前草稿版本改變後不可接受舊建議。材料 ID 指向當時不可變原文；新增其他材料不會自動取代舊材料或表示已重新核實。需要新依據時建立新建議，人工必須核對來源及適用範圍。
+
+相同 idempotency_key／相同內容重試回傳原建議；不同內容拒絕。接受後再次提交舊決定回 VERSION_CONFLICT，重新載入可查看既有結果。接受、草稿版本及 audit 使用同一資料庫交易，任何失敗整體回滾。拒絕不修改草稿。
+
+建議及 audit 存於原有 content SQLite 的 ai_proposals／ai_proposal_audit，會納入現有私人備份。紀錄區分 agent 提議及 local_operator 覆核，不建立人工／法律／發布批准收據。原文只作材料，不作操作指令。
+
+這是單一可信本機營運者工具：agent CLI 不提供接受／拒絕／發布命令；覆核沿用本機頁面的 Host／Origin／CSRF token。它不提供不同 OS 使用者、任意 shell agent 或共享資料庫寫入權限之間的強隔離。不要把覆核 session token 交給 worker；具有任意本機程式執行權限的 agent 仍須受宿主權限限制。遠端多使用者認證及獨立 worker credential 不在此版範圍。

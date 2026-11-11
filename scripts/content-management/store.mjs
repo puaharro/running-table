@@ -68,7 +68,7 @@ export class ContentStore {
       .all(id)
       .map(({ payload_json, ...row }) => ({ ...row, content: JSON.parse(payload_json) }));
   }
-  save(input) {
+  validateDraft(input) {
     const fields = [
       "id",
       "expected_revision",
@@ -124,7 +124,11 @@ export class ContentStore {
       ]),
     );
     payload.material_ids = [...new Set(ids)];
-    this.db.exec("BEGIN IMMEDIATE");
+    return payload;
+  }
+  save(input, { nested = false } = {}) {
+    const payload = this.validateDraft(input);
+    this.db.exec(nested ? "SAVEPOINT content_write" : "BEGIN IMMEDIATE");
     try {
       const prior = input.id ? this.get(input.id) : null;
       if ((prior?.revision ?? 0) !== input.expected_revision)
@@ -141,10 +145,10 @@ export class ContentStore {
       this.db
         .prepare("INSERT INTO content_versions VALUES(?,?,?,?,?)")
         .run(id, revision, "draft", JSON.stringify(payload), at);
-      this.db.exec("COMMIT");
+      this.db.exec(nested ? "RELEASE content_write" : "COMMIT");
       return this.get(id);
     } catch (error) {
-      this.db.exec("ROLLBACK");
+      this.db.exec(nested ? "ROLLBACK TO content_write; RELEASE content_write" : "ROLLBACK");
       throw error;
     }
   }
