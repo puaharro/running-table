@@ -1,4 +1,5 @@
 "use client";
+import { RaceShare } from "./race-share";
 import { useEffect, useState } from "react";
 import { favoritesKey, parseFavorites, toggleFavorite } from "@/lib/favorites";
 import { calendarFile, calendarItems } from "@/lib/calendar";
@@ -34,14 +35,16 @@ export function useFavorites() {
       window.removeEventListener("pageshow", refresh);
     };
   }, []);
-  function toggle(id: string) {
+  function toggle(id: string, saved?: boolean) {
     try {
-      const next = toggleFavorite(localStorage, id);
+      const next = toggleFavorite(localStorage, id, saved);
       setIds(next);
       setMessage(next.includes(id) ? "已收藏於此瀏覽器。" : "已取消收藏。");
       window.dispatchEvent(new Event(changed));
+      return next.includes(id);
     } catch {
       setMessage("未能儲存收藏；請檢查瀏覽器儲存設定。原有收藏未被覆寫。");
+      return null;
     }
   }
   return { ids, ready, message, toggle };
@@ -64,7 +67,13 @@ export function FavoriteFeedback({ saved, message }: { saved: boolean; message: 
     </span>
   );
 }
-export function FavoriteButton({ race }: { race: Pick<Race, "id" | "name"> }) {
+export function FavoriteButton({
+  race,
+  onRemove,
+}: {
+  race: Pick<Race, "id" | "name">;
+  onRemove?: (keyboard: boolean) => void;
+}) {
   const { ids, ready, message, toggle } = useFavorites();
   const saved = ids.includes(race.id);
   return (
@@ -75,7 +84,9 @@ export function FavoriteButton({ race }: { race: Pick<Race, "id" | "name"> }) {
         disabled={!ready}
         aria-pressed={saved}
         aria-label={`${saved ? "取消收藏" : "收藏"}：${race.name}`}
-        onClick={() => toggle(race.id)}
+        onClick={(event) => {
+          if (toggle(race.id) === false) onRemove?.(event.detail === 0);
+        }}
       >
         <span
           className="favorite-icon"
@@ -129,6 +140,7 @@ export function RaceSaveActions({ race, initialNow }: { race: Race; initialNow: 
   return (
     <div className="race-save-actions">
       <FavoriteButton race={race} />
+      <RaceShare name={race.name} href={raceHref(race)} />
       <details>
         <summary>加入日曆</summary>
         <div className="calendar-download">

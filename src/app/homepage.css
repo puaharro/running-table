@@ -200,7 +200,7 @@
   font-size: 12px;
 }
 .home-agenda {
-  --agenda-date-width: 88px;
+  --agenda-date-width: 112px;
   background: linear-gradient(var(--home-line), var(--home-line)) var(--agenda-date-width) center /
     1px 100% no-repeat;
   list-style: none;
@@ -244,9 +244,10 @@
 .home-agenda time strong {
   display: block;
   color: var(--home-action);
-  font-size: 34px;
-  font-weight: 600;
-  line-height: 1.1;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.04em;
 }
@@ -793,21 +794,18 @@
     padding-block: var(--space-5);
   }
   .home-agenda {
-    --agenda-date-width: 61px;
+    --agenda-date-width: 86px;
   }
   .home-agenda time {
     padding-right: var(--space-3);
   }
   .home-agenda time strong {
-    font-size: 30px;
+    font-size: 14px;
   }
   .home-agenda time > span {
     display: grid;
     gap: 2px;
     font-size: 11px;
-  }
-  .home-agenda-date-separator {
-    display: none;
   }
   .home-agenda time::after {
     top: 16.5px;

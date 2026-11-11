@@ -94,6 +94,21 @@ export function assertCatalog(input: unknown): asserts input is Race[] {
         fail(race.id, "invalid or duplicate source");
       sourceIds.add(source.id);
     }
+    if (race.announcement !== undefined) {
+      const notice = race.announcement;
+      if (
+        !notice ||
+        !["postponed", "cancelled", "venue-change"].includes(notice.kind) ||
+        (notice.kind !== "venue-change" && notice.kind !== race.status) ||
+        typeof notice.summary !== "string" ||
+        !notice.summary.trim() ||
+        !race.sources!.some(
+          (source) => source.id === notice.sourceId && source.fields.includes("announcement"),
+        )
+      ) {
+        fail(race.id, "race announcement requires matching status and verified source");
+      }
+    }
     if (race.enquiryLinks !== undefined) {
       if (!Array.isArray(race.enquiryLinks)) fail(race.id, "invalid enquiry links");
       const enquiryIds = new Set<string>();

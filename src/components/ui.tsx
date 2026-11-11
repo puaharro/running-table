@@ -66,7 +66,7 @@ export function Icon({
     </svg>
   );
 }
-export function Header() {
+export function Header({ quickNavigation }: { quickNavigation: React.ReactNode }) {
   return (
     <>
       <a className="skip-link" href="#main">
@@ -86,7 +86,7 @@ export function Header() {
             <span className="brand-wordmark">{siteName}</span>
           </Link>
           <SiteNavigation />
-          <span className="header-note">香港路跑 · 一站掌握</span>
+          {quickNavigation}
         </div>
       </header>
     </>

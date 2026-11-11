@@ -9,6 +9,9 @@ import { editorialReviews } from "@/data/editorial-reviews";
 import { reviewsForGroup } from "@/lib/editorial-reviews";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { ReturnLink } from "@/components/return-link";
+import { RaceAnnouncement, RaceDayInformation } from "@/components/race-day-information";
+import { RaceDayCard } from "@/components/race-day-card";
+import { RegistrationTimeline } from "@/components/registration-timeline";
 import { RaceChapterNav } from "@/components/race-chapter-nav";
 import {
   PublicRegistrationCountdown,
@@ -63,10 +66,11 @@ export default async function RacePage({ params }: Props) {
             dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
           />
         )}
-        <ReturnLink />
+        <ReturnLink compactOnMobile />
         <Breadcrumb
           items={[{ label: "賽事搜尋／時間表", href: "/races/" }, { label: race.name }]}
         />
+        <RaceAnnouncement race={race} />
         <div className="race-hero">
           <div className="detail-heading">
             <div>
@@ -124,6 +128,7 @@ export default async function RacePage({ params }: Props) {
                 <strong>{race.organizer}</strong>
               </div>
             </div>
+            <RaceDayCard race={race} />
             <section id="race-about" tabIndex={-1}>
               <h2>賽事概覽</h2>
               <p>{race.summary}</p>
@@ -152,6 +157,7 @@ export default async function RacePage({ params }: Props) {
                     </a>
                   ))}
                 </nav>
+                <RegistrationTimeline race={race} initialNow={now} />
                 <details className="registration-comparison">
                   <summary>比較各組報名概況</summary>
                   <RegistrationSummary race={race} initialNow={now} />
@@ -178,7 +184,7 @@ export default async function RacePage({ params }: Props) {
             )}
             <section id="race-transport" tabIndex={-1}>
               <h2>交通及集合安排</h2>
-              <p>{race.transport}</p>
+              <RaceDayInformation race={race} />
             </section>
             <section id="race-sources" tabIndex={-1}>
               <h2>資料來源及核實範圍</h2>
@@ -203,6 +209,7 @@ export default async function RacePage({ params }: Props) {
                               venue: "地點",
                               organizer: "主辦／統籌",
                               transport: "交通",
+                              announcement: "賽事變更公告",
                               "groups.distanceKm": "組別距離",
                               "groups.price": "費用／最低籌款額",
                               "groups.startTime": "組別起跑時間",

@@ -26,6 +26,17 @@ describe("real catalog publication and provenance", () => {
         : ["date"];
     expect(() => assertCatalog(data)).toThrow("field evidence");
   });
+  it("requires a verified source and matching status before accepting a race announcement", () => {
+    const data = catalog();
+    const race = data[0];
+    const source = race.sources![0];
+    race.announcement = { kind: "cancelled", summary: "測試公告", sourceId: source.id };
+    expect(() => assertCatalog(data)).toThrow("race announcement");
+    race.status = "cancelled";
+    expect(() => assertCatalog(data)).toThrow("race announcement");
+    source.fields.push("announcement");
+    expect(() => assertCatalog(data)).not.toThrow();
+  });
   it("publishes source-backed real events and no fixtures", () => {
     const data = catalog();
     expect(publishedRaces(data)).toHaveLength(data.length);

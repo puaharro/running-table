@@ -68,21 +68,6 @@ function DetailedReview({ review }: { review: EditorialReview }) {
           );
         })}
       </dl>
-      <details>
-        <summary>原文及依據</summary>
-        {review.evidence.map((e) => (
-          <section key={e.id} id={`review-${review.id}-evidence-${e.id}`}>
-            <p>
-              {evidenceLabels[e.kind]} · {e.editionYear}：{e.description}
-            </p>
-            {e.url && (
-              <a href={e.url} target="_blank" rel="noopener noreferrer">
-                查看材料 ↗
-              </a>
-            )}
-          </section>
-        ))}
-      </details>
       {review.courseNotes && (
         <p>賽道挑戰特性：{review.courseNotes}（獨立描述，不計入體驗分數。）</p>
       )}
@@ -170,6 +155,21 @@ export function EditorialReviewCard({ review }: { review: EditorialReview }) {
       <p className="review-summary">
         {review.quickTake?.summary ?? "此篇未有重點摘要，可展開查看完整評論。"}
       </p>
+      <details className="review-full review-evidence">
+        <summary>原文及依據</summary>
+        {review.evidence.map((e) => (
+          <section key={e.id} id={`review-${review.id}-evidence-${e.id}`}>
+            <p>
+              {evidenceLabels[e.kind]} · {e.editionYear}：{e.description}
+            </p>
+            {e.url && (
+              <a href={e.url} target="_blank" rel="noopener noreferrer">
+                查看材料 ↗
+              </a>
+            )}
+          </section>
+        ))}
+      </details>
       <details className="review-full">
         <summary>查看詳細評論</summary>
         {review.quickTake && (

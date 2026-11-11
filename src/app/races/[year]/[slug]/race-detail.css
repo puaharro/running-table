@@ -1057,3 +1057,213 @@
   font-size: 14px;
   color: var(--home-action);
 }
+
+.race-announcement {
+  margin-block: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border-control);
+  border-inline-start: 4px solid var(--urgent-text);
+  border-radius: var(--radius-control);
+  background: var(--urgent-surface);
+  color: var(--text-primary);
+}
+.race-announcement p {
+  margin: var(--space-2) 0;
+}
+.race-announcement > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px var(--space-4);
+  align-items: center;
+  font-size: var(--text-sm);
+}
+.race-start-points {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+.race-start-points li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control);
+  background: var(--action-tint);
+}
+.race-start-points svg {
+  margin-top: 3px;
+  color: var(--action-primary);
+}
+.race-start-points small {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--text-secondary);
+}
+.race-start-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+}
+.race-start-links a,
+.race-announcement a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.return-link-short {
+  display: none;
+}
+@media (max-width: 767px) {
+  .return-link-responsive .return-link-full {
+    display: none;
+  }
+  .return-link-responsive .return-link-short {
+    display: inline;
+  }
+}
+
+.race-day-card {
+  max-width: 580px;
+  background: var(--surface-card);
+  border: 1px solid var(--home-line);
+  border-radius: var(--radius-card);
+  overflow-wrap: anywhere;
+}
+.race-day-card-heading,
+.race-day-card-groups,
+.race-day-card-footer {
+  padding-inline: clamp(16px, 4vw, 26px);
+}
+.race-day-card-heading {
+  padding-block: var(--space-5) var(--space-4);
+  border-block-start: 4px solid var(--home-action);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+}
+.race-day-card-heading h2 {
+  margin: 0 0 var(--space-2);
+  color: var(--home-action);
+  font-size: 14px;
+}
+.race-day-card-heading p {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(17px, 2.4vw, 22px);
+  line-height: 1.5;
+}
+.race-day-card-heading p + p {
+  margin-top: var(--space-1);
+  font-size: 15px;
+}
+.race-day-card-heading .race-day-card-notice {
+  color: var(--urgent-text);
+}
+.race-day-card-groups {
+  margin: 0;
+  padding-block: var(--space-2);
+  background: var(--home-tint);
+  border-block: 1px dashed var(--home-control);
+}
+.race-day-card-groups > div {
+  display: grid;
+  grid-template-columns: minmax(5rem, 1fr) minmax(0, 2fr);
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+}
+.race-day-card-groups > div + div {
+  border-top: 1px solid var(--home-line);
+}
+.race-day-card-groups dt {
+  font-weight: 700;
+}
+.race-day-card-groups dd {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+}
+.race-day-card-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.registration-timeline {
+  margin-block: var(--space-4) var(--space-6);
+  padding: clamp(14px, 4vw, 24px);
+  border: 1px solid var(--home-line);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  overflow-wrap: anywhere;
+}
+.registration-timeline h3,
+.registration-timeline p {
+  margin: 0 0 var(--space-3);
+}
+.registration-timeline-next {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  background: var(--home-tint);
+  border-inline-start: 3px solid var(--home-action);
+}
+.registration-timeline-next > span,
+.registration-timeline-next small,
+.registration-timeline li > span,
+.registration-timeline li > time {
+  color: var(--home-muted);
+  font-size: 14px;
+}
+.registration-timeline-details {
+  margin-top: var(--space-2);
+}
+.registration-timeline-details summary {
+  min-height: 44px;
+  padding-block: var(--space-3);
+  color: var(--home-action);
+  font-weight: 650;
+  cursor: pointer;
+}
+.registration-timeline-details ol {
+  list-style: none;
+  margin: var(--space-2) 0 0 var(--space-2);
+  padding: 0 0 0 var(--space-4);
+  border-inline-start: 1px solid var(--home-control);
+}
+.registration-timeline-details li {
+  display: grid;
+  position: relative;
+  padding-bottom: var(--space-3);
+}
+.registration-timeline-details li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -21px;
+  top: 0.45em;
+  width: 9px;
+  height: 9px;
+  background: var(--surface-card);
+  border: 1px solid var(--home-action);
+  border-radius: 50%;
+}
+.registration-timeline-details li[data-next="true"]::before {
+  background: var(--home-action);
+}
+.registration-timeline-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+}
+.registration-timeline-sources a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 13px;
+}

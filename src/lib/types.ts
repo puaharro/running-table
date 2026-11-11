@@ -90,6 +90,11 @@ export interface Race {
   summary: string;
   highlights: string[];
   transport: string;
+  announcement?: {
+    kind: "postponed" | "cancelled" | "venue-change";
+    summary: string;
+    sourceId: string;
+  };
   groups: RaceGroup[];
   enquiryLinks?: {
     id: string;

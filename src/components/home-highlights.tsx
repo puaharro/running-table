@@ -83,12 +83,10 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
                 <li key={race.id}>
                   <Link href={raceHref(race)}>
                     <time dateTime={race.date}>
-                      <strong>{race.date.slice(8)}</strong>
-                      <span>
-                        <span>{Number(race.date.slice(5, 7))}月</span>
-                        <span className="home-agenda-date-separator"> · </span>
-                        <span>{race.date.slice(0, 4)}</span>
-                      </span>
+                      <strong>
+                        {Number(race.date.slice(5, 7))}月{Number(race.date.slice(8))}日
+                      </strong>
+                      <span>{race.date.slice(0, 4)} 年</span>
                     </time>
                     <div>
                       <h3>{race.name}</h3>

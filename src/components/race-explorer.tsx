@@ -23,6 +23,7 @@ import { listDeadline, listRegistration } from "@/lib/list-registration";
 import { filteredRaceHref, orderSavedResults, paginateResults, pastResult } from "@/lib/list-view";
 import { resultsEntry, resultsHref } from "@/lib/results-location";
 import { FavoriteButton, useFavorites } from "./race-save";
+import { RaceBackToSearch } from "./race-back-to-search";
 import { RaceOverallRating } from "./race-overall-rating";
 import type { EditorialReview } from "@/lib/editorial-reviews";
 import { distanceOptions, regions, type Filters, type Race } from "@/lib/types";
@@ -89,6 +90,27 @@ export function RaceExplorer({
   const [copyState, setCopyState] = useState<"copied" | "manual" | null>(null);
   const shareRequest = useRef(0);
   const resultsCount = useRef<HTMLSpanElement>(null);
+  const searchBar = useRef<HTMLDivElement>(null);
+  const undoButton = useRef<HTMLButtonElement>(null);
+  const [removed, setRemoved] = useState<{ id: string; name: string; keyboard: boolean } | null>(
+    null,
+  );
+  const [undoPaused, setUndoPaused] = useState(false);
+  const [undoError, setUndoError] = useState(false);
+  const [undoMessage, setUndoMessage] = useState("");
+  useEffect(() => {
+    if (removed?.keyboard) undoButton.current?.focus();
+  }, [removed]);
+  useEffect(() => {
+    if (!removed || undoPaused || undoError) return;
+    const timer = window.setTimeout(() => setRemoved(null), 8000);
+    return () => window.clearTimeout(timer);
+  }, [removed, undoPaused, undoError]);
+  function dismissUndo(restoreFocus: boolean) {
+    if (restoreFocus) resultsCount.current?.focus();
+    setRemoved(null);
+  }
+
   useEffect(() => {
     if (copyState !== "copied") return;
     const timer = window.setTimeout(() => setCopyState(null), 2400);
@@ -325,7 +347,7 @@ export function RaceExplorer({
       <header className="section-heading explorer-heading">
         <h1 id="explorer-heading">香港路跑時間表</h1>
       </header>
-      <div className="calendar-search-bar">
+      <div className="calendar-search-bar" ref={searchBar}>
         <label className="calendar-keyword">
           <span>搜尋賽事</span>
           <span className="search-box">
@@ -751,7 +773,19 @@ export function RaceExplorer({
                           )}
                         </div>
                         <div className="calendar-card-actions">
-                          <FavoriteButton race={race} />
+                          <FavoriteButton
+                            race={race}
+                            onRemove={
+                              savedOnly
+                                ? (keyboard) => {
+                                    setUndoPaused(false);
+                                    setUndoError(false);
+                                    setUndoMessage(`已移除收藏：${race.name}`);
+                                    setRemoved({ id: race.id, name: race.name, keyboard });
+                                  }
+                                : undefined
+                            }
+                          />
                           <div className="calendar-card-detail">
                             <Link
                               className="button button-coral calendar-race-detail"
@@ -852,6 +886,56 @@ export function RaceExplorer({
             </div>
           </div>
         </div>
+      </div>
+      <span className="sr-only" role="status">
+        {undoMessage}
+      </span>
+      <div className="calendar-floating">
+        <RaceBackToSearch searchBar={searchBar} />
+        {removed && (
+          <div
+            className="calendar-undo"
+            onFocus={() => setUndoPaused(true)}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setUndoPaused(false);
+            }}
+            onPointerEnter={(event) => {
+              if (event.pointerType === "mouse") setUndoPaused(true);
+            }}
+            onPointerLeave={(event) => {
+              if (
+                event.pointerType === "mouse" &&
+                !event.currentTarget.contains(document.activeElement)
+              ) {
+                setUndoPaused(false);
+              }
+            }}
+          >
+            <span>{undoError ? "未能復原收藏，請再試。" : `已移除收藏：${removed.name}`}</span>
+            <button
+              type="button"
+              ref={undoButton}
+              onClick={(event) => {
+                if (favorites.toggle(removed.id, true) !== true) {
+                  setUndoError(true);
+                  setUndoMessage("未能復原收藏，請再試。");
+                  return;
+                }
+                setUndoMessage(`已復原收藏：${removed.name}`);
+                dismissUndo(event.detail === 0);
+              }}
+            >
+              復原
+            </button>
+            <button
+              type="button"
+              aria-label="關閉收藏提示"
+              onClick={(event) => dismissUndo(event.detail === 0)}
+            >
+              ×
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

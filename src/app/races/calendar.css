@@ -790,3 +790,78 @@
   margin: var(--space-6) 0 0;
   color: var(--home-ink);
 }
+
+.calendar-floating {
+  position: fixed;
+  z-index: 20;
+  inset-inline-end: max(16px, env(safe-area-inset-right));
+  inset-block-end: max(16px, env(safe-area-inset-bottom));
+  display: grid;
+  justify-items: end;
+  gap: 10px;
+  max-inline-size: min(420px, calc(100% - 32px));
+  pointer-events: none;
+}
+.calendar-floating > * {
+  pointer-events: auto;
+}
+.calendar-undo {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 6px 4px 14px;
+  background: var(--surface-dark);
+  color: var(--text-on-dark);
+  border-radius: var(--radius-card);
+  box-shadow: 0 8px 24px #0002;
+  font-size: var(--text-sm);
+}
+.calendar-undo > span {
+  overflow-wrap: anywhere;
+}
+.calendar-undo button {
+  min-width: 44px;
+  min-height: 44px;
+  flex: none;
+  padding: 0 6px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.calendar-undo button:is(:hover, :focus-visible) {
+  background: #fff2;
+}
+.calendar-undo button:focus-visible {
+  outline-color: currentColor;
+}
+.calendar-back-to-search {
+  display: none;
+}
+@media (max-width: 767px) {
+  .calendar-search-bar {
+    scroll-margin-top: 12px;
+  }
+  .calendar-back-to-search:not([hidden]) {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    background:
+      linear-gradient(var(--surface-card), var(--surface-card)) padding-box,
+      conic-gradient(var(--action-primary) var(--calendar-progress, 0%), var(--border-subtle) 0)
+        border-box;
+    color: var(--action-primary);
+    box-shadow: 0 4px 16px #0002;
+    cursor: pointer;
+  }
+  .calendar-back-to-search svg {
+    transform: rotate(-90deg);
+  }
+}

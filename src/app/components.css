@@ -1773,3 +1773,200 @@ time,
   font-size: 0.875rem;
   color: var(--home-action);
 }
+
+/* Shared dialogs use the same surfaces and controls as the calendar. */
+.site-quick-navigation {
+  flex: none;
+}
+.quick-navigation-trigger.button {
+  white-space: nowrap;
+  min-height: 44px;
+  padding-inline: 12px;
+  font-size: var(--text-sm);
+}
+.nxtgo-dialog {
+  box-sizing: border-box;
+  width: min(560px, calc(100% - 24px));
+  max-height: min(740px, calc(100dvh - 24px));
+  padding: clamp(14px, 4vw, 24px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  color: var(--text-primary);
+  box-shadow: 0 16px 48px #0003;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.nxtgo-dialog::backdrop {
+  background: #101b24a6;
+}
+.nxtgo-dialog-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.nxtgo-dialog-heading h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.nxtgo-dialog-heading button {
+  flex-shrink: 0;
+}
+.quick-navigation-dialog input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-control);
+  background: var(--surface-card);
+  color: inherit;
+  padding-inline: 12px;
+  font: inherit;
+}
+.quick-navigation-results {
+  padding: 0;
+  margin: var(--space-3) 0 0;
+  list-style: none;
+}
+.quick-navigation-results li + li {
+  border-top: 1px solid var(--border-subtle);
+}
+.quick-navigation-results a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 48px;
+  padding: 8px;
+  border-radius: var(--radius-control);
+}
+.quick-navigation-results a:is(:hover, :focus-visible) {
+  background: var(--action-tint);
+}
+.quick-navigation-results small {
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.review-evidence section {
+  border-inline-start: 2px solid var(--border-control);
+  margin-block: var(--space-3);
+  padding-inline-start: var(--space-3);
+  scroll-margin-top: 20px;
+}
+.review-evidence section:target {
+  border-color: var(--action-primary);
+  background: var(--action-tint);
+}
+
+@media (max-width: 767px) {
+  .site-quick-navigation {
+    order: -1;
+    margin-inline-start: auto;
+  }
+  .site-header .brand {
+    order: -2;
+  }
+}
+
+@media (768px <= width <= 1050px) {
+  .site-header nav {
+    gap: clamp(12px, 2vw, 24px);
+  }
+  .site-header .nav-label-full {
+    display: none;
+  }
+  .site-header .nav-label-compact {
+    display: inline;
+  }
+}
+
+.race-dialog-name {
+  margin: 0 0 var(--space-4);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.race-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+.race-dialog button,
+.race-dialog-actions a {
+  min-height: 44px;
+}
+.race-share-url {
+  display: grid;
+  gap: var(--space-2);
+  font-size: 14px;
+}
+.race-share-url input,
+.not-found-search input[type="search"] {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  color: var(--text-primary);
+  background: var(--surface-card);
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-control);
+  font: inherit;
+}
+.race-share-status {
+  min-height: 1.5em;
+  margin: var(--space-3) 0 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+@media (max-width: 600px) {
+  .race-dialog {
+    inset: auto 0 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding-bottom: max(var(--space-5), env(safe-area-inset-bottom));
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+  }
+}
+
+.not-found .not-found-signpost {
+  max-width: 640px;
+  padding: clamp(20px, 5vw, 52px);
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-inline-start: 4px solid var(--home-action);
+  border-radius: var(--radius-card);
+}
+.not-found-code {
+  color: var(--home-action);
+  font-family: var(--font-brand);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.not-found .not-found-signpost h1 {
+  margin-block: var(--space-2);
+  font-size: clamp(26px, 5vw, 38px);
+}
+.not-found-search {
+  display: grid;
+  gap: var(--space-2);
+  margin-block: var(--space-5);
+}
+.not-found-search label {
+  font-size: 14px;
+  font-weight: 650;
+}
+.not-found-search > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2);
+}
+.not-found-signpost .button {
+  min-height: 44px;
+  white-space: nowrap;
+}

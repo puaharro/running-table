@@ -59,6 +59,17 @@ it("toggles durable IDs without replacing other favorites, deduplicates old data
   expect(value).toBe("broken JSON");
   expect(() => parseFavorites('{"race-one":true}')).toThrow();
 });
+it("restores a favorite without toggling it off if another tab already restored it", () => {
+  let value = '["race-two"]';
+  const store = {
+    getItem: () => value,
+    setItem: (_key: string, next: string) => {
+      value = next;
+    },
+  };
+  expect(toggleFavorite(store, "race-one", true)).toEqual(["race-two", "race-one"]);
+  expect(toggleFavorite(store, "race-one", true)).toEqual(["race-two", "race-one"]);
+});
 it("requires matching field provenance for deadlines, without inventing availability or using payment/result dates", () => {
   const race = fixture();
   expect(calendarItems(race, now).filter((i) => i.timed)).toHaveLength(1);

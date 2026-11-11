@@ -10,9 +10,16 @@ export function parseFavorites(value: string | null): string[] {
     throw new Error("收藏資料格式無效");
   return [...new Set(parsed)];
 }
-export function toggleFavorite(storage: Pick<Storage, "getItem" | "setItem">, id: string) {
+export function toggleFavorite(
+  storage: Pick<Storage, "getItem" | "setItem">,
+  id: string,
+  saved?: boolean,
+) {
   const ids = parseFavorites(storage.getItem(favoritesKey));
-  const next = ids.includes(id) ? ids.filter((saved) => saved !== id) : [...ids, id];
+  const wasSaved = ids.includes(id);
+  const shouldSave = saved ?? !wasSaved;
+  if (shouldSave === wasSaved) return ids;
+  const next = shouldSave ? [...ids, id] : ids.filter((favorite) => favorite !== id);
   // Validate before writing; a failed write must never be reported as saved.
   parseFavorites(JSON.stringify(next));
   storage.setItem(favoritesKey, JSON.stringify(next));

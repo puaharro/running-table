@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { safeResultsHref } from "@/lib/results-location";
-export function ReturnLink() {
+export function ReturnLink({ compactOnMobile = false }: { compactOnMobile?: boolean }) {
   const [href, setHref] = useState("/races/#race-list");
   useEffect(() => {
     try {
@@ -13,8 +13,18 @@ export function ReturnLink() {
     }
   }, []);
   return (
-    <Link className="text-link return-link" href={href}>
-      ← 返回賽事搜尋／時間表
+    <Link
+      className={`text-link return-link${compactOnMobile ? " return-link-responsive" : ""}`}
+      href={href}
+    >
+      {compactOnMobile ? (
+        <>
+          <span className="return-link-full">← 返回賽事搜尋／時間表</span>
+          <span className="return-link-short">← 返回時間表</span>
+        </>
+      ) : (
+        "← 返回賽事搜尋／時間表"
+      )}
     </Link>
   );
 }

@@ -14,6 +14,7 @@ const mime = {
   ".ico": "image/x-icon",
   ".txt": "text/plain; charset=utf-8",
   ".xml": "application/xml; charset=utf-8",
+  ".pdf": "application/pdf",
   ".woff2": "font/woff2",
 };
 const server = createServer((req, res) => {
