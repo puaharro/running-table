@@ -1,3 +1,4 @@
+import { initWorkflow, privateRaces } from "./workflow.mjs";
 import { initMaterials, materials } from "./materials.mjs";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, mkdirSync } from "node:fs";
@@ -33,8 +34,12 @@ export class ContentStore {
       throw new ReviewError(400, "示範與真實內容需要獨立資料庫。");
     }
     this.mode = mode;
-    this.catalog = catalog;
+    this.baseCatalog = catalog;
     initMaterials(this);
+    initWorkflow(this);
+  }
+  get catalog() {
+    return [...this.baseCatalog, ...privateRaces(this)];
   }
   close() {
     this.db.close();

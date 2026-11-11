@@ -15,3 +15,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Keep original interviews, evidence, complaints and pending reviews in ignored `.editorial-private/`, outside public assets and source imports. Do not commit these files or include them in deployment archives.
 - Only approved reviews belong in `src/data/editorial-reviews.json`. A changed score, wording, evidence, response or rule requires renewed approval. Run `npm run check:editorial` before publishing.
 - Feedback forms prepare private email only; do not send messages or publish responses without user authorization. Never claim a submission was received when no backend receipt exists.
+
+## Race research coverage
+
+- Follow every source-search category configured in `scripts/research/sources.mjs` for each race research task. Do not silently skip a platform or treat search snippets as a completed original-source review.
+- When a source requires login, ask the owner to complete login in the browser, then resume that same source. Never request passwords, cookies or tokens. Continue independent source checks while waiting, but keep the blocked source pending.
+- Record each category's query, actual review time, links inspected, results and access limitations. Distinguish not searched, awaiting login, searched with no relevant result, inspected original sources, and inaccessible after an attempted review.
+- Do not describe research as complete while a source remains pending. If access cannot be resolved, report that specific limitation; an empty or inaccessible platform is not evidence that runners expressed no opinion.

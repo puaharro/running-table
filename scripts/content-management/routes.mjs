@@ -1,3 +1,10 @@
+import { Workflow } from "./workflow.mjs";
+import {
+  renderRaceEditor,
+  renderProgress,
+  renderWebsite,
+  renderWebsiteIndex,
+} from "./workflow-view.mjs";
 import { ProposalService } from "./proposals.mjs";
 import { renderProposals } from "./proposal-view.mjs";
 import { materials, importMaterials, draftFromMaterials, privateBackup } from "./materials.mjs";
@@ -23,6 +30,50 @@ export async function serveContent({
       .end(JSON.stringify(body));
   const html = (body) =>
     response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }).end(body);
+  const workflow = new Workflow(content);
+  if (request.method === "POST" && url.pathname.startsWith("/api/content/workflow/")) {
+    const input = await readBody(request, 262144);
+    if (url.pathname === "/api/content/workflow/save") json(workflow.save(input));
+    else if (url.pathname === "/api/content/workflow/confirm") json(workflow.confirm(input));
+    else if (url.pathname === "/api/content/workflow/export") {
+      if (
+        !input ||
+        Object.keys(input).sort().join() !== "expected_revision,id" ||
+        !Number.isInteger(input.expected_revision)
+      )
+        throw new ReviewError(400, "請指定版本。");
+      const bundle = workflow.export(input.id, input.expected_revision);
+      response.setHeader("Content-Disposition", 'attachment; filename="confirmed-content.json"');
+      json(bundle);
+    } else return false;
+    return true;
+  }
+  if (request.method === "GET" && url.pathname === "/race-editor") {
+    html(renderRaceEditor(content, token, url.searchParams.get("id")));
+    return true;
+  }
+  if (request.method === "GET" && url.pathname === "/website-copies") {
+    html(renderWebsiteIndex(content, token));
+    return true;
+  }
+  if (request.method === "GET" && ["/research-progress", "/website-copy"].includes(url.pathname)) {
+    const id = url.searchParams.get("id"),
+      raceId = url.searchParams.get("race");
+    if (url.pathname === "/website-copy" && id) {
+      html(renderWebsite(content, token, { id }));
+      return true;
+    }
+    const race = workflow.race(raceId);
+    const year = Number(url.searchParams.get("year") || race.year || race.date.slice(0, 4));
+    if (!Number.isInteger(year) || year < 1900 || year > 2200)
+      throw new ReviewError(400, "請填有效年份。");
+    html(
+      url.pathname === "/research-progress"
+        ? renderProgress(content, token, raceId, year)
+        : renderWebsite(content, token, { raceId, year, draftId: url.searchParams.get("draft") }),
+    );
+    return true;
+  }
   if (url.pathname === "/proposals" && request.method === "GET") {
     html(renderProposals(content, new ProposalService(content), token));
     return true;

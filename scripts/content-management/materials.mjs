@@ -52,7 +52,7 @@ export function importMaterials(content, input) {
     if (
       !r.text.trim() ||
       !r.scope.trim() ||
-      !["course", "organization", "supplies", "other"].includes(r.topic)
+      !["course", "organization", "supplies", "baggage", "transport", "other"].includes(r.topic)
     )
       throw new ReviewError(400, "請填原文、觀察範圍及主題。");
     if (
