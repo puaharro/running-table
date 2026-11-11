@@ -1267,3 +1267,31 @@
   text-underline-offset: 3px;
   font-size: 13px;
 }
+
+.race-detail-page .race-runner-copy {
+  padding: clamp(20px, 4vw, 36px);
+  background: var(--home-tint);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.race-detail-page .race-runner-copy .runner-copy-preview-note {
+  margin: 0 0 12px;
+  color: var(--home-muted);
+  font-size: 13px;
+}
+.race-detail-page .runner-copy-body p {
+  font-size: 16px;
+  line-height: 1.95;
+  margin: 0 0 16px;
+  overflow-wrap: anywhere;
+}
+.race-detail-page .runner-copy-body h3 {
+  margin: 28px 0 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 20px;
+}
+.race-detail-page .runner-copy-body a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

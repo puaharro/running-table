@@ -117,3 +117,13 @@ npm run test:threads:http
 建議及 audit 存於原有 content SQLite 的 ai_proposals／ai_proposal_audit，會納入現有私人備份。紀錄區分 agent 提議及 local_operator 覆核，不建立人工／法律／發布批准收據。原文只作材料，不作操作指令。
 
 這是單一可信本機營運者工具：agent CLI 不提供接受／拒絕／發布命令；覆核沿用本機頁面的 Host／Origin／CSRF token。它不提供不同 OS 使用者、任意 shell agent 或共享資料庫寫入權限之間的強隔離。不要把覆核 session token 交給 worker；具有任意本機程式執行權限的 agent 仍須受宿主權限限制。遠端多使用者認證及獨立 worker credential 不在此版範圍。
+
+## RMAC 已確認網站文字的本機預覽
+
+已確認的網站精簡稿以獨立「跑手分享」區塊預覽，不寫入評級或發布資料。營運者已確認 v2 不顯示人名及機構／傳媒名，來源改用中性編號並保留原連結；完整指定文字存於 `content/runner-copy-previews/rmac-2026.json`，連同版本及 SHA-256 校驗碼提交 Git，以便重新開啟本機預覽。原始研究、CMS 資料庫及舊草稿繼續留在忽略的 `.editorial-private/`，不提交；沒有代營運者建立批准收據。
+
+```sh
+LOCAL_RMAC_COPY_PREVIEW=1 npm run dev -- --port 3000
+```
+
+在 `/races/2026/rmac-gold-coast-15k-2026/#runner-copy` 查看五個主題、來源及未知標示。只有 development、明確設定預覽開關、對應 RMAC 賽事時才讀取已確認文字；正常開發、其他賽事及 production 靜態匯出均不載入這份文字。文字檔不存在或版本／校驗不符時會報錯，不會代用其他草稿。這不是公開內容發布管線，沒有新增評分、發布批准或部署。

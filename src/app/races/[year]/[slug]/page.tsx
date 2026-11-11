@@ -1,4 +1,6 @@
 import "./race-detail.css";
+import { localRunnerCopy } from "@/lib/local-runner-copy";
+import { RaceRunnerCopyPreview } from "@/components/race-runner-copy-preview";
 import { UnscopedRunnerOpinions } from "@/components/runner-opinions";
 import { RaceSaveActions } from "@/components/race-save";
 import { notFound } from "next/navigation";
@@ -45,11 +47,15 @@ export default async function RacePage({ params }: Props) {
     const reviews = reviewsForGroup(race, group, editorialReviews);
     return reviews.current.length || reviews.historical.length;
   });
+  const runnerCopy = localRunnerCopy(race.id);
+  const experienceId = runnerCopy
+    ? "runner-copy"
+    : "ratings-" + (reviewedGroups[0] ?? race.groups[0]).id;
   const now = new Date().toISOString();
   const chapters = [
     { id: "race-about", label: "賽事概覽" },
     { id: "registration-groups", label: "組別及報名" },
-    { id: "ratings-" + (reviewedGroups[0] ?? race.groups[0]).id, label: "參賽體驗" },
+    { id: experienceId, label: runnerCopy ? "跑手分享" : "參賽體驗" },
     { id: "race-transport", label: "交通及集合" },
     { id: "race-sources", label: "資料來源" },
     { id: "race-changes", label: "修改紀錄" },
@@ -83,8 +89,14 @@ export default async function RacePage({ params }: Props) {
           <RaceOverview
             race={race}
             initialNow={now}
-            experienceHref={"#ratings-" + (reviewedGroups[0] ?? race.groups[0]).id}
-            experienceLabel={reviewedGroups.length ? "參賽體驗" : "參賽體驗（未評）"}
+            experienceHref={"#" + experienceId}
+            experienceLabel={
+              runnerCopy
+                ? "跑手分享（無評分）"
+                : reviewedGroups.length
+                  ? "參賽體驗"
+                  : "參賽體驗（未評）"
+            }
           />
           <div className="registration-card race-official-panel">
             <h2>官方報名資料</h2>
@@ -165,6 +177,7 @@ export default async function RacePage({ params }: Props) {
                 <RegistrationGroups race={race} initialNow={now} />
               </div>
             </section>
+            {runnerCopy && <RaceRunnerCopyPreview copy={runnerCopy} />}
             <UnscopedRunnerOpinions race={race} />
             <AdSlot />
             {!!race.enquiryLinks?.length && (
