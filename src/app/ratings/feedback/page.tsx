@@ -34,9 +34,7 @@ export default function FeedbackPage() {
         <EditorialFeedback
           races={races.map((r) => ({
             id: r.id,
-            name:
-              reviewTargets.find((target) => target.raceId === r.id)?.name ??
-              r.name.replace(/\s*20\d{2}(?:\/\d{2,4})?/g, "").trim(),
+            name: reviewTargets.find((target) => target.raceId === r.id)?.name ?? r.name,
           }))}
           recipient={editorialContactEmail}
         />

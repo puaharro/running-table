@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { correctionUrl } from "@/lib/corrections";
+import { siteUrl } from "@/lib/site";
 
 export function CorrectionForm({
   races,
@@ -27,7 +28,7 @@ export function CorrectionForm({
       setPrepared(
         correctionUrl({
           raceName: race.name,
-          racePath: race.path,
+          racePath: new URL(race.path, siteUrl || window.location.origin).href,
           details,
           sourceUrl,
           contactEmail,
