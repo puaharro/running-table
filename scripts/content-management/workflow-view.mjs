@@ -1,13 +1,15 @@
 import { shell } from "./views.mjs";
 import { Workflow, TOPICS, COVERAGE, newWorkflowId } from "./workflow.mjs";
 import { SOURCES } from "../research/sources.mjs";
+import { workspacePanel, websiteChanges } from "./workspace-view.mjs";
+import { titleWarning } from "./handoff.mjs";
 const e = (v) =>
   String(v ?? "").replace(
     /[&<>"']/g,
     (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
   );
 const baseScript = `const token=document.querySelector('meta[name=import-token]').content,status=document.querySelector('#workflow-status');
-const editor=document.querySelector('#race-form,#website-form');let dirty=false;if(editor){editor.addEventListener('input',()=>{dirty=true;for(const b of document.querySelectorAll('#confirm-form button,#export-confirmed'))b.disabled=true;status.textContent='有未保存修改，先保存新版本再確認或匯出。';});window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});}
+const editor=document.querySelector('#race-form,#website-form');let dirty=false;if(editor){editor.addEventListener('input',()=>{dirty=true;for(const b of document.querySelectorAll('#confirm-form button,#export-confirmed,#export-handoff'))b.disabled=true;status.textContent='有未保存修改，先保存新版本再確認或匯出。';});window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});}
 async function post(path,input){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json','X-Import-Token':token},body:JSON.stringify(input)});const b=await r.json();if(!r.ok)throw Error(b.error||'操作失敗');return b;}
 async function submit(button,task){button.disabled=true;try{await task();}catch(e){status.textContent=e.message;button.disabled=false;}}
 function data(form){return Object.fromEntries(new FormData(form));}
@@ -31,7 +33,9 @@ function history(w, r) {
 }
 function confirmation(w, r) {
   if (!r.revision) return "";
-  return `<section class="panel"><h2>完整版本確認及匯出</h2><p>第 ${r.revision} 版 · ${r.status === "confirmed" ? "文字已確認" : "待人工確認"}。修改後須重新確認。確認文字不等於批准發布。</p>${r.status === "confirmed" ? `<button id="export-confirmed" data-id="${e(r.id)}" data-revision="${r.revision}">匯出已確認版本</button>` : `<form id="confirm-form">${hidden(r)}<input type="hidden" name="hash" value="${w.hash(r)}"><label><input type="checkbox" name="acknowledge" required>我已閱讀本頁完整第 ${r.revision} 版，確認此版本文字及來源</label>${r.kind === "website" ? '<label><input type="checkbox" name="allow_incomplete">如有來源未完成，我明確知悉並保留全部未知及限制；不宣稱已查齊</label>' : ""}<label>確認備註<textarea name="note" maxlength="2000" required></textarea></label><button>確認指定版本文字</button></form>`}<p class="meta">匯出係私人待發布交接檔，唔會修改網站目錄、評分或觸發部署。發布仍須另行批准。</p></section>`;
+  if (r.kind === "website" && titleWarning(r.data.title))
+    return `<section class="panel"><h2>公開標題檢查</h2><p class="banner">${e(titleWarning(r.data.title))}</p><p>既有版本與確認紀錄保留；新版本需重新確認，唔會自動套用舊批准。</p></section>`;
+  return `<section class="panel"><h2>完整版本確認及匯出</h2><p>第 ${r.revision} 版 · ${r.status === "confirmed" ? "文字已確認" : "待人工確認"}。修改後須重新確認。確認文字不等於批准發布。</p>${r.status === "confirmed" ? `<button id="export-confirmed" data-id="${e(r.id)}" data-revision="${r.revision}">匯出已確認版本</button>${r.kind === "website" ? `<p><a href="/handoff-preview?id=${e(r.id)}&revision=${r.revision}" target="_blank" rel="noopener noreferrer">預覽已確認交接版本 ↗</a></p><button id="export-handoff" data-id="${e(r.id)}" data-revision="${r.revision}">下載網站交接包（正文＋來源＋版本清單）</button>` : ""}` : `<form id="confirm-form">${hidden(r)}<input type="hidden" name="hash" value="${w.hash(r)}"><label><input type="checkbox" name="acknowledge" required>我已閱讀本頁完整第 ${r.revision} 版，確認此版本文字及來源；公開文字已按去名要求覆核</label>${r.kind === "website" ? '<label><input type="checkbox" name="allow_incomplete">如有來源未完成，我明確知悉並保留全部未知及限制；不宣稱已查齊</label>' : ""}<label>確認備註<textarea name="note" maxlength="2000" required></textarea></label><button>確認指定版本文字</button></form>`}<p class="meta">匯出係私人待發布交接檔，唔會修改網站目錄、評分或觸發部署。發布仍須另行批准。</p></section>`;
 }
 export function renderRaceEditor(content, token, id) {
   const w = new Workflow(content),
@@ -107,7 +111,7 @@ function neutralPreview(d) {
   const urls = [...new Set(d.sections.flatMap((s) => s.urls))];
   return `<article class="panel"><h2>${e(d.title)}</h2><p class="meta">跑手分享 · 無評分。個人自述不代表所有參賽者，未經逐項獨立核實。</p>${d.sections.map((s) => `<section><h3>${e(s.topic)}</h3><p style="white-space:pre-wrap">${e(s.body)}</p><p style="white-space:pre-wrap"><strong>觀察限制：</strong>${e(s.limitations)}</p><p>${s.urls.map((u) => `<a href="${e(u)}" target="_blank" rel="noopener noreferrer">來源${urls.indexOf(u) + 1} ↗</a>`).join(" · ") || "來源：未知／未有足夠材料"}</p></section>`).join("")}</article>`;
 }
-export function renderWebsite(content, token, { id, raceId, year, draftId }) {
+export function renderWebsite(content, token, { id, raceId, year, draftId, workspace = false }) {
   const w = new Workflow(content);
   let r;
   if (id) {
@@ -137,15 +141,26 @@ export function renderWebsite(content, token, { id, raceId, year, draftId }) {
   const d = r.data;
   const draft = d.draft_id ? content.get(d.draft_id) : null;
   const coverage = w.coverage(d.race_id, d.year);
+  let basisMessage = "";
+  if (r.revision) {
+    try {
+      w.assertBasis(r);
+    } catch (error) {
+      basisMessage = `<p class="banner">${e(error.message)}</p>`;
+    }
+  }
+  const panel = workspace ? workspacePanel(content, d.race_id, d.year) : { body: "", script: "" };
   return shell(
     "website",
     content.mode,
     token,
-    `<h1>網站稿版本及預覽</h1><p>五個主題固定保留。正文請用中性稱呼，不顯示人名、帳號名及機構／傳媒名；來源自動用編號顯示，原連結仍可識別作者。呢個介面唔會自動匿名化你輸入嘅正文。</p><p>${e(w.race(d.race_id).name)} · ${d.year} 年 · ${r.revision ? `第 ${r.revision} 版` : "未保存"}</p><p class="banner">研究覆蓋：${coverage.filter((c) => ["reviewed", "no_results"].includes(c.data.state)).length}/7 類完成。<a href="/research-progress?race=${e(d.race_id)}&year=${d.year}">查看未完成來源／登入需要</a></p>${draft ? `<details class="panel"><summary>參考草稿：${e(draft.title)} · 第 ${draft.revision} 版</summary><pre>${e(draft.body)}</pre><p>${e(draft.sources)}</p><p>${e(draft.scope)}</p></details>` : ""}${neutralPreview(d)}<form id="website-form" class="panel">${hidden(r)}<label>網站稿標題<input name="title" maxlength="160" required value="${e(d.title)}"></label>${d.sections.map((s, i) => `<fieldset><legend>${e(s.topic)}</legend><label>正文（不足請標明未知）<textarea name="body${i}" maxlength="4000" rows="4" required>${e(s.body)}</textarea></label><label>觀察限制<textarea name="limitations${i}" maxlength="2000" rows="2" required>${e(s.limitations)}</textarea></label><label>原文來源連結（每行一條）<textarea name="urls${i}" rows="2">${e(s.urls.join("\n"))}</textarea></label></fieldset>`).join("")}<button>保存新版本並預覽</button><p class="meta">下方確認及匯出針對已保存版本。有未保存修改時會鎖定確認及匯出。</p></form>${confirmation(w, r)}<p id="workflow-status" role="status"></p>${history(w, r)}`,
+    `${panel.body}${basisMessage}<h${workspace ? "2" : "1"}>網站稿版本及預覽</h${workspace ? "2" : "1"}><p>工作狀態：${r.status === "confirmed" ? "文字已確認" : "草稿／待覆核"}；公開標題請勿填入工作狀態。</p><p>五個主題固定保留。正文請用中性稱呼，不顯示人名、帳號名及機構／傳媒名；來源自動用編號顯示，原連結仍可識別作者。呢個介面唔會自動匿名化你輸入嘅正文。</p><p>${e(w.race(d.race_id).name)} · ${d.year} 年 · ${r.revision ? `第 ${r.revision} 版` : "未保存"}</p><p class="banner">研究覆蓋：${coverage.filter((c) => ["reviewed", "no_results"].includes(c.data.state)).length}/7 類完成。<a href="/research-progress?race=${e(d.race_id)}&year=${d.year}">查看未完成來源／登入需要</a></p>${draft ? `<details class="panel"><summary>參考草稿：${e(draft.title)} · 第 ${draft.revision} 版</summary><pre>${e(draft.body)}</pre><p>${e(draft.sources)}</p><p>${e(draft.scope)}</p></details>` : ""}${websiteChanges(w, r)}<div id="website-saved-preview">${neutralPreview(d)}</div><form id="website-form" class="panel">${hidden(r)}<label>公開標題（不填候選／待覆核等內部狀態）<input name="title" maxlength="160" required value="${e(d.title)}"></label>${d.sections.map((s, i) => `<fieldset><legend>${e(s.topic)}</legend><label>正文（不足請標明未知）<textarea name="body${i}" maxlength="4000" rows="4" required>${e(s.body)}</textarea></label><label>觀察限制<textarea name="limitations${i}" maxlength="2000" rows="2" required>${e(s.limitations)}</textarea></label><label>原文來源連結（每行一條）<textarea name="urls${i}" rows="2">${e(s.urls.join("\n"))}</textarea></label></fieldset>`).join("")}<button>保存新版本並預覽</button><p class="meta">下方確認及匯出針對已保存版本。有未保存修改時會鎖定確認及匯出。</p></form>${confirmation(w, r)}<p id="workflow-status" role="status"></p>${history(w, r)}`,
     baseScript +
       `const form=document.querySelector('#website-form');const basis=${JSON.stringify({ race_id: d.race_id, year: d.year, draft_id: d.draft_id }).replaceAll("<", "\\u003c")},topics=${JSON.stringify(TOPICS)};form.addEventListener('submit',e=>{e.preventDefault();submit(form.querySelector('button'),async()=>{const f=data(form);const r=await post('/api/content/workflow/save',{id:f.id,expected_revision:Number(f.revision),kind:'website',data:{...basis,title:f.title,sections:topics.map((topic,i)=>({topic,body:f['body'+i],limitations:f['limitations'+i],urls:f['urls'+i].split(/\\n/).map(v=>v.trim()).filter(Boolean)}))}});dirty=false;location.href='/website-copy?id='+encodeURIComponent(r.id);});});` +
-      confirmScript,
-  );
+      confirmScript +
+      panel.script +
+      handoffScript,
+  ).replace("form-action 'none'", "form-action 'self'");
 }
 export function renderWebsiteIndex(content, token) {
   const w = new Workflow(content);
@@ -164,3 +179,5 @@ export function renderWebsiteIndex(content, token) {
     }`,
   );
 }
+
+const handoffScript = `const handoff=document.querySelector('#export-handoff');if(handoff)handoff.addEventListener('click',()=>submit(handoff,async()=>{const b=await post('/api/content/workflow/handoff',{id:handoff.dataset.id,expected_revision:Number(handoff.dataset.revision)});const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(b,null,2)],{type:'application/json'}));a.download='website-handoff-'+b.manifest.source_website_id+'-v'+b.manifest.source_revision+'.json';a.click();URL.revokeObjectURL(a.href);status.textContent='已下載網站交接包，未寫入網站、未批准發布或部署。';handoff.disabled=false;}));`;

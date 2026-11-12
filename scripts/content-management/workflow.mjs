@@ -310,6 +310,8 @@ export class Workflow {
         fail("指定版本已改或不能確認，請重新載入。", 409);
       this.assertBasis(r);
       if (r.kind === "website") {
+        if (/候選|待覆核|待確認|未部署/.test(r.data.title))
+          fail("公開標題含內部工作狀態，請另存新版本移除後再確認。");
         const pending = this.coverage(r.data.race_id, r.data.year).filter(
           (r) => !["reviewed", "no_results"].includes(r.data.state),
         );

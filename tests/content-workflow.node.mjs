@@ -7,6 +7,12 @@ import { join } from "node:path";
 import { ContentStore } from "../scripts/content-management/store.mjs";
 import { Workflow, TOPICS, newWorkflowId } from "../scripts/content-management/workflow.mjs";
 import { ProposalService } from "../scripts/content-management/proposals.mjs";
+import {
+  confirmedHandoff,
+  handoffHtml,
+  contentHash,
+} from "../scripts/content-management/handoff.mjs";
+import { workspacePanel } from "../scripts/content-management/workspace-view.mjs";
 import { importMaterials, materials } from "../scripts/content-management/materials.mjs";
 import {
   renderRaceEditor,
@@ -58,6 +64,79 @@ function setup() {
   const r = w.save(raceInput());
   return { content, w, r };
 }
+test("handoff accepts only the exact confirmed version and excludes private research", () => {
+  const { content, w, r } = setup();
+  try {
+    const input = website(r);
+    input.data.sections[0].body = '<script>alert("fixture")</script> 未知。';
+    input.data.sections[0].urls = ["https://example.com/source"];
+    input.data.sections[4].urls = ["https://example.com/source"];
+    const copy = w.save(input);
+    assert.throws(() => confirmedHandoff(content, copy.id, 1), /確認/);
+    confirm(w, copy, true);
+    const result = confirmedHandoff(content, copy.id, 1, { audit: true });
+    assert.deepEqual(result.public_copy.sections, input.data.sections);
+    assert.equal(result.manifest.public_content_hash, contentHash(result.public_copy));
+    assert.deepEqual(result.manifest.citations, ["https://example.com/source"]);
+    assert.equal(result.manifest.publication_approved, false);
+    assert.equal(result.manifest.research_complete, false);
+    assert.equal(result.manifest.demo, true);
+    assert.equal("basis" in result, false);
+    const html = handoffHtml(result);
+    assert.ok(html.includes("&lt;script&gt;"));
+    assert.ok(!html.includes("<script>"));
+    assert.ok(html.includes("虛構示範"));
+    assert.ok(w.events(copy.id).some((e) => e.action === "handoff_exported"));
+    assert.throws(() => confirmedHandoff(content, copy.id, 2), /確認/);
+    w.save({ ...input, expected_revision: 1 });
+    assert.throws(() => confirmedHandoff(content, copy.id, 1), /確認/);
+  } finally {
+    content.close();
+  }
+});
+
+test("internal title status cannot be confirmed and upstream changes block handoff", () => {
+  const { content, w, r } = setup();
+  try {
+    const input = website(r);
+    input.data.title += "【候選・待覆核】";
+    let copy = w.save(input);
+    assert.throws(() => confirm(w, copy, true), /公開標題/);
+    assert.equal(w.get(copy.id).status, "draft");
+    input.data.title = "虛構公開標題";
+    copy = w.save({ ...input, expected_revision: 1 });
+    confirm(w, copy, true);
+    const cov = w.coverage(r.id, 2026)[0];
+    w.save({
+      id: cov.id,
+      kind: "coverage",
+      expected_revision: 0,
+      data: { ...cov.data, state: "searching", query: "fictional query" },
+    });
+    assert.throws(() => confirmedHandoff(content, copy.id, 2), /依據版本已改/);
+  } finally {
+    content.close();
+  }
+});
+
+test("workspace separates years and renders executable combined scripts without executing content", () => {
+  const { content, w, r } = setup();
+  try {
+    const input = website(r);
+    input.data.title = "本屆虛構稿";
+    const copy = w.save(input);
+    w.save({ ...website(r), data: { ...website(r).data, year: 2025, title: "上屆獨立稿" } });
+    const panel = workspacePanel(content, r.id, 2026);
+    assert.ok(panel.body.includes("本屆虛構稿"));
+    assert.ok(!panel.body.includes("上屆獨立稿"));
+    const html = renderWebsite(content, "fictional-token", { id: copy.id, workspace: true });
+    for (const match of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) new Script(match[1]);
+    assert.ok(html.includes("賽事工作頁"));
+    assert.ok(html.includes("網站稿版本及預覽"));
+  } finally {
+    content.close();
+  }
+});
 test("private new races support material imports and existing AI proposals without altering public catalog", () => {
   const before = readFileSync(new URL("../src/data/catalog.json", import.meta.url), "utf8");
   const { content, w, r } = setup();

@@ -98,8 +98,25 @@ test("new workflow HTTP preserves CSRF, exact-version confirmation and export bo
   assert.equal(result.publication_approved, false);
   assert.equal(result.demo, true);
   assert.equal(result.content.sections.length, 5);
+  const handoff = "/api/content/workflow/handoff";
+  assert.equal(
+    (await post(handoff, { id: copy.id, expected_revision: 1 }, { "X-Import-Token": "wrong" }))
+      .status,
+    403,
+  );
+  const packageResponse = await post(handoff, { id: copy.id, expected_revision: 1 });
+  assert.equal(packageResponse.status, 200);
+  assert.equal((await packageResponse.json()).manifest.publication_approved, false);
+  assert.equal((await fetch(url + `/handoff-preview?id=${copy.id}&revision=1`)).status, 200);
+  assert.equal((await fetch(url + `/handoff-preview?id=${copy.id}&revision=2`)).status, 409);
+  assert.equal((await fetch(url + `/race-workspace?race=${race.id}&year=2026`)).status, 200);
+  assert.equal(
+    (await fetch(url + `/race-workspace?race=${race.id}&year=2025&website=${copy.id}`)).status,
+    400,
+  );
   assert.equal((await post(save, { ...website, expected_revision: 1 })).status, 200);
   assert.equal((await post(exp, { id: copy.id, expected_revision: 1 })).status, 409);
+  assert.equal((await post(handoff, { id: copy.id, expected_revision: 1 })).status, 409);
   assert.equal(
     (await fetch(url + "/.editorial-private/content-management/demo.sqlite")).status,
     404,

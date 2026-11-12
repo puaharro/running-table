@@ -1,4 +1,5 @@
 import { Workflow } from "./workflow.mjs";
+import { confirmedHandoff, handoffHtml } from "./handoff.mjs";
 import { AgentService } from "./agent.mjs";
 import {
   renderRaceEditor,
@@ -41,17 +42,59 @@ export async function serveContent({
     const input = await readBody(request, 262144);
     if (url.pathname === "/api/content/workflow/save") json(workflow.save(input));
     else if (url.pathname === "/api/content/workflow/confirm") json(workflow.confirm(input));
-    else if (url.pathname === "/api/content/workflow/export") {
+    else if (
+      ["/api/content/workflow/export", "/api/content/workflow/handoff"].includes(url.pathname)
+    ) {
       if (
         !input ||
         Object.keys(input).sort().join() !== "expected_revision,id" ||
         !Number.isInteger(input.expected_revision)
       )
         throw new ReviewError(400, "請指定版本。");
-      const bundle = workflow.export(input.id, input.expected_revision);
+      const bundle = url.pathname.endsWith("/handoff")
+        ? confirmedHandoff(content, input.id, input.expected_revision, { audit: true })
+        : workflow.export(input.id, input.expected_revision);
       response.setHeader("Content-Disposition", 'attachment; filename="confirmed-content.json"');
       json(bundle);
     } else return false;
+    return true;
+  }
+  if (request.method === "GET" && url.pathname === "/handoff-preview") {
+    html(
+      handoffHtml(
+        confirmedHandoff(
+          content,
+          url.searchParams.get("id"),
+          Number(url.searchParams.get("revision")),
+        ),
+      ),
+    );
+    return true;
+  }
+  if (request.method === "GET" && url.pathname === "/race-workspace") {
+    const race = workflow.race(url.searchParams.get("race"));
+    const year = Number(url.searchParams.get("year") || race.year || race.date.slice(0, 4));
+    if (!Number.isInteger(year) || year < 1900 || year > 2200)
+      throw new ReviewError(400, "請填有效年份。");
+    const selected = url.searchParams.get("website");
+    const copy = selected
+      ? workflow.get(selected)
+      : workflow.list("website").find((r) => r.data.race_id === race.id && r.data.year === year);
+    if (
+      copy &&
+      (copy.kind !== "website" || copy.data.race_id !== race.id || copy.data.year !== year)
+    )
+      throw new ReviewError(400, "網站稿與研究賽事／屆次不符。");
+    const draft = content.list().find((d) => d.race_id === race.id && d.year === year);
+    html(
+      renderWebsite(content, token, {
+        id: copy?.id,
+        raceId: race.id,
+        year,
+        draftId: draft?.id,
+        workspace: true,
+      }),
+    );
     return true;
   }
   if (request.method === "GET" && url.pathname === "/race-editor") {
