@@ -26,7 +26,7 @@ export function RaceRunnerCopy({ copy }: { copy: RunnerCopy }) {
       tabIndex={-1}
       aria-labelledby="runner-copy-heading"
     >
-      <h2 id="runner-copy-heading">{heading.replace(/^# /, "")}</h2>
+      <h2 id="runner-copy-heading">{heading.replace(/^# /, "").replace("【候選・待覆核】", "")}</h2>
       <div className="runner-copy-body">
         {blocks.map((block, index) =>
           block.startsWith("## ") ? (

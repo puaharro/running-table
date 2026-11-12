@@ -10,7 +10,8 @@ const plain = section
   .replaceAll("&amp;", "&")
   .replaceAll("&quot;", '"');
 for (const block of record.markdown.split(/\n\n+/)) {
-  if (block.startsWith("#")) assert.ok(plain.includes(block.replace(/^#+ /, "")));
+  if (block.startsWith("#"))
+    assert.ok(plain.includes(block.replace(/^#+ /, "").replace("【候選・待覆核】", "")));
   else if (!block.startsWith("[來源"))
     assert.ok(plain.includes(block.replaceAll("**", "")), "Missing exact confirmed paragraph");
 }
@@ -18,6 +19,11 @@ const expected = [...record.markdown.matchAll(/\]\((https:\/\/[^)]+)\)/g)].map((
 const actual = [...section.matchAll(/href="([^"]+)"/g)].map((x) => x[1].replaceAll("&amp;", "&"));
 assert.deepEqual(actual, expected);
 assert.ok(!section.includes("本機預覽") && !section.includes("未部署"));
+assert.ok(!section.includes("候選・待覆核"));
+assert.ok(
+  !html.includes('id="rating-assessment-preview"'),
+  "Private assessment must not be exported",
+);
 for (const name of [
   "karwo_koon",
   "running.arnooo",

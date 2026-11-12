@@ -132,7 +132,9 @@ npm run test:threads:http
 
 已確認的 CMS 網站稿第2版現存於 `content/runner-copies/rmac-2026.json`，`runnerCopyForRace` 在開發及正式靜態建置均載入指定賽事，不再使用 `LOCAL_RMAC_COPY_PREVIEW` 開關。來源 website ID、內容雜湊及轉換後文字雜湊綁定指定版本；改文字或版本須重新覆核並更新綁定，不會靜默採用其他草稿。
 
-內容維持已確認匯出檔的完整標題、五個主題正文、來源編號連結、未知及觀察限制，包括標題原有的「候選・待覆核」文字；沒有另行改寫或新增評分。正式頁面不顯示開發專用「本機預覽／未部署」提示。CMS 資料庫、原始研究及操作紀錄繼續留在 `.editorial-private/`，正式建置不讀取私人檔案。
+內容維持已確認匯出檔的五個主題正文、來源編號連結、未知及觀察限制。按營運者最新要求，顯示標題移除「候選・待覆核」；原始第2版檔案及雜湊保留。正式頁面不顯示開發專用「本機預覽／未部署」提示。CMS 資料庫、原始研究及操作紀錄繼續留在 `.editorial-private/`，正式建置不讀取私人檔案。
+
+本機評估預覽使用 `LOCAL_RMAC_RATING_PREVIEW=1 npm run dev -- --port 3003`。只有明確開啟的 development 伺服器會讀 `.editorial-private/previews/rmac-rating-assessment-v1.json`，顯示待確認的三項準則評估；production 即使誤設同一開關亦不讀取。候選評估未經確認，不加入公開評論資料或正式靜態匯出。現有材料不足以支持數字分數，三項均為 null，附逐項理由；沒有新增總分或五項分數。
 
 ```sh
 npm run build
