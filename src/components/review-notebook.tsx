@@ -210,7 +210,9 @@ export function ReviewNotebook() {
         </div>
         <label>
           參賽／利益關係
-          <input
+          <textarea
+            className="notebook-disclosure"
+            rows={3}
             maxLength={1000}
             placeholder="例如自費參賽、獲贈名額；按實際情況填寫"
             value={active.disclosure}
@@ -286,16 +288,17 @@ export function ReviewNotebook() {
         <button type="button" onClick={requestConfirmation} disabled={!ready}>
           匯出待確認筆記
         </button>
-        <label className="notebook-import">
+        <button type="button" onClick={() => importInput.current?.click()} disabled={!ready}>
           匯入筆記備份
-          <input
-            ref={importInput}
-            type="file"
-            accept="application/json,.json"
-            disabled={!ready}
-            onChange={(e) => void importFile(e.target.files?.[0])}
-          />
-        </label>
+        </button>
+        <input
+          ref={importInput}
+          type="file"
+          accept="application/json,.json"
+          hidden
+          disabled={!ready}
+          onChange={(e) => void importFile(e.target.files?.[0])}
+        />
       </div>
       <p role="status" aria-live="polite">
         {message || "未有修改。"}

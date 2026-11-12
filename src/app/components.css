@@ -1144,6 +1144,9 @@ time,
   min-height: 140px;
   resize: vertical;
 }
+.review-notebook .notebook-disclosure {
+  min-height: 0;
+}
 .notebook-fields {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1192,12 +1195,6 @@ time,
   outline: 2px solid currentColor;
   outline-offset: 3px;
 }
-.review-notebook .notebook-import {
-  margin: 0;
-}
-.review-notebook input[type="file"] {
-  font-size: 13px;
-}
 .editorial-notice {
   border-left: 3px solid var(--ink, var(--text-primary));
   padding: var(--space-4);
@@ -1243,8 +1240,7 @@ time,
   .review-notebook fieldset {
     padding: var(--space-4);
   }
-  .notebook-actions > button,
-  .notebook-actions > label {
+  .notebook-actions > button {
     width: 100%;
   }
 }
@@ -1797,6 +1793,9 @@ time,
   overflow-y: auto;
   overscroll-behavior: contain;
 }
+body:has(.nxtgo-dialog:modal) {
+  overflow: hidden;
+}
 .nxtgo-dialog::backdrop {
   background: #101b24a6;
 }
@@ -1915,6 +1914,7 @@ time,
   border: 1px solid var(--border-control);
   border-radius: var(--radius-control);
   font: inherit;
+  font-size: 16px;
 }
 .race-share-status {
   min-height: 1.5em;
