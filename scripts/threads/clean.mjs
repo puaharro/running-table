@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { demoReport } from "./report.mjs";
 
 export const RULE_VERSION = "hk-clean-v2";
@@ -32,8 +33,24 @@ export const PRESETS = {
     aliases: ["UNICEF HERO RUN", "UNICEF 超能跑", "聯合國兒童基金會超能跑"],
   },
 };
+export const RESEARCH_PRESETS = { ...PRESETS };
+// A catalogue target never proves that a historical edition exists.
+const catalog = JSON.parse(
+  readFileSync(new URL("../../src/data/catalog.json", import.meta.url), "utf8"),
+);
+for (const race of catalog) {
+  if (["hzmb-half-marathon-2026", "standard-chartered-hk-marathon-2027"].includes(race.id))
+    continue;
+  const strip = (v) => v.replace(/\s*20\d{2}\s*/g, "").trim();
+  const name = strip(race.name);
+  if (Object.values(PRESETS).some((p) => p.name === name)) continue;
+  RESEARCH_PRESETS[`catalog:${race.id}`] = {
+    name,
+    aliases: [...new Set([name, strip(race.englishName ?? "")].filter(Boolean))],
+  };
+}
 const OTHER_RACES = [
-  ...Object.entries(PRESETS).map(([key, value]) => ({ key, aliases: value.aliases })),
+  ...Object.entries(RESEARCH_PRESETS).map(([key, value]) => ({ key, aliases: value.aliases })),
   { key: "osaka", aliases: ["大阪馬拉松", "大阪マラソン", "Osaka Marathon", "大阪馬"] },
   { key: "tokyo", aliases: ["東京馬拉松", "東京マラソン", "Tokyo Marathon", "東京馬"] },
 ];
@@ -62,7 +79,7 @@ function matches(text, aliases) {
 }
 
 export function cleanReport(report, presetKey) {
-  const preset = PRESETS[presetKey];
+  const preset = RESEARCH_PRESETS[presetKey];
   if (!preset) throw new Error("Unknown Hong Kong race preset.");
   const records = [
     ...report.posts.map((item) => ({ ...item, kind: "post" })),

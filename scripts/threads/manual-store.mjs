@@ -2,7 +2,7 @@ import { DatabaseSync } from "node:sqlite";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { createHash, randomUUID } from "node:crypto";
-import { PRESETS } from "./clean.mjs";
+import { RESEARCH_PRESETS as PRESETS } from "./clean.mjs";
 import { ReviewError } from "./review-store.mjs";
 import { sourceLink } from "./report.mjs";
 import { publicReference } from "../research/sources.mjs";

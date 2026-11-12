@@ -6,6 +6,36 @@ import { ProposalService } from "./content-management/proposals.mjs";
 import { materials } from "./content-management/materials.mjs";
 const [command, ...args] = process.argv.slice(2);
 const demo = args.includes("--demo");
+if (command === "execute") {
+  try {
+    const url = new URL(process.env.NXTGO_AGENT_URL || "http://127.0.0.1:3334");
+    if (
+      url.protocol !== "http:" ||
+      url.hostname !== "127.0.0.1" ||
+      url.username ||
+      url.password ||
+      url.pathname !== "/" ||
+      url.search ||
+      url.hash
+    )
+      throw Error("Agent URL must be a loopback HTTP origin.");
+    const key = process.env.NXTGO_AGENT_TOKEN || process.env.NXTGO_AGENT_READ_TOKEN;
+    if (!key) throw Error("請先設定 NXTGO_AGENT_TOKEN 或 NXTGO_AGENT_READ_TOKEN。");
+    const response = await fetch(new URL("/api/agent/execute", url), {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+      body: JSON.stringify(JSON.parse(readFileSync(args[0], "utf8"))),
+      signal: AbortSignal.timeout(15000),
+    });
+    console.log(JSON.stringify(await response.json()));
+    process.exit(response.ok ? 0 : 1);
+  } catch (error) {
+    console.log(
+      JSON.stringify({ status: "rejected", code: "REQUEST_FAILED", message: error.message }),
+    );
+    process.exit(1);
+  }
+}
 const path = `.editorial-private/content-management/${demo ? "demo" : "manual"}.sqlite`;
 let content;
 try {

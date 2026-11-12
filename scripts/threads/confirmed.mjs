@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { PRESETS } from "./clean.mjs";
+import { RESEARCH_PRESETS as PRESETS } from "./clean.mjs";
 import { evidenceLink, sourceMetadata } from "../research/sources.mjs";
 import { TOPIC_RULE_VERSION, topicsForRecord, topicSummary } from "./topics.mjs";
 
@@ -76,6 +76,8 @@ export function buildConfirmed(review) {
       record = first.automatic,
       race = raceIdentity(first.manual.race_name);
     const warnings = [];
+    if (observations.some((row) => row.manual.actor?.type === "agent"))
+      warnings.push("agent_review_not_human_approved");
     if (!race.known_hk_preset) warnings.push("custom_race_region_unverified");
     if (
       observations.some((row) =>
@@ -92,6 +94,7 @@ export function buildConfirmed(review) {
     if (record.raw.link_scope === "root") warnings.push("root_link_only");
     records.push({
       ...base,
+      review_actors: observations.map((row) => row.manual.actor ?? { type: "unspecified" }),
       race_key: race.key,
       race_name: first.manual.race_name,
       event_year: first.manual.event_year,

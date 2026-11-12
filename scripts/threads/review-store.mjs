@@ -2,7 +2,7 @@ import { DatabaseSync } from "node:sqlite";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { createHash } from "node:crypto";
-import { PRESETS } from "./clean.mjs";
+import { RESEARCH_PRESETS as PRESETS } from "./clean.mjs";
 import { buildConfirmed } from "./confirmed.mjs";
 import { TOPICS, TOPIC_KEYS, TOPIC_RULE_VERSION } from "./topics.mjs";
 import { buildSummary, SUMMARY_RULE_VERSION } from "./summary.mjs";
@@ -149,7 +149,11 @@ export class ReviewStore {
       .prepare(
         "SELECT record_key,decision,race_name,event_year,note,revision,updated_at FROM manual_decisions WHERE dataset_id=? ORDER BY record_key",
       )
-      .all(id);
+      .all(id)
+      .map((row) => ({
+        ...row,
+        actor: this.history(id, row.record_key)[0]?.actor ?? { type: "unspecified" },
+      }));
   }
   history(id, key) {
     return this.db
@@ -181,7 +185,7 @@ export class ReviewStore {
       decisions,
     };
   }
-  save(id, input) {
+  save(id, input, { actor = { type: "human" } } = {}) {
     if (
       !input ||
       typeof input !== "object" ||
@@ -219,6 +223,7 @@ export class ReviewStore {
       race_name: input.race_name.trim() || null,
       event_year: input.event_year,
       note: input.note.trim(),
+      actor,
     };
     const at = new Date().toISOString();
     this.db.exec("BEGIN IMMEDIATE");

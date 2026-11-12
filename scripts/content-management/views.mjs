@@ -120,7 +120,18 @@ document.querySelector('#legacy-form').addEventListener('submit',async e=>{e.pre
 document.querySelector('#batch-form').addEventListener('submit',async e=>{e.preventDefault();try{const b=await post('/api/content/materials/import',JSON.parse(document.querySelector('#batch').value));status.textContent='新增 '+b.added+' 則，重複 '+b.duplicates+' 則。請重新載入查看。';}catch(e){status.textContent=e.message;}});
 document.querySelector('#make-draft').addEventListener('click',async()=>{try{const ids=Array.from(document.querySelectorAll('input[name=material]:checked')).map(x=>x.value);const d=await post('/api/content/materials/draft',{ids});location.href='/drafts?id='+d.id;}catch(e){status.textContent=e.message;}});
 document.querySelector('#backup').addEventListener('click',async()=>{try{const b=await post('/api/content/backup',{});status.textContent='私人備份已保存：'+b.directory;}catch(e){status.textContent=e.message;}});`;
-export function renderMaterials(content, token, race, batches = []) {
+export function renderMaterials(content, token, race, batches = [], research = {}) {
+  const links = (research.links ?? []).filter((l) => !race || l.race_id === race);
+  const datasets = [...new Map(links.map((l) => [l.dataset_id, l])).values()];
+  const actions = {
+    import_materials: "匯入材料",
+    create_draft: "建立私人草稿",
+    update_draft: "更新私人草稿",
+    research_prepare: "清理及去重",
+    research_review: "逐條覆核",
+  };
+  const researchPanel = `<section class="panel"><h2>研究批次及逐條覆核</h2><p>已連接 ${links.length} 則材料 · ${datasets.length} 個批次。清理、去重、逐條覆核及私人草稿共用同一套流程；稿件確認及發布由營運者執行。</p>${datasets.length ? `<ul>${datasets.map((l) => `<li>${e(content.catalog.find((r) => r.id === l.race_id)?.name ?? l.race_id)} · 研究年份 ${l.year} · <a href="/clean/${e(l.dataset_id)}">清理及去重</a> · <a href="/review/${e(l.dataset_id)}">逐條覆核</a> · <a href="/drafts?race=${encodeURIComponent(l.race_id)}">私人草稿</a></li>`).join("")}</ul>` : '<p class="meta">暫時未有已連接批次。</p>'}<details><summary>研究操作紀錄（全部賽事最近100項）</summary><p class="meta">保留執行者及理由，方便追查材料與草稿版本；AI 研究決定不等於人手稿件確認。</p><ul>${(research.audit ?? []).map((a) => `<li>${e(a.created_at)} · AI · ${e(actions[a.action] ?? a.action)}<p class="meta">${e(a.reason)}</p></li>`).join("") || "<li>暫時未有操作紀錄。</li>"}</ul></details></section>`;
+
   const rows = materials(content, race);
   const example = [
     {
@@ -143,7 +154,7 @@ export function renderMaterials(content, token, race, batches = []) {
     "research",
     content.mode,
     token,
-    `<h1>賽事研究材料庫</h1>${race ? `<div class="actions"><a href="/research-progress?race=${e(race)}&year=${example[0].year}">逐來源研究進度／登入協作 →</a><a href="/website-copy?race=${e(race)}&year=${example[0].year}">網站稿及預覽 →</a></div>` : ""}<p class="meta">原文只作研究材料；未覆核、未批准發布。修改過的材料另存一項，舊草稿保留原有材料。</p><div class="actions"><a href="/research">原有多平台搜尋及逐條覆核 →</a><button id="backup">建立私人備份</button></div><p class="meta">備份包含材料、草稿及既有研究／覆核資料庫，只存於 .editorial-private/backups。不是雲端備份，請另行保存一份。</p><form method="get" action="/materials"><label>對應賽事<select name="race"><option value="">全部賽事</option>${content.catalog.map((r) => `<option value="${e(r.id)}"${r.id === race ? " selected" : ""}>${e(r.name)}</option>`).join("")}</select></label><button type="submit">查看賽事材料</button></form><section class="panel"><h2>新增一則研究材料</h2><form id="single-material-form"><label>對應賽事<select name="race_id">${content.catalog.map((r) => `<option value="${e(r.id)}"${r.id === race ? " selected" : ""}>${e(r.name)}</option>`).join("")}</select></label><div class="grid"><label>材料屆次／年份<input name="year" type="number" min="1900" max="2200" required value="${example[0].year}"></label><label>組別／範圍<input name="group" maxlength="120"></label><label>來源平台<select name="platform">${[
+    `<h1>賽事研究材料庫</h1>${race ? `<div class="actions"><a href="/research-progress?race=${e(race)}&year=${example[0].year}">逐來源研究進度／登入協作 →</a><a href="/website-copy?race=${e(race)}&year=${example[0].year}">網站稿及預覽 →</a></div>` : ""}<p class="meta">原文只作研究材料；未覆核、未批准發布。修改過的材料另存一項，舊草稿保留原有材料。</p><div class="actions"><a href="/research">原有多平台搜尋及逐條覆核 →</a><button id="backup">建立私人備份</button></div><p class="meta">備份包含材料、草稿及既有研究／覆核資料庫，只存於 .editorial-private/backups。不是雲端備份，請另行保存一份。</p><form method="get" action="/materials"><label>對應賽事<select name="race"><option value="">全部賽事</option>${content.catalog.map((r) => `<option value="${e(r.id)}"${r.id === race ? " selected" : ""}>${e(r.name)}</option>`).join("")}</select></label><button type="submit">查看賽事材料</button></form>${researchPanel}<section class="panel"><h2>新增一則研究材料</h2><form id="single-material-form"><label>對應賽事<select name="race_id">${content.catalog.map((r) => `<option value="${e(r.id)}"${r.id === race ? " selected" : ""}>${e(r.name)}</option>`).join("")}</select></label><div class="grid"><label>材料屆次／年份<input name="year" type="number" min="1900" max="2200" required value="${example[0].year}"></label><label>組別／範圍<input name="group" maxlength="120"></label><label>來源平台<select name="platform">${[
       ["threads", "Threads"],
       ["marathonsworld", "Marathon’s World"],
       ["facebook", "Facebook"],

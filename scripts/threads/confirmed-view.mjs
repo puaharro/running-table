@@ -8,6 +8,7 @@ const e = (value) =>
     (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
   );
 const REASONS = {
+  agent_review_not_human_approved: "AI研究覆核；未經人手稿件確認或發布批准",
   missing_confirmed_race: "尚未確認賽事名稱",
   missing_confirmed_year: "尚未確認年份",
   missing_original_text: "沒有可用原文",
@@ -53,7 +54,7 @@ export function renderConfirmed(
     .map(
       (
         group,
-      ) => `<article class="item"><strong>需要再處理 · ${group.observations.length} 份人工保留觀測</strong><ul>${group.reasons.map((reason) => `<li>${e(REASONS[reason] ?? reason)}</li>`).join("")}</ul>
+      ) => `<article class="item"><strong>需要再處理 · ${group.observations.length} 份覆核保留觀測</strong><ul>${group.reasons.map((reason) => `<li>${e(REASONS[reason] ?? reason)}</li>`).join("")}</ul>
     <p class="text">${e(group.observations[0].automatic.raw.text ?? "（沒有原文）")}</p><details><summary>查看衝突與原始覆核</summary><pre>${e(JSON.stringify(group.observations, null, 2))}</pre></details><a href="${e(reviewUrl)}">返回覆核修正 →</a></article>`,
     )
     .join("");
@@ -61,10 +62,10 @@ export function renderConfirmed(
   return `<!doctype html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta name="topic-token" content="${e(topicToken)}"><meta name="topic-api" content="${e(apiBase)}"><meta http-equiv="Content-Security-Policy" content="default-src 'none';connect-src 'self';style-src 'unsafe-inline';script-src 'sha256-${hash}';base-uri 'none';form-action 'none'"><title>NXTGO · 已確認留言資料集</title>
   <style>${TOPIC_STYLES}.shell .toolbar{grid-template-columns:1fr 160px 210px}@media(max-width:650px){.shell .toolbar{grid-template-columns:1fr}}</style>
   <style>*{box-sizing:border-box}body{margin:0;background:#f5f6f0;color:#172f2b;font:15px/1.65 system-ui,'Microsoft JhengHei',sans-serif}.top{background:#172f2b;color:white;padding:14px 5vw;font-weight:600}.shell{max-width:1100px;margin:auto;padding:28px 22px 60px}.banner{padding:16px;background:#fff1cf;border:1px solid #e6c576;border-radius:10px}h1{font-size:clamp(26px,5vw,38px);line-height:1.3}.meta{font-size:13px;color:#5a6e64;overflow-wrap:anywhere}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}.stat,.item{background:white;border:1px solid #d9e2db;border-radius:10px;padding:20px}.stat strong{display:block;font-size:30px}.item{margin:14px 0}.text,pre{white-space:pre-wrap;overflow-wrap:anywhere}.toolbar{display:grid;grid-template-columns:1fr 160px;gap:15px;padding:18px;background:#e9eee6;border-radius:10px}label,details,li{font-size:13px}input,select{display:block;width:100%;padding:10px;margin-top:6px;border:1px solid #afc1b4;border-radius:6px;background:white;font:inherit}a{color:#166746}.exports{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.button{background:#166746;color:white;border-radius:7px;padding:10px 16px;text-decoration:none}.group{margin-top:30px}pre{background:#f5f7f3;padding:12px}summary{cursor:pointer}footer{margin-top:32px;overflow-wrap:anywhere}[hidden]{display:none!important}@media(max-width:650px){.stats{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr}.shell{padding:20px 14px}.item{padding:16px}}</style></head><body><div class="top">NXTGO / 私人已確認資料集</div><main class="shell">
-  ${result.mode === "demo" ? '<div class="banner"><strong>全部是虛構測試資料</strong> · 這些決定不是使用者對真實賽事的覆核。</div>' : result.mode === "manual" ? '<div class="banner"><strong>手動貼上來源</strong> · 人工保留不代表來源或參賽經驗已驗證。</div>' : ""}
-  <p>${importNavigation ? '<a href="/">返回手動匯入</a> · ' : ""}<a href="${e(reviewUrl)}">返回逐條覆核</a></p><h1>按已確認賽事與年份整理。</h1><p>只用你已儲存的人工保留決定；沒有評分，亦不公開發布。</p><p class="meta">未覆核、自動保留及人工排除不會進入可用資料。缺漏賽事／年份或同一來源有衝突，會列入待處理，不代填批次的目標年份。此頁只處理目前快照，不跨歷史快照合併。</p>
+  ${result.mode === "demo" ? '<div class="banner"><strong>全部是虛構測試資料</strong> · 這些決定不是使用者對真實賽事的覆核。</div>' : result.mode === "manual" ? '<div class="banner"><strong>手動貼上來源</strong> · 研究保留不代表來源或參賽經驗已驗證，亦非人手稿件確認。</div>' : ""}
+  <p>${importNavigation ? '<a href="/">返回手動匯入</a> · ' : ""}<a href="${e(reviewUrl)}">返回逐條覆核</a></p><h1>按已確認賽事與年份整理。</h1><p>只用已儲存的研究保留決定（AI 身份見項目警示及歷史）；沒有評分，亦不公開發布。</p><p class="meta">未覆核、自動保留及人工排除不會進入可用資料。缺漏賽事／年份或同一來源有衝突，會列入待處理，不代填批次的目標年份。此頁只處理目前快照，不跨歷史快照合併。</p>
   <div class="stats">${[
-    [result.summary.confirmed_keep, "人工保留觀測"],
+    [result.summary.confirmed_keep, "覆核保留觀測"],
     [result.summary.ready_items, "整理後可用項目"],
     [result.summary.needs_attention, "資料待處理"],
     [result.summary.merged_observations, "同身份合併觀測"],

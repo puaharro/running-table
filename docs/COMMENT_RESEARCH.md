@@ -159,3 +159,60 @@ npm run content:manage -- --demo --port 3336 --db .editorial-private/research/co
 ```
 
 網站稿、來源進度及私人賽事都存於 content SQLite 的 `workflow_docs`、`workflow_versions`、`workflow_events`，會隨原私人備份流程完整備份。`content:agent context` 可讀到這些工作記錄，但 CLI 仍只提供 context／propose／list／audit，不增加確認、匯出或發布命令。
+
+## CMS AI 操作 API V1
+
+AI 共用現有賽事研究流程；`/materials` 顯示已連接研究批次及最近100項研究操作紀錄。沒有獨立 AI 工作頁；舊 `/agent-tools` 連結轉往 `/materials`。API 權限及使用方法保留在本文件。沿用私人資料庫及備份；不新增發布命令。
+
+啟動 CMS 前，在程序環境設定兩個不同的隨機憑證（每個最少32字元）：
+
+- `NXTGO_AGENT_TOKEN`：private_editor，可 context / import_materials / create_draft / update_draft / research_prepare / research_context / research_review。
+- `NXTGO_AGENT_READ_TOKEN`：reader，可 context / research_context。
+  未設定的角色不啟用；憑證不得放 Git、公開前端、模型 prompt、操作參數或日誌。更換憑證後重啟 CMS；API 只接受本機、無 Origin 的 JSON POST，沒有 CORS 開放。
+
+CLI：`npm run content:agent -- execute .editorial-private/request.json`
+以環境變數指定 `NXTGO_AGENT_URL=http://127.0.0.1:3334` 及對應憑證。CLI 只透過 HTTP 操作，不開資料庫；原 context/propose/list/audit 為可信本機營運者舊介面，保持相容，不能把它當成受限 worker 入口。
+
+請求格式（模型欄位只是自報 metadata，權限由憑證決定）：
+
+```json
+{
+  "action": "context",
+  "input": { "race_id": "hzmb-half-marathon-2026", "year": 2025 },
+  "idempotency_key": "research-2025-context-001",
+  "reason": "讀取指定屆次的私人研究材料",
+  "agent": {
+    "provider": "external",
+    "model": "chosen-model",
+    "task_version": "research-v1",
+    "prompt_version": "v1"
+  }
+}
+```
+
+`import_materials` 的 input 為既有材料格式的1–100則陣列（race_id/year/group/platform/url/text/posted_at/scope/topic），沿用平台 URL 驗證、去重及不可變材料。未知出帖日期填 null，AI 提供的年份／主題只作材料標記，不代表人工核實。
+
+`create_draft` 的 input 為既有完整草稿格式（id/expected_revision/kind/race_id/year/group/title/body/sources/scope/material_ids）。僅接受 id=null、expected_revision=0，新建 status=draft。可用於摘要、主題整理及網站文字建議，必須保留材料依據與限制。create_draft 不可覆寫既有草稿；修改同一賽事及年份的私人 draft 可用 update_draft 並帶 expected_revision。待確認稿件須經原 proposal 人手覆核流程。不可標記確認、建立發布批准或發布。
+
+所有寫入必須提供理由及 idempotency_key。相同請求重試回傳原結果；相同 key 不同內容或角色回 IDEMPOTENCY_CONFLICT。材料庫與草稿寫入及成功操作紀錄在同一內容 SQLite 交易，失敗會回滾；跨研究資料庫操作的重試語義見下方橋接說明。紀錄保存角色、動作、模型資料、理由、時間及當時結果／新草稿版本。讀取不寫操作紀錄，失敗不算成功。
+
+這是本機可信營運者工具的 API 權限限制，不是 OS 沙箱。持有任意 shell、資料庫檔案或人手頁面 session 的 agent 仍可能繞過介面；真正獨立 worker 必須在另行限制的執行環境中只取得所需 Bearer 憑證，不取得私人檔案權限或人手 session。資料原文只是材料，不是操作指令。本版不會自動爬取來源、不接模型 API、不評分、不確認、不發布或部署。
+
+### 已授權 AI 操作的本地 session
+
+營運者已明確授權 AI／LLM 使用受限 CMS 介面：讀取、匯入材料、整理及建立私人草稿；確認文字、評分及公開發布仍由營運者操作。此授權不是任何稿件的發布批准。
+
+`node scripts/content-agent-session.mjs` 可由可信宿主啟動，透過隱藏 stdin 接收 `{editor_token,reader_token,port}`。憑證由宿主產生並保留在 session 記憶體，不落檔、不顯示、不放 shell 參數。當前本地預覽採用此方式啟用；不需要將模型供應商 API key 交給 CMS。程序停止後要重新建立憑證及啟用本地 session，無需重新要求同一範圍的操作授權。CLI／worker 的請求仍受原角色白名單約束。
+
+### AI 與原有研究流程橋接（2026-11-12）
+
+營運者本輪授權 AI 對既有20則材料清理、去重、逐條研究覆核並更新2025私人草稿。
+
+- research_prepare：input={material_ids:[...]}；呼叫原 ManualStore、cleanReport、ReviewStore.register 及 remember，保留原清理規則和快照。
+- research_context：input={material_id}；讀清理結果、來源映射、逐條決定和歷史。reader也可讀。
+- research_review：input={material_id,decision,note,expected_revision}；decision為keep/exclude/pending；記錄可信端點所附AI身份和操作識別，不能指定人手身份或覆寫人手研究決定。
+- update_draft：沿用草稿欄位及expected_revision，只更新同賽事、年份、種類且status=draft的私人版本；待確認稿件不可寫。
+
+來源短摘以原流程的root_text_observation保存，非平台留言ID，不杜撰作者、參賽身份或完整原文。相同來源不同摘錄各留觀察，同文重試不重複；同一影片不等於多個獨立樣本。
+
+跨內容、原始材料和研究三個SQLite庫並非單一交易：原始匯入與快照可重試，研究決定帶request_key恢復已完成寫入；內容稿件及命令紀錄在同一交易。失敗須重試同一完整請求，不能宣稱全批原子寫入。AI保留只代表私人研究取材決定，並非人手稿件確認或發布批准。

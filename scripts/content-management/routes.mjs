@@ -1,4 +1,5 @@
 import { Workflow } from "./workflow.mjs";
+import { AgentService } from "./agent.mjs";
 import {
   renderRaceEditor,
   renderProgress,
@@ -31,6 +32,11 @@ export async function serveContent({
   const html = (body) =>
     response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }).end(body);
   const workflow = new Workflow(content);
+  // Keep bookmarked URLs working; research has one shared interface.
+  if (request.method === "GET" && url.pathname === "/agent-tools") {
+    response.writeHead(302, { Location: "/materials" }).end();
+    return true;
+  }
   if (request.method === "POST" && url.pathname.startsWith("/api/content/workflow/")) {
     const input = await readBody(request, 262144);
     if (url.pathname === "/api/content/workflow/save") json(workflow.save(input));
@@ -119,7 +125,13 @@ export async function serveContent({
     return true;
   }
   if (request.method === "GET" && url.pathname === "/materials") {
-    html(renderMaterials(content, token, url.searchParams.get("race"), store?.batches() ?? []));
+    const agent = new AgentService(content, { store, reviews });
+    html(
+      renderMaterials(content, token, url.searchParams.get("race"), store?.batches() ?? [], {
+        links: agent.research.links(),
+        audit: agent.audit(),
+      }),
+    );
     return true;
   }
   if (request.method === "POST" && url.pathname === "/api/content/drafts/save") {

@@ -17,7 +17,7 @@ export function materials(content, race) {
     .map((r) => ({ id: r.id, ...JSON.parse(r.payload_json), created_at: r.created_at }))
     .filter((r) => !race || r.race_id === race);
 }
-export function importMaterials(content, input) {
+export function importMaterials(content, input, { nested = false } = {}) {
   if (!Array.isArray(input) || !input.length || input.length > 100)
     throw new ReviewError(400, "請提供1–100則材料的JSON陣列。");
   const records = input.map((r) => {
@@ -82,7 +82,7 @@ export function importMaterials(content, input) {
     const json = JSON.stringify(payload);
     return { id: createHash("sha256").update(json).digest("hex"), json };
   });
-  content.db.exec("BEGIN IMMEDIATE");
+  content.db.exec(nested ? "SAVEPOINT material_import" : "BEGIN IMMEDIATE");
   let added = 0;
   try {
     for (const r of records)
@@ -91,9 +91,9 @@ export function importMaterials(content, input) {
           .prepare("INSERT OR IGNORE INTO content_materials VALUES(?,?,?)")
           .run(r.id, r.json, new Date().toISOString()).changes,
       );
-    content.db.exec("COMMIT");
+    content.db.exec(nested ? "RELEASE material_import" : "COMMIT");
   } catch (e) {
-    content.db.exec("ROLLBACK");
+    content.db.exec(nested ? "ROLLBACK TO material_import; RELEASE material_import" : "ROLLBACK");
     throw e;
   }
   return { added, duplicates: records.length - added };

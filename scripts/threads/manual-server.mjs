@@ -13,8 +13,24 @@ import { serveSummary } from "./summary-route.mjs";
 import { serveComparison } from "./comparison-route.mjs";
 import { serveContent } from "../content-management/routes.mjs";
 import { decorateResearch } from "../content-management/views.mjs";
+import { AgentService } from "../content-management/agent.mjs";
+import { timingSafeEqual } from "node:crypto";
 
-export async function startManualServer({ store, reviews, content, port = 0 }) {
+export async function startManualServer({
+  store,
+  reviews,
+  content,
+  port = 0,
+  agentToken = process.env.NXTGO_AGENT_TOKEN,
+  agentReadToken = process.env.NXTGO_AGENT_READ_TOKEN,
+}) {
+  const agent = content ? new AgentService(content, { store, reviews }) : null;
+  if (
+    (agentToken && agentToken.length < 32) ||
+    (agentReadToken && agentReadToken.length < 32) ||
+    (agentToken && agentToken === agentReadToken)
+  )
+    throw new Error("Agent keys must be distinct and at least 32 characters.");
   const token = randomBytes(32).toString("hex");
   let origin;
   const server = createServer(async (request, response) => {
@@ -36,6 +52,22 @@ export async function startManualServer({ store, reviews, content, port = 0 }) {
     try {
       if (request.headers.host !== new URL(origin).host)
         throw new ReviewError(403, "只接受本機匯入頁面請求。");
+      if (request.url === "/api/agent/execute") {
+        const equal = (key) =>
+          key &&
+          typeof request.headers.authorization === "string" &&
+          Buffer.byteLength(request.headers.authorization) === Buffer.byteLength(`Bearer ${key}`) &&
+          timingSafeEqual(Buffer.from(request.headers.authorization), Buffer.from(`Bearer ${key}`));
+        const role = equal(agentToken) ? "private_editor" : equal(agentReadToken) ? "reader" : null;
+        if (!agent || !role || request.headers.origin)
+          throw new ReviewError(403, "Agent 權限不足；不可使用人手覆核 session。");
+        if (request.method !== "POST") throw new ReviewError(405, "只接受 POST。");
+        if (request.headers["content-type"]?.split(";")[0].trim() !== "application/json")
+          throw new ReviewError(415, "只接受 JSON。");
+        const result = agent.execute(role, await jsonBody(request, 1500000));
+        json(200, { status: "success", schema_version: 1, result });
+        return;
+      }
       if (request.method === "POST") {
         const reviewRoute = request.url.match(/^\/api\/reviews\/([a-f0-9]{64})\/review$/);
         const topicRoute = request.url.match(/^\/api\/reviews\/([a-f0-9]{64})\/topics$/);
@@ -287,7 +319,15 @@ export async function startManualServer({ store, reviews, content, port = 0 }) {
       throw new ReviewError(404, "找不到這個頁面。");
     } catch (error) {
       json(error instanceof ReviewError ? error.status : 500, {
-        code: error.code ?? (error.status === 409 ? "VERSION_CONFLICT" : error.status === 403 ? "FORBIDDEN" : error.status === 400 ? "INVALID_INPUT" : "REQUEST_FAILED"),
+        code:
+          error.code ??
+          (error.status === 409
+            ? "VERSION_CONFLICT"
+            : error.status === 403
+              ? "FORBIDDEN"
+              : error.status === 400
+                ? "INVALID_INPUT"
+                : "REQUEST_FAILED"),
         error: error instanceof ReviewError ? error.message : "本機保存或讀取失敗，請稍後再試。",
       });
     }

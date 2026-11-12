@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { PRESETS } from "./clean.mjs";
+import { PRESETS, RESEARCH_PRESETS } from "./clean.mjs";
 import { SOURCES } from "../research/sources.mjs";
 const e = (value) =>
   String(value ?? "").replace(
@@ -39,7 +39,7 @@ window.addEventListener('beforeunload',event=>{if(form.dataset.dirty==='true'){e
 batches().catch(()=>{document.querySelector('#batches').textContent='未能讀取已保存批次，請重新載入。';});`;
 
 const RESEARCH_SCRIPT = `
-const searchPresets=${JSON.stringify(Object.fromEntries(Object.entries(PRESETS).map(([key, p]) => [key, p.aliases[0]])))};
+const searchPresets=${JSON.stringify(Object.fromEntries(Object.entries(RESEARCH_PRESETS).map(([key, p]) => [key, p.aliases[0]])))};
 const sourceSearches=${JSON.stringify(Object.entries(SOURCES).map(([key, s]) => ({ key, label: s.label, domain: s.domains[0] ?? null })))};
 function searchLinks(){const query=(form.elements.research_query.value.trim()||searchPresets[form.elements.preset.value])+' '+form.elements.target_year.value+' '+form.elements.race_group.value;
 const box=document.querySelector('#research-links');box.replaceChildren();for(const source of sourceSearches){const a=document.createElement('a');a.textContent=source.label+' ↗';a.target='_blank';a.rel='noopener noreferrer';a.referrerPolicy='no-referrer';a.href=source.key==='youtube'?'https://www.youtube.com/results?search_query='+encodeURIComponent(query+' 賽後 Vlog'):'https://www.google.com/search?q='+encodeURIComponent((source.domain?'site:'+source.domain+' ':'')+query+' 賽後 心得');box.append(a,' ');}}
@@ -53,7 +53,9 @@ export function renderManualImport(mode, token, { multiSource = false } = {}) {
   <div class="banner">${mode === "demo" ? "<strong>虛構資料測試工作區</strong> · 只供介面測試，請勿把結果當成真實賽事證據。" : "<strong>手動貼上來源，毋須 Threads token</strong> · 系統不會開啟或抓取連結；原文、作者及來源未經 API 驗證。"}</div>
   <h1>${multiSource ? "每場比賽，用同一套流程研究。" : "先貼原文，之後整理及覆核。"}</h1><p>${multiSource ? "先開搜尋，再貼原文，最後覆核及整理摘要。搜尋入口不會自動抓取或匯入結果；需要登入時請在來源網站自行登入。" : "保存香港賽事 Threads 貼文／留言，再接清理、去重同逐條人工覆核。暫時沒有評分。"}</p>
   <form id="import-form" class="panel" data-dirty="false"><div class="grid">
-  <label>目標香港賽事<select name="preset">${Object.entries(PRESETS)
+  <label>目標香港賽事<select name="preset">${Object.entries(
+    multiSource ? RESEARCH_PRESETS : PRESETS,
+  )
     .map(([key, preset]) => `<option value="${key}">${e(preset.name)}</option>`)
     .join("")}</select></label>
   <label>收集目標屆次／年份<input name="target_year" type="number" min="1900" max="2200" step="1" value="${multiSource ? "" : "2027"}" required placeholder="填寫賽事年份"><span class="meta">是整理批次標籤，唔代表原文已確認係呢一年。</span></label>
