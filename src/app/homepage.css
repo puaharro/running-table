@@ -263,6 +263,7 @@
 }
 .home-agenda a > div {
   min-width: 0;
+  overflow-wrap: anywhere;
 }
 .home-agenda h3 {
   font-size: 16px;
@@ -357,6 +358,25 @@
 .home-calendar-focus > a:hover {
   text-decoration: underline;
 }
+.home-photo {
+  display: block;
+  width: 100%;
+  margin: 0 0 var(--space-5);
+}
+.home-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 2;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.home-review-photo {
+  margin-top: var(--space-4);
+}
+.home-review-photo img {
+  aspect-ratio: 2 / 1;
+}
 .home-block {
   padding-block: var(--space-14);
 }
@@ -387,148 +407,6 @@
   flex-shrink: 0;
   font-size: 14px;
   font-weight: 600;
-}
-.home-picks {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-6);
-}
-.home-pick {
-  min-width: 0;
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--home-card);
-  border: 1px solid var(--home-line);
-  display: flex;
-  flex-direction: column;
-}
-.home-pick-primary {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-.home-pick-cover {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  height: 164px;
-  padding: var(--space-5) var(--space-6);
-  overflow: hidden;
-  background: var(--home-cover-green);
-  color: var(--home-ink);
-}
-.home-pick-cover--1 {
-  background: var(--home-cover-orange);
-  color: var(--home-orange-ink);
-}
-.home-pick-cover--2 {
-  background: var(--home-cover-blue);
-  color: var(--home-blue-ink);
-}
-.home-pick-cover > span {
-  position: relative;
-  z-index: 1;
-  font-size: 12px;
-  font-weight: 600;
-}
-.home-pick-cover > span:last-child {
-  letter-spacing: 0;
-}
-.home-pick-cover strong {
-  font-family: var(--font-brand);
-  position: relative;
-  z-index: 1;
-  font-size: 64px;
-  line-height: 0.85;
-  white-space: pre-line;
-}
-.home-pick-cover--1 strong {
-  font-size: 37px;
-}
-.home-pick-track {
-  position: absolute;
-  right: -35px;
-  bottom: -135px;
-  width: 180px;
-  height: 280px;
-  border: 2px solid currentColor;
-  border-radius: 80px;
-  transform: rotate(35deg);
-  opacity: 0.14;
-}
-.home-pick-copy {
-  padding: var(--space-6) var(--space-6) var(--space-4);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  flex: 1;
-}
-.home-pick-copy > time {
-  font-size: 13px;
-  color: var(--home-muted);
-}
-.home-pick-copy h3 {
-  font-size: 21px;
-  line-height: 1.6;
-  font-weight: 700;
-  margin: var(--space-3) 0 var(--space-3);
-}
-.home-pick-copy > p {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin: 0;
-  font-size: 14px;
-  color: var(--home-muted);
-}
-.home-pick-copy ul {
-  list-style: none;
-  padding: 0;
-  margin: var(--space-4) 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-.home-pick-copy li {
-  border-radius: 4px;
-  background: var(--home-metadata);
-  color: var(--home-muted);
-  padding: var(--space-1) var(--space-3);
-  font-size: 13px;
-}
-.home-pick-action {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 44px;
-  margin-top: auto;
-  font-size: 14px;
-  font-weight: 600;
-}
-.home-pick-status {
-  margin: 0 var(--space-6);
-  border-top: 1px solid var(--home-line);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  padding-block: var(--space-4);
-  gap: var(--space-2);
-  font-size: 12px;
-  color: var(--home-muted);
-}
-.home-pick-status .status-badge {
-  font-size: 13px;
-}
-.home-source-note {
-  font-size: 13px;
-  color: var(--home-muted);
-  line-height: 1.8;
-  margin: var(--space-5) 0 0;
 }
 .home-reviews {
   background: var(--home-tint);
@@ -708,9 +586,6 @@
   .home-calendar-focus {
     padding: var(--space-6);
   }
-  .home-picks {
-    gap: var(--space-4);
-  }
 }
 @media (max-width: 767px) {
   .home-hero {
@@ -868,55 +743,10 @@
   .home-section-head > a {
     font-size: 14px;
   }
-  .home-picks,
   .home-review-grid,
   .home-guide-grid {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-5);
-  }
-  .home-pick-primary {
-    display: grid;
-    grid-template-columns: 88px minmax(0, 1fr);
-  }
-  .home-pick-cover {
-    height: 100%;
-    min-height: 240px;
-    padding: var(--space-5) var(--space-3);
-  }
-  .home-pick-cover strong {
-    font-size: 42px;
-  }
-  .home-pick-cover--1 strong {
-    font-size: 25px;
-  }
-  .home-pick-cover > span {
-    font-size: 10px;
-  }
-  .home-pick-copy {
-    padding: var(--space-5) var(--space-4) var(--space-3);
-  }
-  .home-pick-copy h3 {
-    font-size: 19px;
-    margin-block: var(--space-2) var(--space-3);
-  }
-  .home-pick-copy > time {
-    font-size: 12px;
-  }
-  .home-pick-copy ul {
-    margin-block: var(--space-3);
-  }
-  .home-pick-copy li {
-    font-size: 12px;
-    padding-inline: var(--space-2);
-  }
-  .home-pick-action {
-    font-size: 13px;
-  }
-  .home-pick-status {
-    margin-inline: var(--space-4);
-  }
-  .home-source-note {
-    font-size: 12px;
   }
   .home-review-card {
     padding: var(--space-6) var(--space-5);
@@ -969,9 +799,6 @@
       color 160ms ease,
       background-color 160ms ease,
       border-color 160ms ease;
-  }
-  .home-pick:hover {
-    border-color: var(--home-action);
   }
 }
 
@@ -1389,12 +1216,10 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .home-agenda-action svg,
-  .home-pick-action svg {
+  .home-agenda-action svg {
     transition: translate var(--motion-fast);
   }
-  .home-agenda a:is(:hover, :focus-visible, :active) .home-agenda-action svg,
-  .home-pick-primary:is(:hover, :focus-visible, :active) .home-pick-action svg {
+  .home-agenda a:is(:hover, :focus-visible, :active) .home-agenda-action svg {
     translate: 3px 0;
   }
 }

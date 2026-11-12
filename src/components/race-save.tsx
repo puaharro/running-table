@@ -57,13 +57,7 @@ export function FavoriteFeedback({ saved, message }: { saved: boolean; message: 
       className={confirmed ? "favorite-notice" : error ? "favorite-error" : "sr-only"}
       role="status"
     >
-      {confirmed ? (
-        <>
-          已收藏 · <a href={favoriteResultsHref}>查看收藏</a>
-        </>
-      ) : (
-        message
-      )}
+      {confirmed ? <a href={favoriteResultsHref}>查看收藏</a> : message}
     </span>
   );
 }

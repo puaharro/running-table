@@ -12,7 +12,6 @@ import { reviewsForGroup } from "@/lib/editorial-reviews";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { ReturnLink } from "@/components/return-link";
 import { RaceAnnouncement, RaceDayInformation } from "@/components/race-day-information";
-import { RaceDayCard } from "@/components/race-day-card";
 import { RegistrationTimeline } from "@/components/registration-timeline";
 import { RaceChapterNav } from "@/components/race-chapter-nav";
 import {
@@ -140,7 +139,6 @@ export default async function RacePage({ params }: Props) {
                 <strong>{race.organizer}</strong>
               </div>
             </div>
-            <RaceDayCard race={race} />
             <section id="race-about" tabIndex={-1}>
               <h2>賽事概覽</h2>
               <p>{race.summary}</p>

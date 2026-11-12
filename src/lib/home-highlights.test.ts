@@ -31,6 +31,5 @@ it("removes elapsed races and provides a useful empty state after the season", (
     createElement(HomeHighlights, { races, initialNow: "2028-01-01T12:00:00+08:00" }),
   );
   expect(afterSeason).toContain("新一季賽事整理中");
-  expect(afterSeason).not.toContain('class="home-pick"');
   expect(afterSeason).toMatch(/href="\/races\/?"/);
 });

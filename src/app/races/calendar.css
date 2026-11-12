@@ -147,6 +147,10 @@
   gap: var(--space-2);
 }
 .search-page .engine-options .option-row button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
   min-height: 44px;
   min-width: 44px;
   padding: var(--space-2) var(--space-3);
@@ -156,6 +160,7 @@
   background: var(--home-card);
   font-size: 14px;
   font-weight: 600;
+  line-height: 1.5;
   transition:
     background var(--motion-fast),
     border-color var(--motion-fast);
@@ -176,23 +181,19 @@
   box-shadow: inset 0 -2px 0 var(--home-action);
 }
 .search-page .engine-options .option-row-checkmarks button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
-  padding-inline: var(--space-2);
+  position: relative;
+  padding-inline: var(--space-4);
 }
-.option-row-checkmarks button::before {
+.option-row-checkmarks button[aria-pressed="true"]::before {
   content: "";
+  position: absolute;
+  inset-inline-start: var(--space-2);
+  inset-block-start: 50%;
   width: 6px;
   height: 10px;
   border: solid currentColor;
   border-width: 0 2px 2px 0;
-  transform: translateY(-1px) rotate(45deg);
-  visibility: hidden;
-}
-.option-row-checkmarks button[aria-pressed="true"]::before {
-  visibility: visible;
+  transform: translateY(-60%) rotate(45deg);
 }
 .calendar-option-count {
   min-width: 3ch;
@@ -608,12 +609,31 @@
     color: var(--home-ink);
   }
   dialog.calendar-filter-panel::backdrop {
-    background: #16282180;
+    background: rgb(22 40 33 / var(--calendar-backdrop-opacity, 0.5));
   }
   .calendar-sheet-dismiss {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    gap: var(--space-2);
     padding: 4px var(--space-4) 0;
+  }
+  .calendar-sheet-grip {
+    display: grid;
+    flex: 1;
+    min-height: 44px;
+    place-items: center;
+    touch-action: pan-x pinch-zoom;
+    cursor: grab;
+  }
+  .calendar-sheet-grip:active {
+    cursor: grabbing;
+  }
+  .calendar-sheet-grip::before {
+    content: "";
+    width: 32px;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--home-control);
   }
   .calendar-sheet-dismiss button {
     min-height: 44px;

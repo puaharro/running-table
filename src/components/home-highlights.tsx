@@ -1,23 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Icon } from "./ui";
-import { StatusBadge } from "./status-badge";
 import { useClock } from "@/lib/use-clock";
-import { displayDate, distanceLabel, hongKongToday, statusSummary } from "@/lib/races";
+import { distanceLabel, hongKongToday } from "@/lib/races";
 import { raceHref } from "@/lib/site";
 import type { Race } from "@/lib/types";
 
-const featuredIds = [
-  "hzmb-half-marathon-2026",
-  "unicef-powerun-2027",
-  "standard-chartered-hk-marathon-2027",
-];
-const featuredArtwork: Record<string, { headline: string; caption: string }> = {
-  "hzmb-half-marathon-2026": { headline: "21.1", caption: "跨越大橋" },
-  "unicef-powerun-2027": { headline: "RUN FOR\nGOOD.", caption: "為善起跑" },
-  "standard-chartered-hk-marathon-2027": { headline: "42.2", caption: "城市挑戰" },
-};
 const distances = (race: Race) => [
   ...new Set(race.groups.map((group) => distanceLabel(group.distanceKm))),
 ];
@@ -28,15 +18,6 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
   const upcoming = races
     .filter((race) => race.status === "scheduled" && race.endDate >= today)
     .sort((a, b) => a.date.localeCompare(b.date));
-  const featured = [
-    ...featuredIds.flatMap((id) => upcoming.filter((race) => race.id === id)),
-    ...upcoming.filter((race) => !featuredIds.includes(race.id)),
-  ].slice(0, 3);
-  const latestVerified = races
-    .flatMap((race) => (race.verifiedAt ? [race.verifiedAt.slice(0, 10)] : []))
-    .sort()
-    .at(-1);
-
   return (
     <>
       <section className="shell home-search-strip" aria-label="搜尋賽事入口">
@@ -115,6 +96,14 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
               睇清楚再決定。
             </h2>
             <p>日期同距離係開始。報名資格、交通安排同跑手體驗，一齊了解先揀得啱。</p>
+            <div className="home-photo">
+              <Image
+                src="/images/home/harbour-run.webp"
+                alt="清晨沿海旁慢跑嘅跑手"
+                width={768}
+                height={512}
+              />
+            </div>
             <ul>
               <li>
                 <Icon name="check" size={17} /> 當屆官方資料逐項整理
@@ -131,63 +120,6 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
             </Link>
           </aside>
         </div>
-      </section>
-      <section className="shell home-block" aria-labelledby="featured-heading">
-        <div className="home-section-head">
-          <div>
-            <h2 id="featured-heading">精選賽事</h2>
-            <p>由大橋半馬到城市全馬，先睇日期，再了解每場特色。</p>
-          </div>
-          <Link href="/races/">
-            全部賽事 <Icon name="arrow" />
-          </Link>
-        </div>
-        <div className="home-picks">
-          {featured.map((race, index) => {
-            const summary = statusSummary(race, race.groups, now);
-            const artwork = featuredArtwork[race.id] ?? { headline: "START.", caption: race.sport };
-            return (
-              <article className="home-pick" key={race.id}>
-                <Link className="home-pick-primary" href={raceHref(race)}>
-                  <div className={`home-pick-cover home-pick-cover--${index}`} aria-hidden="true">
-                    <span>{race.date.slice(0, 4)} SEASON</span>
-                    <strong>{artwork.headline}</strong>
-                    <div className="home-pick-track" />
-                    <span>{artwork.caption}</span>
-                  </div>
-                  <div className="home-pick-copy">
-                    <time dateTime={race.date}>
-                      {displayDate(race.date, { year: "numeric", weekday: "short" })}
-                    </time>
-                    <h3>{race.name}</h3>
-                    <p>
-                      <Icon name="pin" size={15} />
-                      {race.district === "按組別起點" ? "香港 · 按組別起點" : race.district}
-                    </p>
-                    <ul aria-label="比賽距離">
-                      {distances(race).map((distance) => (
-                        <li key={distance}>{distance}</li>
-                      ))}
-                    </ul>
-                    <span className="home-pick-action">
-                      查看詳細資料 <Icon name="arrow" size={18} />
-                    </span>
-                  </div>
-                </Link>
-                <div className="home-pick-status">
-                  <StatusBadge status={summary.key}>{summary.label}</StatusBadge>
-                  <span>按所列報名渠道</span>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-        {!featured.length && <p>新一季精選賽事整理中，歡迎查看完整時間表。</p>}
-        <p className="home-source-note">
-          {latestVerified &&
-            `賽事資料最近核對：${displayDate(latestVerified, { year: "numeric" })}。`}
-          報名狀態按各渠道核對時間顯示，付款前請向大會確認。
-        </p>
       </section>
     </>
   );

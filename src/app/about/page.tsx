@@ -53,6 +53,27 @@ export default function About() {
             <Link href="/ratings/feedback/">評級投訴／大會回應（私人電郵）</Link>
           </p>
         </section>
+        <section id="photo-credits">
+          <h2>首頁圖片來源</h2>
+          <ul>
+            <li>
+              <a href="https://commons.wikimedia.org/wiki/File:Hong_Kong-Zhuhai-Macau_Bridge_at_Sha_Lo_Wan_(20180918131126).jpg">
+                港珠澳大橋香港連接路 · 沙螺灣（2018 年環境照）
+              </a>{" "}
+              · 攝影 N509FZ
+            </li>
+            <li>
+              <a href="https://commons.wikimedia.org/wiki/File:Standard_Chartered_Hong_Kong_Marathon_2026_runners_18-01-2026(12).jpg">
+                渣打香港馬拉松 2026 · 市區路段
+              </a>{" "}
+              · 攝影 LN9267
+            </li>
+          </ul>
+          <p>
+            以上兩張相按 <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>{" "}
+            授權使用，已縮放及裁切展示。首頁海旁跑步及三張指南配圖為 AI 生成示意圖。
+          </p>
+        </section>
         <section id="corrections">
           <h2>資料更正與聯絡</h2>
           <p>

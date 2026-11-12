@@ -144,7 +144,7 @@ it("offers an inline saved-list link only after a confirmed save, without a dial
   );
   expect(html).toContain('class="favorite-notice"');
   expect(html).toContain('role="status"');
-  expect(html).toContain("已收藏 ·");
+  expect(html).not.toContain("已收藏");
   expect(html).toContain(`href="${favoriteResultsHref}"`);
   expect(html).toContain("查看收藏");
   expect(html).not.toContain('role="dialog"');

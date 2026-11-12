@@ -25,6 +25,7 @@ import { resultsEntry, resultsHref } from "@/lib/results-location";
 import { FavoriteButton, useFavorites } from "./race-save";
 import { RaceBackToSearch } from "./race-back-to-search";
 import { RaceOverallRating } from "./race-overall-rating";
+import { CalendarSheetDismiss } from "./calendar-sheet-dismiss";
 import type { EditorialReview } from "@/lib/editorial-reviews";
 import { distanceOptions, regions, type Filters, type Race } from "@/lib/types";
 
@@ -398,11 +399,7 @@ export function RaceExplorer({
             });
           }}
         >
-          {filtersExpanded && (
-            <form method="dialog" className="calendar-sheet-dismiss">
-              <button type="submit">關閉篩選</button>
-            </form>
-          )}
+          {filtersExpanded && <CalendarSheetDismiss />}
           <div className="filter-card search-engine">
             <div className="calendar-filter-heading">
               <Icon name="filter" size={18} />

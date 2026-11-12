@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { HomeFocusBanner } from "@/components/home-focus-banner";
 import { homeFocusSlides } from "@/data/home-focus";
 import { HomeHighlights } from "@/components/home-highlights";
@@ -10,6 +11,29 @@ import { editorialReviews } from "@/data/editorial-reviews";
 import { reviewTargets } from "@/lib/rating-policy";
 import { pageMetadata, raceHref } from "@/lib/site";
 import "./homepage.css";
+
+const reviewPhotos: Record<string, { file: string; height: number; alt: string }> = {
+  "hzmb-half-2025-participant-notes": {
+    file: "hzmb-sha-lo-wan.webp",
+    height: 640,
+    alt: "2018 年環境照：從沙螺灣望向港珠澳大橋香港連接路",
+  },
+  "schkm-marathon-2026-participant-notes": {
+    file: "schkm-2026.webp",
+    height: 720,
+    alt: "2026 年渣馬跑手經過市區路段嘅補給枱",
+  },
+};
+
+const guidePhotos: Record<string, { file: string; alt: string; height?: number }> = {
+  "choose-your-first-10k": { file: "first-10k.webp", alt: "三位跑手沿海旁並排慢跑" },
+  "race-registration-checklist": { file: "registration-gear.webp", alt: "跑鞋、號碼布同扣針" },
+  "compare-half-marathons": {
+    file: "half-marathon.webp",
+    alt: "兩位跑手攤開示意路線圖，比較路線同起伏",
+    height: 384,
+  },
+};
 
 export const metadata = pageMetadata(
   "香港路跑時間表、賽事資料及體驗評論",
@@ -49,6 +73,7 @@ export default function Home() {
               const target = reviewTargets.find((entry) => entry.id === review.targetId);
               const race = races.find((entry) => entry.id === target?.raceId);
               if (!target || !race) return null;
+              const photo = reviewPhotos[review.id];
               return (
                 <article className="home-review-card" key={review.id}>
                   <h3>
@@ -63,6 +88,16 @@ export default function Home() {
                       {review.editionYear} 年 · {target.group}
                     </span>
                   </div>
+                  {photo && (
+                    <div className="home-photo home-review-photo">
+                      <Image
+                        src={`/images/home/${photo.file}`}
+                        alt={photo.alt}
+                        width={960}
+                        height={photo.height}
+                      />
+                    </div>
+                  )}
                   {review.quickTake && (
                     <p className="home-review-summary">{review.quickTake.summary}</p>
                   )}
@@ -101,20 +136,33 @@ export default function Home() {
           </Link>
         </div>
         <div className="home-guide-grid">
-          {guides.map((guide) => (
-            <Link className="home-guide" href={`/guides/${guide.slug}/`} key={guide.slug}>
-              <div className="home-guide-top">
-                <span>
-                  {guide.category} · {guide.readMinutes} 分鐘
+          {guides.map((guide) => {
+            const photo = guidePhotos[guide.slug];
+            return (
+              <Link className="home-guide" href={`/guides/${guide.slug}/`} key={guide.slug}>
+                <div className="home-guide-top">
+                  <span>
+                    {guide.category} · {guide.readMinutes} 分鐘
+                  </span>
+                </div>
+                <h3>{guide.title}</h3>
+                <p>{guide.description}</p>
+                {photo && (
+                  <span className="home-photo">
+                    <Image
+                      src={`/images/home/${photo.file}`}
+                      alt={photo.alt}
+                      width={768}
+                    height={photo.height ?? 512}
+                    />
+                  </span>
+                )}
+                <span className="home-guide-read">
+                  閱讀指南 <Icon name="arrow" size={18} />
                 </span>
-              </div>
-              <h3>{guide.title}</h3>
-              <p>{guide.description}</p>
-              <span className="home-guide-read">
-                閱讀指南 <Icon name="arrow" size={18} />
-              </span>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       </section>
       <section className="shell home-help" aria-labelledby="home-help-heading">

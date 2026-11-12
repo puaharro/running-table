@@ -295,6 +295,7 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 .race-detail-page .highlight-list li {
   gap: var(--space-4);
@@ -335,6 +336,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
+  min-width: 0;
   min-height: 44px;
   padding: var(--space-2) var(--space-4);
   border: 1px solid var(--home-action);
@@ -343,6 +345,10 @@
   color: var(--home-action);
   font-size: 16px;
   font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.race-group-links a svg {
+  flex: none;
 }
 .race-detail-page .detail-content .race-group-links a {
   text-decoration: none;
@@ -367,9 +373,13 @@
 .race-detail-page .registration-summary {
   margin: 0;
   padding: var(--space-4) 0;
+  overflow-wrap: anywhere;
 }
 .race-detail-page .registration-summary-list > li {
   padding: var(--space-4) 0;
+}
+.race-detail-page .channel-summary-list .channel-comparison {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
 }
 .race-detail-page .registration-summary-heading {
   flex-wrap: wrap;
@@ -1125,72 +1135,6 @@
   .return-link-responsive .return-link-short {
     display: inline;
   }
-}
-
-.race-day-card {
-  max-width: 580px;
-  background: var(--surface-card);
-  border: 1px solid var(--home-line);
-  border-radius: var(--radius-card);
-  overflow-wrap: anywhere;
-}
-.race-day-card-heading,
-.race-day-card-groups,
-.race-day-card-footer {
-  padding-inline: clamp(16px, 4vw, 26px);
-}
-.race-day-card-heading {
-  padding-block: var(--space-5) var(--space-4);
-  border-block-start: 4px solid var(--home-action);
-  border-radius: var(--radius-card) var(--radius-card) 0 0;
-}
-.race-day-card-heading h2 {
-  margin: 0 0 var(--space-2);
-  color: var(--home-action);
-  font-size: 14px;
-}
-.race-day-card-heading p {
-  margin: 0;
-  font-weight: 700;
-  font-size: clamp(17px, 2.4vw, 22px);
-  line-height: 1.5;
-}
-.race-day-card-heading p + p {
-  margin-top: var(--space-1);
-  font-size: 15px;
-}
-.race-day-card-heading .race-day-card-notice {
-  color: var(--urgent-text);
-}
-.race-day-card-groups {
-  margin: 0;
-  padding-block: var(--space-2);
-  background: var(--home-tint);
-  border-block: 1px dashed var(--home-control);
-}
-.race-day-card-groups > div {
-  display: grid;
-  grid-template-columns: minmax(5rem, 1fr) minmax(0, 2fr);
-  gap: var(--space-3);
-  padding-block: var(--space-3);
-}
-.race-day-card-groups > div + div {
-  border-top: 1px solid var(--home-line);
-}
-.race-day-card-groups dt {
-  font-weight: 700;
-}
-.race-day-card-groups dd {
-  display: grid;
-  gap: var(--space-1);
-  margin: 0;
-}
-.race-day-card-footer a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 .registration-timeline {
