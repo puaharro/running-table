@@ -128,15 +128,19 @@ npm run test:threads:http
 
 這是單一可信本機營運者工具：agent CLI 不提供接受／拒絕／發布命令；覆核沿用本機頁面的 Host／Origin／CSRF token。它不提供不同 OS 使用者、任意 shell agent 或共享資料庫寫入權限之間的強隔離。不要把覆核 session token 交給 worker；具有任意本機程式執行權限的 agent 仍須受宿主權限限制。遠端多使用者認證及獨立 worker credential 不在此版範圍。
 
-## RMAC 已確認網站文字的本機預覽
+## RMAC 已確認網站稿的正式建置接入
 
-已確認的網站精簡稿以獨立「跑手分享」區塊預覽，不寫入評級或發布資料。營運者已確認 v2 不顯示人名及機構／傳媒名，來源改用中性編號並保留原連結；完整指定文字存於 `content/runner-copy-previews/rmac-2026.json`，連同版本及 SHA-256 校驗碼提交 Git，以便重新開啟本機預覽。原始研究、CMS 資料庫及舊草稿繼續留在忽略的 `.editorial-private/`，不提交；沒有代營運者建立批准收據。
+已確認的 CMS 網站稿第2版現存於 `content/runner-copies/rmac-2026.json`，`runnerCopyForRace` 在開發及正式靜態建置均載入指定賽事，不再使用 `LOCAL_RMAC_COPY_PREVIEW` 開關。來源 website ID、內容雜湊及轉換後文字雜湊綁定指定版本；改文字或版本須重新覆核並更新綁定，不會靜默採用其他草稿。
+
+內容維持已確認匯出檔的完整標題、五個主題正文、來源編號連結、未知及觀察限制，包括標題原有的「候選・待覆核」文字；沒有另行改寫或新增評分。正式頁面不顯示開發專用「本機預覽／未部署」提示。CMS 資料庫、原始研究及操作紀錄繼續留在 `.editorial-private/`，正式建置不讀取私人檔案。
 
 ```sh
-LOCAL_RMAC_COPY_PREVIEW=1 npm run dev -- --port 3000
+npm run build
+npm run check:export
+PORT=3002 npm start
 ```
 
-在 `/races/2026/rmac-gold-coast-15k-2026/#runner-copy` 查看五個主題、來源及未知標示。只有 development、明確設定預覽開關、對應 RMAC 賽事時才讀取已確認文字；正常開發、其他賽事及 production 靜態匯出均不載入這份文字。文字檔不存在或版本／校驗不符時會報錯，不會代用其他草稿。這不是公開內容發布管線，沒有新增評分、發布批准或部署。
+`check:export` 除原匯出檢查，亦核對 RMAC 靜態 HTML 包含指定完整段落、五個主題及8個引用，不顯示人名／機構名，並確保不滲入其他賽事。這是建置接入，不代表已部署；實際部署仍須營運者另行批准。
 
 ## 新版：新增賽事 → 研究進度 → 網站稿 → 確認匯出
 

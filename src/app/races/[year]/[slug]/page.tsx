@@ -1,6 +1,6 @@
 import "./race-detail.css";
-import { localRunnerCopy } from "@/lib/local-runner-copy";
-import { RaceRunnerCopyPreview } from "@/components/race-runner-copy-preview";
+import { runnerCopyForRace } from "@/lib/runner-copy";
+import { RaceRunnerCopy } from "@/components/race-runner-copy";
 import { UnscopedRunnerOpinions } from "@/components/runner-opinions";
 import { RaceSaveActions } from "@/components/race-save";
 import { notFound } from "next/navigation";
@@ -46,7 +46,7 @@ export default async function RacePage({ params }: Props) {
     const reviews = reviewsForGroup(race, group, editorialReviews);
     return reviews.current.length || reviews.historical.length;
   });
-  const runnerCopy = localRunnerCopy(race.id);
+  const runnerCopy = runnerCopyForRace(race.id);
   const experienceId = runnerCopy
     ? "runner-copy"
     : "ratings-" + (reviewedGroups[0] ?? race.groups[0]).id;
@@ -175,7 +175,7 @@ export default async function RacePage({ params }: Props) {
                 <RegistrationGroups race={race} initialNow={now} />
               </div>
             </section>
-            {runnerCopy && <RaceRunnerCopyPreview copy={runnerCopy} />}
+            {runnerCopy && <RaceRunnerCopy copy={runnerCopy} />}
             <UnscopedRunnerOpinions race={race} />
             <AdSlot />
             {!!race.enquiryLinks?.length && (

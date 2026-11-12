@@ -19,7 +19,7 @@
     "test:threads": "node --test tests/threads-collector.node.mjs tests/threads-report.node.mjs tests/threads-clean.node.mjs tests/threads-review.node.mjs tests/threads-manual.node.mjs tests/threads-confirmed.node.mjs tests/threads-topics.node.mjs tests/threads-summary.node.mjs tests/threads-comparison.node.mjs tests/threads-comparison-notes.node.mjs tests/threads-verification.node.mjs",
     "test:threads:http": "node --test tests/threads-review-http.node.mjs tests/threads-manual-http.node.mjs tests/threads-topics-http.node.mjs tests/threads-summary-http.node.mjs tests/threads-comparison-http.node.mjs tests/threads-comparison-notes-http.node.mjs tests/threads-verification-http.node.mjs",
     "check:data": "vitest run src/lib/data.test.ts",
-    "check:export": "node scripts/check-export.mjs",
+    "check:export": "node scripts/check-export.mjs && node scripts/check-runner-copy-export.mjs",
     "review:data": "node scripts/review-queue.mjs",
     "format": "prettier --write src tests scripts docs README.md package.json next.config.ts tsconfig.json vitest.config.ts .github .prettierrc.json",
     "test:http": "node scripts/smoke-http.mjs",

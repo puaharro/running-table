@@ -1,4 +1,4 @@
-import type { LocalRunnerCopy } from "@/lib/local-runner-copy";
+import type { RunnerCopy } from "@/lib/runner-copy";
 
 // Render the small Markdown subset in the confirmed copy without changing wording
 // or interpreting source text as HTML. Links remain HTTPS and open separately.
@@ -17,7 +17,7 @@ function inline(text: string) {
   });
 }
 
-export function RaceRunnerCopyPreview({ copy }: { copy: LocalRunnerCopy }) {
+export function RaceRunnerCopy({ copy }: { copy: RunnerCopy }) {
   const [heading, ...blocks] = copy.markdown.trim().split(/\n\n+/);
   return (
     <section
@@ -26,7 +26,6 @@ export function RaceRunnerCopyPreview({ copy }: { copy: LocalRunnerCopy }) {
       tabIndex={-1}
       aria-labelledby="runner-copy-heading"
     >
-      <p className="runner-copy-preview-note">本機預覽 · 網站精簡稿 v{copy.revision} · 未部署</p>
       <h2 id="runner-copy-heading">{heading.replace(/^# /, "")}</h2>
       <div className="runner-copy-body">
         {blocks.map((block, index) =>
