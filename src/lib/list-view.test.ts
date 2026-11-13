@@ -4,7 +4,12 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { races } from "@/data/races";
 import { RaceExplorer } from "@/components/race-explorer";
 import { defaultFilters, selectRaces } from "./races";
-import { filteredRaceHref, orderSavedResults, paginateResults } from "./list-view";
+import {
+  filteredRaceHref,
+  orderByListedDeadline,
+  orderSavedResults,
+  paginateResults,
+} from "./list-view";
 import { resultsEntry, resultsHref, safeResultsHref } from "./results-location";
 const now = "2026-11-07T02:00:00Z";
 it("renders ten races per page and preserves all results without overlap or omissions", () => {
@@ -68,4 +73,40 @@ it("exports only ten list cards while retaining total count and accessible next-
   expect(html).toContain("下一頁");
   expect(html).toContain("上一頁");
   expect(html).toContain("共 ");
+});
+
+it("orders by the displayed verified deadline even when live registration is unconfirmed", () => {
+  const base = races[0];
+  const make = (id: string, deadline?: string) => {
+    const channel = {
+      ...base.groups[0].channels[0],
+      status: "unknown" as const,
+      deadline,
+      registrationClosesAt: undefined,
+      sourceIds: ["official"],
+    };
+    return {
+      race: {
+        ...base,
+        id,
+        sources: [
+          {
+            id: "official",
+            title: "Official",
+            url: "https://example.test/",
+            fields: ["channels.registration"],
+            checkedAt: now,
+          },
+        ],
+      },
+      groups: [{ ...base.groups[0], channels: [channel] }],
+    };
+  };
+  const input = [make("none"), make("later", "2026-11-10"), make("sooner", "2026-11-08")];
+  expect(orderByListedDeadline(input, now).map(({ race }) => race.id)).toEqual([
+    "sooner",
+    "later",
+    "none",
+  ]);
+  expect(input[0].race.id).toBe("none");
 });

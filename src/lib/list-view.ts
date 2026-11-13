@@ -1,4 +1,5 @@
 import { clockTime, hongKongToday, type Clock } from "./races";
+import { listDeadline } from "./list-registration";
 import { raceHref } from "./site";
 import type { Filters, Race, RaceGroup } from "./types";
 
@@ -23,6 +24,19 @@ export function orderSavedResults(results: RaceResult[], now: Clock) {
     );
   });
 }
+export function orderByListedDeadline(results: RaceResult[], now: Clock) {
+  return results
+    .map((result) => {
+      const date = listDeadline(result.race, result.groups, now)?.date;
+      const deadline = date
+        ? Date.parse(date.length === 10 ? `${date}T23:59:59.999+08:00` : date)
+        : Infinity;
+      return { result, deadline };
+    })
+    .sort((a, b) => a.deadline - b.deadline || a.result.race.date.localeCompare(b.result.race.date))
+    .map(({ result }) => result);
+}
+
 export function paginateResults<T>(results: T[], requestedPage: number) {
   const pages = Math.max(1, Math.ceil(results.length / racesPerPage));
   const page = Math.min(

@@ -32,11 +32,15 @@ export function RaceOverallRating({
 
   return (
     <div className="calendar-race-overall" title={scope}>
-      <span>推薦指數：</span>
+      <span className="calendar-rating-label">推薦指數：</span>
       {stars === null ? (
         <span>N/A</span>
       ) : (
-        <span className="calendar-overall-stars" role="img" aria-label={`${stars}／5 星 · ${scope}`}>
+        <span
+          className="calendar-overall-stars"
+          role="img"
+          aria-label={`${stars}／5 星 · ${scope}`}
+        >
           {Array.from({ length: 5 }, (_, index) => {
             const fill = Math.max(0, Math.min(1, stars - index));
             return (

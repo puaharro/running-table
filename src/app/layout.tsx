@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Header, Footer } from "@/components/ui";
+import { Footer } from "@/components/ui";
+import { Header } from "@/components/site-header";
 import { publicRaces } from "@/data/races";
 import { guides } from "@/data/guides";
 import { QuickNavigation, type QuickDestination } from "@/components/quick-navigation";

@@ -64,9 +64,11 @@ export function FavoriteFeedback({ saved, message }: { saved: boolean; message: 
 export function FavoriteButton({
   race,
   onRemove,
+  compact = false,
 }: {
   race: Pick<Race, "id" | "name">;
   onRemove?: (keyboard: boolean) => void;
+  compact?: boolean;
 }) {
   const { ids, ready, message, toggle } = useFavorites();
   const saved = ids.includes(race.id);
@@ -89,9 +91,20 @@ export function FavoriteButton({
         >
           {saved ? "★" : "☆"}
         </span>{" "}
-        {saved ? "已收藏" : "收藏"}
+        {!compact && (saved ? "已收藏" : "收藏")}
       </button>
-      <FavoriteFeedback saved={saved} message={message} />
+      {compact ? (
+        <span
+          className={
+            message.startsWith("未能") || message.startsWith("無法") ? "favorite-error" : "sr-only"
+          }
+          role="status"
+        >
+          {message}
+        </span>
+      ) : (
+        <FavoriteFeedback saved={saved} message={message} />
+      )}
     </span>
   );
 }

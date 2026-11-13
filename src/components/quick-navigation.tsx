@@ -4,6 +4,7 @@ import Link from "next/link";
 import { favoriteResultsHref } from "@/lib/results-location";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Icon } from "./ui";
 
 export type QuickDestination = {
   href: string;
@@ -67,7 +68,10 @@ export function QuickNavigation({ destinations }: { destinations: QuickDestinati
           dialog.current?.showModal();
         }}
       >
-        快速前往
+        <span className="quick-navigation-icon">
+          <Icon name="search" size={16} />
+        </span>
+        <span>快速前往</span>
       </button>
       <dialog
         className="nxtgo-dialog quick-navigation-dialog"

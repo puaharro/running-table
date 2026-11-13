@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { SiteNavigation } from "./site-navigation";
 import type { Guide } from "@/data/guides";
 import { siteName } from "@/lib/site";
 
@@ -64,32 +63,6 @@ export function Icon({
     >
       {paths[name]}
     </svg>
-  );
-}
-export function Header({ quickNavigation }: { quickNavigation: React.ReactNode }) {
-  return (
-    <>
-      <a className="skip-link" href="#main">
-        跳到主要內容
-      </a>
-      <div className="prototype-strip">
-        資料核實提示 <span>報名狀態只對應所列渠道，付款前請向大會再次確認。</span>
-      </div>
-      <header className="site-header">
-        <div className="shell header-inner">
-          <Link className="brand" href="/" aria-label={`${siteName} 首頁`}>
-            <span className="brand-mark">
-              <i />
-              <i />
-              <i />
-            </span>
-            <span className="brand-wordmark">{siteName}</span>
-          </Link>
-          <SiteNavigation />
-          {quickNavigation}
-        </div>
-      </header>
-    </>
   );
 }
 export function Footer() {

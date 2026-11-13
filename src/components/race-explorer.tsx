@@ -20,7 +20,13 @@ import {
 } from "@/lib/filter-shortcuts";
 import { groupLocations } from "@/lib/group-locations";
 import { listDeadline, listRegistration } from "@/lib/list-registration";
-import { filteredRaceHref, orderSavedResults, paginateResults, pastResult } from "@/lib/list-view";
+import {
+  filteredRaceHref,
+  orderByListedDeadline,
+  orderSavedResults,
+  paginateResults,
+  pastResult,
+} from "@/lib/list-view";
 import { resultsEntry, resultsHref } from "@/lib/results-location";
 import { FavoriteButton, useFavorites } from "./race-save";
 import { RaceBackToSearch } from "./race-back-to-search";
@@ -29,9 +35,15 @@ import { CalendarSheetDismiss } from "./calendar-sheet-dismiss";
 import type { EditorialReview } from "@/lib/editorial-reviews";
 import { distanceOptions, regions, type Filters, type Race } from "@/lib/types";
 
-function monthLabel(date: string) {
-  return `${date.slice(0, 4)} 年 ${Number(date.slice(5, 7))} 月`;
-}
+const filterCategories = [
+  ["date", "比賽日期"],
+  ["location", "地點"],
+  ["distance", "距離"],
+  ["registration", "報名狀態"],
+  ["type", "賽事類型"],
+  ["difficulty", "賽事難易度"],
+] as const;
+type FilterCategory = (typeof filterCategories)[number][0];
 
 function highlightMatch(text: string, query: string) {
   const term = query.trim();
@@ -117,6 +129,9 @@ export function RaceExplorer({
     const timer = window.setTimeout(() => setCopyState(null), 2400);
     return () => window.clearTimeout(timer);
   }, [copyState]);
+  const [filterCategory, setFilterCategory] = useState<FilterCategory | null>(null);
+  const categoryButtons = useRef<Partial<Record<FilterCategory, HTMLButtonElement>>>({});
+  const categoryOptions = useRef<HTMLDivElement>(null);
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   useEffect(() => {
     if (!filtersExpanded) return;
@@ -218,21 +233,29 @@ export function RaceExplorer({
     [races, savedOnly, favorites.ids],
   );
   const results = useMemo(() => {
-    const selected = selectRaces(searchableRaces, filters, now);
+    const selected = selectRaces(
+      searchableRaces,
+      filters.sort === "deadline" ? { ...filters, sort: "date" } : filters,
+      now,
+    );
+    if (filters.sort === "deadline") return orderByListedDeadline(selected, now);
     return savedOnly && filters.sort === "date" ? orderSavedResults(selected, now) : selected;
   }, [searchableRaces, filters, now, savedOnly]);
   const optionCounts = useMemo(() => {
-    if (!filtersExpanded) return null;
+    if (!filtersExpanded && filterCategory !== "location" && filterCategory !== "distance")
+      return null;
     return {
       regions: regions.map(
         (region) =>
-          selectRaces(searchableRaces, { ...filters, countries: [], regions: [region] }, now).length,
+          selectRaces(searchableRaces, { ...filters, countries: [], regions: [region] }, now)
+            .length,
       ),
       distances: distanceOptions.map(
-        (distance) => selectRaces(searchableRaces, { ...filters, distances: [distance] }, now).length,
+        (distance) =>
+          selectRaces(searchableRaces, { ...filters, distances: [distance] }, now).length,
       ),
     };
-  }, [filtersExpanded, searchableRaces, filters, now]);
+  }, [filterCategory, filtersExpanded, searchableRaces, filters, now]);
   const pagination = paginateResults(results, page);
   const visibleResults = pagination.items;
   useEffect(() => {
@@ -274,7 +297,7 @@ export function RaceExplorer({
   const showCustomDates =
     customDates || (!!(filters.from || filters.to) && !yearActive && !nextYearActive);
   const error = filterError(filters);
-  const dateErrorId = filtersExpanded ? "calendar-date-range-error" : "calendar-filter-error";
+  const dateErrorId = "calendar-date-range-error";
   const activeFilterCount =
     Number(Boolean(filters.from || filters.to)) +
     Number(Boolean(filters.month)) +
@@ -287,6 +310,14 @@ export function RaceExplorer({
     filters.sports.length +
     filters.statuses.length +
     filters.channels.length;
+  const categoryCounts: Record<FilterCategory, number> = {
+    date: Number(Boolean(filters.from || filters.to)) + Number(Boolean(filters.month)),
+    location: filters.regions.length + filters.countries.length,
+    distance: filters.distances.length + Number(Boolean(filters.min || filters.max)),
+    registration: filters.statuses.length + filters.channels.length,
+    type: Number(filters.themed || filters.family) + filters.sports.length,
+    difficulty: 0,
+  };
   const acceptingOnly = filters.statuses.length === 1 && filters.statuses[0] === "open";
   const selectedView = savedOnly
     ? "saved"
@@ -350,7 +381,7 @@ export function RaceExplorer({
       </header>
       <div className="calendar-search-bar" ref={searchBar}>
         <label className="calendar-keyword">
-          <span>搜尋賽事</span>
+          <span className="sr-only">搜尋賽事</span>
           <span className="search-box">
             <Icon name="search" size={21} />
             <input
@@ -400,103 +431,170 @@ export function RaceExplorer({
           }}
         >
           {filtersExpanded && <CalendarSheetDismiss />}
-          <div className="filter-card search-engine">
+          <div
+            className="filter-card search-engine"
+            onKeyDown={(event) => {
+              if (event.key !== "Escape" || filtersExpanded || !filterCategory) return;
+              event.preventDefault();
+              setFilterCategory(null);
+              categoryButtons.current[filterCategory]?.focus();
+            }}
+          >
             <div className="calendar-filter-heading">
-              <Icon name="filter" size={18} />
-              <h2>篩選條件</h2>
+              {filtersExpanded ? (
+                <>
+                  <Icon name="filter" size={18} />
+                  <h2>篩選條件</h2>
+                </>
+              ) : (
+                <div className="calendar-filter-categories" role="group" aria-label="篩選條件">
+                  {filterCategories.map(([key, label]) => (
+                    <button
+                      key={key}
+                      ref={(button) => {
+                        if (button) categoryButtons.current[key] = button;
+                        else delete categoryButtons.current[key];
+                      }}
+                      type="button"
+                      aria-expanded={filterCategory === key}
+                      aria-controls="calendar-category-options"
+                      data-active={categoryCounts[key] > 0}
+                      onClick={(event) => {
+                        const next = filterCategory === key ? null : key;
+                        setFilterCategory(next);
+                        if (next && event.detail === 0) {
+                          window.requestAnimationFrame(() => categoryOptions.current?.focus());
+                        }
+                      }}
+                    >
+                      {label}
+                      {categoryCounts[key] > 0 && (
+                        <span className="calendar-category-count">
+                          <span className="sr-only">已選 </span>
+                          {categoryCounts[key]}
+                        </span>
+                      )}
+                      <span className="calendar-category-chevron" aria-hidden="true" />
+                    </button>
+                  ))}
+                </div>
+              )}
               <button
                 type="button"
                 className="calendar-reset-filters"
                 onClick={() => {
+                  setFilterCategory(null);
                   setCustomDates(false);
-                  changeSavedOnly(false);
-                  update(defaultFilters);
+                  changeSavedOnly(false, defaultFilters);
                 }}
               >
                 重置條件
               </button>
             </div>
-            <div className="engine-options">
-              <div className="engine-option-row" role="group" aria-label="比賽日期">
-                <span className="engine-label">比賽日期</span>
-                <div className="option-row">
-                  <button aria-pressed={yearActive} onClick={() => quickDate("year")}>
-                    {calendarYear}
-                  </button>
-                  <button aria-pressed={nextYearActive} onClick={() => quickDate("next-year")}>
-                    {calendarYear + 1}
-                  </button>
-                  <button
-                    aria-pressed={showCustomDates}
-                    aria-expanded={showCustomDates}
-                    aria-controls="custom-dates"
-                    onClick={() => {
-                      setCustomDates(!showCustomDates);
-                      update({ ...filters, from: "", to: "", view: "all" });
-                    }}
-                  >
-                    指定時間
-                  </button>
-                  <label className="engine-month">
-                    <span className="sr-only">月份</span>
-                    <select
-                      aria-label="月份"
-                      value={filters.month}
-                      onChange={(e) => field("month", e.target.value)}
+            <div
+              className="engine-options"
+              id="calendar-category-options"
+              ref={categoryOptions}
+              role={filtersExpanded ? undefined : "group"}
+              aria-label={
+                filtersExpanded
+                  ? undefined
+                  : filterCategories.find(([key]) => key === filterCategory)?.[1]
+              }
+              tabIndex={filtersExpanded ? undefined : -1}
+              hidden={!filtersExpanded && !filterCategory}
+            >
+              <div hidden={!filtersExpanded && filterCategory !== "date"}>
+                <div className="engine-option-row" role="group" aria-label="比賽日期">
+                  {filtersExpanded && <span className="engine-label">比賽日期</span>}
+                  <div className="option-row">
+                    <button aria-pressed={yearActive} onClick={() => quickDate("year")}>
+                      {calendarYear}
+                    </button>
+                    <button aria-pressed={nextYearActive} onClick={() => quickDate("next-year")}>
+                      {calendarYear + 1}
+                    </button>
+                    <button
+                      aria-pressed={showCustomDates}
+                      aria-expanded={showCustomDates}
+                      aria-controls="custom-dates"
+                      onClick={() => {
+                        setCustomDates(!showCustomDates);
+                        update({ ...filters, from: "", to: "", view: "all" });
+                      }}
                     >
-                      <option value="">月份</option>
-                      {Array.from({ length: 12 }, (_, index) => index + 1).map((month) => (
-                        <option key={month} value={String(month)}>
-                          {month}月
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                      指定時間
+                    </button>
+                    <label className="engine-month">
+                      <span className="sr-only">月份</span>
+                      <select
+                        aria-label="月份"
+                        value={filters.month}
+                        onChange={(e) => field("month", e.target.value)}
+                      >
+                        <option value="">月份</option>
+                        {Array.from({ length: 12 }, (_, index) => index + 1).map((month) => (
+                          <option key={month} value={String(month)}>
+                            {month}月
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
                 </div>
+                {showCustomDates && (
+                  <fieldset className="date-inputs engine-dates" id="custom-dates">
+                    <legend>指定日期範圍</legend>
+                    <label>
+                      <span>開始日期</span>
+                      <input
+                        aria-label="開始日期"
+                        type="date"
+                        aria-invalid={error ? true : undefined}
+                        aria-describedby={error ? dateErrorId : undefined}
+                        value={filters.from}
+                        onChange={(e) => update({ ...filters, from: e.target.value, view: "all" })}
+                      />
+                    </label>
+                    <span aria-hidden="true">至</span>
+                    <label>
+                      <span>結束日期</span>
+                      <input
+                        aria-label="結束日期"
+                        type="date"
+                        aria-invalid={error ? true : undefined}
+                        aria-describedby={error ? dateErrorId : undefined}
+                        value={filters.to}
+                        onChange={(e) => update({ ...filters, to: e.target.value, view: "all" })}
+                      />
+                    </label>
+                    {error && (
+                      <p
+                        className="calendar-date-range-error"
+                        id="calendar-date-range-error"
+                        role="alert"
+                      >
+                        {error}
+                      </p>
+                    )}
+                    {!error && (filters.from || filters.to) && (
+                      <p className="calendar-date-range-summary" role="status">
+                        {filters.from && displayDate(filters.from, { year: "numeric" })}
+                        {filters.from && filters.to && " "}
+                        {filters.to && `至 ${displayDate(filters.to, { year: "numeric" })}`}
+                        {!filters.to && "起"}
+                      </p>
+                    )}
+                  </fieldset>
+                )}
               </div>
-              {showCustomDates && (
-                <fieldset className="date-inputs engine-dates" id="custom-dates">
-                  <legend>指定日期範圍</legend>
-                  <label>
-                    <span>開始日期</span>
-                    <input
-                      aria-label="開始日期"
-                      type="date"
-                      aria-invalid={error ? true : undefined}
-                      aria-describedby={error ? dateErrorId : undefined}
-                      value={filters.from}
-                      onChange={(e) => update({ ...filters, from: e.target.value, view: "all" })}
-                    />
-                  </label>
-                  <span aria-hidden="true">至</span>
-                  <label>
-                    <span>結束日期</span>
-                    <input
-                      aria-label="結束日期"
-                      type="date"
-                      aria-invalid={error ? true : undefined}
-                      aria-describedby={error ? dateErrorId : undefined}
-                      value={filters.to}
-                      onChange={(e) => update({ ...filters, to: e.target.value, view: "all" })}
-                    />
-                  </label>
-                  {error && filtersExpanded && (
-                    <p className="calendar-date-range-error" id="calendar-date-range-error" role="alert">
-                      {error}
-                    </p>
-                  )}
-                  {!error && (filters.from || filters.to) && (
-                    <p className="calendar-date-range-summary" role="status">
-                      {filters.from && displayDate(filters.from, { year: "numeric" })}
-                      {filters.from && filters.to && " "}
-                      {filters.to && `至 ${displayDate(filters.to, { year: "numeric" })}`}
-                      {!filters.to && "起"}
-                    </p>
-                  )}
-                </fieldset>
-              )}
-              <div className="engine-option-row" role="group" aria-label="地點">
-                <span className="engine-label">地點</span>
+              <div
+                className="engine-option-row"
+                role="group"
+                aria-label="地點"
+                hidden={!filtersExpanded && filterCategory !== "location"}
+              >
+                {filtersExpanded && <span className="engine-label">地點</span>}
                 <div className="option-row option-row-checkmarks">
                   {regions.map((region, index) => (
                     <button
@@ -510,8 +608,13 @@ export function RaceExplorer({
                   ))}
                 </div>
               </div>
-              <div className="engine-option-row" role="group" aria-label="距離">
-                <span className="engine-label">距離</span>
+              <div
+                className="engine-option-row"
+                role="group"
+                aria-label="距離"
+                hidden={!filtersExpanded && filterCategory !== "distance"}
+              >
+                {filtersExpanded && <span className="engine-label">距離</span>}
                 <div className="option-row option-row-checkmarks">
                   {distanceOptions.map((distance, index) => (
                     <button
@@ -525,8 +628,13 @@ export function RaceExplorer({
                   ))}
                 </div>
               </div>
-              <div className="engine-option-row" role="group" aria-label="報名狀態">
-                <span className="engine-label">報名狀態</span>
+              <div
+                className="engine-option-row"
+                role="group"
+                aria-label="報名狀態"
+                hidden={!filtersExpanded && filterCategory !== "registration"}
+              >
+                {filtersExpanded && <span className="engine-label">報名狀態</span>}
                 <div className="option-row">
                   <button
                     aria-pressed={acceptingOnly}
@@ -536,8 +644,13 @@ export function RaceExplorer({
                   </button>
                 </div>
               </div>
-              <div className="engine-option-row" role="group" aria-label="賽事類型">
-                <span className="engine-label">賽事類型</span>
+              <div
+                className="engine-option-row"
+                role="group"
+                aria-label="賽事類型"
+                hidden={!filtersExpanded && filterCategory !== "type"}
+              >
+                {filtersExpanded && <span className="engine-label">賽事類型</span>}
                 <div className="option-row option-row-checkmarks">
                   <button
                     aria-pressed={filters.themed}
@@ -551,9 +664,10 @@ export function RaceExplorer({
                 className="engine-option-row"
                 role="group"
                 aria-label="賽事難易度"
+                hidden={!filtersExpanded && filterCategory !== "difficulty"}
                 aria-describedby="difficulty-note"
               >
-                <span className="engine-label">賽事難易度</span>
+                {filtersExpanded && <span className="engine-label">賽事難易度</span>}
                 <div className="option-row">
                   {["困難", "適中", "容易"].map((difficulty) => (
                     <button key={difficulty} disabled>
@@ -631,7 +745,9 @@ export function RaceExplorer({
                 data-copied={copyState === "copied"}
               >
                 {copyState === "copied" ? (
-                  <>已複製 <Icon name="check" size={16} /></>
+                  <>
+                    已複製 <Icon name="check" size={16} />
+                  </>
                 ) : copyState === "manual" ? (
                   "請複製網址"
                 ) : (
@@ -656,6 +772,29 @@ export function RaceExplorer({
           <div className="race-results-layout" ref={resultsPanel}>
             <div className="race-results-main">
               <div className="race-list">
+                {visibleResults.length > 0 && (
+                  <div className="calendar-row-head" role="group" aria-label="賽事列表欄位">
+                    <span>賽事／起點</span>
+                    <button
+                      type="button"
+                      aria-pressed={filters.sort === "date"}
+                      onClick={() => field("sort", "date")}
+                    >
+                      比賽日 {filters.sort === "date" && <span aria-hidden="true">↑</span>}
+                    </button>
+                    <span>距離</span>
+                    <span>報名概況</span>
+                    <button
+                      type="button"
+                      aria-pressed={filters.sort === "deadline"}
+                      onClick={() => field("sort", "deadline")}
+                    >
+                      最近截止 {filters.sort === "deadline" && <span aria-hidden="true">↑</span>}
+                    </button>
+                    <span>推薦指數</span>
+                    <span>收藏</span>
+                  </div>
+                )}
                 {visibleResults.map(({ race, groups }, index) => {
                   const detailHref = filteredRaceHref(race, groups, filters);
                   const deadline = listDeadline(race, groups, now);
@@ -668,9 +807,7 @@ export function RaceExplorer({
                   const hasDistanceFilter = Boolean(
                     filters.distances.length || filters.min || filters.max,
                   );
-                  const RaceHeading = filters.sort === "date" ? "h3" : "h2";
-                  const month = race.date.slice(0, 7);
-                  const previousMonth = visibleResults[index - 1]?.race.date.slice(0, 7);
+
                   const pastSaved =
                     savedOnly && filters.sort === "date" && pastResult({ race, groups }, now);
                   const firstPast =
@@ -678,12 +815,6 @@ export function RaceExplorer({
                   return (
                     <Fragment key={race.id}>
                       {firstPast && <h2 className="past-saved-heading">過往收藏</h2>}
-                      {filters.sort === "date" && month !== previousMonth && (
-                        <div className="month-divider">
-                          <h2>{monthLabel(race.date)}</h2>
-                          <i />
-                        </div>
-                      )}
                       <motion.article
                         layout={ready && !reduceMotion ? "position" : false}
                         layoutDependency={resultKey}
@@ -706,9 +837,9 @@ export function RaceExplorer({
                         }}
                       >
                         <div className="calendar-race-content">
-                          <RaceHeading>
+                          <h2>
                             <Link href={detailHref}>{highlightMatch(race.name, filters.q)}</Link>
-                          </RaceHeading>
+                          </h2>
                           <p className="calendar-race-venue">
                             <Icon name="pin" size={18} />
                             <span>
@@ -724,76 +855,68 @@ export function RaceExplorer({
                               )}
                             </span>
                           </p>
-                          <ul className="calendar-race-distances" aria-label="比賽距離">
-                            {distances.map((distance) => {
-                              const matched = matchedDistances.has(distance);
-                              return (
-                                <li
-                                  key={distance}
-                                  data-distance-match={hasDistanceFilter ? matched : undefined}
-                                >
-                                  {distance}
-                                  {hasDistanceFilter && matched && (
-                                    <span className="sr-only">（符合篩選）</span>
-                                  )}
-                                </li>
-                              );
-                            })}
-                          </ul>
-                          <p className="calendar-race-start">
-                            <Icon name="calendar" size={18} />
-                            <span className="sr-only">起跑日期：</span>
-                            <span>
-                              {[...new Set(groups.map((group) => group.date))]
-                                .sort()
-                                .map((date, index) => (
-                                  <Fragment key={date}>
-                                    {index > 0 && " ／ "}
-                                    <time dateTime={date}>
-                                      {displayDate(date, { year: "numeric" })}
-                                    </time>
-                                  </Fragment>
-                                ))}
-                            </span>
-                          </p>
-                          <p className="calendar-race-registration" aria-label="報名概況">
-                            {listRegistration(race, groups, now)}
-                          </p>
-                          {deadline && (
-                            <p className="calendar-race-deadline">
+                        </div>
+                        <p className="calendar-race-start">
+                          <Icon name="calendar" size={18} />
+                          <span className="sr-only">起跑日期：</span>
+                          <span>
+                            {[...new Set(groups.map((group) => group.date))]
+                              .sort()
+                              .map((date, index) => (
+                                <Fragment key={date}>
+                                  {index > 0 && " ／ "}
+                                  <time dateTime={date}>{date.replaceAll("-", "/")}</time>
+                                </Fragment>
+                              ))}
+                          </span>
+                        </p>
+                        <ul className="calendar-race-distances" aria-label="比賽距離">
+                          {distances.map((distance) => {
+                            const matched = matchedDistances.has(distance);
+                            return (
+                              <li
+                                key={distance}
+                                data-distance-match={hasDistanceFilter ? matched : undefined}
+                              >
+                                {distance}
+                                {hasDistanceFilter && matched && (
+                                  <span className="sr-only">（符合篩選）</span>
+                                )}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                        <p className="calendar-race-registration" aria-label="報名概況">
+                          {listRegistration(race, groups, now)}
+                        </p>
+                        <div className="calendar-race-deadline" data-empty={!deadline}>
+                          {deadline ? (
+                            <>
                               <span className="sr-only">最近已核實報名截止：</span>
                               <strong>
                                 <time dateTime={deadline.date}>{deadline.label}</time>
                               </strong>
                               <span>{deadline.scope}</span>
-                            </p>
+                            </>
+                          ) : (
+                            <span aria-label="暫無已核實截止日期">—</span>
                           )}
                         </div>
-                        <div className="calendar-card-actions">
-                          <FavoriteButton
-                            race={race}
-                            onRemove={
-                              savedOnly
-                                ? (keyboard) => {
-                                    setUndoPaused(false);
-                                    setUndoError(false);
-                                    setUndoMessage(`已移除收藏：${race.name}`);
-                                    setRemoved({ id: race.id, name: race.name, keyboard });
-                                  }
-                                : undefined
-                            }
-                          />
-                          <div className="calendar-card-detail">
-                            <Link
-                              className="button button-coral calendar-race-detail"
-                              href={detailHref}
-                              aria-label={`${race.name}：詳細資料`}
-                            >
-                              詳細資料 <Icon name="arrow" size={20} />
-                            </Link>
-                            <RaceOverallRating race={race} groups={groups} reviews={reviews} />
-                          </div>
-                        </div>
+                        <RaceOverallRating race={race} groups={groups} reviews={reviews} />
+                        <FavoriteButton
+                          compact
+                          race={race}
+                          onRemove={
+                            savedOnly
+                              ? (keyboard) => {
+                                  setUndoPaused(false);
+                                  setUndoError(false);
+                                  setUndoMessage(`已移除收藏：${race.name}`);
+                                  setRemoved({ id: race.id, name: race.name, keyboard });
+                                }
+                              : undefined
+                          }
+                        />
                       </motion.article>
                       {index === 5 && visibleResults.length > 7 && <AdSlot />}
                     </Fragment>

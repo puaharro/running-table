@@ -19,6 +19,9 @@ export function SiteNavigation() {
         <Link
           key={href}
           href={href}
+          onClick={(event) => {
+            event.currentTarget.closest<HTMLElement>("[popover]")?.hidePopover();
+          }}
           aria-current={
             href === "/"
               ? pathname === "/"
