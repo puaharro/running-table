@@ -1,17 +1,19 @@
-import type { LocalConfirmedExperience } from "@/lib/local-confirmed-experience";
+import type { ConfirmedRaceExperience } from "@/lib/confirmed-race-experience";
 import { ratingDimensions, ratingPolicy } from "@/lib/rating-policy";
 
-export function LocalConfirmedExperiencePreview({
+export function RaceConfirmedExperience({
   experience: e,
   currentYear,
+  reviewAnchor,
 }: {
-  experience: LocalConfirmedExperience;
+  experience: ConfirmedRaceExperience;
   currentYear: string;
+  reviewAnchor?: string;
 }) {
   const urls = [...new Set(e.sections.flatMap((s) => s.urls))];
   return (
-    <section id="local-confirmed-experience" className="race-runner-copy" tabIndex={-1}>
-      <p className="runner-copy-preview-note">本機預覽 · 網站稿第 2 版 · 未發布或部署</p>
+    <section id="race-confirmed-experience" className="race-runner-copy" tabIndex={-1}>
+      {reviewAnchor && <span id={reviewAnchor} aria-hidden="true" />}
       <h2>{e.title}</h2>
       <p className="review-edition-note">
         {e.year} 年 · {e.group} · 往屆體驗，不代表 {currentYear} 年安排或表現。

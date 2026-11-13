@@ -10,6 +10,7 @@ import { raceHref } from "./site";
 import { assertEditorialReviews, reviewsForGroup, type EditorialReview } from "./editorial-reviews";
 import { ratingDimensions, ratingPolicy, reviewTargets } from "./rating-policy";
 import { defaultFilters, selectRaces } from "./races";
+import { confirmedRaceExperience } from "./confirmed-race-experience";
 
 const bridge = races.find((r) => r.id === "hzmb-half-marathon-2026")!;
 const main = races.find((r) => r.id === "standard-chartered-hk-marathon-2027")!;
@@ -344,11 +345,22 @@ describe("race detail as the main review reading location", () => {
         }),
       );
       const review = reviewsForGroup(race, race.groups[0], editorialReviews).historical[0];
-      expect(html).toContain('href="#ratings-' + race.groups[0].id + '"');
+      const confirmed = confirmedRaceExperience(race.id)!;
+      expect(html).toContain('href="#race-confirmed-experience"');
       expect(html).toContain('id="ratings-' + race.groups[0].id + '"');
       expect(html).toContain('id="review-' + review.id + '"');
-      expect(html).toContain(review.quickTake!.summary);
-      for (const note of review.quickTake!.reminders) expect(html).toContain(note);
+      for (const section of confirmed.sections) {
+        expect(html).toContain(section.body);
+        expect(html).toContain(section.limitations);
+      }
+      for (const a of Object.values(confirmed.assessments)) expect(html).toContain(a.comment);
+      if (review.editionYear === confirmed.year) {
+        expect(html.match(new RegExp('id="review-' + review.id + '"', "g"))).toHaveLength(1);
+        expect(html).not.toContain(review.quickTake!.summary);
+      } else {
+        expect(html).toContain(review.quickTake!.summary);
+        for (const note of review.quickTake!.reminders) expect(html).toContain(note);
+      }
       expect(html).toContain("不代表 " + race.date.slice(0, 4) + " 年安排或表現");
       expect(html).not.toContain('<details class="historical-reviews"');
       expect(html).not.toContain('<details class="review-full" open');

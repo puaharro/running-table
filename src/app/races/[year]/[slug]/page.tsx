@@ -1,8 +1,8 @@
 import "./race-detail.css";
 import { runnerCopyForRace } from "@/lib/runner-copy";
 import { RaceRunnerCopy } from "@/components/race-runner-copy";
-import { localConfirmedExperience } from "@/lib/local-confirmed-experience";
-import { LocalConfirmedExperiencePreview } from "@/components/local-confirmed-experience";
+import { confirmedRaceExperience } from "@/lib/confirmed-race-experience";
+import { RaceConfirmedExperience } from "@/components/confirmed-race-experience";
 import { localRatingAssessment } from "@/lib/local-rating-preview";
 import { RaceRatingAssessmentPreview } from "@/components/race-rating-assessment-preview";
 import { UnscopedRunnerOpinions } from "@/components/runner-opinions";
@@ -52,9 +52,18 @@ export default async function RacePage({ params }: Props) {
   });
   const runnerCopy = runnerCopyForRace(race.id);
   const ratingAssessment = localRatingAssessment(race.id);
-  const localExperience = localConfirmedExperience(race.id);
-  const experienceId = localExperience
-    ? "local-confirmed-experience"
+  const confirmedExperience = confirmedRaceExperience(race.id);
+  const replacedReview = confirmedExperience
+    ? race.groups.flatMap((group) => {
+        if (group.id !== confirmedExperience.groupId) return [];
+        const { current, historical } = reviewsForGroup(race, group, editorialReviews);
+        return [...current, ...historical].filter(
+          (r) => r.editionYear === confirmedExperience.year,
+        );
+      })[0]
+    : undefined;
+  const experienceId = confirmedExperience
+    ? "race-confirmed-experience"
     : runnerCopy
       ? "runner-copy"
       : "ratings-" + (reviewedGroups[0] ?? race.groups[0]).id;
@@ -98,7 +107,7 @@ export default async function RacePage({ params }: Props) {
             initialNow={now}
             experienceHref={"#" + experienceId}
             experienceLabel={
-              localExperience
+              confirmedExperience
                 ? "2025 往屆體驗"
                 : runnerCopy
                   ? "跑手分享（無評分）"
@@ -186,8 +195,8 @@ export default async function RacePage({ params }: Props) {
                   race={race}
                   initialNow={now}
                   previewEdition={
-                    localExperience
-                      ? { groupId: localExperience.groupId, year: localExperience.year }
+                    confirmedExperience
+                      ? { groupId: confirmedExperience.groupId, year: confirmedExperience.year }
                       : undefined
                   }
                 />
@@ -195,13 +204,14 @@ export default async function RacePage({ params }: Props) {
             </section>
             {ratingAssessment && <RaceRatingAssessmentPreview draft={ratingAssessment} />}
             {runnerCopy && <RaceRunnerCopy copy={runnerCopy} />}
-            {localExperience && (
-              <LocalConfirmedExperiencePreview
-                experience={localExperience}
+            {confirmedExperience && (
+              <RaceConfirmedExperience
+                experience={confirmedExperience}
                 currentYear={race.date.slice(0, 4)}
+                reviewAnchor={replacedReview ? `review-${replacedReview.id}` : undefined}
               />
             )}
-            {!localExperience && <UnscopedRunnerOpinions race={race} />}
+            {!confirmedExperience && <UnscopedRunnerOpinions race={race} />}
             <AdSlot />
             {!!race.enquiryLinks?.length && (
               <section id="enquiries" tabIndex={-1}>

@@ -1,0 +1,83 @@
+{
+  "raceId": "standard-chartered-hk-marathon-2027",
+  "groupId": "schkm-2027-marathon",
+  "group": "全馬",
+  "year": 2025,
+  "copyRevision": 2,
+  "ratingRevision": 1,
+  "sourceWebsiteId": "website-9f450c03-615e-4d6d-84ad-fdfec68d7837",
+  "sourceContentHash": "508826d3e4b1fff433e233db9bfb046f9a459a08bada26068f63ac86965bca34",
+  "title": "香港全馬2025｜跑手分享五項重點",
+  "sections": [
+    {
+      "topic": "賽道",
+      "body": "一篇當屆全馬自述提到橋路起伏及迎風較吃力，也覺得末段市區沿途打氣氣氛較好。另一份全馬一組影片的說明、字幕，以及同頁一則自述同組的留言，均提到部分路段人多，影響跑動或加速。",
+      "limitations": "網誌部分英文圖說誤寫2024，主文賽名及日期指向2025；仍待覆核。影片只讀原頁說明、可見字幕及已載入留言，未逐段觀看。路段距離依作者標示；沒有量度擠塞範圍或持續時間。留言身份及彼此獨立性未知，不代表全部批次。同一影片的說明及字幕只作一份作者自述；同頁留言亦不作獨立查證或樣本數統計。",
+      "urls": [
+        "https://rickiekwong.blogspot.com/2025/03/hk-actions-2025-standard-chartered-hong.html",
+        "https://www.youtube.com/watch?v=NEGAlOxyQF4",
+        "https://www.youtube.com/watch?v=NEGAlOxyQF4&lc=UgwYKRf1f-1mqdnd_NR4AaABAg"
+      ]
+    },
+    {
+      "topic": "補給",
+      "body": "未知。現有已讀2025全馬材料沒有足夠飲品、食物、站點取用或後段供應的親身描述。",
+      "limitations": "不借用其他屆次訪談、半馬或十公里經驗；未提及問題也不等於已確認供應正常。下列連結只標示已讀但未提供足夠補給細節的範圍，不是補給正常的證據。",
+      "urls": [
+        "https://rickiekwong.blogspot.com/2025/03/hk-actions-2025-standard-chartered-hong.html",
+        "https://www.youtube.com/watch?v=NEGAlOxyQF4"
+      ]
+    },
+    {
+      "topic": "寄存",
+      "body": "未知。現有已讀材料不足以交代寄存、領回效率及等候時間。",
+      "limitations": "取選手包屬賽前領物，不等於比賽日寄存；沒有以領物記錄推論行李服務。下列連結只標示已讀但未提供足夠寄存細節的範圍，不是寄存表現的證據。",
+      "urls": [
+        "https://rickiekwong.blogspot.com/2025/03/hk-actions-2025-standard-chartered-hong.html",
+        "https://www.youtube.com/watch?v=NEGAlOxyQF4"
+      ]
+    },
+    {
+      "topic": "交通",
+      "body": "當年賽前資料預告提早公共交通、特別巴士及臨時封路安排。跑手實際到場、候車、班次執行及離場體驗未知。",
+      "limitations": "來源屬2025年2月4日賽前報道，並非親身或實際執行紀錄；只保留當屆背景，不作現行交通指引。",
+      "urls": ["https://hk.running.biji.co/index.php?act=info&id=7856&q=news"]
+    },
+    {
+      "topic": "大會安排",
+      "body": "當屆材料提到到啟德領取選手包；有個人自述較偏好以往的博覽會場地。領物及整體運作效率仍未知。",
+      "limitations": "取包依影片字幕及網誌個人描述，未逐段看影片；偏好舊場地不等於證明新場地安排欠佳。沒有排隊實測，不把未核實的擺位疑慮或事故敘述寫成事實。",
+      "urls": [
+        "https://www.youtube.com/watch?v=NEGAlOxyQF4",
+        "https://rickiekwong.blogspot.com/2025/03/hk-actions-2025-standard-chartered-hong.html"
+      ]
+    }
+  ],
+  "ruleVersion": "2026-10-30-experience-v1",
+  "assessments": {
+    "course": {
+      "score": 2,
+      "comment": "建議2/5，只適用本輪材料所描述的2025全馬一組觀察。作者的說明及字幕多次提到人多，另有同頁自述同組留言形容頭段及西隧出口上斜路段擠迫、難以加速，對應多個路段流動及超車需要改善。末段沿途打氣是另一篇全馬自述提到的正面體驗；上落斜辛苦本身不扣分。未逐段看影片，留言身份及彼此獨立性未知，沒有量度擠塞範圍或時間，不推廣至所有批次。",
+      "positives": ["有當屆全馬自述形容末段市區打氣氣氛較佳。"],
+      "concerns": ["全馬一組文字及字幕描述部分路段人多、影響流動或加速；未獨立核實。"],
+      "suitedFor": "只供了解材料所描述的全馬一組流動及節奏；其他批次情況未知。",
+      "basis": "2025影片說明/字幕與lc留言，以及當屆全馬網誌；同一作者說明和字幕只作一份自述。"
+    },
+    "organization": {
+      "score": null,
+      "comment": "未評。現有資料只有領物地點、場地個人偏好及部分路段人潮自述，欠寄存、廁所、分流執行、等候及離場的足夠親身紀錄。不能由賽前計劃、偏好舊場地或未核實事故敘述推定大會執行分數。",
+      "positives": [],
+      "concerns": [],
+      "suitedFor": "資料不足，未知。",
+      "basis": "網站稿第2版之大會安排、寄存與交通限制。"
+    },
+    "aid": {
+      "score": null,
+      "comment": "未評。現有已讀2025全馬材料未有足夠補給位置、取用動線、飲品食物及不同時段供應的親身描述。不借用其他屆次訪談，不把無投訴當作供應正常。",
+      "positives": [],
+      "concerns": [],
+      "suitedFor": "資料不足，未知。",
+      "basis": "網站稿第2版之補給資料缺口。"
+    }
+  }
+}
