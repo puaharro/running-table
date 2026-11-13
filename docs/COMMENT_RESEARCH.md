@@ -242,3 +242,9 @@ CLI：`npm run content:agent -- execute .editorial-private/request.json`
 `confirmed-race-experience-schema.mjs` 綁定指定賽事、組別、2025屆次、稿件版本及完整展示內容雜湊。`check:editorial` 和正式建置都會核對此綁定；變更正文、分數、評語、來源或限制須先重新確認完整版本，再更新選定內容。內容綁定不是發布批准或法律審閱收據，也不更改原有公開評論的批准紀錄。
 
 建置不需要 `LOCAL_2025_EXPERIENCE_PREVIEW`，亦不讀 `.editorial-private/`。`npm run build` 後執行 `npm run check:export`，會逐項核對兩場靜態頁的指定分數、完整文字、來源連結、去名要求及往屆隔離；舊同屆內容不重複展示，既有評級頁連結保留可達入口。其他屆次評論維持原有紀錄。建置及本機靜態預覽不等於已發布或部署，部署仍須另行授權。
+
+## CMS 本機下一版：版本、接入及驗收
+
+網站稿列表及賽事工作頁新增版本摘要。已確認且依據一致的稿件可準備不可變通用五主題接入包、預覽與下載，重試重用同一包。接入包只含公開文字及版本 manifest，不自動寫入公開 catalog／runtime、Git 或部署。兩場已確認評分僅在相同 source website、版本及完整文字／來源符合既有公開內容 hash 時沿用；其他稿件不產生新評分。
+
+驗收結果按接入版本追加保存：類型、查閱時間、結果、限制與參考 commit／CI／部署版本。頁面明示為操作者記錄，不是 CMS 自動查詢 GitHub 或正式網站，也不是稿件確認／發布批准。無紀錄的正式版本標為未知。稿件或依據改變後舊包與驗收標為過期，禁止舊包預覽、下載及續寫。新表沿用私人 content SQLite 及現有備份。

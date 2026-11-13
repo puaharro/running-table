@@ -93,6 +93,32 @@ test("new workflow HTTP preserves CSRF, exact-version confirmation and export bo
   );
   assert.equal((await post(confirmation, { ...payload, acknowledge: false })).status, 400);
   assert.equal((await post(confirmation, payload)).status, 200);
+  const preparePath = "/api/content/releases/prepare";
+  assert.equal(
+    (await post(preparePath, { id: copy.id, expected_revision: 1 }, { "X-Import-Token": "wrong" }))
+      .status,
+    403,
+  );
+  const staged = await (await post(preparePath, { id: copy.id, expected_revision: 1 })).json();
+  assert.equal(staged.payload.publication_approved, false);
+  assert.equal((await fetch(url + "/site-release?id=" + copy.id)).status, 200);
+  assert.equal((await fetch(url + "/release-preview?id=" + staged.id)).status, 200);
+  assert.equal((await fetch(url + "/api/content/releases/package?id=" + staged.id)).status, 200);
+  const qa = {
+    release_id: staged.id,
+    expected_revision: 1,
+    kind: "browser",
+    status: "limited",
+    checked_at: new Date().toISOString(),
+    notes: "虛構測試驗收，不是發布批准",
+    reference: "",
+  };
+  assert.equal(
+    (await post("/api/content/releases/qa", qa, { Origin: "https://foreign.example" })).status,
+    403,
+  );
+  assert.equal((await post("/api/content/releases/qa", qa)).status, 200);
+
   const result = await (await post(exp, { id: copy.id, expected_revision: 1 })).json();
   assert.equal(result.published, false);
   assert.equal(result.publication_approved, false);

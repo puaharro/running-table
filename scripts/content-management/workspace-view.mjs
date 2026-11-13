@@ -24,7 +24,7 @@ export function workspacePanel(content, raceId, year) {
       <nav class="actions" aria-label="本場工作"><a href="#workspace-coverage">來源進度</a><a href="#workspace-proposals">AI 建議</a><a href="#website-saved-preview">網站全文及差異</a><a href="/materials?race=${e(raceId)}">材料庫</a></nav>
       <section class="panel" id="workspace-coverage"><h2>逐來源研究進度</h2><ul>${coverage.map((c) => `<li><a href="/research-progress?${q}#source-${c.data.platform}">${e(SOURCES[c.data.platform].label)}</a>：${e(COVERAGE[c.data.state])}<p class="meta">查閱時間：${e(c.data.checked_at || "未知")} · 原文連結 ${c.data.links.length} 條</p><details><summary>查閱範圍與限制</summary><p>${e(c.data.notes)}</p></details></li>`).join("")}</ul><p>原文連結數不是可採用材料數，材料數不是獨立跑手數。</p></section>
       <section class="panel"><h2>本屆材料及草稿</h2><p>已保存材料 ${rows.length} 則，是否適合採用須逐項覆核。</p><ul>${drafts.map((d) => `<li><a href="/drafts?id=${e(d.id)}">${e(d.title)}</a> · 第 ${d.revision} 版 · ${e(d.group || "組別未知")}</li>`).join("") || "<li>尚未有本屆草稿。</li>"}</ul><details><summary>本屆網站稿版本</summary><ul>${copies.map((c) => `<li><a href="/race-workspace?${q}&website=${e(c.id)}">${e(c.data.title)}</a> · 第 ${c.revision} 版 · ${c.status === "confirmed" ? "文字已確認" : "草稿"}</li>`).join("") || "<li>尚未保存網站稿。</li>"}</ul></details></section>
-      <section id="workspace-proposals">${proposals.body}</section>`,
+      <section class="panel"><h2>網站接入及上線摘要</h2>${copies.map((c) => `<p><a href="/site-release?id=${e(c.id)}">${e(c.data.title)} · 第 ${c.revision} 版：接入預覽、驗收及版本紀錄</a></p>`).join("") || "<p>先保存網站稿，再確認指定版本。</p>"}</section><section id="workspace-proposals">${proposals.body}</section>`,
     script: proposals.script,
   };
 }

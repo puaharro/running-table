@@ -173,7 +173,7 @@ export function renderWebsiteIndex(content, token) {
         .list("website")
         .map(
           (r) =>
-            `<article class="panel"><h2><a href="/website-copy?id=${e(r.id)}">${e(r.data.title)}</a></h2><p>第 ${r.revision} 版 · ${r.status === "confirmed" ? "文字已確認，尚未發布" : "待人工確認"} · ${e(r.updated_at)}</p></article>`,
+            `<article class="panel"><h2><a href="/website-copy?id=${e(r.id)}">${e(r.data.title)}</a></h2><p>第 ${r.revision} 版 · ${r.status === "confirmed" ? "文字已確認；上線狀態見版本摘要" : "待人工確認"} · ${e(r.updated_at)}</p><p><a href="/site-release?id=${e(r.id)}">版本及上線摘要／接入預覽／驗收紀錄</a></p></article>`,
         )
         .join("") || "<p>尚未有網站稿。</p>"
     }`,

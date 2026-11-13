@@ -1,3 +1,4 @@
+import { Releases, releasePage } from "./releases.mjs";
 import { Workflow } from "./workflow.mjs";
 import { confirmedHandoff, handoffHtml } from "./handoff.mjs";
 import { AgentService } from "./agent.mjs";
@@ -33,6 +34,31 @@ export async function serveContent({
   const html = (body) =>
     response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }).end(body);
   const workflow = new Workflow(content);
+  if (request.method === "GET" && url.pathname === "/site-release") {
+    html(releasePage(content, token, url.searchParams.get("id")));
+    return true;
+  }
+  if (request.method === "GET" && url.pathname === "/release-preview") {
+    html(new Releases(content).preview(url.searchParams.get("id")));
+    return true;
+  }
+  if (request.method === "GET" && url.pathname === "/api/content/releases/package") {
+    const service = new Releases(content),
+      r = service.get(url.searchParams.get("id"));
+    if (!service.current(r)) throw new ReviewError(409, "版本已過期。");
+    response.setHeader("Content-Disposition", 'attachment; filename="site-integration.json"');
+    json(r.payload);
+    return true;
+  }
+  if (
+    request.method === "POST" &&
+    ["/api/content/releases/prepare", "/api/content/releases/qa"].includes(url.pathname)
+  ) {
+    const service = new Releases(content),
+      input = await readBody(request);
+    json(url.pathname.endsWith("prepare") ? service.prepare(input) : service.record(input));
+    return true;
+  }
   // Keep bookmarked URLs working; research has one shared interface.
   if (request.method === "GET" && url.pathname === "/agent-tools") {
     response.writeHead(302, { Location: "/materials" }).end();
