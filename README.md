@@ -31,6 +31,10 @@
 
 第一階段只做路跑。已提供毋須額外帳戶的本機收藏及日曆檔下載：列表可只看收藏，詳情頁可保存比賽日或有來源依據的報名截止；匯入日曆後不會自動同步更新。會員及跨裝置同步留待後續。
 
+## 網站驗收
+
+手機與日曆驗收程序見 [網站驗收 SOP](docs/SITE_QA_SOP.md)，可重用技能來源為 [nxtgo-site-qa](skills/nxtgo-site-qa/SKILL.md)。`npm run check:content` 核對現有靜態輸出；本機預覽用 `npm run check:content -- --base-url http://127.0.0.1:3000`（以實際預覽 origin 為準）。目前覆蓋兩場已確認 2025 稿；驗收、文字確認及發布批准分開。
+
 ## 文件入口
 
 Threads Collector V0.1 已加入私人 CLI：先收集公開搜尋命中及 API 可讀取的 conversation，保存原始資料、分頁進度及來源，之後另做評分。設定 token、收集大阪馬拉松、續跑及資料表說明見 [Threads Collector 使用文件](docs/THREADS_COLLECTOR.md)。
