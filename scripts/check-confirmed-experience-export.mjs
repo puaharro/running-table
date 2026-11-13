@@ -52,7 +52,7 @@ for (const [raceId, pin] of Object.entries(selectedExperiences)) {
       1,
       "preserve one legacy review anchor without duplicating the old same-edition content",
     );
-  const scores = html.match(/<dl class="rating-grid quick-scores">[\s\S]*?<\/dl>/g) ?? [];
+  const scores = html.match(/<dl\b[^>]*class="rating-grid quick-scores(?: [^"]*)?"[^>]*>[\s\S]*?<\/dl>/g) ?? [];
   assert.ok(
     scores.some((dl) =>
       Object.values(record.assessments).every((a) =>

@@ -1239,3 +1239,89 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+.race-detail-page .experience-compact .experience-scores {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 20px 0 12px;
+}
+.experience-scores > div {
+  padding: 12px 8px;
+  background: var(--paper, #fff);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  text-align: center;
+}
+.experience-scores dt {
+  font-size: 13px;
+}
+.experience-scores dd {
+  margin: 6px 0 0;
+  font-size: 20px;
+}
+.experience-compact summary {
+  cursor: pointer;
+}
+.experience-rating-details > summary {
+  padding: 10px 0;
+  font-size: 14px;
+}
+.experience-compact .experience-topics-heading {
+  margin: 22px 0 4px;
+  font-size: 18px;
+}
+.experience-compact .experience-help {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--home-muted);
+}
+.experience-topic {
+  border-top: 1px solid var(--line);
+}
+.experience-topic > summary {
+  display: grid;
+  grid-template-columns: 4.5em minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 10px;
+  padding: 14px 0;
+  list-style: none;
+}
+.experience-topic > summary::-webkit-details-marker {
+  display: none;
+}
+.experience-topic > summary::after {
+  content: "+";
+  grid-column: 3;
+  grid-row: 1;
+}
+.experience-topic[open] > summary::after {
+  content: "−";
+}
+.experience-topic > summary > strong {
+  font-size: 15px;
+}
+.experience-topic-excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.experience-topic > summary > small {
+  grid-column: 2;
+  color: var(--home-muted);
+  font-size: 12px;
+}
+.experience-topic[open] .experience-topic-excerpt,
+.experience-topic[open] > summary > small {
+  display: none;
+}
+.experience-topic-content {
+  padding: 0 0 4px;
+}
+.experience-topic > summary:focus-visible {
+  outline: 2px solid var(--home-ink);
+  outline-offset: 3px;
+}
