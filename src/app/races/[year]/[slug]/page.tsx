@@ -1,6 +1,8 @@
 import "./race-detail.css";
 import { runnerCopyForRace } from "@/lib/runner-copy";
 import { RaceRunnerCopy } from "@/components/race-runner-copy";
+import { localConfirmedExperience } from "@/lib/local-confirmed-experience";
+import { LocalConfirmedExperiencePreview } from "@/components/local-confirmed-experience";
 import { localRatingAssessment } from "@/lib/local-rating-preview";
 import { RaceRatingAssessmentPreview } from "@/components/race-rating-assessment-preview";
 import { UnscopedRunnerOpinions } from "@/components/runner-opinions";
@@ -50,9 +52,12 @@ export default async function RacePage({ params }: Props) {
   });
   const runnerCopy = runnerCopyForRace(race.id);
   const ratingAssessment = localRatingAssessment(race.id);
-  const experienceId = runnerCopy
-    ? "runner-copy"
-    : "ratings-" + (reviewedGroups[0] ?? race.groups[0]).id;
+  const localExperience = localConfirmedExperience(race.id);
+  const experienceId = localExperience
+    ? "local-confirmed-experience"
+    : runnerCopy
+      ? "runner-copy"
+      : "ratings-" + (reviewedGroups[0] ?? race.groups[0]).id;
   const now = new Date().toISOString();
   const chapters = [
     { id: "race-about", label: "賽事概覽" },
@@ -93,11 +98,13 @@ export default async function RacePage({ params }: Props) {
             initialNow={now}
             experienceHref={"#" + experienceId}
             experienceLabel={
-              runnerCopy
-                ? "跑手分享（無評分）"
-                : reviewedGroups.length
-                  ? "參賽體驗"
-                  : "參賽體驗（未評）"
+              localExperience
+                ? "2025 往屆體驗"
+                : runnerCopy
+                  ? "跑手分享（無評分）"
+                  : reviewedGroups.length
+                    ? "參賽體驗"
+                    : "參賽體驗（未評）"
             }
           />
           <div className="registration-card race-official-panel">
@@ -175,12 +182,26 @@ export default async function RacePage({ params }: Props) {
                   <summary>比較各組報名概況</summary>
                   <RegistrationSummary race={race} initialNow={now} />
                 </details>
-                <RegistrationGroups race={race} initialNow={now} />
+                <RegistrationGroups
+                  race={race}
+                  initialNow={now}
+                  previewEdition={
+                    localExperience
+                      ? { groupId: localExperience.groupId, year: localExperience.year }
+                      : undefined
+                  }
+                />
               </div>
             </section>
             {ratingAssessment && <RaceRatingAssessmentPreview draft={ratingAssessment} />}
             {runnerCopy && <RaceRunnerCopy copy={runnerCopy} />}
-            <UnscopedRunnerOpinions race={race} />
+            {localExperience && (
+              <LocalConfirmedExperiencePreview
+                experience={localExperience}
+                currentYear={race.date.slice(0, 4)}
+              />
+            )}
+            {!localExperience && <UnscopedRunnerOpinions race={race} />}
             <AdSlot />
             {!!race.enquiryLinks?.length && (
               <section id="enquiries" tabIndex={-1}>

@@ -188,9 +188,23 @@ export function EditorialReviewCard({ review }: { review: EditorialReview }) {
     </article>
   );
 }
-export function GroupRatings({ race, group }: { race: Race; group: RaceGroup }) {
-  const { current, historical } = reviewsForGroup(race, group, editorialReviews);
-  const opinions = runnerOpinionsForGroup(race, group);
+export function GroupRatings({
+  race,
+  group,
+  excludedEditionYear,
+}: {
+  race: Race;
+  group: RaceGroup;
+  excludedEditionYear?: number;
+}) {
+  const { current, historical } = reviewsForGroup(
+    race,
+    group,
+    editorialReviews.filter((r) => r.editionYear !== excludedEditionYear),
+  );
+  const opinions = runnerOpinionsForGroup(race, group).filter(
+    (r) => r.editionYear !== excludedEditionYear,
+  );
   const target = reviewTargets.find((t) => t.raceId === race.id && t.groupId === group.id);
   const groupNotices = notices.filter(
     (n) =>

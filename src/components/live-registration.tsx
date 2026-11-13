@@ -411,7 +411,15 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
     </section>
   );
 }
-export function RegistrationGroups({ race, initialNow }: { race: Race; initialNow: string }) {
+export function RegistrationGroups({
+  race,
+  initialNow,
+  previewEdition,
+}: {
+  race: Race;
+  initialNow: string;
+  previewEdition?: { groupId: string; year: number };
+}) {
   const now = useClock(initialNow);
   const [selectedGroup, setSelectedGroup] = useState("");
   useEffect(() => {
@@ -470,7 +478,13 @@ export function RegistrationGroups({ race, initialNow }: { race: Race; initialNo
               <dd>{group.limit ?? "待核實，請查看官方組別資料。"}</dd>
             </div>
           </dl>
-          <GroupRatings race={race} group={group} />
+          <GroupRatings
+            race={race}
+            group={group}
+            excludedEditionYear={
+              previewEdition?.groupId === group.id ? previewEdition.year : undefined
+            }
+          />
           <h4 className="channels-heading">
             報名渠道 · {group.channels.length + Number(!!group.charityEntry)}
           </h4>
