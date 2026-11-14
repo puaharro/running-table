@@ -776,7 +776,7 @@
 }
 .race-detail-page .detail-sidebar {
   position: sticky;
-  top: var(--space-4);
+  top: calc(var(--site-header-height) + var(--space-4));
   align-self: start;
 }
 .race-contents {
@@ -904,7 +904,7 @@
   }
   .race-contents-compact {
     position: sticky;
-    top: 0;
+    top: var(--site-header-height);
     z-index: 2;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

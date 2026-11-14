@@ -44,7 +44,6 @@ export function HomeFocusBanner({
   const measuredStep = useRef(0);
   const currentSlide = useRef(0);
   const targetSlide = useRef<number | null>(null);
-  const settleTimer = useRef<number | undefined>(undefined);
   const active = Math.max(
     0,
     available.findIndex((slide) => slide.id === activeId),
@@ -52,14 +51,56 @@ export function HomeFocusBanner({
   const availabilityKey = available.map((slide) => slide.id).join(":");
   const firstId = available[0]?.id;
   useEffect(() => {
-    const node = track.current;
     setActiveId(firstId);
     setSettledId(null);
     currentSlide.current = 0;
     targetSlide.current = null;
-    if (!node) return;
+    if (!track.current) return;
+    const node = track.current;
     measuredStep.current = slideStep(node);
     node.scrollTo({ left: 0, behavior: "instant" });
+
+    function settle(index: number) {
+      const slide = node.children[index];
+      const id = slide?.getAttribute("data-slide-id");
+      if (!id) return;
+      targetSlide.current = null;
+      if (index === currentSlide.current) return;
+      if (node.children[currentSlide.current]?.contains(document.activeElement)) {
+        node.focus({ preventScroll: true });
+      }
+      currentSlide.current = index;
+      setActiveId(id);
+      setSettledId(id);
+    }
+
+    function handleSnapChange(event: Event) {
+      const { snapTargetInline } = event as Event & { snapTargetInline: Element | null };
+      if (snapTargetInline) settle(Array.from(node.children).indexOf(snapTargetInline));
+    }
+
+    function handleScrollEnd() {
+      const step = measuredStep.current;
+      if (!step) return;
+      const index = Math.round(node.scrollLeft / step);
+      if (Math.abs(node.scrollLeft - index * step) < 1) settle(index);
+    }
+
+    let timer: number | undefined;
+    function handleScroll() {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(handleScrollEnd, 140);
+    }
+
+    const supportsSnapEvents = "onscrollsnapchange" in node;
+    const supportsScrollEnd = Reflect.has(node, "onscrollend");
+    if (supportsSnapEvents) {
+      node.addEventListener("scrollsnapchange", handleSnapChange);
+    } else if (supportsScrollEnd) {
+      node.addEventListener("scrollend", handleScrollEnd);
+    } else {
+      node.addEventListener("scroll", handleScroll, { passive: true });
+    }
 
     const observer = new ResizeObserver(() => {
       const step = slideStep(node);
@@ -71,7 +112,10 @@ export function HomeFocusBanner({
     observer.observe(node);
     return () => {
       observer.disconnect();
-      window.clearTimeout(settleTimer.current);
+      node.removeEventListener("scrollsnapchange", handleSnapChange);
+      node.removeEventListener("scrollend", handleScrollEnd);
+      node.removeEventListener("scroll", handleScroll);
+      window.clearTimeout(timer);
     };
   }, [availabilityKey, firstId]);
   if (!available.length) return null;
@@ -79,16 +123,16 @@ export function HomeFocusBanner({
   function show(index: number) {
     const node = track.current;
     if (!node || !available[index]) return;
-    const left = index * slideStep(node);
-    if (targetSlide.current === null && Math.abs(node.scrollLeft - left) < 1) return;
-    window.clearTimeout(settleTimer.current);
-    setSettledId(null);
+    const left = index * measuredStep.current;
+    const alreadyAligned = Math.abs(node.scrollLeft - left) < 1;
+    if (alreadyAligned && targetSlide.current === null) return;
     targetSlide.current = index;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     node.scrollTo({
       left,
-      behavior: reducedMotion ? "instant" : "smooth",
+      behavior: alreadyAligned || reducedMotion ? "instant" : "smooth",
     });
+    if (alreadyAligned && index === currentSlide.current) targetSlide.current = null;
   }
 
   return (
@@ -103,31 +147,13 @@ export function HomeFocusBanner({
         id="home-focus-track"
         ref={track}
         tabIndex={0}
+        role="group"
+        aria-label="投影片"
         onPointerDown={() => {
           targetSlide.current = null;
         }}
         onWheel={() => {
           targetSlide.current = null;
-        }}
-        onScroll={(event) => {
-          const node = event.currentTarget;
-          const step = slideStep(node);
-          if (!step || Math.abs(step - measuredStep.current) >= 0.5) return;
-          const index = Math.round(node.scrollLeft / step);
-          const aligned = Math.abs(node.scrollLeft - index * step) < 1;
-          if (aligned && index === targetSlide.current) {
-            targetSlide.current = null;
-          }
-          window.clearTimeout(settleTimer.current);
-          setSettledId(null);
-          const next = available[index];
-          if (next && index !== currentSlide.current) {
-            currentSlide.current = index;
-            setActiveId(next.id);
-          }
-          if (next && aligned && targetSlide.current === null) {
-            settleTimer.current = window.setTimeout(() => setSettledId(next.id), 100);
-          }
         }}
         onKeyDown={(event) => {
           if (event.target !== event.currentTarget) return;
@@ -150,6 +176,7 @@ export function HomeFocusBanner({
             role="group"
             aria-roledescription="投影片"
             aria-label={`${index + 1}／${available.length}：${slide.title}`}
+            data-slide-id={slide.id}
             data-settled={settledId === slide.id}
             inert={index !== active}
           >

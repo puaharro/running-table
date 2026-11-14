@@ -876,22 +876,6 @@ time,
   margin: 0;
 }
 @media (max-width: 767px) {
-  .header-inner {
-    height: auto;
-    min-height: 70px;
-    flex-wrap: wrap;
-    padding-block: var(--space-4) 0;
-  }
-  .site-header nav {
-    width: 100%;
-    overflow-x: auto;
-    gap: var(--space-5);
-    padding-bottom: var(--space-2);
-  }
-  .site-header nav a {
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
   .home-section {
     padding-block: var(--space-8);
   }
@@ -1229,10 +1213,6 @@ time,
   line-height: 1.7;
 }
 @media (max-width: 760px) {
-  .site-header nav {
-    flex-wrap: wrap;
-    row-gap: 0;
-  }
   .notebook-fields {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
@@ -1516,30 +1496,8 @@ time,
   align-items: center;
   white-space: nowrap;
 }
-.site-header nav a[aria-current="page"] {
-  color: var(--home-action);
-  box-shadow: inset 0 -2px 0 var(--home-action);
-}
-@media (max-width: 1200px) {
-  .site-header .header-note {
-    display: none;
-  }
-}
-@media (max-width: 767px) {
-  .site-header nav a:last-child {
-    display: inline-flex;
-  }
-  .site-header nav {
-    gap: var(--space-5);
-    scrollbar-width: thin;
-  }
-}
-
-@media (max-width: 767px) {
-  .site-header nav {
-    flex-wrap: nowrap;
-    min-width: 0;
-  }
+.site-header nav a:last-child {
+  display: inline-flex;
 }
 
 @media (max-width: 767px) {
@@ -1560,20 +1518,7 @@ time,
 .nav-label-compact {
   display: none;
 }
-@media (max-width: 767px) {
-  .site-header nav {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: var(--space-1);
-    overflow: visible;
-  }
-  .site-header nav a {
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-    font-size: 14px;
-    padding-inline: 2px;
-  }
+@media (width < 768px) {
   .nav-label-full {
     display: none;
   }
@@ -1712,13 +1657,14 @@ time,
   color: var(--text-primary);
   box-shadow: 0 16px 48px #0003;
   overflow-y: auto;
-  overscroll-behavior: contain;
 }
-body:has(.nxtgo-dialog:modal) {
-  overflow: hidden;
+.nxtgo-dialog:modal {
+  overscroll-behavior: contain;
 }
 .nxtgo-dialog::backdrop {
   background: #101b24a6;
+  overflow: hidden;
+  overscroll-behavior: contain;
 }
 .nxtgo-dialog-heading {
   display: flex;
@@ -1779,20 +1725,7 @@ body:has(.nxtgo-dialog:modal) {
   background: var(--action-tint);
 }
 
-@media (max-width: 767px) {
-  .site-quick-navigation {
-    order: -1;
-    margin-inline-start: auto;
-  }
-  .site-header .brand {
-    order: -2;
-  }
-}
-
 @media (768px <= width <= 1050px) {
-  .site-header nav {
-    gap: clamp(12px, 2vw, 24px);
-  }
   .site-header .nav-label-full {
     display: none;
   }
@@ -1892,8 +1825,8 @@ body:has(.nxtgo-dialog:modal) {
   white-space: nowrap;
 }
 
-/* The calendar keeps its search and navigation in one compact top bar. */
-.site-header--calendar {
+/* Sticky top bar shared by all public pages. */
+.site-header {
   position: sticky;
   inset-block-start: 0;
   z-index: 20;
@@ -1901,48 +1834,43 @@ body:has(.nxtgo-dialog:modal) {
   background: #101518;
   border-bottom-color: #333b3d;
 }
-.site-header--calendar .header-inner {
+.site-header .header-inner {
   position: relative;
   height: auto;
-  min-height: 68px;
+  min-height: calc(var(--site-header-height) - 1px);
   justify-content: flex-start;
   gap: clamp(12px, 2vw, 26px);
   padding-block: 0;
 }
-.site-header--calendar .brand {
+.site-header .brand {
   flex: none;
-  order: 0;
   min-height: 44px;
   color: inherit;
 }
-.site-header--calendar .brand-wordmark {
+.site-header .brand-wordmark {
   font-size: 28px;
 }
-.site-header--calendar .brand-mark {
+.site-header .brand-mark {
   height: 24px;
 }
-.site-header--calendar .brand-mark i {
+.site-header .brand-mark i {
   width: 4px;
   background: #a4d5ad;
 }
-.site-header--calendar .brand-mark i:nth-child(2) {
+.site-header .brand-mark i:nth-child(2) {
   height: 19px;
 }
-.site-header--calendar .brand-mark i:nth-child(3) {
+.site-header .brand-mark i:nth-child(3) {
   height: 14px;
 }
-.site-header--calendar .site-quick-navigation {
-  order: 0;
+.site-header .site-quick-navigation {
   width: clamp(144px, 18vw, 230px);
   margin: 0;
 }
-.quick-navigation-icon {
-  display: none;
-}
-.site-header--calendar .quick-navigation-icon {
+.site-header .quick-navigation-icon {
   display: inline-flex;
 }
-.site-header--calendar .quick-navigation-trigger {
+.site-header .quick-navigation-trigger {
   justify-content: flex-start;
   width: 100%;
   gap: 8px;
@@ -1950,51 +1878,54 @@ body:has(.nxtgo-dialog:modal) {
   background: #252d30;
   color: inherit;
 }
-.site-header--calendar .quick-navigation-trigger:hover {
+.site-header .quick-navigation-trigger:hover {
   background: #354144;
 }
-.site-header--calendar .header-inner > nav {
+.site-header .header-inner > nav {
   gap: clamp(4px, 1vw, 14px);
 }
-.site-header--calendar nav a {
+.site-header nav a {
   padding: 0 8px;
   border-radius: 4px;
   color: inherit;
 }
-.site-header--calendar nav a:is(:hover, [aria-current="page"]) {
+.site-header nav a:is(:hover, [aria-current="page"]) {
   background: #293832;
   color: #d3f3da;
   box-shadow: none;
 }
-.site-header--calendar :is(.brand, .quick-navigation-trigger, nav a, .calendar-site-menu-toggle):focus-visible {
+.site-header :is(.brand, .quick-navigation-trigger, nav a, .site-menu-toggle):focus-visible {
   outline: 2px solid #d3f3da;
   outline-offset: 2px;
 }
-.site-header--calendar .quick-navigation-dialog {
+.site-header .quick-navigation-dialog {
   color: var(--text-primary);
 }
-.calendar-site-menu-toggle,
-.calendar-site-menu {
+.site-menu-toggle,
+.site-menu {
   display: none;
 }
-html:has(.site-header--calendar) {
-  scroll-padding-top: 72px;
+html {
+  --site-header-height: 69px;
+  scroll-padding-top: calc(var(--site-header-height) + 4px);
 }
 
-@media (max-width: 767px) {
-  .site-header--calendar .header-inner {
+@media (width < 768px) {
+  html {
+    --site-header-height: 61px;
+  }
+  .site-header .header-inner {
     flex-wrap: nowrap;
-    min-height: 60px;
     gap: 10px;
   }
-  .site-header--calendar .site-quick-navigation {
+  .site-header .site-quick-navigation {
     flex: 1;
     min-width: 0;
   }
-  .site-header--calendar .header-inner > nav {
+  .site-header .header-inner > nav {
     display: none;
   }
-  .calendar-site-menu-toggle {
+  .site-menu-toggle {
     display: grid;
     flex: none;
     place-items: center;
@@ -2006,19 +1937,19 @@ html:has(.site-header--calendar) {
     background: #252d30;
     color: inherit;
   }
-  .calendar-site-menu-toggle span {
+  .site-menu-toggle span {
     width: 18px;
     height: 12px;
     border-block: 2px solid currentColor;
     background: linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat;
   }
-  .calendar-site-menu:popover-open {
+  .site-menu:popover-open {
     position: fixed;
-    inset: 60px 0 auto;
+    inset: var(--site-header-height) 0 auto;
     display: block;
     box-sizing: border-box;
     width: 100%;
-    max-height: calc(100dvh - 60px);
+    max-height: calc(100dvh - var(--site-header-height));
     overflow: auto;
     margin: 0;
     padding: 8px 16px 12px;
@@ -2027,13 +1958,39 @@ html:has(.site-header--calendar) {
     background: #101518;
     color: var(--text-on-dark);
   }
-  .site-header--calendar .calendar-site-menu nav {
+  .site-header .site-menu nav {
+    display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 4px;
     padding: 0;
   }
-  .site-header--calendar .calendar-site-menu nav a {
+  .site-header .site-menu nav a {
     justify-content: flex-start;
     padding-inline: 12px;
+  }
+}
+
+@supports not selector(:popover-open) {
+  @media (width < 768px) {
+    html {
+      --site-header-height: 105px;
+    }
+    .site-header .header-inner {
+      flex-wrap: wrap;
+      gap: 0 10px;
+    }
+    .site-header .header-inner > nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 0;
+      padding-bottom: 0;
+    }
+    .site-header .header-inner > nav a {
+      justify-content: center;
+      padding-inline: 2px;
+    }
+    .site-menu-toggle {
+      display: none;
+    }
   }
 }

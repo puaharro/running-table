@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { HomeFocusBanner } from "@/components/home-focus-banner";
 import { homeFocusSlides } from "@/data/home-focus";
 import { HomeHighlights } from "@/components/home-highlights";
+import { HomePhoto } from "@/components/home-photo";
 import { LegacySearchRedirect } from "@/components/legacy-search-redirect";
 import { Icon } from "@/components/ui";
 import { publicRaces as races } from "@/data/races";
@@ -90,11 +90,12 @@ export default function Home() {
                   </div>
                   {photo && (
                     <div className="home-photo home-review-photo">
-                      <Image
-                        src={`/images/home/${photo.file}`}
+                      <HomePhoto
+                        file={photo.file}
                         alt={photo.alt}
                         width={960}
                         height={photo.height}
+                        sizes="(max-width: 767px) calc(100vw - 74px), (max-width: 1100px) calc(50vw - 98px), (max-width: 1280px) calc(50vw - 110px), 530px"
                       />
                     </div>
                   )}
@@ -149,11 +150,12 @@ export default function Home() {
                 <p>{guide.description}</p>
                 {photo && (
                   <span className="home-photo">
-                    <Image
-                      src={`/images/home/${photo.file}`}
+                    <HomePhoto
+                      file={photo.file}
                       alt={photo.alt}
                       width={768}
-                    height={photo.height ?? 512}
+                      height={photo.height ?? 512}
+                      sizes="(max-width: 767px) calc(100vw - 32px), (max-width: 1100px) calc((100vw - 112px) / 3), (max-width: 1280px) calc((100vw - 136px) / 3), 382px"
                     />
                   </span>
                 )}

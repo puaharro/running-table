@@ -502,10 +502,7 @@
   dialog.calendar-filter-panel:not([open]) {
     display: none;
   }
-  body:has(dialog.calendar-filter-panel:modal) {
-    overflow: hidden;
-  }
-  dialog.calendar-filter-panel {
+  dialog.calendar-filter-panel:modal {
     position: fixed;
     inset: auto 0 0;
     box-sizing: border-box;
@@ -520,9 +517,12 @@
     border-radius: 16px 16px 0 0;
     background: var(--home-card);
     color: var(--home-ink);
+    overscroll-behavior: contain;
   }
   dialog.calendar-filter-panel::backdrop {
     background: rgb(22 40 33 / var(--calendar-backdrop-opacity, 0.5));
+    overflow: hidden;
+    overscroll-behavior: contain;
   }
   .calendar-sheet-dismiss {
     display: flex;

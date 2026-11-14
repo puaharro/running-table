@@ -1,5 +1,6 @@
 import { afterEach, expect, test, vi } from "vitest";
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import hz from "../../content/race-experiences/hzmb-half-2025.json";
 import sc from "../../content/race-experiences/hk-marathon-2025.json";
 import { confirmedRaceExperience } from "./confirmed-race-experience";
@@ -14,11 +15,14 @@ afterEach(() => {
 test("production reads both selected public display records without private preview flags", () => {
   vi.stubEnv("NODE_ENV", "production");
   vi.stubEnv("LOCAL_2025_EXPERIENCE_PREVIEW", "");
-  for (const record of [hz, sc]) {
+  for (const [record, file] of [
+    [hz, "hzmb-half-2025.json"],
+    [sc, "hk-marathon-2025.json"],
+  ] as const) {
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify(record));
     expect(confirmedRaceExperience(record.raceId)?.sections).toEqual(record.sections);
     expect(readFileSync).toHaveBeenLastCalledWith(
-      expect.stringContaining(`content/race-experiences/`),
+      join(process.cwd(), "content", "race-experiences", file),
       "utf8",
     );
   }

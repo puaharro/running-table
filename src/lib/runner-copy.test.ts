@@ -1,5 +1,6 @@
 import { afterEach, expect, test, vi } from "vitest";
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import record from "../../content/runner-copies/rmac-2026.json";
 import { runnerCopyForRace } from "./runner-copy";
 vi.mock("node:fs", () => ({ readFileSync: vi.fn() }));
@@ -14,7 +15,7 @@ test("production builds include the selected confirmed copy without a preview fl
   vi.mocked(readFileSync).mockReturnValue(JSON.stringify(record));
   expect(runnerCopyForRace(raceId)?.markdown).toBe(record.markdown);
   expect(readFileSync).toHaveBeenCalledWith(
-    expect.stringContaining("content/runner-copies/rmac-2026.json"),
+    join(process.cwd(), "content", "runner-copies", "rmac-2026.json"),
     "utf8",
   );
 });

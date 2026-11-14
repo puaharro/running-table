@@ -417,7 +417,8 @@ export function RaceExplorer({
           className="calendar-filter-panel"
           id="calendar-filter-panel"
           data-expanded={filtersExpanded}
-          aria-label="賽事篩選"
+          aria-label={filtersExpanded ? undefined : "賽事篩選"}
+          aria-labelledby={filtersExpanded ? "calendar-filter-title" : undefined}
           onClose={(event) => {
             const panel = event.currentTarget;
             setFiltersExpanded(false);
@@ -444,7 +445,7 @@ export function RaceExplorer({
               {filtersExpanded ? (
                 <>
                   <Icon name="filter" size={18} />
-                  <h2>篩選條件</h2>
+                  <h2 id="calendar-filter-title">篩選條件</h2>
                 </>
               ) : (
                 <div className="calendar-filter-categories" role="group" aria-label="篩選條件">
@@ -799,7 +800,12 @@ export function RaceExplorer({
                   const detailHref = filteredRaceHref(race, groups, filters);
                   const deadline = listDeadline(race, groups, now);
                   const distances = [
-                    ...new Set(race.groups.map((group) => distanceLabel(group.distanceKm))),
+                    ...new Set(
+                      race.groups
+                        .map((group) => group.distanceKm)
+                        .sort((longer, shorter) => shorter - longer)
+                        .map(distanceLabel),
+                    ),
                   ];
                   const matchedDistances = new Set(
                     groups.map((group) => distanceLabel(group.distanceKm)),

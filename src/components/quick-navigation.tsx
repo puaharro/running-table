@@ -108,7 +108,13 @@ export function QuickNavigation({ destinations }: { destinations: QuickDestinati
             placeholder="搜尋賽事、指南或頁面"
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key !== "ArrowDown" || !matches.length) return;
+              if (
+                event.key !== "ArrowDown" ||
+                !matches.length ||
+                event.nativeEvent.isComposing ||
+                event.nativeEvent.keyCode === 229
+              )
+                return;
               event.preventDefault();
               dialog.current?.querySelector<HTMLElement>(".quick-navigation-results a")?.focus();
             }}

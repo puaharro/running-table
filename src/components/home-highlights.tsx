@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { HomePhoto } from "./home-photo";
 import { Icon } from "./ui";
 import { useClock } from "@/lib/use-clock";
 import { distanceLabel, hongKongToday } from "@/lib/races";
@@ -97,11 +97,12 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
             </h2>
             <p>日期同距離係開始。報名資格、交通安排同跑手體驗，一齊了解先揀得啱。</p>
             <div className="home-photo">
-              <Image
-                src="/images/home/harbour-run.webp"
+              <HomePhoto
+                file="harbour-run.webp"
                 alt="清晨沿海旁慢跑嘅跑手"
                 width={768}
                 height={512}
+                sizes="(max-width: 767px) calc(100vw - 80px), (max-width: 1100px) calc((100vw - 76px) / 2.8 - 56px), (max-width: 1280px) calc((100vw - 104px) / 2.9 - 56px), 350px"
               />
             </div>
             <ul>

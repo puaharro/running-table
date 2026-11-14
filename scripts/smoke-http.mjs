@@ -50,6 +50,11 @@ try {
     if (!(response.headers.get("content-type") ?? "").includes("text/html"))
       throw new Error(`${path}: wrong content type`);
   }
+  const photo = await fetch(`http://127.0.0.1:${port}/images/home/harbour-run-360.webp`, {
+    method: "HEAD",
+  });
+  if (photo.status !== 200 || photo.headers.get("content-type") !== "image/webp")
+    throw new Error("Responsive WebP images must be served with image/webp.");
   const missing = await fetch(`http://127.0.0.1:${port}/missing-race/`, { method: "HEAD" });
   if (missing.status !== 404) throw new Error("Missing routes must return 404.");
   const privatePaths = [
@@ -69,7 +74,7 @@ try {
   const post = await fetch(`http://127.0.0.1:${port}/`, { method: "POST" });
   if (post.status !== 405) throw new Error("Static preview must reject POST.");
   console.log(
-    `HTTP smoke passed: ${paths.length} page routes return 200; ${privatePaths.length} private workspace paths return 404; 404 and 405 handling verified.`,
+    `HTTP smoke passed: ${paths.length} page routes return 200; ${privatePaths.length} private workspace paths return 404; WebP, 404 and 405 handling verified.`,
   );
 } finally {
   server.kill();

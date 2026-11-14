@@ -300,7 +300,7 @@
   border-radius: 10px;
   background: var(--home-card);
   position: sticky;
-  top: 24px;
+  top: calc(var(--site-header-height) + 24px);
 }
 .guides-toc h2 {
   font-size: 18px;
