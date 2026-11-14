@@ -18,7 +18,7 @@ export function releaseIssues(settings: ReleaseSettings) {
       url.username ||
       url.password
     )
-      issues.push("正式網域必須係無路徑嘅 HTTPS origin。");
+      issues.push("正式網域必須使用不含路徑的 HTTPS 來源網址。");
   } catch {
     issues.push("缺少正式網域 NEXT_PUBLIC_SITE_URL。");
   }

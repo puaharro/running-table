@@ -73,7 +73,7 @@ export function Footer() {
           <Link href="/" className="footer-brand">
             <span className="brand-wordmark">{siteName}</span>
           </Link>
-          <p>你嘅下一場比賽，由呢度開始。</p>
+          <p>從這裡規劃您的下一場比賽。</p>
           <p className="muted">香港路跑資訊網站 · 官方來源整理</p>
         </div>
         <div className="footer-links">

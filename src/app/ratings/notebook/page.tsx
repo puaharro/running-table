@@ -20,7 +20,7 @@ export default function NotebookPage() {
           <br />
           再慢慢整理。
         </h1>
-        <p>親身跑過嘅細節，就係原創評論嘅開始。</p>
+        <p>記錄親身參賽的細節，為原創評論整理素材。</p>
       </div>
       <div className="prose narrow">
         <Link className="text-link" href="/ratings/">

@@ -21,7 +21,7 @@ const reviewPhotos: Record<string, { file: string; height: number; alt: string }
   "schkm-marathon-2026-participant-notes": {
     file: "schkm-2026.webp",
     height: 720,
-    alt: "2026 年渣馬跑手經過市區路段嘅補給枱",
+    alt: "2026 年渣馬跑手經過市區路段的補給站",
   },
 };
 
@@ -37,7 +37,7 @@ const guidePhotos: Record<string, { file: string; alt: string; height?: number }
 
 export const metadata = pageMetadata(
   "香港路跑時間表、賽事資料及體驗評論",
-  "由香港路跑賽期出發，查閱官方報名資料、原創體驗評論及選賽指南，計劃你嘅下一場比賽。",
+  "由香港路跑賽期出發，查閱官方報名資料、原創體驗評論及選賽指南，規劃您的下一場比賽。",
   "/",
 );
 
@@ -48,8 +48,8 @@ export default function Home() {
       <LegacySearchRedirect />
       <header className="shell home-intro">
         <div>
-          <h1>你嘅下一場，由呢度起跑。</h1>
-          <p>香港路跑賽期、報名資料同跑手體驗。</p>
+          <h1>為下一場比賽做好準備。</h1>
+          <p>香港路跑賽期、報名資料及跑手體驗。</p>
         </div>
         <Link href="/races/">
           查看完整時間表 <Icon name="arrow" size={18} />
@@ -62,7 +62,7 @@ export default function Home() {
           <div className="home-section-head">
             <div>
               <h2 id="home-review-heading">跑手體驗評論</h2>
-              <p>從跑手訪談了解賽道、大會執行同補給體驗，揀賽事多一個角度。</p>
+              <p>透過跑手訪談了解賽道、大會執行及補給體驗，作為選擇賽事的參考。</p>
             </div>
             <Link href="/ratings/">
               評論與評分準則 <Icon name="arrow" />
@@ -112,7 +112,7 @@ export default function Home() {
                 </article>
               );
             })}
-            {!editorialReviews.length && <p>評論整理中，先了解我哋嘅評分準則。</p>}
+            {!editorialReviews.length && <p>評論正在整理，您可先查閱本站的評分準則。</p>}
           </div>
           <div className="home-review-method">
             <span>賽道體驗</span>
@@ -121,7 +121,7 @@ export default function Home() {
             <i />
             <span>補給體驗</span>
             <Link href="/ratings/#method">
-              三項獨立評分，睇清依據 <Icon name="arrow" size={16} />
+              查閱三項獨立評分的依據 <Icon name="arrow" size={16} />
             </Link>
           </div>
         </div>
@@ -169,8 +169,8 @@ export default function Home() {
       </section>
       <section className="shell home-help" aria-labelledby="home-help-heading">
         <div>
-          <h2 id="home-help-heading">揀好目標，下一步就出發。</h2>
-          <p>按日期、距離同地點，搵一場啱自己嘅比賽。</p>
+          <h2 id="home-help-heading">選定您的下一場比賽</h2>
+          <p>按日期、距離及地點尋找合適的比賽。</p>
         </div>
         <Link className="home-primary" href="/races/">
           前往賽事時間表 <Icon name="arrow" />
@@ -178,10 +178,10 @@ export default function Home() {
       </section>
       <section className="shell home-service-links" aria-label="報名重點及資料政策">
         <Link href="/races/?channel=charity">
-          查看設有慈善名額嘅賽事 <Icon name="arrow" size={16} />
+          查看設有慈善名額的賽事 <Icon name="arrow" size={16} />
         </Link>
         <Link href="/races/?status=open&sort=deadline">
-          按報名截止搵賽事 <Icon name="arrow" size={16} />
+          按報名截止日期搜尋賽事 <Icon name="arrow" size={16} />
         </Link>
         <Link href="/about/">
           官方來源、核實與更正政策 <Icon name="arrow" size={16} />

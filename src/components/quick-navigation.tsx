@@ -121,7 +121,7 @@ export function QuickNavigation({ destinations }: { destinations: QuickDestinati
           />
         </form>
         <p className={matches.length ? "sr-only" : undefined} role="status">
-          {matches.length ? `顯示 ${matches.length} 個選項` : "搵唔到相符結果。"}
+          {matches.length ? `顯示 ${matches.length} 個選項` : "沒有符合條件的結果。"}
         </p>
         <ul
           className="quick-navigation-results"

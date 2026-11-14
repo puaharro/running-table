@@ -116,7 +116,7 @@ export function EditionReviewCoverage({ races, reviews }: Props) {
         <span>當屆賽事及組別評論狀態</span>
         <span className="ratings-coverage-hint">查看各組別</span>
       </summary>
-      <p>當屆未評唔等於體驗差；如有往屆評論，會另作標示。</p>
+      <p>當屆未有評分，並不代表體驗欠佳。如有往屆評論，將另作標示。</p>
       <ul className="ratings-coverage-list">
         {[...races]
           .sort((a, b) => a.date.localeCompare(b.date))

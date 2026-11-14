@@ -61,7 +61,7 @@ export function EditorialFeedback({
   return (
     <form className="correction-form editorial-feedback" onSubmit={prepare}>
       <p>
-        此表格只準備電郵草稿，唔會上傳或儲存投訴。請確認內容後，自行寄到{" "}
+        此表格只產生電郵草稿，不會上傳或儲存投訴。請確認內容後，自行寄到{" "}
         <a href={`mailto:${recipient}`}>{recipient}</a>；附件可在電郵加入。
       </p>
       <label>
@@ -166,7 +166,8 @@ export function EditorialFeedback({
         />
       </label>
       <p>
-        請只提供處理所需資料，避免加入身份證、健康資料或無關人士個人資料；回報唔會轉到公開 GitHub。
+        請只提供處理所需資料，避免加入身份證、健康資料或無關人士個人資料；回報內容不會轉發至公開的
+        GitHub 儲存庫。
       </p>
       <button type="submit" className="button button-dark">
         準備私人電郵

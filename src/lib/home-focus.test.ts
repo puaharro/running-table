@@ -30,5 +30,5 @@ it("removes expired event promotions while retaining the evergreen guide", () =>
   );
   expect(html).not.toContain("渣打香港馬拉松 2027");
   expect(html).not.toContain("港珠澳大橋（香港段）半馬拉松 2026");
-  expect(html).toContain("第一場 10K");
+  expect(html).toContain('data-slide-id="choose-your-first-10k"');
 });

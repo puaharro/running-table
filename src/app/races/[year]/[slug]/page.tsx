@@ -118,7 +118,7 @@ export default async function RacePage({ params }: Props) {
           />
           <div className="registration-card race-official-panel">
             <h2>官方報名資料</h2>
-            <p>查看大會當屆資料，確認你嘅組別、名額渠道及付款安排。</p>
+            <p>查看大會當屆資料，確認您的組別、名額渠道及付款安排。</p>
             <a
               className="button button-coral official-cta"
               href={race.sourceUrl!}
@@ -127,7 +127,7 @@ export default async function RacePage({ params }: Props) {
             >
               前往官方賽事網站 <Icon name="arrow" />
             </a>
-            <small>將開啟大會網站。本站唔收報名費，亦唔保證即時餘額。</small>
+            <small>將開啟大會網站。本站不收取報名費，亦不保證即時名額。</small>
           </div>
         </div>
         <details className="race-verification">
@@ -163,7 +163,7 @@ export default async function RacePage({ params }: Props) {
               <p>{race.summary}</p>
             </section>
             <section>
-              <h2>報名前，先睇呢幾點</h2>
+              <h2>報名前須核對的事項</h2>
               <ul className="highlight-list">
                 {race.highlights.map((s, i) => (
                   <li key={s}>
@@ -235,7 +235,7 @@ export default async function RacePage({ params }: Props) {
             <section id="race-sources" tabIndex={-1}>
               <h2>資料來源及核實範圍</h2>
               <p>
-                「已核對」只適用下列列明欄位。未完成核對嘅費用、資格及報名狀態，唔會用其他組別資料代填。
+                「已核對」只適用下列列明欄位。尚待核對的費用、資格及報名狀態，不會以其他組別的資料代填。
               </p>
               <div className="source-cards">
                 {race.sources?.map((source) => (
@@ -307,17 +307,17 @@ export default async function RacePage({ params }: Props) {
             <RaceChapterNav chapters={chapters} />
             <div className="sidebar-note">
               <Icon name="check" />
-              <h3>抽籤截止，唔等於全部渠道截止。</h3>
+              <h3>抽籤截止後，其他渠道仍可能接受申請。</h3>
               <p>同一比賽可能有公眾抽籤、慈善或其他特別名額。請按自身資格向官方確認。</p>
               <Link href="/guides/race-registration-checklist/" className="text-link">
-                睇報名前清單 <Icon name="arrow" size={16} />
+                查看報名前清單 <Icon name="arrow" size={16} />
               </Link>
             </div>
           </aside>
         </div>
         <section className="related-section">
           <div className="section-heading">
-            <h2>幫你作決定嘅實用指南</h2>
+            <h2>報名及選賽指南</h2>
           </div>
           <div className="guide-grid">
             {guides.map((g) => (

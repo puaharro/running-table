@@ -91,9 +91,9 @@ export function AdFrame({ children }: { children: React.ReactNode }) {
           </div>
           <h2 id="vignette-title">全屏廣告版位</h2>
           <p>
-            你嘅下一步，
+            您的下一步，
             <br />
-            由呢度開始。
+            從這裡開始。
           </p>
           <small>插頁廣告示意 · 可隨時關閉</small>
         </div>

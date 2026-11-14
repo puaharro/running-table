@@ -776,13 +776,7 @@ export function RaceExplorer({
                 {visibleResults.length > 0 && (
                   <div className="calendar-row-head" role="group" aria-label="賽事列表欄位">
                     <span>賽事／起點</span>
-                    <button
-                      type="button"
-                      aria-pressed={filters.sort === "date"}
-                      onClick={() => field("sort", "date")}
-                    >
-                      比賽日 {filters.sort === "date" && <span aria-hidden="true">↑</span>}
-                    </button>
+                    <span>比賽日</span>
                     <span>距離</span>
                     <span>報名概況</span>
                     <button
@@ -936,10 +930,10 @@ export function RaceExplorer({
                     {error
                       ? "調整一下篩選範圍"
                       : savedOnly
-                        ? "未有符合篩選嘅收藏"
-                        : "暫時搵唔到符合條件嘅賽事"}
+                        ? "沒有符合篩選條件的收藏"
+                        : "暫無符合條件的賽事"}
                   </h2>
-                  {savedOnly && <p>可切換到「全部」，再按賽事旁嘅「收藏」。</p>}
+                  {savedOnly && <p>可切換至「全部」，再按賽事旁的「收藏」。</p>}
                   <p>
                     {filters.countries.length &&
                     !races.some((race) => filters.countries.includes(race.country ?? "香港"))

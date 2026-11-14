@@ -132,7 +132,7 @@ export function ReviewNotebook() {
         <Link href="/ratings/process/">了解審閱流程</Link>
       </p>
       <p className="notebook-notice">
-        筆記只會儲存在目前瀏覽器，唔會傳送到網站或自動發布。清除瀏覽資料會失去草稿，請匯出備份。
+        筆記只會儲存在目前瀏覽器，不會傳送至網站或自動發布。清除瀏覽資料會失去草稿，請匯出備份。
       </p>
       <fieldset disabled={!ready}>
         <legend>選擇參賽筆記</legend>
@@ -172,7 +172,7 @@ export function ReviewNotebook() {
         <legend>
           {target.name} · {target.group}
         </legend>
-        <p>每次只記一個年份；跑過多屆可新增另一份筆記。唔記得嘅細節可以留空。</p>
+        <p>每次只記一個年份；跑過多屆可新增另一份筆記。記憶不確切的細節可留空。</p>
         <div className="notebook-fields">
           <label>
             參賽年份
@@ -238,7 +238,7 @@ export function ReviewNotebook() {
                 {rule.title}實際經驗
                 <textarea
                   maxLength={12000}
-                  placeholder="用口語寫低優點、問題、位置／時間，以及適合邊類跑手。"
+                  placeholder="記錄優點、問題、發生地點或時間，以及適合的跑手類型。"
                   value={active.dimensions[key].notes}
                   onChange={(e) => dimensionUpdate(key, { notes: e.target.value })}
                 />
@@ -272,7 +272,7 @@ export function ReviewNotebook() {
           賽道挑戰特性（獨立描述）
           <textarea
             maxLength={12000}
-            placeholder="斜路、風、路面等；難跑唔等於體驗差，唔會加入三項評分。"
+            placeholder="斜路、風、路面等；賽道難度獨立記錄，不納入三項體驗評分。"
             value={active.courseNotes}
             onChange={(e) => update({ courseNotes: e.target.value })}
           />

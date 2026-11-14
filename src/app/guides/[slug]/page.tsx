@@ -86,8 +86,8 @@ export default async function GuidePage({ params }: Props) {
               返回目錄 ↑
             </a>
             <div className="guides-article-cta">
-              <h2>睇完指南，搵下一場。</h2>
-              <p>按日期、距離及地區，縮窄你嘅選擇。</p>
+              <h2>搜尋下一場賽事</h2>
+              <p>按日期、距離及地區篩選賽事。</p>
               <Link className="guides-primary-link" href={searchHref}>
                 {guide.relatedDistance ? `查看${guide.relatedDistance}時間表` : "前往賽事搜尋"}{" "}
                 <Icon name="arrow" />

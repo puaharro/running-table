@@ -5,7 +5,7 @@ import { Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { pageMetadata } from "@/lib/site";
 export const metadata = pageMetadata(
   "原創報名及選賽指南",
-  "由報名清單到選賽比較，幫香港跑手掌握需要核實嘅資訊。",
+  "由報名清單到選賽比較，協助香港跑手掌握須核實的資訊。",
   "/guides/",
 );
 export default function GuidesPage() {
@@ -13,14 +13,14 @@ export default function GuidesPage() {
     {
       id: "choosing",
       category: "選賽指南",
-      title: "點揀比賽",
-      description: "由距離、路線到交通，逐項比較你重視嘅條件。",
+      title: "如何選擇賽事",
+      description: "由距離、路線到交通，逐項比較您重視的條件。",
     },
     {
       id: "registration",
       category: "報名指南",
       title: "報名前準備",
-      description: "揀好比賽之後，核對入口、資料、費用同確認通知。",
+      description: "選定賽事後，核對報名入口、資料、費用及確認通知。",
     },
   ];
   return (
@@ -29,7 +29,7 @@ export default function GuidesPage() {
         <Breadcrumb items={[{ label: "報名及選賽指南" }]} />
         <header className="guides-heading">
           <h1>報名及選賽指南</h1>
-          <p>由第一場路跑到下一場半馬，整理實用嘅報名及選賽方法。</p>
+          <p>從首次參加路跑到準備下一場半馬，查閱實用的報名及選賽方法。</p>
           <nav aria-label="指南分類">
             {categories.map((category) => (
               <a key={category.id} href={`#${category.id}`}>
@@ -63,15 +63,15 @@ export default function GuidesPage() {
         })}
         <div className="guides-next-step">
           <div>
-            <h2>有咗方向，就搵下一場。</h2>
-            <p>按賽期同距離縮窄選擇，再睇賽事資料及指定年份嘅參賽體驗。</p>
+            <h2>搜尋下一場賽事</h2>
+            <p>按賽期及距離縮窄選擇，再查閱賽事資料及指定年份的參賽體驗。</p>
           </div>
           <div className="guides-next-actions">
             <Link className="guides-primary-link" href="/races/">
               查看路跑時間表 <Icon name="arrow" />
             </Link>
             <Link className="guides-secondary-link" href="/ratings/">
-              睇體驗評級
+              查看體驗評級
             </Link>
           </div>
         </div>

@@ -11,13 +11,13 @@ export const homeFocusSlides: FocusSlide[] = [
       id: "standard-chartered-hk-marathon-2027",
       graphic: "42.2",
       tone: "green" as const,
-      description: "全馬、半馬、10K。由各組起點到報名渠道，計劃你嘅下一場城市挑戰。",
+      description: "全馬、半馬、10K。由各組起點到報名渠道，規劃您的下一場城市路跑。",
     },
     {
       id: "hzmb-half-marathon-2026",
       graphic: "21.1",
       tone: "blue" as const,
-      description: "半馬定 10K？先了解組別資料、集合與接駁安排，再計劃你嘅大橋賽事。",
+      description: "半馬還是 10 公里？先了解組別資料、集合與接駁安排，再規劃您的大橋賽事。",
     },
   ].flatMap((entry) => {
     const race = races.find((race) => race.id === entry.id && race.status === "scheduled");

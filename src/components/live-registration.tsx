@@ -118,11 +118,13 @@ function Timestamp({ value }: { value: string }) {
 function RegistrationTerm({ term }: { term: "公眾抽籤" | "最低籌款額" }) {
   return (
     <details className="registration-term">
-      <summary>{term} <span aria-hidden="true">?</span></summary>
+      <summary>
+        {term} <span aria-hidden="true">?</span>
+      </summary>
       <p>
         {term === "公眾抽籤"
-          ? "提交抽籤申請後，要等大會公布結果先知有冇名額。中籤後如有付款期限，要按時完成付款。"
-          : "參加該渠道所需達到嘅最低籌款金額。如另有參賽費，請按主辦方條款核對。"}
+          ? "提交抽籤申請後，請等候大會公布結果，以確認是否獲得名額。中籤後如設有付款期限，請按時付款。"
+          : "透過該渠道參賽所需達到的最低籌款額。如另有參賽費，請按主辦方條款核對。"}
       </p>
     </details>
   );
@@ -286,7 +288,7 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
         <a href="#registration-groups">查看完整組別資料 ↓</a>
       </div>
       <p>
-        每個渠道有獨立資格、價格及期限；接受申請唔等於已確認名額。結果公布及付款期限另列，唔等同申請截止。
+        每個渠道有獨立資格、價格及期限；接受申請並不表示名額已獲確認。公布結果的日期和付款期限另行列出，與申請截止日期有別。
       </p>
       <div className="group-compare">
         <button

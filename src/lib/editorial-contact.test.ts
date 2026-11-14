@@ -53,7 +53,7 @@ describe("private editorial email preparation", () => {
     const html = renderToStaticMarkup(
       createElement(EditorialFeedback, { races: [], recipient: editorialContactEmail }),
     );
-    expect(html).toContain("唔會上傳或儲存投訴");
+    expect(html).toContain("不會上傳或儲存投訴");
     expect(html).toContain("毋須為官方公告");
     expect(html).not.toContain("github.com");
     expect(html).not.toMatch(/required[^>]*type="url"|type="url"[^>]*required/);

@@ -55,7 +55,7 @@ export function RaceConfirmedExperience({
         </div>
       </details>
       <h3 className="experience-topics-heading">跑手分享</h3>
-      <p className="experience-help">點開主題查看全文、來源及觀察限制。</p>
+      <p className="experience-help">展開各主題，即可查閱全文、來源及觀察限制。</p>
       <div className="runner-copy-body experience-topics">
         {e.sections.map((s) => (
           <details key={s.topic} className="experience-topic">

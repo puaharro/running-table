@@ -41,7 +41,7 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
           </div>
         </form>
         <Link href="/races/" className="home-search-full">
-          按日期、地區、距離搵賽事 <Icon name="arrow" size={18} />
+          按日期、地區及距離搜尋賽事 <Icon name="arrow" size={18} />
         </Link>
       </section>
       <section className="shell home-calendar-section" aria-labelledby="home-calendar-heading">
@@ -93,13 +93,13 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
             <h2 id="home-focus-heading">
               一場比賽，
               <br />
-              睇清楚再決定。
+              了解詳情後再作決定。
             </h2>
-            <p>日期同距離係開始。報名資格、交通安排同跑手體驗，一齊了解先揀得啱。</p>
+            <p>除日期和距離外，亦可參考報名資格、交通安排及跑手體驗，再選擇合適的賽事。</p>
             <div className="home-photo">
               <HomePhoto
                 file="harbour-run.webp"
-                alt="清晨沿海旁慢跑嘅跑手"
+                alt="清晨沿海濱慢跑的跑手"
                 width={768}
                 height={512}
                 sizes="(max-width: 767px) calc(100vw - 80px), (max-width: 1100px) calc((100vw - 76px) / 2.8 - 56px), (max-width: 1280px) calc((100vw - 104px) / 2.9 - 56px), 350px"
@@ -113,7 +113,7 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
                 <Icon name="check" size={17} /> 往屆評論列明年份及組別
               </li>
               <li>
-                <Icon name="check" size={17} /> 未能確認嘅資料保留待核實
+                <Icon name="check" size={17} /> 未能確認的資料標示為待核實
               </li>
             </ul>
             <Link href="/ratings/">

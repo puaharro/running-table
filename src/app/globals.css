@@ -2749,3 +2749,19 @@ html:has(.ad-vignette[open]) {
   border-radius: 4px;
   cursor: pointer;
 }
+/* Heading subset of Adobe Source Han Serif HK 2.003, renamed under the OFL. */
+@font-face {
+  font-family: "NXTGO Editorial HK";
+  src: url("/fonts/nxtgo-editorial-hk-600.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+.guides-page .guides-article-heading h1,
+.race-detail-page .race-runner-copy > h2 {
+  font-family: "NXTGO Editorial HK", var(--font-body);
+  font-weight: 600;
+  letter-spacing: normal;
+  text-wrap: balance;
+}

@@ -151,11 +151,11 @@ export function registrationCountdown(race: Race, groups: RaceGroup[], now: Cloc
   const day = 24 * hour;
   const label =
     remaining >= day
-      ? `仲有 ${Math.floor(remaining / day)} 日截止`
+      ? `尚餘 ${Math.floor(remaining / day)} 日截止`
       : remaining >= hour
-        ? `仲有 ${Math.floor(remaining / hour)} 小時截止`
+        ? `尚餘 ${Math.floor(remaining / hour)} 小時截止`
         : remaining >= minute
-          ? `仲有 ${Math.floor(remaining / minute)} 分鐘截止`
+          ? `尚餘 ${Math.floor(remaining / minute)} 分鐘截止`
           : "不足 1 分鐘截止";
   return {
     label,
@@ -204,12 +204,12 @@ function distanceMatches(km: number, selection: string[]) {
   );
 }
 export function filterError(f: Filters) {
-  if ((f.from && !validDate(f.from)) || (f.to && !validDate(f.to))) return "請輸入有效嘅日期。";
+  if ((f.from && !validDate(f.from)) || (f.to && !validDate(f.to))) return "請輸入有效的日期。";
   for (const value of [f.min, f.max])
     if (value && (!Number.isFinite(Number(value)) || Number(value) < 0 || Number(value) > 1000))
       return "距離請輸入 0 至 1000 公里。";
-  if (f.from && f.to && f.from > f.to) return "開始日期唔可以遲過結束日期。";
-  if (f.min && f.max && Number(f.min) > Number(f.max)) return "最短距離唔可以大過最長距離。";
+  if (f.from && f.to && f.from > f.to) return "開始日期不得晚於結束日期。";
+  if (f.min && f.max && Number(f.min) > Number(f.max)) return "最短距離不得大於最長距離。";
   return "";
 }
 export function selectRaces(races: Race[], f: Filters, now: Clock) {

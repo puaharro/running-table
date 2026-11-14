@@ -28,7 +28,7 @@ export function RaceShare({ name, href }: { name: string; href: string }) {
     } catch {
       field.current?.focus();
       field.current?.select();
-      setMessage("請手動複製已選取嘅網址。");
+      setMessage("請手動複製已選取的網址。");
     }
   }
 

@@ -23,10 +23,10 @@ export default function RatingsPage() {
         <Breadcrumb items={[{ label: "賽事體驗評級" }]} />
         <header className="ratings-heading">
           <h1>賽事體驗評級</h1>
-          <p>跑過之後，先知道嘅事。閱讀指定年份及組別嘅參賽體驗。</p>
+          <p>查閱指定年份及組別的參賽體驗，了解跑手在賽事中的實際觀察。</p>
           <nav aria-label="評級頁入口">
             <a href="#published-reviews">
-              睇已發布評論 <Icon name="arrow" size={16} />
+              查看已發布評論 <Icon name="arrow" size={16} />
             </a>
             <a href="#method">了解評分準則 ↓</a>
           </nav>
@@ -51,11 +51,11 @@ export default function RatingsPage() {
             <EditionReviewCoverage races={races} reviews={editorialReviews} />
           </div>
           <details className="ratings-explainer">
-            <summary>點樣睇評分？</summary>
+            <summary>如何理解評分？</summary>
             <p>評論按年份及組別分開，保留三項獨立評分，總評分為三項等權平均。</p>
 
             <h2 id="ratings-explainer-heading">
-              三個角度，<span>分開睇體驗。</span>
+              從三個角度<span>分項評估參賽體驗。</span>
             </h2>
             <p>
               每項 1–5 分；資料不足保留未評，不當零分；三項齊備才計算總評分，滿分 5
@@ -108,7 +108,7 @@ export default function RatingsPage() {
                 5 分，顯示一位小數。
               </p>
               <p>
-                距離、時限及官方安排繼續在賽事資料列出；賽道挑戰特性獨立描述，難跑唔等於體驗差。
+                距離、時限及官方安排繼續在賽事資料列出；賽道挑戰特性獨立描述，賽道難度與參賽體驗分開評估。
               </p>
             </section>
             {ratingDimensions.map((key) => (
@@ -125,15 +125,17 @@ export default function RatingsPage() {
               </section>
             ))}
             <section>
-              <h2>讀分數時，一齊睇呢幾點</h2>
+              <h2>閱讀評分時的注意事項</h2>
               <ul>
                 <li>評論按年份及組別分開；往屆體驗不代表下一屆表現，全馬評論亦不套用半馬。</li>
                 <li>顯示評審署名、前／中／後段位置、參賽或利益關係、更新日期及觀察限制。</li>
                 <li>
-                  單一評審只代表其觀察，唔當成所有跑手共識；官方安排、GPX
-                  或影片可補充背景，唔會單憑宣傳內容評服務表現。
+                  單一評審只代表其觀察，並不代表所有跑手的共識；官方安排、GPX
+                  或影片可補充背景，服務表現的評估須有宣傳內容以外的依據。
                 </li>
-                <li>5 分需要具體紀錄支持，補給尤其要留意後段供應；未觀察到唔等於冇問題。</li>
+                <li>
+                  5 分需要具體紀錄支持，補給尤其要留意後段供應；未有觀察記錄，無法據此判定有否問題。
+                </li>
                 <li>未來修訂準則會保留修改原因及版本；這是編輯試行評級，尚未經大規模校準。</li>
               </ul>
             </section>

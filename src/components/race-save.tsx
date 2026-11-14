@@ -177,12 +177,14 @@ export function RaceSaveActions({ race, initialNow }: { race: Race; initialNow: 
           <button type="button" className="button" disabled={!item} onClick={download}>
             下載日曆檔
           </button>
-          <p>比賽日為全日行程；只提供有來源依據、尚未過期嘅報名截止。未列出嘅期限仍待核實。</p>
-          <p>下載後需自行匯入；改期或截止日更新唔會自動同步。</p>
-          <p role="status">{items.length ? message : "暫未有可加入嘅日期。"}</p>
+          <p>
+            比賽日以全日行程列出。日曆只提供有來源支持且尚未過期的報名截止日期，未列出的期限仍待核實。
+          </p>
+          <p>下載後需自行匯入；賽期或截止日期如有變更，日曆不會自動同步。</p>
+          <p role="status">{items.length ? message : "暫無可加入的日期。"}</p>
         </div>
       </details>
-      <small>收藏只存於此瀏覽器，清除網站資料後會移除，唔會跨裝置同步。</small>
+      <small>收藏只存於此瀏覽器，清除網站資料後會移除，不會跨裝置同步。</small>
     </div>
   );
 }
