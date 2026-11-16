@@ -33,6 +33,11 @@ function history(w, r) {
 }
 function confirmation(w, r) {
   if (!r.revision) return "";
+  try {
+    w.assertBasis(r);
+  } catch (error) {
+    return `<section class="panel banner" role="status"><h2>依據變更提醒</h2><p>${e(error.message)}</p><p>此版本的確認及匯出已停止；先檢查來源，再保存新版本。</p></section>`;
+  }
   if (r.kind === "website" && titleWarning(r.data.title))
     return `<section class="panel"><h2>公開標題檢查</h2><p class="banner">${e(titleWarning(r.data.title))}</p><p>既有版本與確認紀錄保留；新版本需重新確認，唔會自動套用舊批准。</p></section>`;
   return `<section class="panel"><h2>完整版本確認及匯出</h2><p>第 ${r.revision} 版 · ${r.status === "confirmed" ? "文字已確認" : "待人工確認"}。修改後須重新確認。確認文字不等於批准發布。</p>${r.status === "confirmed" ? `<button id="export-confirmed" data-id="${e(r.id)}" data-revision="${r.revision}">匯出已確認版本</button>${r.kind === "website" ? `<p><a href="/handoff-preview?id=${e(r.id)}&revision=${r.revision}" target="_blank" rel="noopener noreferrer">預覽已確認交接版本 ↗</a></p><button id="export-handoff" data-id="${e(r.id)}" data-revision="${r.revision}">下載網站交接包（正文＋來源＋版本清單）</button>` : ""}` : `<form id="confirm-form">${hidden(r)}<input type="hidden" name="hash" value="${w.hash(r)}"><label><input type="checkbox" name="acknowledge" required>我已閱讀本頁完整第 ${r.revision} 版，確認此版本文字及來源；公開文字已按去名要求覆核</label>${r.kind === "website" ? '<label><input type="checkbox" name="allow_incomplete">如有來源未完成，我明確知悉並保留全部未知及限制；不宣稱已查齊</label>' : ""}<label>確認備註<textarea name="note" maxlength="2000" required></textarea></label><button>確認指定版本文字</button></form>`}<p class="meta">匯出係私人待發布交接檔，唔會修改網站目錄、評分或觸發部署。發布仍須另行批准。</p></section>`;
@@ -173,7 +178,14 @@ export function renderWebsiteIndex(content, token) {
         .list("website")
         .map(
           (r) =>
-            `<article class="panel"><h2><a href="/website-copy?id=${e(r.id)}">${e(r.data.title)}</a></h2><p>第 ${r.revision} 版 · ${r.status === "confirmed" ? "文字已確認；上線狀態見版本摘要" : "待人工確認"} · ${e(r.updated_at)}</p><p><a href="/site-release?id=${e(r.id)}">版本及上線摘要／接入預覽／驗收紀錄</a></p></article>`,
+            `<article class="panel"><h2><a href="/website-copy?id=${e(r.id)}">${e(r.data.title)}</a></h2><p>第 ${r.revision} 版 · ${(() => {
+              try {
+                w.assertBasis(r);
+                return r.status === "confirmed" ? "文字已確認；上線狀態見版本摘要" : "待人工確認";
+              } catch {
+                return "依據已變，需重審";
+              }
+            })()} · ${e(r.updated_at)}</p><p><a href="/site-release?id=${e(r.id)}">版本及上線摘要／接入預覽／驗收紀錄</a></p></article>`,
         )
         .join("") || "<p>尚未有網站稿。</p>"
     }`,

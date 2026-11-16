@@ -1,3 +1,4 @@
+import { initResearchState, recordDraftBasis, draftBasisStatus } from "./research-state.mjs";
 import { initWorkflow, privateRaces } from "./workflow.mjs";
 import { initMaterials, materials } from "./materials.mjs";
 import { DatabaseSync } from "node:sqlite";
@@ -36,6 +37,7 @@ export class ContentStore {
     this.mode = mode;
     this.baseCatalog = catalog;
     initMaterials(this);
+    initResearchState(this);
     initWorkflow(this);
   }
   get catalog() {
@@ -150,6 +152,7 @@ export class ContentStore {
       this.db
         .prepare("INSERT INTO content_versions VALUES(?,?,?,?,?)")
         .run(id, revision, "draft", JSON.stringify(payload), at);
+      recordDraftBasis(this, this.get(id));
       this.db.exec(nested ? "RELEASE content_write" : "COMMIT");
       return this.get(id);
     } catch (error) {
@@ -171,6 +174,8 @@ export class ContentStore {
       const prior = this.get(input.id);
       if (prior.revision !== input.expected_revision)
         throw new ReviewError(409, "草稿已有新版本，請重新載入。");
+      if (draftBasisStatus(this, prior).stale)
+        throw new ReviewError(409, "研究依據已變，請先檢查並保存草稿新版本。");
       if (!prior.body.trim() || !prior.sources.trim() || !prior.scope.trim())
         throw new ReviewError(400, "標記待確認前，請先儲存正文、材料／來源及觀察範圍。");
       if (prior.status === "pending") {
@@ -188,6 +193,7 @@ export class ContentStore {
       this.db
         .prepare("INSERT INTO content_versions VALUES(?,?,?,?,?)")
         .run(input.id, revision, "pending", row.payload_json, at);
+      recordDraftBasis(this, this.get(input.id));
       this.db.exec("COMMIT");
       return this.get(input.id);
     } catch (error) {
@@ -202,6 +208,13 @@ export class ContentStore {
       confirmation_required: true,
       published: false,
       draft: this.get(id),
+      research_basis_status: draftBasisStatus(this, this.get(id)),
+      research_basis_versions: this.db
+        .prepare(
+          "SELECT revision,basis_json,captured_at,reason FROM draft_research_basis WHERE draft_id=? ORDER BY revision DESC",
+        )
+        .all(id)
+        .map(({ basis_json, ...row }) => ({ ...row, basis: JSON.parse(basis_json) })),
       versions: this.history(id),
     };
   }

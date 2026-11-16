@@ -1,3 +1,5 @@
+import { Workflow } from "./workflow.mjs";
+import { draftBasisStatus } from "./research-state.mjs";
 import { ResearchBridge } from "./research-bridge.mjs";
 import { createHash } from "node:crypto";
 import { materials, importMaterials } from "./materials.mjs";
@@ -13,6 +15,7 @@ export const agentPermissions = {
     "research_prepare",
     "research_context",
     "research_review",
+    "coverage_save",
   ],
 };
 function fail(code, message, status = 400) {
@@ -42,6 +45,7 @@ const canonical = (v) =>
 export class AgentService {
   constructor(content, { store, reviews } = {}) {
     this.content = content;
+    if (reviews) content.researchReviews = reviews;
     this.research = new ResearchBridge(content, store, reviews);
     content.db.exec(`CREATE TABLE IF NOT EXISTS agent_commands(
       request_key TEXT PRIMARY KEY, request_hash TEXT NOT NULL, role TEXT NOT NULL,
@@ -76,6 +80,11 @@ export class AgentService {
         materials: materials(this.content, race_id).filter((m) => m.year === year),
         drafts: this.content.list().filter((d) => d.race_id === race_id && d.year === year),
         research: this.research.links().filter((l) => l.race_id === race_id && l.year === year),
+        coverage: new Workflow(this.content).coverage(race_id, year),
+        draft_basis: this.content
+          .list()
+          .filter((d) => d.race_id === race_id && d.year === year)
+          .map((d) => ({ id: d.id, ...draftBasisStatus(this.content, d) })),
         permissions: agentPermissions[role],
       };
     }
@@ -97,7 +106,30 @@ export class AgentService {
       let result;
       if (request.action === "import_materials")
         result = importMaterials(this.content, request.input, { nested: true });
-      else if (request.action === "research_prepare") result = this.research.prepare(request.input);
+      else if (request.action === "coverage_save") {
+        if (request.input?.kind !== "coverage") fail("FORBIDDEN", "AI只可更新來源進度。", 403);
+        if (typeof request.input.id !== "string") fail("INVALID_INPUT", "請指定來源進度版本。");
+        const old = this.content.db
+          .prepare("SELECT id FROM workflow_docs WHERE id=?")
+          .get(request.input.id);
+        if (
+          old &&
+          new Workflow(this.content)
+            .events(old.id)
+            .some((e) => e.action === "saved" && e.actor_type !== "agent")
+        )
+          fail("FORBIDDEN", "AI不能覆寫人手來源進度，請由營運者更新。", 403);
+        result = new Workflow(this.content).save(request.input, {
+          nested: true,
+          actor: {
+            type: "agent",
+            ...request.agent,
+            request_key: request.idempotency_key,
+            reason: request.reason,
+          },
+        });
+      } else if (request.action === "research_prepare")
+        result = this.research.prepare(request.input);
       else if (request.action === "research_review")
         result = this.research.review(request.input, request, fingerprint);
       else if (request.action === "update_draft") {

@@ -1,3 +1,5 @@
+import { renderResearchDashboard } from "./research-dashboard.mjs";
+import { draftBasisStatus } from "./research-state.mjs";
 import { materials } from "./materials.mjs";
 import { createHash } from "node:crypto";
 
@@ -86,12 +88,16 @@ export function renderDrafts(content, token, selected = null, initial = {}) {
     scope: "",
   };
   const list = content.list().filter((d) => !initial.race_id || d.race_id === initial.race_id);
+  const basisWarning =
+    selected && draftBasisStatus(content, selected).stale
+      ? `<p class="banner" role="status">依據變更提醒：${e(draftBasisStatus(content, selected).reason)} 請檢查並保存新版本，再標記待確認。</p>`
+      : "";
   const history = selected ? content.history(selected.id) : [];
   return shell(
     "drafts",
     content.mode,
     token,
-    `<h1>評論草稿</h1>${selected ? `<p><a href="/website-copy?race=${encodeURIComponent(row.race_id)}&year=${row.year}&draft=${e(row.id)}">由此版本整理網站稿 →</a></p><p><a href="/materials?race=${encodeURIComponent(row.race_id)}">查看對應賽事材料（${row.material_ids?.length ?? 0}則已連結）</a></p>` : ""}<p class="meta">評論及賽事更新建議集中放喺呢度。標記「待確認」只整理工作進度，不代表營運者已批准發布。</p>
+    `<h1>評論草稿</h1>${basisWarning}${selected ? `<p><a href="/website-copy?race=${encodeURIComponent(row.race_id)}&year=${row.year}&draft=${e(row.id)}">由此版本整理網站稿 →</a></p><p><a href="/materials?race=${encodeURIComponent(row.race_id)}">查看對應賽事材料（${row.material_ids?.length ?? 0}則已連結）</a></p>` : ""}<p class="meta">評論及賽事更新建議集中放喺呢度。標記「待確認」只整理工作進度，不代表營運者已批准發布。</p>
   <section class="panel"><h2>已保存草稿</h2>${list.length ? `<ul class="draft-list">${list.map((d) => `<li><a href="/drafts?id=${encodeURIComponent(d.id)}">${e(d.title)}</a> <span class="status ${d.status}">${d.status === "pending" ? "待確認" : "草稿"}</span><br><small>${names[d.kind]} · ${d.year} 年 · ${e(d.group || "範圍未填")} · 第 ${d.revision} 版</small></li>`).join("")}</ul>` : '<p class="meta">暫時未有草稿。</p>'}<a href="/drafts">新增草稿 →</a></section>
   <section class="panel"><h2>${selected ? "編輯草稿" : "新增草稿"}</h2>${selected ? `<p><span class="status ${row.status}">${row.status === "pending" ? "待確認" : "草稿"}</span> · 第 ${row.revision} 版</p>` : ""}
   <form id="draft-form" data-dirty="false"><input type="hidden" name="id" value="${e(row.id ?? "")}"><input type="hidden" name="material_ids" value="${e(JSON.stringify(row.material_ids ?? []))}"><input type="hidden" name="revision" value="${row.revision}"><div class="grid">
@@ -121,7 +127,9 @@ document.querySelector('#batch-form').addEventListener('submit',async e=>{e.prev
 document.querySelector('#make-draft').addEventListener('click',async()=>{try{const ids=Array.from(document.querySelectorAll('input[name=material]:checked')).map(x=>x.value);const d=await post('/api/content/materials/draft',{ids});location.href='/drafts?id='+d.id;}catch(e){status.textContent=e.message;}});
 document.querySelector('#backup').addEventListener('click',async()=>{try{const b=await post('/api/content/backup',{});status.textContent='私人備份已保存：'+b.directory;}catch(e){status.textContent=e.message;}});`;
 export function renderMaterials(content, token, race, batches = [], research = {}) {
-  const links = (research.links ?? []).filter((l) => !race || l.race_id === race);
+  const links = (research.links ?? []).filter(
+    (l) => (!race || l.race_id === race) && (!research.year || l.year === research.year),
+  );
   const datasets = [...new Map(links.map((l) => [l.dataset_id, l])).values()];
   const actions = {
     import_materials: "匯入材料",
@@ -129,18 +137,21 @@ export function renderMaterials(content, token, race, batches = [], research = {
     update_draft: "更新私人草稿",
     research_prepare: "清理及去重",
     research_review: "逐條覆核",
+    coverage_save: "更新來源研究進度",
   };
   const researchPanel = `<section class="panel"><h2>研究批次及逐條覆核</h2><p>已連接 ${links.length} 則材料 · ${datasets.length} 個批次。清理、去重、逐條覆核及私人草稿共用同一套流程；稿件確認及發布由營運者執行。</p>${datasets.length ? `<ul>${datasets.map((l) => `<li>${e(content.catalog.find((r) => r.id === l.race_id)?.name ?? l.race_id)} · 研究年份 ${l.year} · <a href="/clean/${e(l.dataset_id)}">清理及去重</a> · <a href="/review/${e(l.dataset_id)}">逐條覆核</a> · <a href="/drafts?race=${encodeURIComponent(l.race_id)}">私人草稿</a></li>`).join("")}</ul>` : '<p class="meta">暫時未有已連接批次。</p>'}<details><summary>研究操作紀錄（全部賽事最近100項）</summary><p class="meta">保留執行者及理由，方便追查材料與草稿版本；AI 研究決定不等於人手稿件確認。</p><ul>${(research.audit ?? []).map((a) => `<li>${e(a.created_at)} · AI · ${e(actions[a.action] ?? a.action)}<p class="meta">${e(a.reason)}</p></li>`).join("") || "<li>暫時未有操作紀錄。</li>"}</ul></details></section>`;
 
-  const rows = materials(content, race);
+  const rows = materials(content, race).filter((m) => !research.year || m.year === research.year);
   const example = [
     {
       race_id: race || content.catalog[0]?.id,
-      year: Number(
-        content.catalog.find((r) => r.id === race)?.year ??
-          content.catalog.find((r) => r.id === race)?.date.slice(0, 4) ??
-          new Date().getFullYear(),
-      ),
+      year:
+        research.year ??
+        Number(
+          content.catalog.find((r) => r.id === race)?.year ??
+            content.catalog.find((r) => r.id === race)?.date.slice(0, 4) ??
+            new Date().getFullYear(),
+        ),
       group: "",
       platform: "blog",
       url: "https://example.com/article",
@@ -154,7 +165,7 @@ export function renderMaterials(content, token, race, batches = [], research = {
     "research",
     content.mode,
     token,
-    `<h1>賽事研究材料庫</h1>${race ? `<div class="actions"><a href="/research-progress?race=${e(race)}&year=${example[0].year}">逐來源研究進度／登入協作 →</a><a href="/website-copy?race=${e(race)}&year=${example[0].year}">網站稿及預覽 →</a></div>` : ""}<p class="meta">原文只作研究材料；未覆核、未批准發布。修改過的材料另存一項，舊草稿保留原有材料。</p><div class="actions"><a href="/research">原有多平台搜尋及逐條覆核 →</a><button id="backup">建立私人備份</button></div><p class="meta">備份包含材料、草稿及既有研究／覆核資料庫，只存於 .editorial-private/backups。不是雲端備份，請另行保存一份。</p><form method="get" action="/materials"><label>對應賽事<select name="race"><option value="">全部賽事</option>${content.catalog.map((r) => `<option value="${e(r.id)}"${r.id === race ? " selected" : ""}>${e(r.name)}</option>`).join("")}</select></label><button type="submit">查看賽事材料</button></form>${researchPanel}<section class="panel"><h2>新增一則研究材料</h2><form id="single-material-form"><label>對應賽事<select name="race_id">${content.catalog.map((r) => `<option value="${e(r.id)}"${r.id === race ? " selected" : ""}>${e(r.name)}</option>`).join("")}</select></label><div class="grid"><label>材料屆次／年份<input name="year" type="number" min="1900" max="2200" required value="${example[0].year}"></label><label>組別／範圍<input name="group" maxlength="120"></label><label>來源平台<select name="platform">${[
+    `<h1>賽事研究材料庫</h1>${race ? `<div class="actions"><a href="/research-progress?race=${e(race)}&year=${example[0].year}">逐來源研究進度／登入協作 →</a><a href="/website-copy?race=${e(race)}&year=${example[0].year}">網站稿及預覽 →</a></div>` : ""}<p class="meta">原文只作研究材料；未覆核、未批准發布。修改過的材料另存一項，舊草稿保留原有材料。</p><div class="actions"><a href="/research">原有多平台搜尋及逐條覆核 →</a><button id="backup">建立私人備份</button></div><p class="meta">備份包含材料、草稿及既有研究／覆核資料庫，只存於 .editorial-private/backups。不是雲端備份，請另行保存一份。</p><form method="get" action="/materials"><label>對應賽事<select name="race"><option value="">全部賽事</option>${content.catalog.map((r) => `<option value="${e(r.id)}"${r.id === race ? " selected" : ""}>${e(r.name)}</option>`).join("")}</select></label><label>研究年份（留空顯示全部）<input name="year" type="number" min="1900" max="2200" value="${research.year ?? ""}"></label><button type="submit">查看賽事材料</button></form>${renderResearchDashboard(content, { race, year: research.year ?? null })}${researchPanel}<section class="panel"><h2>新增一則研究材料</h2><form id="single-material-form"><label>對應賽事<select name="race_id">${content.catalog.map((r) => `<option value="${e(r.id)}"${r.id === race ? " selected" : ""}>${e(r.name)}</option>`).join("")}</select></label><div class="grid"><label>材料屆次／年份<input name="year" type="number" min="1900" max="2200" required value="${example[0].year}"></label><label>組別／範圍<input name="group" maxlength="120"></label><label>來源平台<select name="platform">${[
       ["threads", "Threads"],
       ["marathonsworld", "Marathon’s World"],
       ["facebook", "Facebook"],

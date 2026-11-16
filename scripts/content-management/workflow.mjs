@@ -1,3 +1,5 @@
+import { researchBasis, draftBasisStatus } from "./research-state.mjs";
+import { materials } from "./materials.mjs";
 import { isIP } from "node:net";
 import { createHash, randomUUID } from "node:crypto";
 import { SOURCES, publicReference } from "../research/sources.mjs";
@@ -154,6 +156,13 @@ export class Workflow {
     if (draft && (draft.race_id !== data.race_id || draft.year !== data.year))
       fail("草稿與網站稿賽事／年份不符。");
     return {
+      research: researchBasis(
+        this.content,
+        draft?.material_ids ??
+          materials(this.content, data.race_id)
+            .filter((m) => m.year === data.year)
+            .map((m) => m.id),
+      ),
       race_digest: digest(race),
       draft_id: draft?.id ?? null,
       draft_revision: draft?.revision ?? null,
@@ -163,7 +172,7 @@ export class Workflow {
       })),
     };
   }
-  save(input) {
+  save(input, { nested = false, actor = { type: "human" } } = {}) {
     exact(input, ["id", "expected_revision", "kind", "data"]);
     if (
       !["race", "coverage", "website"].includes(input.kind) ||
@@ -212,7 +221,7 @@ export class Workflow {
       d.links = [...new Set(d.links.map((link) => publicReference(d.platform, link).url))];
       if (d.state !== "not_started" && !d.query.trim()) fail("請記錄實際搜尋字詞。");
       if (
-        ["reviewed", "no_results", "inaccessible"].includes(d.state) &&
+        (d.checked_at !== "" || ["reviewed", "no_results", "inaccessible"].includes(d.state)) &&
         (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2})$/.test(
           d.checked_at,
         ) ||
@@ -249,10 +258,12 @@ export class Workflow {
           fail("五個主題均須有正文及觀察限制，資料不足請標明未知。");
         s.urls = [...new Set(s.urls.map(url))];
       });
+      if (d.draft_id && draftBasisStatus(this.content, this.content.get(d.draft_id)).stale)
+        fail("參考草稿依據已變，請先檢查並保存草稿新版本。", 409);
       basis = this.basis(d);
     }
     if (!Number.isInteger(d.year) || d.year < 1900 || d.year > 2200) fail("年份無效。");
-    this.db.exec("BEGIN IMMEDIATE");
+    this.db.exec(nested ? "SAVEPOINT workflow_write" : "BEGIN IMMEDIATE");
     try {
       const raw = this.db.prepare("SELECT * FROM workflow_docs WHERE id=?").get(input.id);
       if ((raw?.revision ?? 0) !== input.expected_revision || (raw && raw.kind !== input.kind))
@@ -270,15 +281,16 @@ export class Workflow {
         .run(input.id, revision, JSON.stringify(record));
       this.event(input.id, {
         action: "saved",
-        actor_type: "local_operator",
+        actor_type: actor.type === "agent" ? "agent" : "local_operator",
+        actor,
         before_revision: input.expected_revision,
         after_revision: revision,
         content_hash: digest(d),
       });
-      this.db.exec("COMMIT");
+      this.db.exec(nested ? "RELEASE workflow_write" : "COMMIT");
       return record;
     } catch (e) {
-      this.db.exec("ROLLBACK");
+      this.db.exec(nested ? "ROLLBACK TO workflow_write; RELEASE workflow_write" : "ROLLBACK");
       throw e;
     }
   }
@@ -336,6 +348,12 @@ export class Workflow {
     }
   }
   assertBasis(r) {
+    if (
+      r.kind === "website" &&
+      r.data.draft_id &&
+      draftBasisStatus(this.content, this.content.get(r.data.draft_id)).stale
+    )
+      fail("參考草稿研究依據已變，請先更新草稿及網站稿。", 409);
     if (r.kind === "website" && digest(this.basis(r.data)) !== digest(r.basis))
       fail("依據版本已改，請另存網站稿新版本再覆核。", 409);
   }

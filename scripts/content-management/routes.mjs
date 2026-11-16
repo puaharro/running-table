@@ -195,10 +195,14 @@ export async function serveContent({
   }
   if (request.method === "GET" && url.pathname === "/materials") {
     const agent = new AgentService(content, { store, reviews });
+    const year = url.searchParams.get("year") ? Number(url.searchParams.get("year")) : null;
+    if (year !== null && (!Number.isInteger(year) || year < 1900 || year > 2200))
+      throw new ReviewError(400, "研究年份無效。");
     html(
       renderMaterials(content, token, url.searchParams.get("race"), store?.batches() ?? [], {
         links: agent.research.links(),
         audit: agent.audit(),
+        year,
       }),
     );
     return true;
