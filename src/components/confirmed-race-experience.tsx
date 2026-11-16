@@ -1,3 +1,5 @@
+import { language } from "@/lib/english-races";
+import { englishRaceTerm } from "@/lib/race-terms.en";
 import type { ConfirmedRaceExperience } from "@/lib/confirmed-race-experience";
 import { ratingDimensions, ratingPolicy } from "@/lib/rating-policy";
 
@@ -5,11 +7,14 @@ export function RaceConfirmedExperience({
   experience: e,
   currentYear,
   reviewAnchor,
+  english = false,
 }: {
   experience: ConfirmedRaceExperience;
   currentYear: string;
   reviewAnchor?: string;
+  english?: boolean;
 }) {
+  const t = language(english);
   const urls = [...new Set(e.sections.flatMap((s) => s.urls))];
   return (
     <section
@@ -18,70 +23,117 @@ export function RaceConfirmedExperience({
       tabIndex={-1}
     >
       {reviewAnchor && <span id={reviewAnchor} aria-hidden="true" />}
-      <h2>{e.title}</h2>
+      <h2>{english ? "Race experience" : e.title}</h2>
       <p className="review-edition-note">
-        {e.year} 年 · {e.group} · 往屆體驗，不代表 {currentYear} 年安排或表現。
+        {t(
+          `${e.year} 年 · ${e.group} · 往屆體驗，不代表 ${currentYear} 年安排或表現。`,
+          `${e.year} · ${englishRaceTerm(e.group, true)} · Past edition, with original accounts in Chinese. Arrangements and experience may differ in ${currentYear}.`,
+        )}
       </p>
-      <dl className="rating-grid quick-scores experience-scores" aria-label="三項獨立評分">
+      <dl
+        className="rating-grid quick-scores experience-scores"
+        aria-label={t("三項獨立評分", "Three independent ratings")}
+      >
         {ratingDimensions.map((key) => (
           <div key={key}>
-            <dt>{ratingPolicy.dimensions[key].title}</dt>
+            <dt>{englishRaceTerm(ratingPolicy.dimensions[key].title, english)}</dt>
             <dd>
               <strong>
-                {e.assessments[key].score === null ? "未評" : `${e.assessments[key].score} / 5`}
+                {e.assessments[key].score === null
+                  ? t("未評", "Unrated")
+                  : `${e.assessments[key].score} / 5`}
               </strong>
             </dd>
           </div>
         ))}
       </dl>
       <details className="experience-rating-details">
-        <summary>查看完整評語及評分依據</summary>
+        <summary>{t("查看完整評語及評分依據", "Read full comments and scoring evidence")}</summary>
         <div className="runner-copy-body">
-          <p>按已確認材料作編輯判斷；三項分別評估，不設總分。個人自述不代表全體跑手。</p>
+          <p>
+            {t(
+              "按已確認材料作編輯判斷；三項分別評估，不設總分。個人自述不代表全體跑手。",
+              "Editors assess the three dimensions independently using confirmed material, without an overall score. An individual account describes one runner’s experience.",
+            )}
+          </p>
           {ratingDimensions.map((key) => {
             const a = e.assessments[key];
             return (
               <section key={key}>
-                <h3>{ratingPolicy.dimensions[key].title} · 完整評語</h3>
-                <p>{a.comment}</p>
-                {!!a.positives.length && <p>優點：{a.positives.join("；")}</p>}
-                {!!a.concerns.length && <p>關注：{a.concerns.join("；")}</p>}
-                <p>適用範圍：{a.suitedFor}</p>
-                <p>依據及限制：{a.basis}</p>
+                <h3>
+                  {englishRaceTerm(ratingPolicy.dimensions[key].title, english)}{" "}
+                  {t("· 完整評語", "· Full comments")}
+                </h3>
+                <p lang={english ? "zh-HK" : undefined}>{a.comment}</p>
+                {!!a.positives.length && (
+                  <p>
+                    {t("優點：", "Strengths: ")}
+                    <span lang={english ? "zh-HK" : undefined}>{a.positives.join("；")}</span>
+                  </p>
+                )}
+                {!!a.concerns.length && (
+                  <p>
+                    {t("關注：", "Concerns: ")}
+                    <span lang={english ? "zh-HK" : undefined}>{a.concerns.join("；")}</span>
+                  </p>
+                )}
+                <p>
+                  {t("適用範圍：", "Scope: ")}
+                  <span lang={english ? "zh-HK" : undefined}>{a.suitedFor}</span>
+                </p>
+                <p>
+                  {t("依據及限制：", "Evidence and limitations: ")}
+                  <span lang={english ? "zh-HK" : undefined}>{a.basis}</span>
+                </p>
               </section>
             );
           })}
-          <p>準則版本：{e.ruleVersion}。交通、寄存不另設分數。</p>
+          <p>
+            {t("準則版本：", "Criteria version: ")}
+            {e.ruleVersion}
+            {t("。交通、寄存不另設分數。", ". Transport and bag drop have no separate scores.")}
+          </p>
         </div>
       </details>
-      <h3 className="experience-topics-heading">跑手分享</h3>
-      <p className="experience-help">展開各主題，即可查閱全文、來源及觀察限制。</p>
+      <h3 className="experience-topics-heading">{t("跑手分享", "Runner accounts")}</h3>
+      <p className="experience-help">
+        {t(
+          "展開各主題，即可查閱全文、來源及觀察限制。",
+          "Expand a topic to read the original account, sources and observation limits.",
+        )}
+      </p>
       <div className="runner-copy-body experience-topics">
         {e.sections.map((s) => (
           <details key={s.topic} className="experience-topic">
             <summary>
-              <strong>{s.topic}</strong>
-              <span className="experience-topic-excerpt">
+              <strong>{englishRaceTerm(s.topic, english)}</strong>
+              <span className="experience-topic-excerpt" lang={english ? "zh-HK" : undefined}>
                 {s.body.match(/^.*?[。！？]/)?.[0] ?? s.body}
               </span>
-              {s.body.includes("未知") && !s.body.startsWith("未知") && <small>部分未知</small>}
+              {s.body.includes("未知") && !s.body.startsWith("未知") && (
+                <small>{t("部分未知", "Partly unverified")}</small>
+              )}
             </summary>
             <div className="experience-topic-content">
-              <p>{s.body}</p>
+              <p lang={english ? "zh-HK" : undefined}>{s.body}</p>
               <p>
-                <strong>觀察限制：</strong>
-                {s.limitations}
+                <strong>{t("觀察限制：", "Observation limits: ")}</strong>
+                <span lang={english ? "zh-HK" : undefined}>{s.limitations}</span>
               </p>
               <p>
                 {s.urls.length
                   ? s.urls.map((url) => (
                       <span key={url}>
                         <a href={url} target="_blank" rel="noopener noreferrer">
-                          來源{urls.indexOf(url) + 1} ↗
+                          {t("來源", "Source ")}
+                          {urls.indexOf(url) + 1} ↗
                         </a>{" "}
                       </span>
                     ))
-                  : "來源：未知／原始公開連結未提供"}
+                  : t(
+                      "來源：未知／原始公開連結未提供",
+                      "Source unknown. No public link was provided.",
+                    )}
               </p>
             </div>
           </details>

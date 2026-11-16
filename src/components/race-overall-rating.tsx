@@ -1,4 +1,5 @@
 import { reviewsForGroup, type EditorialReview } from "@/lib/editorial-reviews";
+import { englishDistance } from "@/lib/english-races";
 import { ratingDimensions } from "@/lib/rating-policy";
 import type { Race, RaceGroup } from "@/lib/types";
 
@@ -12,10 +13,12 @@ export function RaceOverallRating({
   race,
   groups,
   reviews,
+  english = false,
 }: {
   race: Race;
   groups: RaceGroup[];
   reviews: EditorialReview[];
+  english?: boolean;
 }) {
   const entries = groups.flatMap((group) => {
     const { current, historical } = reviewsForGroup(race, group, reviews);
@@ -26,20 +29,22 @@ export function RaceOverallRating({
   const score = entry ? overallScore(entry.review) : null;
   const stars = score === null ? null : Math.round(Number(score) * 2) / 2;
   const scope = entry
-    ? `${entry.review.editionYear} 年 · ${entry.group.name}${entry.historical ? " · 往屆" : ""}`
+    ? english
+      ? `${entry.review.editionYear} · ${englishDistance(entry.group.distanceKm)}${entry.historical ? " · Past edition" : ""}`
+      : `${entry.review.editionYear} 年 · ${entry.group.name}${entry.historical ? " · 往屆" : ""}`
     : undefined;
   const starPath = "M10 1.5 12.6 7l6 .8-4.4 4.3 1 6-5.2-2.8-5.2 2.8 1-6L1.4 7.8l6-.8Z";
 
   return (
     <div className="calendar-race-overall" title={scope}>
-      <span className="calendar-rating-label">推薦指數：</span>
+      <span className="calendar-rating-label">{english ? "Runner rating:" : "推薦指數："}</span>
       {stars === null ? (
         <span>N/A</span>
       ) : (
         <span
           className="calendar-overall-stars"
           role="img"
-          aria-label={`${stars}／5 星 · ${scope}`}
+          aria-label={english ? `${stars} out of 5 stars · ${scope}` : `${stars}／5 星 · ${scope}`}
         >
           {Array.from({ length: 5 }, (_, index) => {
             const fill = Math.max(0, Math.min(1, stars - index));

@@ -1,29 +1,35 @@
 "use client";
 
 import Link from "next/link";
+import { language, localPath } from "@/lib/english-races";
+import { homeRaceNews } from "@/lib/home-race-news";
 import { HomePhoto } from "./home-photo";
 import { Icon } from "./ui";
 import { useClock } from "@/lib/use-clock";
-import { distanceLabel, hongKongToday } from "@/lib/races";
-import { raceHref } from "@/lib/site";
 import type { Race } from "@/lib/types";
 
-const distances = (race: Race) => [
-  ...new Set(race.groups.map((group) => distanceLabel(group.distanceKm))),
-];
-
-export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNow: string }) {
+export function HomeHighlights({
+  races,
+  initialNow,
+  english = false,
+}: {
+  races: Race[];
+  initialNow: string;
+  english?: boolean;
+}) {
+  const t = language(english);
   const now = useClock(initialNow);
-  const today = hongKongToday(new Date(now));
-  const upcoming = races
-    .filter((race) => race.status === "scheduled" && race.endDate >= today)
-    .sort((a, b) => a.date.localeCompare(b.date));
+  const news = homeRaceNews(races, now, english);
   return (
     <>
-      <section className="shell home-search-strip" aria-label="搜尋賽事入口">
-        <form action="/races/" role="search" aria-label="搜尋香港路跑賽事">
+      <section className="shell home-search-strip" aria-label={t("搜尋賽事入口", "Race search")}>
+        <form
+          action={localPath("/races/", english)}
+          role="search"
+          aria-label={t("搜尋香港路跑賽事", "Search Hong Kong road races")}
+        >
           <label htmlFor="home-query" className="home-search-label">
-            已有目標賽事？
+            {t("已有目標賽事？", "Looking for a specific race?")}
           </label>
           <div className="home-search">
             <Icon name="search" size={21} />
@@ -31,75 +37,77 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
               id="home-query"
               name="q"
               type="search"
-              placeholder="賽事名稱、地點或主辦方"
+              placeholder={t("賽事名稱、地點或主辦方", "Race name, venue or organiser")}
               maxLength={200}
               enterKeyHint="search"
             />
             <button type="submit">
-              搜尋 <Icon name="arrow" size={18} />
+              {t("搜尋", "Search")} <Icon name="arrow" size={18} />
             </button>
           </div>
         </form>
-        <Link href="/races/" className="home-search-full">
-          按日期、地區及距離搜尋賽事 <Icon name="arrow" size={18} />
+        <Link href={localPath("/races/", english)} className="home-search-full">
+          {t("按日期、地區及距離搜尋賽事", "Search by date, region and distance")}{" "}
+          <Icon name="arrow" size={18} />
         </Link>
       </section>
-      <section className="shell home-calendar-section" aria-labelledby="home-calendar-heading">
+      <section className="shell home-calendar-section" aria-labelledby="home-news-heading">
         <div className="home-calendar-section-head">
-          <div>
-            <h2 id="home-calendar-heading">近期路跑時間表</h2>
-          </div>
-          <Link href="/races/">
-            全部賽期 <Icon name="arrow" size={17} />
+          <h2 id="home-news-heading">{t("最新消息", "Latest news")}</h2>
+          <Link href={localPath("/races/", english)}>
+            {t("賽事時間表", "Race calendar")} <Icon name="arrow" size={17} />
           </Link>
         </div>
         <div className="home-calendar-layout">
-          <div className="home-agenda-sheet">
-            <div className="home-agenda-caption">
-              <span>已收錄賽事 · 按起跑日期排列</span>
-              <span>香港</span>
-            </div>
-            <ol className="home-agenda">
-              {upcoming.slice(0, 3).map((race) => (
-                <li key={race.id}>
-                  <Link href={raceHref(race)}>
-                    <time dateTime={race.date}>
-                      <strong>
-                        {Number(race.date.slice(5, 7))}月{Number(race.date.slice(8))}日
-                      </strong>
-                      <span>{race.date.slice(0, 4)} 年</span>
-                    </time>
-                    <div>
-                      <h3>{race.name}</h3>
-                      <p>{race.district === "按組別起點" ? "香港 · 按組別起點" : race.district}</p>
-                      <span>{distances(race).join(" · ")}</span>
-                    </div>
-                    <span className="home-agenda-action">
-                      <span>詳細資料</span>
+          <div className="home-news-sheet">
+            {news.length ? (
+              <ul className="home-news-list" role="list">
+                {news.map((item) => (
+                  <li key={item.id}>
+                    <Link href={item.href}>
+                      <div className="home-news-copy">
+                        <p className="home-news-category">{item.category}</p>
+                        <h3>{item.headline}</h3>
+                        <p className="home-news-summary">
+                          {item.summary}
+                          {item.date && (
+                            <>
+                              {" "}
+                              · <time dateTime={item.date.value}>{item.date.label}</time>
+                            </>
+                          )}
+                        </p>
+                      </div>
                       <Icon name="arrow" size={18} />
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-            {!upcoming.length && (
-              <p className="home-calendar-empty">新一季賽事整理中。可以先到時間表查看歷屆賽事。</p>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="home-news-empty">
+                {t(
+                  "暫無已核實的最新消息。您可在賽事時間表查看已收錄的比賽。",
+                  "There are no verified updates at the moment. See the calendar for listed races.",
+                )}
+              </p>
             )}
-            <Link className="home-agenda-more" href="/races/">
-              進入賽事搜尋／時間表 <Icon name="arrow" size={17} />
-            </Link>
           </div>
           <aside className="home-calendar-focus" aria-labelledby="home-focus-heading">
             <h2 id="home-focus-heading">
-              一場比賽，
+              {t("一場比賽，", "Choose a race")}
               <br />
-              了解詳情後再作決定。
+              {t("了解詳情後再作決定。", "with the details in view.")}
             </h2>
-            <p>除日期和距離外，亦可參考報名資格、交通安排及跑手體驗，再選擇合適的賽事。</p>
+            <p>
+              {t(
+                "除日期和距離外，亦可參考報名資格、交通安排及跑手體驗，再選擇合適的賽事。",
+                "Alongside dates and distances, check eligibility, transport and runner reviews to find a race that suits you.",
+              )}
+            </p>
             <div className="home-photo">
               <HomePhoto
                 file="harbour-run.webp"
-                alt="清晨沿海濱慢跑的跑手"
+                alt={t("清晨沿海濱慢跑的跑手", "A runner jogging along the waterfront at dawn")}
                 width={768}
                 height={512}
                 sizes="(max-width: 767px) calc(100vw - 80px), (max-width: 1100px) calc((100vw - 76px) / 2.8 - 56px), (max-width: 1280px) calc((100vw - 104px) / 2.9 - 56px), 350px"
@@ -107,17 +115,21 @@ export function HomeHighlights({ races, initialNow }: { races: Race[]; initialNo
             </div>
             <ul>
               <li>
-                <Icon name="check" size={17} /> 當屆官方資料逐項整理
+                <Icon name="check" size={17} />{" "}
+                {t("當屆官方資料逐項整理", "Official details for the current edition")}
               </li>
               <li>
-                <Icon name="check" size={17} /> 往屆評論列明年份及組別
+                <Icon name="check" size={17} />{" "}
+                {t("往屆評論列明年份及組別", "Past reviews identify the year and category")}
               </li>
               <li>
-                <Icon name="check" size={17} /> 未能確認的資料標示為待核實
+                <Icon name="check" size={17} />{" "}
+                {t("未能確認的資料標示為待核實", "Unconfirmed details are marked as unverified")}
               </li>
             </ul>
-            <Link href="/ratings/">
-              了解體驗評論與評分 <Icon name="arrow" size={17} />
+            <Link href={localPath("/ratings/", english)}>
+              {t("了解體驗評論與評分", "About runner reviews and ratings")}{" "}
+              <Icon name="arrow" size={17} />
             </Link>
           </aside>
         </div>

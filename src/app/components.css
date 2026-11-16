@@ -1994,3 +1994,37 @@ html {
     }
   }
 }
+
+.site-header .site-language {
+  display: grid;
+  flex: none;
+  place-items: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  margin-inline-start: auto;
+  border: 1px solid #687275;
+  border-radius: var(--radius-control);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.site-header .site-language:is(:hover, :focus-visible) {
+  background: #293832;
+  color: #d3f3da;
+}
+@media (width < 420px) {
+  .site-header .header-inner {
+    gap: 6px;
+  }
+  .site-header .quick-navigation-trigger {
+    justify-content: center;
+    padding-inline: 4px;
+  }
+  .site-header .quick-navigation-trigger > span:not(.quick-navigation-icon) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}

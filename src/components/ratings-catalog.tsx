@@ -1,3 +1,5 @@
+import { language, localPath } from "@/lib/english-races";
+import { englishRaceTerm } from "@/lib/race-terms.en";
 import Link from "next/link";
 import { ReviewOverallScore } from "./review-overall-score";
 import { Icon } from "./ui";
@@ -13,9 +15,10 @@ import { formatTimestamp } from "@/lib/races";
 import { raceHref } from "@/lib/site";
 import type { Race } from "@/lib/types";
 
-type Props = { races: Race[]; reviews: EditorialReview[] };
+type Props = { races: Race[]; reviews: EditorialReview[]; english?: boolean };
 
-export function PublishedReviewCards({ races, reviews }: Props) {
+export function PublishedReviewCards({ races, reviews, english = false }: Props) {
+  const t = language(english);
   return (
     <div className="ratings-review-grid">
       {[...reviews]
@@ -28,7 +31,7 @@ export function PublishedReviewCards({ races, reviews }: Props) {
           const year = Number(group.date.slice(0, 4));
           const historical = review.editionYear < year;
           const current = review.editionYear === year;
-          const href = `${raceHref(race)}#review-${review.id}`;
+          const href = localPath(`${raceHref(race)}#review-${review.id}`, english);
           return (
             <article
               key={review.id}
@@ -36,32 +39,43 @@ export function PublishedReviewCards({ races, reviews }: Props) {
               aria-labelledby={`index-${review.id}`}
             >
               <h3 id={`index-${review.id}`}>
-                <Link href={href}>{target.name}</Link>
+                <Link href={href}>{englishRaceTerm(target.name, english)}</Link>
               </h3>
               <div className="ratings-review-meta">
                 <span className="ratings-edition">
-                  <span className="sr-only">評論年份及組別：</span>
-                  {review.editionYear} 年 · {target.group}
+                  <span className="sr-only">
+                    {t("評論年份及組別：", "Review edition and category: ")}
+                  </span>
+                  {review.editionYear}
+                  {t(" 年 · ", " · ")}
+                  {englishRaceTerm(target.group, english)}
                 </span>
                 <span className={`ratings-scope ${historical ? "ratings-scope--historical" : ""}`}>
-                  {historical ? "往屆評論" : current ? "當屆評論" : "其他年份評論"}
+                  {historical
+                    ? t("往屆評論", "Past edition")
+                    : current
+                      ? t("當屆評論", "Current edition")
+                      : t("其他年份評論", "Other edition")}
                 </span>
               </div>
-              <ReviewOverallScore review={review} compact />
-              <dl className="ratings-score-grid" aria-label="三項獨立評分">
+              <ReviewOverallScore english={english} review={review} compact />
+              <dl
+                className="ratings-score-grid"
+                aria-label={t("三項獨立評分", "Three independent ratings")}
+              >
                 {ratingDimensions.map((key) => {
                   const score = review.assessments[key].score;
                   return (
                     <div key={key}>
-                      <dt>{ratingPolicy.dimensions[key].title}</dt>
+                      <dt>{englishRaceTerm(ratingPolicy.dimensions[key].title, english)}</dt>
                       <dd>
                         {score === null ? (
-                          <strong className="ratings-unrated-score">未評</strong>
+                          <strong className="ratings-unrated-score">{t("未評", "Unrated")}</strong>
                         ) : (
                           <>
                             <strong>{score}</strong>
                             <span> / 5</span>
-                            <small>{scoreLabels[score]}</small>
+                            <small>{englishRaceTerm(scoreLabels[score], english)}</small>
                           </>
                         )}
                       </dd>
@@ -70,26 +84,53 @@ export function PublishedReviewCards({ races, reviews }: Props) {
                 })}
               </dl>
               {review.quickTake && (
-                <p className="ratings-review-summary">{review.quickTake.summary}</p>
+                <p className="ratings-review-summary" lang={english ? "zh-HK" : undefined}>
+                  {review.quickTake.summary}
+                </p>
               )}
               <details className="ratings-observation">
-                <summary>計分說明及資料範圍</summary>
-                <p className="ratings-edition-context">於 {year} 年賽事頁閱讀 · 編輯點評</p>
+                <summary>{t("計分說明及資料範圍", "Scoring and scope of evidence")}</summary>
+                <p className="ratings-edition-context">
+                  {t(
+                    `於 ${year} 年賽事頁閱讀 · 編輯點評`,
+                    `Editorial review on the ${year} race page`,
+                  )}
+                </p>
                 {historical && (
-                  <p className="ratings-year-notice">往屆評論 · 不代表 {year} 年安排或表現</p>
+                  <p className="ratings-year-notice">
+                    {t(
+                      `往屆評論 · 不代表 ${year} 年安排或表現`,
+                      `Past edition review · Arrangements and experience may differ in ${year}`,
+                    )}
+                  </p>
                 )}
-                <ReviewOverallScore review={review} />
+                <ReviewOverallScore english={english} review={review} />
                 <p className="ratings-runner-context">
                   {review.runnerSegment === "unknown"
-                    ? "一位跑手觀察（位置未記錄）"
-                    : `一位${segmentLabels[review.runnerSegment]}跑手觀察`}
+                    ? t(
+                        "一位跑手觀察（位置未記錄）",
+                        "One runner’s observations (position unrecorded)",
+                      )
+                    : t(
+                        `一位${segmentLabels[review.runnerSegment]}跑手觀察`,
+                        `One runner’s observations · ${englishRaceTerm(segmentLabels[review.runnerSegment], true)}`,
+                      )}
                 </p>
-                <h4>評審及觀察範圍</h4>
-                <p>評審：{review.reviewer}</p>
-                <p>參賽／利益關係：{review.disclosure}</p>
-                <p>觀察範圍：{review.observationLimits}</p>
+                <h4>{t("評審及觀察範圍", "Reviewer and scope of observation")}</h4>
+                <p>
+                  {t("評審：", "Reviewer: ")}
+                  <span lang={english ? "zh-HK" : undefined}>{review.reviewer}</span>
+                </p>
+                <p>
+                  {t("參賽／利益關係：", "Participation and conflicts of interest: ")}
+                  <span lang={english ? "zh-HK" : undefined}>{review.disclosure}</span>
+                </p>
+                <p>
+                  {t("觀察範圍：", "Observation scope: ")}
+                  <span lang={english ? "zh-HK" : undefined}>{review.observationLimits}</span>
+                </p>
                 <small>
-                  評論更新：
+                  {t("評論更新：", "Review updated: ")}
                   <time dateTime={review.reviewedAt}>{formatTimestamp(review.reviewedAt)} HKT</time>
                 </small>
               </details>
@@ -97,9 +138,12 @@ export function PublishedReviewCards({ races, reviews }: Props) {
                 <Link
                   className="ratings-review-action"
                   href={href}
-                  aria-label={`${target.name} ${review.editionYear} 年${target.group}：查看完整評論`}
+                  aria-label={t(
+                    `${target.name} ${review.editionYear} 年${target.group}：查看完整評論`,
+                    `${englishRaceTerm(target.name, true)} ${review.editionYear} ${englishRaceTerm(target.group, true)}: read full review`,
+                  )}
                 >
-                  查看完整評論 <Icon name="arrow" size={18} />
+                  {t("查看完整評論", "Read full review")} <Icon name="arrow" size={18} />
                 </Link>
               </div>
             </article>
@@ -109,37 +153,48 @@ export function PublishedReviewCards({ races, reviews }: Props) {
   );
 }
 
-export function EditionReviewCoverage({ races, reviews }: Props) {
+export function EditionReviewCoverage({ races, reviews, english = false }: Props) {
+  const t = language(english);
   return (
     <details className="ratings-coverage" id="edition-coverage">
       <summary>
-        <span>當屆賽事及組別評論狀態</span>
-        <span className="ratings-coverage-hint">查看各組別</span>
+        <span>{t("當屆賽事及組別評論狀態", "Review coverage by edition and category")}</span>
+        <span className="ratings-coverage-hint">{t("查看各組別", "View race categories")}</span>
       </summary>
-      <p>當屆未有評分，並不代表體驗欠佳。如有往屆評論，將另作標示。</p>
+      <p>
+        {t(
+          "當屆未有評分，並不代表體驗欠佳。如有往屆評論，將另作標示。",
+          "An unrated edition has no current rating. Past reviews are marked separately.",
+        )}
+      </p>
       <ul className="ratings-coverage-list">
         {[...races]
           .sort((a, b) => a.date.localeCompare(b.date))
           .map((race) => (
             <li key={race.id}>
               <h3>
-                <Link href={raceHref(race)}>{race.name}</Link>
+                <Link href={localPath(raceHref(race), english)}>
+                  {english ? race.englishName : race.name}
+                </Link>
               </h3>
               <ul>
                 {race.groups.map((group) => {
                   const { current, historical } = reviewsForGroup(race, group, reviews);
                   return (
                     <li key={group.id}>
-                      <Link href={`${raceHref(race)}#ratings-${group.id}`}>
-                        <span>{group.name}</span>
+                      <Link href={localPath(`${raceHref(race)}#ratings-${group.id}`, english)}>
+                        <span>{englishRaceTerm(group.name, english)}</span>
                         <span
                           className={`ratings-coverage-status ${current.length ? "ratings-coverage-status--current" : ""}`}
                         >
                           {current.length
-                            ? "當屆已評"
+                            ? t("當屆已評", "Current edition rated")
                             : historical.length
-                              ? "當屆未評 · 有往屆評論"
-                              : "未評"}
+                              ? t(
+                                  "當屆未評 · 有往屆評論",
+                                  "Unrated this edition · past review available",
+                                )
+                              : t("未評", "Unrated")}
                         </span>
                         <Icon name="arrow" size={16} />
                       </Link>

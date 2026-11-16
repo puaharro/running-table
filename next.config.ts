@@ -6,6 +6,7 @@ const config: NextConfig = {
   poweredByHeader: false,
   serverExternalPackages: ["pdfkit"],
   images: { unoptimized: true },
+  experimental: { globalNotFound: true },
 };
 
 export default config;

@@ -43,7 +43,8 @@ try {
       .filter((r) => r.publication === "published" && r.verification === "verified")
       .map((r) => `/races/${r.date.slice(0, 4)}/${r.slug}/`),
   ];
-  for (const path of paths) {
+  const englishPaths = paths.map((path) => `/en${path}`);
+  for (const path of [...paths, ...englishPaths]) {
     const response = await fetch(`http://127.0.0.1:${port}${path}`, { method: "HEAD" });
     if (response.status !== 200)
       throw new Error(`${path}: expected 200, received ${response.status}`);
@@ -74,7 +75,7 @@ try {
   const post = await fetch(`http://127.0.0.1:${port}/`, { method: "POST" });
   if (post.status !== 405) throw new Error("Static preview must reject POST.");
   console.log(
-    `HTTP smoke passed: ${paths.length} page routes return 200; ${privatePaths.length} private workspace paths return 404; WebP, 404 and 405 handling verified.`,
+    `HTTP smoke passed: ${paths.length + englishPaths.length} page routes return 200; ${privatePaths.length} private workspace paths return 404; WebP, 404 and 405 handling verified.`,
   );
 } finally {
   server.kill();

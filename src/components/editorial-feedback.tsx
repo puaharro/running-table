@@ -1,4 +1,7 @@
 "use client";
+
+import { language } from "@/lib/english-races";
+import { englishRaceTerm } from "@/lib/race-terms.en";
 import { useEffect, useState, type FormEvent } from "react";
 import {
   feedbackTypes,
@@ -9,10 +12,13 @@ import {
 export function EditorialFeedback({
   races,
   recipient,
+  english = false,
 }: {
   races: { id: string; name: string }[];
   recipient: string;
+  english?: boolean;
 }) {
+  const t = language(english);
   const [raceId, setRaceId] = useState("");
   const [fields, setFields] = useState<Omit<Feedback, "raceName">>({
     type: "correction",
@@ -51,34 +57,43 @@ export function EditorialFeedback({
         prepareEditorialFeedback(
           { ...fields, raceName: races.find((r) => r.id === raceId)?.name ?? "" },
           recipient,
+          english,
         ),
       );
       setError("");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "請檢查輸入內容。");
+      setError(
+        e instanceof Error
+          ? englishRaceTerm(e.message, english)
+          : t("請檢查輸入內容。", "Check the fields and try again."),
+      );
     }
   }
   return (
     <form className="correction-form editorial-feedback" onSubmit={prepare}>
       <p>
-        此表格只產生電郵草稿，不會上傳或儲存投訴。請確認內容後，自行寄到{" "}
-        <a href={`mailto:${recipient}`}>{recipient}</a>；附件可在電郵加入。
+        {t(
+          "此表格只產生電郵草稿，不會上傳或儲存投訴。請確認內容後，自行寄到",
+          "This form prepares an email draft without uploading or storing the report. Review it and send it to",
+        )}{" "}
+        <a href={`mailto:${recipient}`}>{recipient}</a>
+        {t("；附件可在電郵加入。", ". You can add attachments in your email app.")}
       </p>
       <label>
-        回報類別
+        {t("回報類別", "Feedback type")}
         <select
           value={fields.type}
           onChange={(e) => field("type", e.target.value as Feedback["type"])}
         >
           {Object.entries(feedbackTypes).map(([value, label]) => (
             <option key={value} value={value}>
-              {label}
+              {englishRaceTerm(label, english)}
             </option>
           ))}
         </select>
       </label>
       <label>
-        賽事系列
+        {t("賽事系列", "Race series")}
         <select
           required
           value={raceId}
@@ -87,7 +102,7 @@ export function EditorialFeedback({
             setPrepared(null);
           }}
         >
-          <option value="">請選擇賽事</option>
+          <option value="">{t("請選擇賽事", "Select a race")}</option>
           {races.map((r) => (
             <option key={r.id} value={r.id}>
               {r.name}
@@ -96,7 +111,7 @@ export function EditorialFeedback({
         </select>
       </label>
       <label>
-        所指參賽年份
+        {t("所指參賽年份", "Edition year")}
         <input
           required
           inputMode="numeric"
@@ -104,21 +119,27 @@ export function EditorialFeedback({
           maxLength={4}
           value={fields.year}
           onChange={(e) => field("year", e.target.value)}
-          placeholder="例如 2025；往屆請填實際年份"
+          placeholder={t(
+            "例如 2025；往屆請填實際年份",
+            "For example, 2025. Enter the year the race took place.",
+          )}
         />
       </label>
       <label>
-        組別
+        {t("組別", "Category")}
         <input
           required
           maxLength={100}
           value={fields.group}
           onChange={(e) => field("group", e.target.value)}
-          placeholder="例如半馬、全馬或起跑批次"
+          placeholder={t(
+            "例如半馬、全馬或起跑批次",
+            "For example, half marathon, marathon or start wave",
+          )}
         />
       </label>
       <label>
-        評論參考（選填）
+        {t("評論參考（選填）", "Review reference (optional)")}
         <input
           maxLength={150}
           value={fields.reviewId}
@@ -126,7 +147,7 @@ export function EditorialFeedback({
         />
       </label>
       <label>
-        爭議句子／分數
+        {t("爭議句子／分數", "Disputed wording or score")}
         <textarea
           required
           maxLength={1200}
@@ -136,7 +157,7 @@ export function EditorialFeedback({
         />
       </label>
       <label>
-        原因／希望更正或回應的內容
+        {t("原因／希望更正或回應的內容", "Reason and requested correction or response")}
         <textarea
           required
           maxLength={2000}
@@ -146,7 +167,7 @@ export function EditorialFeedback({
         />
       </label>
       <label>
-        佐證連結（選填，毋須為官方公告）
+        {t("佐證連結（選填，毋須為官方公告）", "Evidence link (optional)")}
         <input
           type="url"
           pattern="https://.*"
@@ -157,7 +178,7 @@ export function EditorialFeedback({
         />
       </label>
       <label>
-        回覆電郵（選填）
+        {t("回覆電郵（選填）", "Reply email (optional)")}
         <input
           type="email"
           maxLength={200}
@@ -166,25 +187,39 @@ export function EditorialFeedback({
         />
       </label>
       <p>
-        請只提供處理所需資料，避免加入身份證、健康資料或無關人士個人資料；回報內容不會轉發至公開的
-        GitHub 儲存庫。
+        {t(
+          "請只提供處理所需資料，避免加入身份證、健康資料或無關人士個人資料；回報內容不會轉發至公開的 GitHub 儲存庫。",
+          "Include only information needed to review the report. Leave out identity documents, medical data and unrelated personal information. Your report is not forwarded to the public GitHub repository.",
+        )}
       </p>
       <button type="submit" className="button button-dark">
-        準備私人電郵
+        {t("準備私人電郵", "Prepare private email")}
       </button>
       {error && <p role="alert">{error}</p>}
       {prepared && (
         <div className="prepared-feedback" role="status">
-          <h3>電郵草稿已準備，尚未寄出</h3>
-          <p>網站尚未收到此回報。請自行開啟電郵程式、確認收件人及內容，再按寄出。</p>
+          <h3>{t("電郵草稿已準備，尚未寄出", "Email draft ready to send")}</h3>
+          <p>
+            {t(
+              "網站尚未收到此回報。請自行開啟電郵程式、確認收件人及內容，再按寄出。",
+              "Open your email app, check the recipient and contents, then send the draft.",
+            )}
+          </p>
           <a className="text-link" href={prepared.url}>
-            開啟電郵草稿
+            {t("開啟電郵草稿", "Open email draft")}
           </a>
           <label>
-            電郵內容（可複製）
+            {t("電郵內容（可複製）", "Email text (copyable)")}
             <textarea readOnly rows={12} value={`${prepared.subject}\n\n${prepared.body}`} />
           </label>
-          <p>如電郵程式未帶齊內容，可複製以上文字，自行寄到 {prepared.recipient}。</p>
+          <p>
+            {t(
+              "如電郵程式未帶齊內容，可複製以上文字，自行寄到",
+              "If your email app omits part of the draft, copy the text above and send it to",
+            )}{" "}
+            {prepared.recipient}
+            {t("。", ".")}
+          </p>
         </div>
       )}
     </form>

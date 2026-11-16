@@ -29,8 +29,8 @@ function checkTree(dir) {
   }
 }
 checkTree("out");
-for (const year of readdirSync("out/races", { withFileTypes: true }).filter((e) =>
-  e.isDirectory(),
+for (const year of readdirSync("out/races", { withFileTypes: true }).filter(
+  (e) => e.isDirectory() && /^\d{4}$/.test(e.name),
 )) {
   for (const race of readdirSync(`out/races/${year.name}`, { withFileTypes: true }).filter((e) =>
     e.isDirectory(),

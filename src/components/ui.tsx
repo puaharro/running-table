@@ -1,3 +1,5 @@
+import { language, localPath } from "@/lib/english-races";
+import { englishGuides } from "@/data/guides.en";
 import Link from "next/link";
 import type { Guide } from "@/data/guides";
 import { siteName } from "@/lib/site";
@@ -65,28 +67,38 @@ export function Icon({
     </svg>
   );
 }
-export function Footer() {
+export function Footer({ english = false }: { english?: boolean }) {
+  const t = language(english);
   return (
     <footer className="site-footer">
       <div className="shell footer-main">
         <div>
-          <Link href="/" className="footer-brand">
+          <Link href={localPath("/", english)} className="footer-brand">
             <span className="brand-wordmark">{siteName}</span>
           </Link>
-          <p>從這裡規劃您的下一場比賽。</p>
-          <p className="muted">香港路跑資訊網站 · 官方來源整理</p>
+          <p>{t("從這裡規劃您的下一場比賽。", "Plan your next race here.")}</p>
+          <p className="muted">
+            {t("香港路跑資訊網站 · 官方來源整理", "Hong Kong road races · Official sources")}
+          </p>
         </div>
         <div className="footer-links">
-          <Link href="/races/">賽事搜尋／時間表</Link>
-          <Link href="/ratings/">體驗評級</Link>
-          <Link href="/guides/">原創指南</Link>
-          <Link href="/about/">關於及資料政策</Link>
-          <Link href="/privacy/">私隱說明</Link>
+          <Link href={localPath("/races/", english)}>{t("賽事搜尋／時間表", "Race calendar")}</Link>
+          <Link href={localPath("/ratings/", english)}>{t("體驗評級", "Runner ratings")}</Link>
+          <Link href={localPath("/guides/", english)}>{t("原創指南", "Guides")}</Link>
+          <Link href={localPath("/about/", english)}>
+            {t("關於及資料政策", "About and information policy")}
+          </Link>
+          <Link href={localPath("/privacy/", english)}>{t("私隱說明", "Privacy")}</Link>
         </div>
       </div>
       <div className="shell footer-bottom">
         <span>© 2026 {siteName}</span>
-        <span>獨立資訊整理 · 報名及名額安排以大會公告為準</span>
+        <span>
+          {t(
+            "獨立資訊整理 · 報名及名額安排以大會公告為準",
+            "Independent race information · Check entry details with the organiser",
+          )}
+        </span>
       </div>
     </footer>
   );
@@ -123,9 +135,13 @@ export function AdSidebar({ format = "sidebar-box" }: { format?: "sidebar-tall" 
     </div>
   );
 }
-export function GuideCard({ guide }: { guide: Guide }) {
+export function GuideCard({ guide, english = false }: { guide: Guide; english?: boolean }) {
+  const translation = english ? englishGuides.find((item) => item.slug === guide.slug) : undefined;
   return (
-    <Link className={`guide-card ${guide.accent}`} href={`/guides/${guide.slug}/`}>
+    <Link
+      className={`guide-card ${guide.accent}`}
+      href={localPath(`/guides/${guide.slug}/`, english)}
+    >
       <div className="guide-graphic" aria-hidden="true">
         <span>
           {guide.category === "報名指南"
@@ -139,28 +155,40 @@ export function GuideCard({ guide }: { guide: Guide }) {
         <i />
       </div>
       <div className="guide-card-body">
-        <h3>{guide.title}</h3>
+        <h3>{translation?.title ?? guide.title}</h3>
         <div className="eyebrow">
-          {guide.category}
-          <span>{guide.readMinutes} 分鐘閱讀</span>
+          {english
+            ? guide.category === "報名指南"
+              ? "Registration guide"
+              : "Race selection guide"
+            : guide.category}
+          <span>
+            {guide.readMinutes} {english ? "min read" : "分鐘閱讀"}
+          </span>
         </div>
-        <p>{guide.description}</p>
+        <p>{translation?.description ?? guide.description}</p>
         <span className="text-link">
-          閱讀指南 <Icon name="arrow" size={16} />
+          {english ? "Read guide" : "閱讀指南"} <Icon name="arrow" size={16} />
         </span>
       </div>
     </Link>
   );
 }
-export function Breadcrumb({ items }: { items: { label: string; href?: string }[] }) {
+export function Breadcrumb({
+  items,
+  english = false,
+}: {
+  items: { label: string; href?: string }[];
+  english?: boolean;
+}) {
   return (
-    <nav className="breadcrumbs" aria-label="所在位置">
-      <Link href="/">首頁</Link>
+    <nav className="breadcrumbs" aria-label={english ? "Breadcrumb" : "所在位置"}>
+      <Link href={localPath("/", english)}>{english ? "Home" : "首頁"}</Link>
       {items.map((item, i) => (
         <span key={i}>
           <span aria-hidden="true"> / </span>
           {item.href ? (
-            <Link href={item.href}>{item.label}</Link>
+            <Link href={localPath(item.href, english)}>{item.label}</Link>
           ) : (
             <span aria-current={i === items.length - 1 ? "page" : undefined}>{item.label}</span>
           )}

@@ -9,7 +9,7 @@ import {
 } from "motion/react";
 import { useEffect, useRef } from "react";
 
-export function CalendarSheetDismiss() {
+export function CalendarSheetDismiss({ english = false }: { english?: boolean }) {
   const y = useMotionValue(0);
   const reduceMotion = useReducedMotion();
   const grip = useRef<HTMLDivElement>(null);
@@ -63,7 +63,7 @@ export function CalendarSheetDismiss() {
           });
         }}
       />
-      <button type="submit">關閉篩選</button>
+      <button type="submit">{english ? "Close filters" : "關閉篩選"}</button>
     </form>
   );
 }

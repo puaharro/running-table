@@ -1,3 +1,5 @@
+import { language, localPath } from "@/lib/english-races";
+import { englishRaceTerm } from "@/lib/race-terms.en";
 import Link from "next/link";
 import { ReviewOverallScore } from "./review-overall-score";
 import { OpinionYearComparison } from "./opinion-year-comparison";
@@ -18,9 +20,20 @@ import {
 import { formatTimestamp } from "@/lib/races";
 import type { Race, RaceGroup } from "@/lib/types";
 
-function DetailedReview({ review }: { review: EditorialReview }) {
+function DetailedReview({
+  review,
+  english = false,
+}: {
+  review: EditorialReview;
+  english?: boolean;
+}) {
+  const t = language(english);
   return (
-    <article className="editorial-review" aria-label={`${review.editionYear}年體驗評論`}>
+    <article
+      lang={english ? "zh-HK" : undefined}
+      className="editorial-review"
+      aria-label={`${review.editionYear}年體驗評論`}
+    >
       <h5>
         {review.editionYear} 年 ·{" "}
         {reviewTargets.find((target) => target.id === review.targetId)?.group} · 編輯體驗評論
@@ -40,7 +53,7 @@ function DetailedReview({ review }: { review: EditorialReview }) {
               <dd>
                 <strong>
                   {assessment.score === null
-                    ? "未評"
+                    ? t("未評", "Unrated")
                     : `${assessment.score} / 5 · ${scoreLabels[assessment.score]}`}
                 </strong>
                 <p>{assessment.comment}</p>
@@ -72,15 +85,23 @@ function DetailedReview({ review }: { review: EditorialReview }) {
         <p>賽道挑戰特性：{review.courseNotes}（獨立描述，不計入體驗分數。）</p>
       )}
       <details>
-        <summary>評審及觀察範圍</summary>
+        <summary>{t("評審及觀察範圍", "Reviewer and scope of observation")}</summary>
         <p>
-          評審：{review.reviewer} · 跑手位置：{segmentLabels[review.runnerSegment]}
+          {t("評審：", "Reviewer: ")}
+          {review.reviewer} · 跑手位置：{segmentLabels[review.runnerSegment]}
         </p>
-        <p>參賽／利益關係：{review.disclosure}</p>
-        <p>觀察範圍：{review.observationLimits}</p>
+        <p>
+          {t("參賽／利益關係：", "Participation and conflicts of interest: ")}
+          {review.disclosure}
+        </p>
+        <p>
+          {t("觀察範圍：", "Observation scope: ")}
+          {review.observationLimits}
+        </p>
       </details>
       <small>
-        評論更新：{formatTimestamp(review.reviewedAt)} HKT · 準則：{review.ruleVersion}
+        {t("評論更新：", "Review updated: ")}
+        {formatTimestamp(review.reviewedAt)} HKT · 準則：{review.ruleVersion}
       </small>
       <p>
         <small>
@@ -116,29 +137,47 @@ function DetailedReview({ review }: { review: EditorialReview }) {
       <p>
         <Link
           className="text-link"
-          href={`/ratings/feedback/?race=${reviewTargets.find((target) => target.id === review.targetId)?.raceId ?? ""}&review=${encodeURIComponent(review.id)}&year=${review.editionYear}&group=${encodeURIComponent(reviewTargets.find((target) => target.id === review.targetId)?.group ?? "")}`}
+          href={localPath(
+            `/ratings/feedback/?race=${reviewTargets.find((target) => target.id === review.targetId)?.raceId ?? ""}&review=${encodeURIComponent(review.id)}&year=${review.editionYear}&group=${encodeURIComponent(reviewTargets.find((target) => target.id === review.targetId)?.group ?? "")}`,
+            english,
+          )}
         >
-          提出更正／投訴／大會回應
+          {t("提出更正／投訴／大會回應", "Submit a correction, complaint or organiser response")}
         </Link>
       </p>
     </article>
   );
 }
-export function EditorialReviewCard({ review }: { review: EditorialReview }) {
+export function EditorialReviewCard({
+  review,
+  english = false,
+}: {
+  review: EditorialReview;
+  english?: boolean;
+}) {
+  const t = language(english);
   return (
     <article
       id={`review-${review.id}`}
       className="review-quicklook"
-      aria-label={`${review.editionYear}年體驗重點`}
+      aria-label={t(
+        `${review.editionYear}年體驗重點`,
+        `${review.editionYear} race experience summary`,
+      )}
     >
       <p className="review-context">
-        {review.editionYear} 年 · {reviewTargets.find((t) => t.id === review.targetId)?.group}
+        {review.editionYear}
+        {t(" 年 · ", " · ")}
+        {englishRaceTerm(
+          reviewTargets.find((target) => target.id === review.targetId)?.group,
+          english,
+        )}
       </p>
-      <ReviewOverallScore review={review} compact />
+      <ReviewOverallScore english={english} review={review} compact />
       <dl className="rating-grid quick-scores">
         {ratingDimensions.map((key) => (
           <div key={key}>
-            <dt>{ratingPolicy.dimensions[key].title}</dt>
+            <dt>{englishRaceTerm(ratingPolicy.dimensions[key].title, english)}</dt>
             <dd>
               {review.assessments[key].score === null ? (
                 "未評"
@@ -152,11 +191,12 @@ export function EditorialReviewCard({ review }: { review: EditorialReview }) {
           </div>
         ))}
       </dl>
-      <p className="review-summary">
-        {review.quickTake?.summary ?? "此篇未有重點摘要，可展開查看完整評論。"}
+      <p className="review-summary" lang={english && review.quickTake ? "zh-HK" : undefined}>
+        {review.quickTake?.summary ??
+          t("此篇未有重點摘要，可展開查看完整評論。", "Open the full review for details.")}
       </p>
       <details className="review-full review-evidence">
-        <summary>原文及依據</summary>
+        <summary>{t("原文及依據", "Original review and evidence")}</summary>
         {review.evidence.map((e) => (
           <section key={e.id} id={`review-${review.id}-evidence-${e.id}`}>
             <p>
@@ -164,26 +204,28 @@ export function EditorialReviewCard({ review }: { review: EditorialReview }) {
             </p>
             {e.url && (
               <a href={e.url} target="_blank" rel="noopener noreferrer">
-                查看材料 ↗
+                {t("查看材料 ↗", "View source ↗")}
               </a>
             )}
           </section>
         ))}
       </details>
       <details className="review-full">
-        <summary>查看詳細評論</summary>
+        <summary>{t("查看詳細評論", "Read the original review in Chinese")}</summary>
         {review.quickTake && (
-          <ul className="review-reminders" aria-label="兩個實用提醒">
+          <ul className="review-reminders" aria-label={t("兩個實用提醒", "Two practical tips")}>
             {review.quickTake.reminders.map((note, i) => (
-              <li key={i}>{note}</li>
+              <li key={i} lang={english ? "zh-HK" : undefined}>
+                {note}
+              </li>
             ))}
           </ul>
         )}
-        <DetailedReview review={review} />
+        <DetailedReview english={english} review={review} />
       </details>
       <details className="review-full">
-        <summary>計分說明及資料範圍</summary>
-        <ReviewOverallScore review={review} />
+        <summary>{t("計分說明及資料範圍", "Scoring and scope of evidence")}</summary>
+        <ReviewOverallScore english={english} review={review} />
       </details>
     </article>
   );
@@ -192,11 +234,14 @@ export function GroupRatings({
   race,
   group,
   excludedEditionYear,
+  english = false,
 }: {
   race: Race;
   group: RaceGroup;
   excludedEditionYear?: number;
+  english?: boolean;
 }) {
+  const t = language(english);
   const { current, historical } = reviewsForGroup(
     race,
     group,
@@ -216,31 +261,39 @@ export function GroupRatings({
     <section
       id={`ratings-${group.id}`}
       className="group-ratings"
-      aria-label={`${group.name}賽事體驗評級`}
+      aria-label={t(
+        `${englishRaceTerm(group.name, english)}賽事體驗評級`,
+        `${englishRaceTerm(group.name, true)} ratings`,
+      )}
     >
       <h4>
-        參賽體驗{" "}
+        {t("參賽體驗", "Race experience")}{" "}
         <small>
-          {group.date.slice(0, 4)} 年 · {group.name}
+          {group.date.slice(0, 4)}
+          {t(" 年 · ", " · ")}
+          {englishRaceTerm(group.name, english)}
         </small>
       </h4>
       <ReviewViews
+        english={english}
         runnerContent={
           opinions.length ? (
             <>
               {opinions.map((record) => (
                 <RunnerOpinionSummary
+                  english={english}
                   key={`${record.targetId}-${record.editionYear}`}
                   record={record}
                   currentYear={Number(group.date.slice(0, 4))}
                 />
               ))}
               <details className="runner-opinion-sources">
-                <summary>跨年份主題比較及人工備註</summary>
+                <summary>{t("跨年份主題比較及人工備註", "Compare topics across editions")}</summary>
                 <OpinionYearComparison
+                  english={english}
                   records={opinions}
                   currentYear={Number(group.date.slice(0, 4))}
-                  groupName={group.name}
+                  groupName={englishRaceTerm(group.name, english)}
                   scope={JSON.stringify([race.id, group.id])}
                 />
               </details>
@@ -249,31 +302,43 @@ export function GroupRatings({
         }
       >
         {current.length ? (
-          current.map((r) => <EditorialReviewCard key={r.id} review={r} />)
+          current.map((r) => <EditorialReviewCard english={english} key={r.id} review={r} />)
         ) : (
-          <>{!historical.length && <p>此組別暫未評分。</p>}</>
+          <>
+            {!historical.length && (
+              <p>{t("此組別暫未評分。", "This category is currently unrated.")}</p>
+            )}
+          </>
         )}
         {!!historical.length && (
           <div className="historical-reviews">
             <p className="review-edition-note">
-              往屆評論 · 不代表 {group.date.slice(0, 4)} 年安排或表現
+              {t(
+                `往屆評論 · 不代表 ${group.date.slice(0, 4)} 年安排或表現`,
+                `Past edition · Arrangements and experience may differ in ${group.date.slice(0, 4)}`,
+              )}
             </p>
             {historical.map((r) => (
-              <EditorialReviewCard key={r.id} review={r} />
+              <EditorialReviewCard english={english} key={r.id} review={r} />
             ))}
           </div>
         )}
         <details className="review-full">
-          <summary>評分說明及發布紀錄</summary>
+          <summary>{t("評分說明及發布紀錄", "Scoring and publication record")}</summary>
           {!current.length && !historical.length && (
             <>
-              <p>此屆此組別尚未有已發布體驗評論。</p>
-              <ReviewOverallScore />
+              <p>
+                {t(
+                  "此屆此組別尚未有已發布體驗評論。",
+                  "No review has been published for this category and edition.",
+                )}
+              </p>
+              <ReviewOverallScore english={english} />
               <dl className="rating-grid quick-scores">
                 {ratingDimensions.map((key) => (
                   <div key={key}>
-                    <dt>{ratingPolicy.dimensions[key].title}</dt>
-                    <dd>未評</dd>
+                    <dt>{englishRaceTerm(ratingPolicy.dimensions[key].title, english)}</dt>
+                    <dd>{t("未評", "Unrated")}</dd>
                   </div>
                 ))}
               </dl>
@@ -282,11 +347,13 @@ export function GroupRatings({
           {!!groupNotices.length && (
             <p className="editorial-notice">
               {groupNotices.map((n) => `${n.editionYear} 年：${n.summary}`).join(" ")}{" "}
-              <Link href="/ratings/process/#publication-history">查看處理紀錄</Link>
+              <Link href={localPath("/ratings/process/#publication-history", english)}>
+                {t("查看處理紀錄", "View the correction record")}
+              </Link>
             </p>
           )}
-          <Link className="text-link" href="/ratings/">
-            了解三項評分準則
+          <Link className="text-link" href={localPath("/ratings/", english)}>
+            {t("了解三項評分準則", "View the three rating criteria")}
           </Link>
         </details>
       </ReviewViews>

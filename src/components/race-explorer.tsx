@@ -2,6 +2,14 @@
 
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { englishRaceTerm } from "@/lib/race-terms.en";
+import {
+  englishDate,
+  englishDistanceTag,
+  englishTimestamp,
+  language,
+  localPath,
+} from "@/lib/english-races";
 import { motion, useReducedMotion } from "motion/react";
 import { AdSlot, Icon } from "./ui";
 import {
@@ -35,15 +43,16 @@ import { CalendarSheetDismiss } from "./calendar-sheet-dismiss";
 import type { EditorialReview } from "@/lib/editorial-reviews";
 import { distanceOptions, regions, type Filters, type Race } from "@/lib/types";
 
-const filterCategories = [
-  ["date", "比賽日期"],
-  ["location", "地點"],
-  ["distance", "距離"],
-  ["registration", "報名狀態"],
-  ["type", "賽事類型"],
-  ["difficulty", "賽事難易度"],
-] as const;
-type FilterCategory = (typeof filterCategories)[number][0];
+const filterCategories = (t: ReturnType<typeof language>) =>
+  [
+    ["date", t("比賽日期", "Race date")],
+    ["location", t("地點", "Location")],
+    ["distance", t("距離", "Distance")],
+    ["registration", t("報名狀態", "Entry status")],
+    ["type", t("賽事類型", "Race type")],
+    ["difficulty", t("賽事難易度", "Race difficulty")],
+  ] as const;
+type FilterCategory = ReturnType<typeof filterCategories>[number][0];
 
 function highlightMatch(text: string, query: string) {
   const term = query.trim();
@@ -54,11 +63,11 @@ function highlightMatch(text: string, query: string) {
     .map((part, index) => (index % 2 === 0 ? part : <mark key={index}>{part}</mark>));
 }
 
-function FilterOptionCount({ count }: { count: number }) {
+function FilterOptionCount({ count, english }: { count: number; english: boolean }) {
   return (
     <span className="calendar-option-count">
       {count}
-      <span className="sr-only"> 場</span>
+      <span className="sr-only">{english ? " races" : " 場"}</span>
     </span>
   );
 }
@@ -67,11 +76,14 @@ export function RaceExplorer({
   races,
   initialNow,
   reviews = [],
+  english = false,
 }: {
   races: Race[];
   initialNow: string;
   reviews?: EditorialReview[];
+  english?: boolean;
 }) {
+  const t = language(english);
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [page, setPage] = useState(1);
   const favorites = useFavorites();
@@ -160,7 +172,11 @@ export function RaceExplorer({
       if (requestedSaved) {
         changeSavedOnly(true);
         // Consume the entry command; sharing keeps only ordinary list filters.
-        window.history.replaceState(window.history.state, "", resultsHref(next));
+        window.history.replaceState(
+          window.history.state,
+          "",
+          localPath(resultsHref(next), english),
+        );
       }
       setFilters(next);
       setPage(nextPage);
@@ -262,7 +278,7 @@ export function RaceExplorer({
     if (!ready || (savedOnly && !favorites.ready) || page === pagination.page) return;
     setPage(pagination.page);
     const href = resultsHref(filters, undefined, pagination.page);
-    window.history.replaceState(window.history.state, "", href);
+    window.history.replaceState(window.history.state, "", localPath(href, english));
     try {
       sessionStorage.setItem("rundates:results", href);
     } catch {
@@ -275,7 +291,7 @@ export function RaceExplorer({
     shareRequest.current += 1;
     setCopyState(null);
     const href = resultsHref(filters, undefined, target);
-    window.history.replaceState(window.history.state, "", href);
+    window.history.replaceState(window.history.state, "", localPath(href, english));
     try {
       sessionStorage.setItem("rundates:results", href);
     } catch {
@@ -325,40 +341,57 @@ export function RaceExplorer({
       ? "open"
       : filters.view;
   const quickViews = [
-    ["upcoming", "即將舉行"],
-    ["open", "接受申請"],
-    ["saved", "我的收藏"],
-    ["all", "全部"],
+    ["upcoming", t("即將舉行", "Upcoming")],
+    ["open", t("接受申請", "Accepting entries")],
+    ["saved", t("我的收藏", "Saved races")],
+    ["all", t("全部", "All")],
   ] as const;
   const relaxOptions: { label: string; next: Filters }[] = [];
   if (!results.length) {
-    if (filters.month) relaxOptions.push({ label: "取消月份", next: { ...filters, month: "" } });
+    if (filters.month)
+      relaxOptions.push({ label: t("取消月份", "Remove month"), next: { ...filters, month: "" } });
     if (filters.from || filters.to) {
-      relaxOptions.push({ label: "取消日期範圍", next: { ...filters, from: "", to: "" } });
+      relaxOptions.push({
+        label: t("取消日期範圍", "Remove date range"),
+        next: { ...filters, from: "", to: "" },
+      });
     }
     if (filters.countries.length || filters.regions.length) {
       relaxOptions.push({
-        label: "取消地點限制",
+        label: t("取消地點限制", "Remove location filter"),
         next: { ...filters, countries: [], regions: [] },
       });
     }
     if (filters.distances.length || filters.min || filters.max) {
       relaxOptions.push({
-        label: "取消距離限制",
+        label: t("取消距離限制", "Remove distance filter"),
         next: { ...filters, distances: [], min: "", max: "" },
       });
     }
     if (filters.themed)
-      relaxOptions.push({ label: "取消主題跑限制", next: { ...filters, themed: false } });
+      relaxOptions.push({
+        label: t("取消主題跑限制", "Remove themed race filter"),
+        next: { ...filters, themed: false },
+      });
     if (filters.family)
-      relaxOptions.push({ label: "取消組別限制", next: { ...filters, family: false } });
+      relaxOptions.push({
+        label: t("取消組別限制", "Remove category filter"),
+        next: { ...filters, family: false },
+      });
     if (filters.statuses.length) {
-      relaxOptions.push({ label: "取消報名狀態限制", next: { ...filters, statuses: [] } });
+      relaxOptions.push({
+        label: t("取消報名狀態限制", "Remove entry status filter"),
+        next: { ...filters, statuses: [] },
+      });
     }
     if (filters.channels.length) {
-      relaxOptions.push({ label: "取消報名渠道限制", next: { ...filters, channels: [] } });
+      relaxOptions.push({
+        label: t("取消報名渠道限制", "Remove entry channel filter"),
+        next: { ...filters, channels: [] },
+      });
     }
-    if (filters.q) relaxOptions.push({ label: "清除搜尋字詞", next: { ...filters, q: "" } });
+    if (filters.q)
+      relaxOptions.push({ label: t("清除搜尋字詞", "Clear search"), next: { ...filters, q: "" } });
   }
   const relaxOption =
     relaxOptions.find(({ next }) => selectRaces(races, next, now).length > 0) ?? relaxOptions[0];
@@ -377,11 +410,11 @@ export function RaceExplorer({
   return (
     <section id="race-list" className="explorer shell" aria-labelledby="explorer-heading">
       <header className="section-heading explorer-heading">
-        <h1 id="explorer-heading">香港路跑時間表</h1>
+        <h1 id="explorer-heading">{t("香港路跑時間表", "Hong Kong race calendar")}</h1>
       </header>
       <div className="calendar-search-bar" ref={searchBar}>
         <label className="calendar-keyword">
-          <span className="sr-only">搜尋賽事</span>
+          <span className="sr-only">{t("搜尋賽事", "Search races")}</span>
           <span className="search-box">
             <Icon name="search" size={21} />
             <input
@@ -389,7 +422,7 @@ export function RaceExplorer({
               value={filters.q}
               maxLength={200}
               onChange={(e) => field("q", e.target.value)}
-              placeholder="賽事名或地點"
+              placeholder={t("賽事名或地點", "Race name or venue")}
               enterKeyHint="search"
             />
           </span>
@@ -402,7 +435,7 @@ export function RaceExplorer({
           aria-controls="calendar-filter-panel"
           onClick={() => setFiltersExpanded(!filtersExpanded)}
         >
-          <Icon name="filter" size={18} /> 篩選
+          <Icon name="filter" size={18} /> {t("篩選", "Filters")}
           <span
             className="calendar-filter-count"
             data-empty={activeFilterCount === 0}
@@ -417,7 +450,7 @@ export function RaceExplorer({
           className="calendar-filter-panel"
           id="calendar-filter-panel"
           data-expanded={filtersExpanded}
-          aria-label={filtersExpanded ? undefined : "賽事篩選"}
+          aria-label={filtersExpanded ? undefined : t("賽事篩選", "Race filters")}
           aria-labelledby={filtersExpanded ? "calendar-filter-title" : undefined}
           onClose={(event) => {
             const panel = event.currentTarget;
@@ -431,7 +464,7 @@ export function RaceExplorer({
             });
           }}
         >
-          {filtersExpanded && <CalendarSheetDismiss />}
+          {filtersExpanded && <CalendarSheetDismiss english={english} />}
           <div
             className="filter-card search-engine"
             onKeyDown={(event) => {
@@ -445,11 +478,15 @@ export function RaceExplorer({
               {filtersExpanded ? (
                 <>
                   <Icon name="filter" size={18} />
-                  <h2 id="calendar-filter-title">篩選條件</h2>
+                  <h2 id="calendar-filter-title">{t("篩選條件", "Filters")}</h2>
                 </>
               ) : (
-                <div className="calendar-filter-categories" role="group" aria-label="篩選條件">
-                  {filterCategories.map(([key, label]) => (
+                <div
+                  className="calendar-filter-categories"
+                  role="group"
+                  aria-label={t("篩選條件", "Filters")}
+                >
+                  {filterCategories(t).map(([key, label]) => (
                     <button
                       key={key}
                       ref={(button) => {
@@ -471,7 +508,7 @@ export function RaceExplorer({
                       {label}
                       {categoryCounts[key] > 0 && (
                         <span className="calendar-category-count">
-                          <span className="sr-only">已選 </span>
+                          <span className="sr-only">{t("已選", "Selected")} </span>
                           {categoryCounts[key]}
                         </span>
                       )}
@@ -489,7 +526,7 @@ export function RaceExplorer({
                   changeSavedOnly(false, defaultFilters);
                 }}
               >
-                重置條件
+                {t("重置條件", "Reset filters")}
               </button>
             </div>
             <div
@@ -500,14 +537,20 @@ export function RaceExplorer({
               aria-label={
                 filtersExpanded
                   ? undefined
-                  : filterCategories.find(([key]) => key === filterCategory)?.[1]
+                  : filterCategories(t).find(([key]) => key === filterCategory)?.[1]
               }
               tabIndex={filtersExpanded ? undefined : -1}
               hidden={!filtersExpanded && !filterCategory}
             >
               <div hidden={!filtersExpanded && filterCategory !== "date"}>
-                <div className="engine-option-row" role="group" aria-label="比賽日期">
-                  {filtersExpanded && <span className="engine-label">比賽日期</span>}
+                <div
+                  className="engine-option-row"
+                  role="group"
+                  aria-label={t("比賽日期", "Race date")}
+                >
+                  {filtersExpanded && (
+                    <span className="engine-label">{t("比賽日期", "Race date")}</span>
+                  )}
                   <div className="option-row">
                     <button aria-pressed={yearActive} onClick={() => quickDate("year")}>
                       {calendarYear}
@@ -524,19 +567,24 @@ export function RaceExplorer({
                         update({ ...filters, from: "", to: "", view: "all" });
                       }}
                     >
-                      指定時間
+                      {t("指定時間", "Custom dates")}
                     </button>
                     <label className="engine-month">
-                      <span className="sr-only">月份</span>
+                      <span className="sr-only">{t("月份", "Month")}</span>
                       <select
-                        aria-label="月份"
+                        aria-label={t("月份", "Month")}
                         value={filters.month}
                         onChange={(e) => field("month", e.target.value)}
                       >
-                        <option value="">月份</option>
+                        <option value="">{t("月份", "Month")}</option>
                         {Array.from({ length: 12 }, (_, index) => index + 1).map((month) => (
                           <option key={month} value={String(month)}>
-                            {month}月
+                            {english
+                              ? new Intl.DateTimeFormat("en", {
+                                  month: "short",
+                                  timeZone: "UTC",
+                                }).format(new Date(Date.UTC(2026, Number(month) - 1, 1)))
+                              : `${month}月`}
                           </option>
                         ))}
                       </select>
@@ -545,11 +593,11 @@ export function RaceExplorer({
                 </div>
                 {showCustomDates && (
                   <fieldset className="date-inputs engine-dates" id="custom-dates">
-                    <legend>指定日期範圍</legend>
+                    <legend>{t("指定日期範圍", "Custom date range")}</legend>
                     <label>
-                      <span>開始日期</span>
+                      <span>{t("開始日期", "Start date")}</span>
                       <input
-                        aria-label="開始日期"
+                        aria-label={t("開始日期", "Start date")}
                         type="date"
                         aria-invalid={error ? true : undefined}
                         aria-describedby={error ? dateErrorId : undefined}
@@ -557,11 +605,11 @@ export function RaceExplorer({
                         onChange={(e) => update({ ...filters, from: e.target.value, view: "all" })}
                       />
                     </label>
-                    <span aria-hidden="true">至</span>
+                    <span aria-hidden="true">{t("至", "to")}</span>
                     <label>
-                      <span>結束日期</span>
+                      <span>{t("結束日期", "End date")}</span>
                       <input
-                        aria-label="結束日期"
+                        aria-label={t("結束日期", "End date")}
                         type="date"
                         aria-invalid={error ? true : undefined}
                         aria-describedby={error ? dateErrorId : undefined}
@@ -575,15 +623,21 @@ export function RaceExplorer({
                         id="calendar-date-range-error"
                         role="alert"
                       >
-                        {error}
+                        {englishRaceTerm(error, english)}
                       </p>
                     )}
                     {!error && (filters.from || filters.to) && (
                       <p className="calendar-date-range-summary" role="status">
-                        {filters.from && displayDate(filters.from, { year: "numeric" })}
+                        {filters.from &&
+                          (english
+                            ? englishDate(filters.from)
+                            : displayDate(filters.from, { year: "numeric" }))}
                         {filters.from && filters.to && " "}
-                        {filters.to && `至 ${displayDate(filters.to, { year: "numeric" })}`}
-                        {!filters.to && "起"}
+                        {filters.to &&
+                          (english
+                            ? `to ${englishDate(filters.to)}`
+                            : `至 ${displayDate(filters.to, { year: "numeric" })}`)}
+                        {!filters.to && t("起", " onwards")}
                       </p>
                     )}
                   </fieldset>
@@ -592,10 +646,10 @@ export function RaceExplorer({
               <div
                 className="engine-option-row"
                 role="group"
-                aria-label="地點"
+                aria-label={t("地點", "Location")}
                 hidden={!filtersExpanded && filterCategory !== "location"}
               >
-                {filtersExpanded && <span className="engine-label">地點</span>}
+                {filtersExpanded && <span className="engine-label">{t("地點", "Location")}</span>}
                 <div className="option-row option-row-checkmarks">
                   {regions.map((region, index) => (
                     <button
@@ -603,8 +657,21 @@ export function RaceExplorer({
                       aria-pressed={filters.regions.includes(region)}
                       onClick={() => toggle("regions", region)}
                     >
-                      {region === "港島" ? "香港島" : region}
-                      {optionCounts && <FilterOptionCount count={optionCounts.regions[index]} />}
+                      {english
+                        ? (
+                            {
+                              港島: "Hong Kong Island",
+                              九龍: "Kowloon",
+                              新界: "New Territories",
+                              離島: "Outlying Islands",
+                            } as const
+                          )[region]
+                        : region === "港島"
+                          ? "香港島"
+                          : region}
+                      {optionCounts && (
+                        <FilterOptionCount english={english} count={optionCounts.regions[index]} />
+                      )}
                     </button>
                   ))}
                 </div>
@@ -612,10 +679,10 @@ export function RaceExplorer({
               <div
                 className="engine-option-row"
                 role="group"
-                aria-label="距離"
+                aria-label={t("距離", "Distance")}
                 hidden={!filtersExpanded && filterCategory !== "distance"}
               >
-                {filtersExpanded && <span className="engine-label">距離</span>}
+                {filtersExpanded && <span className="engine-label">{t("距離", "Distance")}</span>}
                 <div className="option-row option-row-checkmarks">
                   {distanceOptions.map((distance, index) => (
                     <button
@@ -623,8 +690,13 @@ export function RaceExplorer({
                       aria-pressed={filters.distances.includes(distance)}
                       onClick={() => toggle("distances", distance)}
                     >
-                      {distance}
-                      {optionCounts && <FilterOptionCount count={optionCounts.distances[index]} />}
+                      {english ? englishDistanceTag(distance) : distance}
+                      {optionCounts && (
+                        <FilterOptionCount
+                          english={english}
+                          count={optionCounts.distances[index]}
+                        />
+                      )}
                     </button>
                   ))}
                 </div>
@@ -632,58 +704,67 @@ export function RaceExplorer({
               <div
                 className="engine-option-row"
                 role="group"
-                aria-label="報名狀態"
+                aria-label={t("報名狀態", "Entry status")}
                 hidden={!filtersExpanded && filterCategory !== "registration"}
               >
-                {filtersExpanded && <span className="engine-label">報名狀態</span>}
+                {filtersExpanded && (
+                  <span className="engine-label">{t("報名狀態", "Entry status")}</span>
+                )}
                 <div className="option-row">
                   <button
                     aria-pressed={acceptingOnly}
                     onClick={() => field("statuses", acceptingOnly ? [] : ["open"])}
                   >
-                    接受申請
+                    {t("接受申請", "Accepting entries")}
                   </button>
                 </div>
               </div>
               <div
                 className="engine-option-row"
                 role="group"
-                aria-label="賽事類型"
+                aria-label={t("賽事類型", "Race type")}
                 hidden={!filtersExpanded && filterCategory !== "type"}
               >
-                {filtersExpanded && <span className="engine-label">賽事類型</span>}
+                {filtersExpanded && (
+                  <span className="engine-label">{t("賽事類型", "Race type")}</span>
+                )}
                 <div className="option-row option-row-checkmarks">
                   <button
                     aria-pressed={filters.themed}
                     onClick={() => update({ ...filters, themed: !filters.themed, family: false })}
                   >
-                    主題跑
+                    {t("主題跑", "Themed races")}
                   </button>
                 </div>
               </div>
               <div
                 className="engine-option-row"
                 role="group"
-                aria-label="賽事難易度"
+                aria-label={t("賽事難易度", "Race difficulty")}
                 hidden={!filtersExpanded && filterCategory !== "difficulty"}
                 aria-describedby="difficulty-note"
               >
-                {filtersExpanded && <span className="engine-label">賽事難易度</span>}
+                {filtersExpanded && (
+                  <span className="engine-label">{t("賽事難易度", "Race difficulty")}</span>
+                )}
                 <div className="option-row">
                   {["困難", "適中", "容易"].map((difficulty) => (
-                    <button key={difficulty} disabled>
-                      {difficulty}
+                    <button key={englishRaceTerm(difficulty, english)} disabled>
+                      {englishRaceTerm(difficulty, english)}
                     </button>
                   ))}
                 </div>
-                <small id="difficulty-note">正式難易度評級推出後開放</small>
+                <small id="difficulty-note">
+                  {t("正式難易度評級推出後開放", "Available when difficulty ratings are published")}
+                </small>
               </div>
             </div>
           </div>
           {filtersExpanded && (
             <form method="dialog" className="calendar-sheet-footer">
               <button type="submit" value="results" className="calendar-apply-filters">
-                顯示 {results.length} 場賽事 <Icon name="arrow" size={18} />
+                {t(`顯示 ${results.length} 場賽事`, `Show ${results.length} races`)}{" "}
+                <Icon name="arrow" size={18} />
               </button>
             </form>
           )}
@@ -691,11 +772,15 @@ export function RaceExplorer({
         <div className="calendar-results">
           {error && !filtersExpanded && (
             <p className="error-message" id="calendar-filter-error" role="alert">
-              {error}
+              {englishRaceTerm(error, english)}
             </p>
           )}
           <div className="results-toolbar" id="results-toolbar" tabIndex={-1}>
-            <div className="calendar-view-tabs" role="group" aria-label="賽事快捷篩選">
+            <div
+              className="calendar-view-tabs"
+              role="group"
+              aria-label={t("賽事快捷篩選", "Quick race filters")}
+            >
               {quickViews.map(([key, label]) => (
                 <button
                   key={key}
@@ -723,36 +808,37 @@ export function RaceExplorer({
               aria-live="polite"
               aria-atomic="true"
             >
-              共 <strong>{results.length}</strong> 場
+              {t("共 ", "")}
+              <strong>{results.length}</strong> {t("場", results.length === 1 ? "race" : "races")}
             </span>
             <div className="results-actions">
               <label className="calendar-sort">
-                <span>排序</span>
+                <span>{t("排序", "Sort")}</span>
                 <select
-                  aria-label="排序方式"
+                  aria-label={t("排序方式", "Sort order")}
                   value={filters.sort}
                   onChange={(e) => field("sort", e.target.value as Filters["sort"])}
                 >
-                  <option value="date">按比賽日期</option>
-                  <option value="deadline">按報名截止</option>
-                  <option value="recent">按最近更新</option>
+                  <option value="date">{t("按比賽日期", "Race date")}</option>
+                  <option value="deadline">{t("按報名截止", "Entry deadline")}</option>
+                  <option value="recent">{t("按最近更新", "Recently updated")}</option>
                 </select>
               </label>
               <button
                 type="button"
                 className="share-button"
                 onClick={share}
-                aria-label="分享篩選"
+                aria-label={t("分享篩選", "Share filters")}
                 data-copied={copyState === "copied"}
               >
                 {copyState === "copied" ? (
                   <>
-                    已複製 <Icon name="check" size={16} />
+                    {t("已複製", "Copied")} <Icon name="check" size={16} />
                   </>
                 ) : copyState === "manual" ? (
-                  "請複製網址"
+                  t("請複製網址", "Copy the URL")
                 ) : (
-                  "分享篩選 ↗"
+                  t("分享篩選 ↗", "Share filters ↗")
                 )}
               </button>
             </div>
@@ -764,35 +850,45 @@ export function RaceExplorer({
           </div>
           <span className="sr-only" role="status">
             {copyState === "copied"
-              ? "已複製篩選連結"
+              ? t("已複製篩選連結", "Filter link copied")
               : copyState === "manual"
-                ? "請複製瀏覽器網址，當中已保留篩選條件。"
+                ? t(
+                    "請複製瀏覽器網址，當中已保留篩選條件。",
+                    "Copy the address from your browser to share these filters.",
+                  )
                 : ""}
           </span>
-          {!ready && <p className="sr-only">正在載入你的篩選條件。</p>}
+          {!ready && (
+            <p className="sr-only">{t("正在載入你的篩選條件。", "Loading your filters.")}</p>
+          )}
           <div className="race-results-layout" ref={resultsPanel}>
             <div className="race-results-main">
               <div className="race-list">
                 {visibleResults.length > 0 && (
-                  <div className="calendar-row-head" role="group" aria-label="賽事列表欄位">
-                    <span>賽事／起點</span>
-                    <span>比賽日</span>
-                    <span>距離</span>
-                    <span>報名概況</span>
+                  <div
+                    className="calendar-row-head"
+                    role="group"
+                    aria-label={t("賽事列表欄位", "Race list columns")}
+                  >
+                    <span>{t("賽事／起點", "Race / Start")}</span>
+                    <span>{t("比賽日", "Race day")}</span>
+                    <span>{t("距離", "Distance")}</span>
+                    <span>{t("報名概況", "Registration")}</span>
                     <button
                       type="button"
                       aria-pressed={filters.sort === "deadline"}
                       onClick={() => field("sort", "deadline")}
                     >
-                      最近截止 {filters.sort === "deadline" && <span aria-hidden="true">↑</span>}
+                      {t("最近截止", "Next deadline")}{" "}
+                      {filters.sort === "deadline" && <span aria-hidden="true">↑</span>}
                     </button>
-                    <span>推薦指數</span>
-                    <span>收藏</span>
+                    <span>{t("推薦指數", "Runner rating")}</span>
+                    <span>{t("收藏", "Save")}</span>
                   </div>
                 )}
                 {visibleResults.map(({ race, groups }, index) => {
-                  const detailHref = filteredRaceHref(race, groups, filters);
-                  const deadline = listDeadline(race, groups, now);
+                  const detailHref = localPath(filteredRaceHref(race, groups, filters), english);
+                  const deadline = listDeadline(race, groups, now, english);
                   const distances = [
                     ...new Set(
                       race.groups
@@ -814,7 +910,9 @@ export function RaceExplorer({
                     pastSaved && (index === 0 || !pastResult(visibleResults[index - 1], now));
                   return (
                     <Fragment key={race.id}>
-                      {firstPast && <h2 className="past-saved-heading">過往收藏</h2>}
+                      {firstPast && (
+                        <h2 className="past-saved-heading">{t("過往收藏", "Past saved races")}</h2>
+                      )}
                       <motion.article
                         layout={ready && !reduceMotion ? "position" : false}
                         layoutDependency={resultKey}
@@ -828,7 +926,11 @@ export function RaceExplorer({
                           if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
                             return;
                           const returnHref = resultsHref(filters, race.id, pagination.page);
-                          window.history.replaceState(window.history.state, "", returnHref);
+                          window.history.replaceState(
+                            window.history.state,
+                            "",
+                            localPath(returnHref, english),
+                          );
                           try {
                             sessionStorage.setItem("rundates:results", returnHref);
                           } catch {
@@ -838,7 +940,9 @@ export function RaceExplorer({
                       >
                         <div className="calendar-race-content">
                           <h2>
-                            <Link href={detailHref}>{highlightMatch(race.name, filters.q)}</Link>
+                            <Link href={detailHref}>
+                              {highlightMatch(english ? race.englishName : race.name, filters.q)}
+                            </Link>
                           </h2>
                           <p className="calendar-race-venue">
                             <Icon name="pin" size={18} />
@@ -847,7 +951,9 @@ export function RaceExplorer({
                                 [
                                   ...new Set(
                                     groupLocations(race, groups).map(
-                                      (location) => location.venue ?? "起點待核實",
+                                      (location) =>
+                                        englishRaceTerm(location.venue, english) ??
+                                        t("起點待核實", "Start location not verified"),
                                     ),
                                   ),
                                 ].join(" ／ "),
@@ -858,19 +964,24 @@ export function RaceExplorer({
                         </div>
                         <p className="calendar-race-start">
                           <Icon name="calendar" size={18} />
-                          <span className="sr-only">起跑日期：</span>
+                          <span className="sr-only">{t("起跑日期：", "Race date:")}</span>
                           <span>
                             {[...new Set(groups.map((group) => group.date))]
                               .sort()
                               .map((date, index) => (
                                 <Fragment key={date}>
                                   {index > 0 && " ／ "}
-                                  <time dateTime={date}>{date.replaceAll("-", "/")}</time>
+                                  <time dateTime={date}>
+                                    {english ? englishDate(date) : date.replaceAll("-", "/")}
+                                  </time>
                                 </Fragment>
                               ))}
                           </span>
                         </p>
-                        <ul className="calendar-race-distances" aria-label="比賽距離">
+                        <ul
+                          className="calendar-race-distances"
+                          aria-label={t("比賽距離", "Race distances")}
+                        >
                           {distances.map((distance) => {
                             const matched = matchedDistances.has(distance);
                             return (
@@ -878,41 +989,73 @@ export function RaceExplorer({
                                 key={distance}
                                 data-distance-match={hasDistanceFilter ? matched : undefined}
                               >
-                                {distance}
+                                {english ? englishDistanceTag(distance) : distance}
                                 {hasDistanceFilter && matched && (
-                                  <span className="sr-only">（符合篩選）</span>
+                                  <span className="sr-only">
+                                    {t("（符合篩選）", " (matches filter)")}
+                                  </span>
                                 )}
                               </li>
                             );
                           })}
                         </ul>
-                        <p className="calendar-race-registration" aria-label="報名概況">
-                          {listRegistration(race, groups, now)}
+                        <p
+                          className="calendar-race-registration"
+                          aria-label={t("報名概況", "Registration")}
+                        >
+                          {listRegistration(race, groups, now, english)}
                         </p>
                         <div className="calendar-race-deadline" data-empty={!deadline}>
                           {deadline ? (
                             <>
-                              <span className="sr-only">最近已核實報名截止：</span>
+                              <span className="sr-only">
+                                {t("最近已核實報名截止：", "Next verified entry deadline:")}
+                              </span>
                               <strong>
-                                <time dateTime={deadline.date}>{deadline.label}</time>
+                                <time dateTime={deadline.date}>
+                                  {english
+                                    ? deadline.date.length > 10
+                                      ? englishTimestamp(deadline.date)
+                                      : englishDate(deadline.date)
+                                    : deadline.label}
+                                </time>
                               </strong>
                               <span>{deadline.scope}</span>
                             </>
                           ) : (
-                            <span aria-label="暫無已核實截止日期">—</span>
+                            <span
+                              aria-label={t("暫無已核實截止日期", "No verified entry deadline")}
+                            >
+                              —
+                            </span>
                           )}
                         </div>
-                        <RaceOverallRating race={race} groups={groups} reviews={reviews} />
-                        <FavoriteButton
-                          compact
+                        <RaceOverallRating
+                          english={english}
                           race={race}
+                          groups={groups}
+                          reviews={reviews}
+                        />
+                        <FavoriteButton
+                          english={english}
+                          compact
+                          race={english ? { id: race.id, name: race.englishName } : race}
                           onRemove={
                             savedOnly
                               ? (keyboard) => {
                                   setUndoPaused(false);
                                   setUndoError(false);
-                                  setUndoMessage(`已移除收藏：${race.name}`);
-                                  setRemoved({ id: race.id, name: race.name, keyboard });
+                                  setUndoMessage(
+                                    t(
+                                      `已移除收藏：${race.name}`,
+                                      `Removed from saved races: ${race.englishName}`,
+                                    ),
+                                  );
+                                  setRemoved({
+                                    id: race.id,
+                                    name: english ? race.englishName : race.name,
+                                    keyboard,
+                                  });
                                 }
                               : undefined
                           }
@@ -928,17 +1071,30 @@ export function RaceExplorer({
                   <Icon name="search" size={36} />
                   <h2>
                     {error
-                      ? "調整一下篩選範圍"
+                      ? t("調整一下篩選範圍", "Try changing your filters")
                       : savedOnly
-                        ? "沒有符合篩選條件的收藏"
-                        : "暫無符合條件的賽事"}
+                        ? t("沒有符合篩選條件的收藏", "No saved races match the filters")
+                        : t("暫無符合條件的賽事", "No races match the filters")}
                   </h2>
-                  {savedOnly && <p>可切換至「全部」，再按賽事旁的「收藏」。</p>}
+                  {savedOnly && (
+                    <p>
+                      {t(
+                        "可切換至「全部」，再按賽事旁的「收藏」。",
+                        "Switch to All and select Save next to a race.",
+                      )}
+                    </p>
+                  )}
                   <p>
                     {filters.countries.length &&
                     !races.some((race) => filters.countries.includes(race.country ?? "香港"))
-                      ? `暫時未收錄${filters.countries.join("、")}賽事。試下其他地點。`
-                      : "試下放寬日期、移除部分條件，或者切換「全部」。"}
+                      ? t(
+                          `暫時未收錄${filters.countries.join("、")}賽事。試下其他地點。`,
+                          "No races are listed for the selected location. Try another region.",
+                        )
+                      : t(
+                          "試下放寬日期、移除部分條件，或者切換「全部」。",
+                          "Try a wider date range, remove some filters or switch to All.",
+                        )}
                   </p>
                   <div className="calendar-empty-actions">
                     {relaxOption && (
@@ -962,14 +1118,17 @@ export function RaceExplorer({
                         resultsCount.current?.focus({ preventScroll: true });
                       }}
                     >
-                      查看全部賽事 <Icon name="arrow" />
+                      {t("查看全部賽事", "View all races")} <Icon name="arrow" />
                     </button>
                   </div>
                 </div>
               )}
               <div className="results-footer">
                 <span role="status" aria-live="polite">
-                  顯示第 {pagination.from} 至 {pagination.to} 場，共 {results.length} 場
+                  {t(
+                    `顯示第 ${pagination.from} 至 ${pagination.to} 場，共 ${results.length} 場`,
+                    `Showing ${pagination.from}–${pagination.to} of ${results.length} races`,
+                  )}
                 </span>
                 <a
                   href="#race-list"
@@ -979,27 +1138,33 @@ export function RaceExplorer({
                     setFiltersExpanded(true);
                   }}
                 >
-                  返回篩選 ↑
+                  {t("返回篩選 ↑", "Back to filters ↑")}
                 </a>
               </div>
               {pagination.pages > 1 && (
-                <nav className="race-pagination" aria-label="賽事列表分頁">
+                <nav
+                  className="race-pagination"
+                  aria-label={t("賽事列表分頁", "Race list pagination")}
+                >
                   <button
                     className="button"
                     disabled={pagination.page === 1}
                     onClick={() => changePage(pagination.page - 1)}
                   >
-                    上一頁
+                    {t("上一頁", "Previous")}
                   </button>
                   <span>
-                    第 {pagination.page}／{pagination.pages} 頁
+                    {t(
+                      `第 ${pagination.page}／${pagination.pages} 頁`,
+                      `Page ${pagination.page} of ${pagination.pages}`,
+                    )}
                   </span>
                   <button
                     className="button"
                     disabled={pagination.page === pagination.pages}
                     onClick={() => changePage(pagination.page + 1)}
                   >
-                    下一頁
+                    {t("下一頁", "Next")}
                   </button>
                 </nav>
               )}
@@ -1011,7 +1176,7 @@ export function RaceExplorer({
         {undoMessage}
       </span>
       <div className="calendar-floating">
-        <RaceBackToSearch searchBar={searchBar} />
+        <RaceBackToSearch english={english} searchBar={searchBar} />
         {removed && (
           <div
             className="calendar-undo"
@@ -1031,25 +1196,33 @@ export function RaceExplorer({
               }
             }}
           >
-            <span>{undoError ? "未能復原收藏，請再試。" : `已移除收藏：${removed.name}`}</span>
+            <span>
+              {undoError
+                ? t("未能復原收藏，請再試。", "Could not restore the saved race. Try again.")
+                : t(`已移除收藏：${removed.name}`, `Removed from saved races: ${removed.name}`)}
+            </span>
             <button
               type="button"
               ref={undoButton}
               onClick={(event) => {
                 if (favorites.toggle(removed.id, true) !== true) {
                   setUndoError(true);
-                  setUndoMessage("未能復原收藏，請再試。");
+                  setUndoMessage(
+                    t("未能復原收藏，請再試。", "Could not restore the saved race. Try again."),
+                  );
                   return;
                 }
-                setUndoMessage(`已復原收藏：${removed.name}`);
+                setUndoMessage(
+                  t(`已復原收藏：${removed.name}`, `Restored to saved races: ${removed.name}`),
+                );
                 dismissUndo(event.detail === 0);
               }}
             >
-              復原
+              {t("復原", "Undo")}
             </button>
             <button
               type="button"
-              aria-label="關閉收藏提示"
+              aria-label={t("關閉收藏提示", "Dismiss save notification")}
               onClick={(event) => dismissUndo(event.detail === 0)}
             >
               ×

@@ -6,7 +6,17 @@ export const raceHref = (race: Race) => `/races/${race.date.slice(0, 4)}/${race.
 export const pageMetadata = (title: string, description: string, path: string): Metadata => ({
   title: { absolute: `${title}｜${siteName}` },
   description,
-  ...(siteUrl ? { alternates: { canonical: new URL(path, siteUrl).toString() } } : {}),
+  ...(siteUrl
+    ? {
+        alternates: {
+          canonical: new URL(path, siteUrl).toString(),
+          languages: {
+            "zh-HK": new URL(path, siteUrl).toString(),
+            en: new URL(`/en${path}`, siteUrl).toString(),
+          },
+        },
+      }
+    : {}),
   openGraph: {
     title: `${title}｜${siteName}`,
     description,

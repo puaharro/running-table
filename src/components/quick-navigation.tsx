@@ -20,7 +20,15 @@ function normalize(value: string) {
     .replace(/[\p{P}\s]/gu, "");
 }
 
-export function QuickNavigation({ destinations }: { destinations: QuickDestination[] }) {
+export function QuickNavigation({
+  destinations,
+  english = false,
+}: {
+  destinations: QuickDestination[];
+  english?: boolean;
+}) {
+  const label = english ? "Quick search" : "快速前往";
+  const placeholder = english ? "Search races, guides or pages" : "搜尋賽事、指南或頁面";
   const [query, setQuery] = useState("");
   const trigger = useRef<HTMLButtonElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -71,7 +79,7 @@ export function QuickNavigation({ destinations }: { destinations: QuickDestinati
         <span className="quick-navigation-icon">
           <Icon name="search" size={16} />
         </span>
-        <span>快速前往</span>
+        <span>{label}</span>
       </button>
       <dialog
         className="nxtgo-dialog quick-navigation-dialog"
@@ -79,9 +87,9 @@ export function QuickNavigation({ destinations }: { destinations: QuickDestinati
         aria-labelledby="quick-navigation-title"
       >
         <div className="nxtgo-dialog-heading">
-          <h2 id="quick-navigation-title">快速前往</h2>
+          <h2 id="quick-navigation-title">{label}</h2>
           <button type="button" className="button" onClick={() => dialog.current?.close()}>
-            關閉
+            {english ? "Close" : "關閉"}
           </button>
         </div>
         <form
@@ -97,7 +105,7 @@ export function QuickNavigation({ destinations }: { destinations: QuickDestinati
           }}
         >
           <label htmlFor="quick-navigation-search" className="sr-only">
-            搜尋賽事、指南或頁面
+            {placeholder}
           </label>
           <input
             id="quick-navigation-search"
@@ -105,7 +113,7 @@ export function QuickNavigation({ destinations }: { destinations: QuickDestinati
             autoFocus
             value={query}
             maxLength={100}
-            placeholder="搜尋賽事、指南或頁面"
+            placeholder={placeholder}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => {
               if (
@@ -121,7 +129,11 @@ export function QuickNavigation({ destinations }: { destinations: QuickDestinati
           />
         </form>
         <p className={matches.length ? "sr-only" : undefined} role="status">
-          {matches.length ? `顯示 ${matches.length} 個選項` : "沒有符合條件的結果。"}
+          {english
+            ? `${matches.length} results`
+            : matches.length
+              ? `顯示 ${matches.length} 個選項`
+              : "沒有符合條件的結果。"}
         </p>
         <ul
           className="quick-navigation-results"

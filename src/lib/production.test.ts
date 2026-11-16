@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { publicRaces } from "@/data/races";
+import { englishRaceTerm } from "./race-terms.en";
+import { raceHref } from "./site";
 import rawCatalog from "../data/catalog.json";
 import { assertCatalog, publishedRaces } from "./catalog";
 import { defaultFilters, groupStatus, channelStatus, selectRaces } from "./races";
@@ -157,6 +160,22 @@ describe("search release readiness and structured data", () => {
     expect(raceStructuredData({ ...r, verification: "demo" }, "https://rundates.test")).toBeNull();
     expect(raceStructuredData(r)).toBeNull();
   });
+  it("keeps public English race descriptions and their structured data in the same locale", () => {
+    const origin = "https://rundates.test";
+    for (const race of publicRaces) {
+      const description = englishRaceTerm(race.summary, true);
+      expect(description, race.id).toMatch(/[A-Za-z]/);
+      expect(description, race.id).not.toMatch(/\p{Script=Han}/u);
+      if (!race.region) continue;
+      const schema = raceStructuredData(race, origin, true);
+      expect(schema, race.id).toMatchObject({
+        name: race.englishName,
+        description,
+        url: new URL(`/en${raceHref(race)}`, origin).href,
+      });
+    }
+  });
+
   it("escapes script delimiters in JSON-LD", () => {
     expect(safeJsonLd({ title: "</script>" })).not.toContain("<");
     expect(JSON.parse(safeJsonLd({ title: "</script>" }))).toEqual({ title: "</script>" });

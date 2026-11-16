@@ -17,7 +17,7 @@ function inline(text: string) {
   });
 }
 
-export function RaceRunnerCopy({ copy }: { copy: RunnerCopy }) {
+export function RaceRunnerCopy({ copy, english = false }: { copy: RunnerCopy; english?: boolean }) {
   const [heading, ...blocks] = copy.markdown.trim().split(/\n\n+/);
   return (
     <section
@@ -26,8 +26,11 @@ export function RaceRunnerCopy({ copy }: { copy: RunnerCopy }) {
       tabIndex={-1}
       aria-labelledby="runner-copy-heading"
     >
-      <h2 id="runner-copy-heading">{heading.replace(/^# /, "").replace("【候選・待覆核】", "")}</h2>
-      <div className="runner-copy-body">
+      <h2 id="runner-copy-heading" lang={english ? "zh-HK" : undefined}>
+        {heading.replace(/^# /, "").replace("【候選・待覆核】", "")}
+      </h2>
+      {english && <p lang="en">Original runner account in Chinese.</p>}
+      <div className="runner-copy-body" lang={english ? "zh-HK" : undefined}>
         {blocks.map((block, index) =>
           block.startsWith("## ") ? (
             <h3 key={index}>{block.slice(3)}</h3>

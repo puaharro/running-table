@@ -1,7 +1,9 @@
+import { localPath } from "./english-races";
+import { englishRaceTerm } from "./race-terms.en";
 import type { Race } from "./types";
 import { raceHref } from "./site";
 
-export function raceStructuredData(race: Race, origin?: string) {
+export function raceStructuredData(race: Race, origin?: string, english = false) {
   if (
     !origin ||
     race.verification !== "verified" ||
@@ -12,20 +14,20 @@ export function raceStructuredData(race: Race, origin?: string) {
   return {
     "@context": "https://schema.org",
     "@type": "SportsEvent",
-    name: race.name,
-    description: race.summary,
+    name: english ? race.englishName : race.name,
+    description: englishRaceTerm(race.summary, english),
     startDate: race.date,
     endDate: race.endDate,
     eventStatus: `https://schema.org/${race.status === "cancelled" ? "EventCancelled" : race.status === "postponed" ? "EventPostponed" : "EventScheduled"}`,
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    url: new URL(raceHref(race), origin).toString(),
+    url: new URL(localPath(raceHref(race), english), origin).toString(),
     sameAs: race.sourceUrl,
     location: {
       "@type": "Place",
-      name: race.venue,
+      name: englishRaceTerm(race.venue, english),
       address: {
         "@type": "PostalAddress",
-        addressLocality: race.district,
+        addressLocality: englishRaceTerm(race.district, english),
         addressRegion: "Hong Kong",
         addressCountry: "HK",
       },

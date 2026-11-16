@@ -6,10 +6,12 @@ export function RaceDialog({
   title,
   onOpen,
   children,
+  english = false,
 }: {
   title: string;
   onOpen?: () => void;
   children: ReactNode;
+  english?: boolean;
 }) {
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);
@@ -38,7 +40,7 @@ export function RaceDialog({
         <div className="nxtgo-dialog-heading">
           <h2 id={id}>{title}</h2>
           <button type="button" className="button" onClick={() => dialog.current?.close()}>
-            關閉
+            {english ? "Close" : "關閉"}
           </button>
         </div>
         {children}

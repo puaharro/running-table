@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { englishDate, language } from "@/lib/english-races";
 import { LayoutGroup, motion, useReducedMotion } from "motion/react";
 import { Icon } from "./ui";
 import { useClock } from "@/lib/use-clock";
@@ -30,10 +31,13 @@ function slideStep(track: HTMLDivElement) {
 export function HomeFocusBanner({
   slides,
   initialNow,
+  english = false,
 }: {
   slides: FocusSlide[];
   initialNow: string;
+  english?: boolean;
 }) {
+  const t = language(english);
   const now = useClock(initialNow);
   const reduceMotion = useReducedMotion();
   const today = hongKongToday(new Date(now));
@@ -138,8 +142,8 @@ export function HomeFocusBanner({
   return (
     <section
       className="shell home-focus-banner"
-      aria-label="焦點賽事及資訊"
-      aria-roledescription="輪播"
+      aria-label={t("焦點賽事及資訊", "Featured races and guides")}
+      aria-roledescription={t("輪播", "carousel")}
       data-multiple={available.length > 1}
     >
       <div
@@ -148,7 +152,7 @@ export function HomeFocusBanner({
         ref={track}
         tabIndex={0}
         role="group"
-        aria-label="投影片"
+        aria-label={t("投影片", "slide")}
         onPointerDown={() => {
           targetSlide.current = null;
         }}
@@ -174,7 +178,7 @@ export function HomeFocusBanner({
             key={slide.id}
             className={`focus-banner-slide focus-banner-slide--${slide.tone}`}
             role="group"
-            aria-roledescription="投影片"
+            aria-roledescription={t("投影片", "slide")}
             aria-label={`${index + 1}／${available.length}：${slide.title}`}
             data-slide-id={slide.id}
             data-settled={settledId === slide.id}
@@ -188,7 +192,7 @@ export function HomeFocusBanner({
               {slide.date && (
                 <time className="focus-banner-date" dateTime={slide.date}>
                   <Icon name="calendar" size={16} />
-                  {displayDate(slide.date, { year: "numeric" })}
+                  {english ? englishDate(slide.date) : displayDate(slide.date, { year: "numeric" })}
                 </time>
               )}
               <p>{slide.description}</p>
@@ -209,14 +213,21 @@ export function HomeFocusBanner({
       </div>
       <div className="focus-banner-controls">
         <span className="focus-banner-counter" aria-live="polite" aria-atomic="true">
-          焦點 {active + 1}／{available.length}
+          {t("焦點", "Featured")} {active + 1}／{available.length}
         </span>
-        <div className="focus-banner-dots" role="group" aria-label="選擇焦點內容">
+        <div
+          className="focus-banner-dots"
+          role="group"
+          aria-label={t("選擇焦點內容", "Choose a featured item")}
+        >
           <LayoutGroup>
             {available.map((slide, index) => (
               <button
                 key={slide.id}
-                aria-label={`顯示第 ${index + 1} 張：${slide.title}`}
+                aria-label={t(
+                  `顯示第 ${index + 1} 張：${slide.title}`,
+                  `Show slide ${index + 1}: ${slide.title}`,
+                )}
                 aria-pressed={active === index}
                 onClick={() => show(index)}
               >

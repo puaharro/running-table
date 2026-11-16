@@ -1,16 +1,20 @@
 "use client";
 
+import { language } from "@/lib/english-races";
 import { useEffect, useState } from "react";
 
 type Chapter = { id: string; label: string };
 
 export function RaceChapterNav({
   chapters,
+  english = false,
   compact = false,
 }: {
   chapters: Chapter[];
+  english?: boolean;
   compact?: boolean;
 }) {
+  const t = language(english);
   const [active, setActive] = useState(chapters[0]?.id);
 
   useEffect(() => {
@@ -50,9 +54,9 @@ export function RaceChapterNav({
   return (
     <nav
       className={compact ? "race-contents race-contents-compact" : "race-contents"}
-      aria-label="頁內目錄"
+      aria-label={t("頁內目錄", "On this page")}
     >
-      {!compact && <h2>頁內目錄</h2>}
+      {!compact && <h2>{t("頁內目錄", "On this page")}</h2>}
       {chapters.map(({ id, label }) => (
         <a key={id} href={`#${id}`} aria-current={active === id ? "location" : undefined}>
           {label}

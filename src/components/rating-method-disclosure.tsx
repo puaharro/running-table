@@ -1,8 +1,16 @@
 "use client";
 
+import { language } from "@/lib/english-races";
 import { useEffect, useState, type ReactNode } from "react";
 
-export function RatingMethodDisclosure({ children }: { children: ReactNode }) {
+export function RatingMethodDisclosure({
+  children,
+  english = false,
+}: {
+  children: ReactNode;
+  english?: boolean;
+}) {
+  const t = language(english);
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const reveal = () => {
@@ -28,7 +36,7 @@ export function RatingMethodDisclosure({ children }: { children: ReactNode }) {
       onToggle={(event) => setOpen(event.currentTarget.open)}
       tabIndex={-1}
     >
-      <summary>了解評分準則及發布流程</summary>
+      <summary>{t("了解評分準則及發布流程", "Rating criteria and publication process")}</summary>
       <div className="ratings-method-body">{children}</div>
     </details>
   );

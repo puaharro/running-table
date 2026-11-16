@@ -2,34 +2,73 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 import { HomeHighlights } from "@/components/home-highlights";
-import { races } from "@/data/races";
+import { publicRaces as races } from "@/data/races";
+import { homeRaceNews } from "@/lib/home-race-news";
 
-it("offers a real search form and the next three races in chronological order", () => {
-  const html = renderToStaticMarkup(
-    createElement(HomeHighlights, { races, initialNow: "2026-11-01T12:00:00+08:00" }),
-  );
+const initialNow = "2026-11-16T12:00:00+08:00";
+
+it("keeps search and links localised deadline headlines to registration details", () => {
+  const html = renderToStaticMarkup(createElement(HomeHighlights, { races, initialNow }));
   expect(html).toContain('action="/races/"');
   expect(html).toContain('name="q"');
-  const agenda = html.split('<ol class="home-agenda">')[1].split("</ol>")[0];
-  expect(agenda.match(/<li>/g)).toHaveLength(3);
-  const orderedIds = [
-    "rmac-gold-coast-15k-2026",
-    "hzmb-half-marathon-2026",
-    "pocari-sweat-run-fest-2026",
-  ];
-  const positions = orderedIds.map((id) => agenda.indexOf(id));
-  expect(positions.every((position) => position >= 0)).toBe(true);
-  expect(positions).toEqual([...positions].sort((a, b) => a - b));
+  expect(html).toContain("最新消息");
+  const news = html.split('class="home-news-sheet"')[1].split("<aside")[0];
+  expect(news).toMatch(/sai-kung-district-run-2026\/?#registration-groups/);
+  expect(news).toContain("距報名截止尚餘 2 日");
+  expect(news.indexOf("sai-kung-district-run-2026")).toBeLessThan(
+    news.indexOf("ocean-park-run-for-survival-2026"),
+  );
+
+  const english = renderToStaticMarkup(
+    createElement(HomeHighlights, { races, initialNow, english: true }),
+  );
+  expect(english).toContain('action="/en/races/"');
+  expect(english).toContain("Latest news");
+  expect(english).toMatch(/sai-kung-district-run-2026\/?#registration-groups/);
+  expect(english).toContain("/en/races/2026/sai-kung-district-run-2026");
+  expect(english).toContain("entries close in 2 days");
 });
 
-it("removes elapsed races and provides a useful empty state after the season", () => {
-  const afterBridge = renderToStaticMarkup(
-    createElement(HomeHighlights, { races, initialNow: "2026-11-16T12:00:00+08:00" }),
+it("uses Hong Kong midnight for date-only deadlines and drops timed entries at cutoff", () => {
+  const id = "sai-kung-district-run-2026-deadline";
+  const itemsAt = (now: string) => homeRaceNews(races, now);
+  expect(itemsAt("2026-11-18T15:59:00Z").find((item) => item.id === id)?.headline).toContain(
+    "今日截止",
   );
-  expect(afterBridge).not.toContain("hzmb-half-marathon-2026");
+  expect(itemsAt("2026-11-18T16:00:00Z").map((item) => item.id)).not.toContain(id);
+  expect(
+    itemsAt("2026-11-27T23:58:00+08:00").some((item) => item.id === "schkm-youth-2027-deadline"),
+  ).toBe(true);
+  expect(
+    itemsAt("2026-11-27T23:59:00+08:00").some((item) => item.id === "schkm-youth-2027-deadline"),
+  ).toBe(false);
+});
+
+it("shows an explicitly verified course map and removes expired news", () => {
+  const race = structuredClone(races.find((item) => item.id === "schkm-youth-2027")!);
+  race.sources!.push({
+    id: "test-course-map",
+    title: "Test organiser course map",
+    url: "https://example.com/test-map",
+    checkedAt: initialNow,
+    fields: ["courseMap"],
+  });
+  expect(
+    homeRaceNews([race], "2026-11-16T11:59:00+08:00").some((item) =>
+      item.href.includes("test-course-map"),
+    ),
+  ).toBe(false);
+  expect(
+    homeRaceNews([race], initialNow, true).find((item) => item.category === "Course map"),
+  ).toMatchObject({
+    category: "Course map",
+    href: "/en/races/2027/schkm-youth-2027/#source-test-course-map",
+  });
+  expect(homeRaceNews([race], "2026-12-17T12:00:00+08:00")).toEqual([]);
+
   const afterSeason = renderToStaticMarkup(
     createElement(HomeHighlights, { races, initialNow: "2028-01-01T12:00:00+08:00" }),
   );
-  expect(afterSeason).toContain("新一季賽事整理中");
+  expect(afterSeason).toContain("暫無已核實的最新消息");
   expect(afterSeason).toMatch(/href="\/races\/?"/);
 });

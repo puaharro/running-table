@@ -1,3 +1,5 @@
+import { englishDate, englishTimestamp, language } from "./english-races";
+import { englishRaceTerm } from "./race-terms.en";
 import { validDate, hongKongToday } from "./races";
 import { verifiedRegistrationDeadline } from "./registration-deadline";
 import type { Race } from "./types";
@@ -11,19 +13,27 @@ export type CalendarItem = {
   location?: string;
   description: string;
 };
-export function calendarItems(race: Race, now: string): CalendarItem[] {
+export function calendarItems(race: Race, now: string, english = false): CalendarItem[] {
   if (race.status !== "scheduled") return [];
+  const t = language(english);
+  const raceName = english ? race.englishName : race.name;
   const today = hongKongToday(new Date(now));
   const items: CalendarItem[] = race.groups
     .filter((g) => validDate(g.date) && g.date >= today)
     .map((g) => ({
       id: `${race.id}:${g.id}:race`,
-      label: `比賽日 · ${g.name} · ${g.date}`,
-      title: `${race.name} · ${g.name}`,
+      label: t(
+        `比賽日 · ${g.name} · ${g.date}`,
+        `Race day · ${englishRaceTerm(g.name, true)} · ${g.date}`,
+      ),
+      title: `${raceName} · ${englishRaceTerm(g.name, english)}`,
       date: g.date,
       timed: false,
-      location: g.venue ?? race.venue,
-      description: "比賽日全日行程；不代表起跑時間或已獲參賽資格。",
+      location: englishRaceTerm(g.venue ?? race.venue, english),
+      description: t(
+        "比賽日全日行程；不代表起跑時間或已獲參賽資格。",
+        "All-day race date. Check the organiser for your start time and entry confirmation.",
+      ),
     }));
   for (const group of race.groups)
     for (const channel of group.channels) {
@@ -33,11 +43,18 @@ export function calendarItems(race: Race, now: string): CalendarItem[] {
       const exact = timed ? date : undefined;
       items.push({
         id: `${race.id}:${group.id}:${channel.id}:deadline`,
-        label: `報名截止 · ${group.name}／${channel.name} · ${exact ? new Date(exact).toLocaleString("zh-HK", { timeZone: "Asia/Hong_Kong", hour12: false }) + " 香港時間" : date + "（時刻待核實）"}`,
-        title: `報名截止｜${race.name} · ${group.name}／${channel.name}`,
+        label: english
+          ? `Entry deadline · ${englishRaceTerm(group.name, true)} / ${englishRaceTerm(channel.name, true)} · ${exact ? englishTimestamp(exact) : englishDate(date) + " (time unverified)"}`
+          : `報名截止 · ${group.name}／${channel.name} · ${exact ? new Date(exact).toLocaleString("zh-HK", { timeZone: "Asia/Hong_Kong", hour12: false }) + " 香港時間" : date + "（時刻待核實）"}`,
+        title: t(
+          `報名截止｜${race.name} · ${group.name}／${channel.name}`,
+          `Entry deadline | ${raceName} · ${englishRaceTerm(group.name, true)} / ${englishRaceTerm(channel.name, true)}`,
+        ),
         date,
         timed: !!exact,
-        description: `只適用此報名渠道，並非結果公布或付款期限；不保證即時名額。${exact ? "截止時間以香港時間顯示，日曆會按裝置時區轉換。" : "只核實截止日期，截止時刻待核實；此為全日行程。"}\n官方依據：${sources.map((s) => s.url).join("\n")}\n核對：${sources.map((s) => s.checkedAt).join("、")}`,
+        description: english
+          ? `The deadline applies to this entry option. It does not confirm availability. ${exact ? "The calendar converts Hong Kong time to your device time zone." : "Only the date is verified, so this is an all-day event."}\nOfficial sources: ${sources.map((source) => source.url).join("\n")}\nChecked: ${sources.map((source) => source.checkedAt).join(", ")}`
+          : `只適用此報名渠道，並非結果公布或付款期限；不保證即時名額。${exact ? "截止時間以香港時間顯示，日曆會按裝置時區轉換。" : "只核實截止日期，截止時刻待核實；此為全日行程。"}\n官方依據：${sources.map((s) => s.url).join("\n")}\n核對：${sources.map((s) => s.checkedAt).join("、")}`,
       });
     }
   return items;
@@ -68,7 +85,7 @@ export function foldCalendarLine(line: string) {
   }
   return result;
 }
-export function calendarFile(item: CalendarItem, url: string, now: string) {
+export function calendarFile(item: CalendarItem, url: string, now: string, english = false) {
   if (!/^https?:$/.test(new URL(url).protocol)) throw new Error("Invalid calendar URL");
   const start = item.timed ? utc(item.date) : item.date.replace(/-/g, "");
   const end = item.timed
@@ -80,7 +97,7 @@ export function calendarFile(item: CalendarItem, url: string, now: string) {
     [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
-      "PRODID:-//NXTGO//Race Calendar//ZH",
+      `PRODID:-//NXTGO//Race Calendar//${english ? "EN" : "ZH"}`,
       "CALSCALE:GREGORIAN",
       "BEGIN:VEVENT",
       `UID:${encodeURIComponent(item.id)}@nxtgo`,
@@ -88,7 +105,7 @@ export function calendarFile(item: CalendarItem, url: string, now: string) {
       `DTSTART${item.timed ? "" : ";VALUE=DATE"}:${start}`,
       ...end,
       `SUMMARY:${escapeText(item.title)}`,
-      `DESCRIPTION:${escapeText(item.description + "\n此為下載時的資料快照，不會自動同步改期；請再次查看大會資料。")}`,
+      `DESCRIPTION:${escapeText(item.description + (english ? "\nThis download is a snapshot. Check the organiser for changes." : "\n此為下載時的資料快照，不會自動同步改期；請再次查看大會資料。"))}`,
       ...(item.location ? [`LOCATION:${escapeText(item.location)}`] : []),
       `URL:${url.replace(/[\r\n]/g, "")}`,
       "TRANSP:TRANSPARENT",

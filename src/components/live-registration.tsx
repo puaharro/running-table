@@ -1,5 +1,8 @@
 "use client";
 
+import { RaceDataText } from "./race-data-text";
+import { englishDate, englishDistance, englishTimestamp, language } from "@/lib/english-races";
+import { englishRaceTerm } from "@/lib/race-terms.en";
 import { useEffect, useState } from "react";
 import { useClock } from "@/lib/use-clock";
 export { useClock } from "@/lib/use-clock";
@@ -28,10 +31,13 @@ import { channelPriceHeading, channelPriceLabel } from "@/lib/registration-displ
 export function PublicRegistrationCountdown({
   race,
   initialNow,
+  english = false,
 }: {
   race: Race;
   initialNow: string;
+  english?: boolean;
 }) {
+  const t = language(english);
   const now = useClock(initialNow);
   const groups = race.groups.map((group) => ({
     ...group,
@@ -39,13 +45,16 @@ export function PublicRegistrationCountdown({
   }));
   const countdown = registrationCountdown(race, groups, now);
   const status = groups.some((group) => group.channels.length)
-    ? statusSummary(race, groups, now).label
-    : "未有一般公眾報名資料";
+    ? englishRaceTerm(statusSummary(race, groups, now).label, english)
+    : t("未有一般公眾報名資料", "No general public entry information");
 
   return (
-    <section className="public-registration-countdown" aria-label="一般公眾報名">
+    <section
+      className="public-registration-countdown"
+      aria-label={t("一般公眾報名", "General public entry")}
+    >
       <h2>
-        <Icon name="clock" size={18} /> 一般公眾報名
+        <Icon name="clock" size={18} /> {t("一般公眾報名", "General public entry")}
       </h2>
       {countdown ? (
         <>
@@ -54,16 +63,19 @@ export function PublicRegistrationCountdown({
             data-timed={countdown.deadline.includes("T")}
             data-urgent={countdown.urgent}
           >
-            {countdown.deadline.includes("T") ? countdown.label : "接受申請"}
+            {countdown.deadline.includes("T")
+              ? englishRaceTerm(countdown.label, english)
+              : t("接受申請", "Accepting entries")}
           </p>
           <dl className="public-registration-deadline">
-            <dt>報名截止</dt>
+            <dt>{t("報名截止", "Entry deadline")}</dt>
             <dd>
-              <Timestamp value={countdown.deadline} />
+              <Timestamp english={english} value={countdown.deadline} />
             </dd>
           </dl>
           <a href={`#channel-${countdown.channelId}`}>
-            {countdown.groupName} · {countdown.channelName} <Icon name="arrow" size={16} />
+            {englishRaceTerm(countdown.groupName, english)} ·{" "}
+            {englishRaceTerm(countdown.channelName, english)} <Icon name="arrow" size={16} />
           </a>
         </>
       ) : (
@@ -73,58 +85,92 @@ export function PublicRegistrationCountdown({
   );
 }
 
-export function LiveRaceStatus({ race, initialNow }: { race: Race; initialNow: string }) {
+export function LiveRaceStatus({
+  race,
+  initialNow,
+  english = false,
+}: {
+  race: Race;
+  initialNow: string;
+  english?: boolean;
+}) {
   const now = useClock(initialNow),
     summary = statusSummary(race, race.groups, now);
-  return <StatusBadge status={summary.key}>{summary.label}</StatusBadge>;
+  return (
+    <StatusBadge english={english} status={summary.key}>
+      {englishRaceTerm(summary.label, english)}
+    </StatusBadge>
+  );
 }
 export function RegistrationVerification({
   race,
   group,
   channel,
   now,
+  english = false,
 }: {
   race: Race;
   group: RaceGroup;
   channel: RegistrationChannel;
   now: string;
+  english?: boolean;
 }) {
-  const reason = registrationUncertaintyReason(race, group, channel, now);
+  const t = language(english);
+  const reason = registrationUncertaintyReason(race, group, channel, now, english);
   return (
     <div className="registration-verification">
       <p>
-        此渠道最後核對：
+        {t("此渠道最後核對：", "Entry channel last checked:")}
         {channel.registrationVerifiedAt ? (
           <time dateTime={channel.registrationVerifiedAt}>
-            {formatTimestamp(channel.registrationVerifiedAt)} HKT
+            {english
+              ? englishTimestamp(channel.registrationVerifiedAt)
+              : `${formatTimestamp(channel.registrationVerifiedAt)} HKT`}
           </time>
         ) : (
-          "尚未完成"
+          t("尚未完成", "Pending")
         )}
       </p>
       {reason && <p className="verification-reason">{reason}</p>}
     </div>
   );
 }
-function Timestamp({ value }: { value: string }) {
+function Timestamp({ value, english = false }: { value: string; english?: boolean }) {
   return (
     <time dateTime={value}>
-      {value.includes("T")
-        ? `${formatTimestamp(value)} HKT`
-        : displayDate(value, { year: "numeric" })}
+      {english
+        ? value.includes("T")
+          ? englishTimestamp(value)
+          : englishDate(value)
+        : value.includes("T")
+          ? `${formatTimestamp(value)} HKT`
+          : displayDate(value, { year: "numeric" })}
     </time>
   );
 }
-function RegistrationTerm({ term }: { term: "公眾抽籤" | "最低籌款額" }) {
+function RegistrationTerm({
+  term,
+  english = false,
+}: {
+  term: "公眾抽籤" | "最低籌款額";
+  english?: boolean;
+}) {
+  const t = language(english);
   return (
     <details className="registration-term">
       <summary>
-        {term} <span aria-hidden="true">?</span>
+        {englishRaceTerm(term, english)} <span aria-hidden="true">?</span>
       </summary>
       <p>
         {term === "公眾抽籤"
-          ? "提交抽籤申請後，請等候大會公布結果，以確認是否獲得名額。中籤後如設有付款期限，請按時付款。"
-          : "透過該渠道參賽所需達到的最低籌款額。如另有參賽費，請按主辦方條款核對。"}
+          ? t(
+              "提交抽籤申請後，請等候大會公布結果，以確認是否獲得名額。中籤後如設有付款期限，請按時付款。",
+              "After applying, wait for the organiser to confirm the ballot results. If selected, pay by the stated deadline.",
+            )
+          : t(
+              "透過該渠道參賽所需達到的最低籌款額。如另有參賽費，請按主辦方條款核對。",
+              "This is the minimum you must raise to enter through this option. Check the organiser’s terms for any separate entry fee.",
+            )}
       </p>
     </details>
   );
@@ -134,12 +180,15 @@ function ChannelCard({
   group,
   channel,
   now,
+  english = false,
 }: {
   race: Race;
   group: RaceGroup;
   channel: RegistrationChannel;
   now: string;
+  english?: boolean;
 }) {
+  const t = language(english);
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const reveal = () => {
@@ -159,79 +208,117 @@ function ChannelCard({
   }, [channel.id]);
   const deadline = channel.registrationClosesAt ?? channel.deadline;
   return (
-    <article className="registration-channel" aria-label={`${group.name} · ${channel.name}`}>
+    <article
+      className="registration-channel"
+      aria-label={`${englishRaceTerm(group.name, english)} · ${englishRaceTerm(channel.name, english)}`}
+    >
       <details
         className="channel-details"
         open={open}
         onToggle={(event) => setOpen(event.currentTarget.open)}
       >
         <summary className="channel-toggle">
-          <h4>{channel.name}</h4>
-          <StatusBadge status={channelStatus(race, group, channel, now)} />
+          <h4>{englishRaceTerm(channel.name, english)}</h4>
+          <StatusBadge english={english} status={channelStatus(race, group, channel, now)} />
           <span className="channel-toggle-facts">
             <span>
-              {channelPriceHeading(channel)}：{channelPriceLabel(channel)}
-              {channel.priceUnit && ` · ${channel.priceUnit}`}
+              {channelPriceHeading(channel, english)}：{channelPriceLabel(channel, english)}
+              {channel.priceUnit && ` · ${englishRaceTerm(channel.priceUnit, english)}`}
             </span>
-            <span>截止：{deadline ? <Timestamp value={deadline} /> : "待核實"}</span>
+            <span>
+              {t("截止：", "Deadline:")}
+              {deadline ? (
+                <Timestamp english={english} value={deadline} />
+              ) : (
+                t("待核實", "Unverified")
+              )}
+            </span>
           </span>
         </summary>
         <div className="channel-details-body">
           <p>
-            {channelTypeLabels[channel.type]}
-            {channel.registrationMethod !== "公眾抽籤" && ` · ${channel.registrationMethod}`}
+            {englishRaceTerm(channelTypeLabels[channel.type], english)}
+            {channel.registrationMethod !== "公眾抽籤" &&
+              ` · ${englishRaceTerm(channel.registrationMethod, english)}`}
           </p>
-          {channel.registrationMethod === "公眾抽籤" && <RegistrationTerm term="公眾抽籤" />}
+          {channel.registrationMethod === "公眾抽籤" && (
+            <RegistrationTerm english={english} term="公眾抽籤" />
+          )}
           <dl>
             <div>
-              <dt>申請資格／條件</dt>
-              <dd>{channel.eligibility}</dd>
+              <dt>{t("申請資格／條件", "Eligibility and conditions")}</dt>
+              <dd>
+                <RaceDataText value={channel.eligibility} english={english} />
+              </dd>
             </div>
             <div>
               <dt>
                 {channel.priceType === "minimum-donation" ? (
-                  <RegistrationTerm term="最低籌款額" />
+                  <RegistrationTerm english={english} term="最低籌款額" />
                 ) : (
-                  channelPriceHeading(channel)
+                  channelPriceHeading(channel, english)
                 )}
               </dt>
               <dd>
-                {channelPriceLabel(channel)}
-                {channel.priceUnit && ` · ${channel.priceUnit}`}
-                {channel.priceNote && <small>{channel.priceNote}</small>}
+                {channelPriceLabel(channel, english)}
+                {channel.priceUnit && ` · ${englishRaceTerm(channel.priceUnit, english)}`}
+                {channel.priceNote && (
+                  <small>
+                    <RaceDataText value={channel.priceNote} english={english} />
+                  </small>
+                )}
               </dd>
             </div>
             {(channel.registrationOpensAt || channel.registrationStart) && (
               <div>
-                <dt>申請開始</dt>
+                <dt>{t("申請開始", "Applications open")}</dt>
                 <dd>
-                  <Timestamp value={(channel.registrationOpensAt ?? channel.registrationStart)!} />
+                  <Timestamp
+                    english={english}
+                    value={(channel.registrationOpensAt ?? channel.registrationStart)!}
+                  />
                 </dd>
               </div>
             )}
             <div>
-              <dt>申請截止 · 香港時間</dt>
-              <dd>{deadline ? <Timestamp value={deadline} /> : "待核實／未有已核對期限"}</dd>
+              <dt>{t("申請截止 · 香港時間", "Application deadline · Hong Kong time")}</dt>
+              <dd>
+                {deadline ? (
+                  <Timestamp english={english} value={deadline} />
+                ) : (
+                  t("待核實／未有已核對期限", "No verified deadline")
+                )}
+              </dd>
             </div>
             {channel.resultAnnouncedAt && (
               <div>
-                <dt>結果公布</dt>
+                <dt>{t("結果公布", "Results announcement")}</dt>
                 <dd>
-                  <Timestamp value={channel.resultAnnouncedAt} />
+                  <Timestamp english={english} value={channel.resultAnnouncedAt} />
                 </dd>
               </div>
             )}
             {channel.paymentClosesAt && (
               <div>
-                <dt>獲確認後付款截止</dt>
+                <dt>{t("獲確認後付款截止", "Payment deadline after confirmation")}</dt>
                 <dd>
-                  <Timestamp value={channel.paymentClosesAt} />
+                  <Timestamp english={english} value={channel.paymentClosesAt} />
                 </dd>
               </div>
             )}
           </dl>
-          {channel.registrationNote && <p className="group-note">{channel.registrationNote}</p>}
-          <RegistrationVerification race={race} group={group} channel={channel} now={now} />
+          {channel.registrationNote && (
+            <p className="group-note">
+              <RaceDataText value={channel.registrationNote} english={english} />
+            </p>
+          )}
+          <RegistrationVerification
+            english={english}
+            race={race}
+            group={group}
+            channel={channel}
+            now={now}
+          />
           {channel.registrationUrl && (
             <a
               className="text-link group-official-link"
@@ -239,16 +326,16 @@ function ChannelCard({
               target="_blank"
               rel="noopener noreferrer"
             >
-              查看此渠道官方資料 ↗
+              {t("查看此渠道官方資料 ↗", "Official entry information ↗")}
             </a>
           )}
           <div className="group-sources">
-            此渠道核實依據：
+            {t("此渠道核實依據：", "Sources for this entry option:")}
             {channel.sourceIds.map((id) => {
               const source = race.sources?.find((source) => source.id === id);
               return source ? (
                 <a key={id} href={source.url} target="_blank" rel="noopener noreferrer">
-                  {source.title}
+                  <RaceDataText value={source.title} english={english} />
                 </a>
               ) : null;
             })}
@@ -258,7 +345,16 @@ function ChannelCard({
     </article>
   );
 }
-export function RegistrationSummary({ race, initialNow }: { race: Race; initialNow: string }) {
+export function RegistrationSummary({
+  race,
+  initialNow,
+  english = false,
+}: {
+  race: Race;
+  initialNow: string;
+  english?: boolean;
+}) {
+  const t = language(english);
   const now = useClock(initialNow);
   const [sort, setSort] = useState<"ascending" | "descending">();
   const groups = sort
@@ -266,29 +362,41 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
         (a, b) => (a.distanceKm - b.distanceKm) * (sort === "ascending" ? 1 : -1),
       )
     : race.groups;
-  const fields = ["距離", "起點", "資格／時限", "公眾報名"];
+  const fields = [
+    t("距離", "Distance"),
+    t("起點", "Start"),
+    t("資格／時限", "Eligibility / time limit"),
+    t("公眾報名", "Public entry"),
+  ];
   const rows = groups.map((group) => {
     const publicChannels = group.channels.filter((channel) => channel.type === "general");
     return {
       group,
       values: [
-        distanceLabel(group.distanceKm),
-        groupLocations(race, [group])[0].venue ?? "起點待核實",
-        group.limit ?? "待核實",
+        (english ? englishDistance : distanceLabel)(group.distanceKm),
+        englishRaceTerm(groupLocations(race, [group])[0].venue, english) ??
+          t("起點待核實", "Start location unverified"),
+        (group.limit && englishRaceTerm(group.limit, english)) ?? t("待核實", "Unverified"),
         publicChannels.length
-          ? statusSummary(race, [{ ...group, channels: publicChannels }], now).label
-          : "未有公眾報名資料",
+          ? englishRaceTerm(
+              statusSummary(race, [{ ...group, channels: publicChannels }], now).label,
+              english,
+            )
+          : t("未有公眾報名資料", "No public entry information"),
       ],
     };
   });
   return (
     <section className="registration-summary" aria-labelledby="registration-summary-heading">
       <div className="registration-summary-heading">
-        <h2 id="registration-summary-heading">報名重點</h2>
-        <a href="#registration-groups">查看完整組別資料 ↓</a>
+        <h2 id="registration-summary-heading">{t("報名重點", "Entry at a glance")}</h2>
+        <a href="#registration-groups">{t("查看完整組別資料 ↓", "See all category details ↓")}</a>
       </div>
       <p>
-        每個渠道有獨立資格、價格及期限；接受申請並不表示名額已獲確認。公布結果的日期和付款期限另行列出，與申請截止日期有別。
+        {t(
+          "每個渠道有獨立資格、價格及期限；接受申請並不表示名額已獲確認。公布結果的日期和付款期限另行列出，與申請截止日期有別。",
+          "Each option has its own eligibility, fees and deadlines. Applying does not guarantee a place. Results and payment dates are listed separately from the application deadline.",
+        )}
       </p>
       <div className="group-compare">
         <button
@@ -297,16 +405,21 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
           onClick={() => setSort(sort === "ascending" ? "descending" : "ascending")}
         >
           {sort === "ascending"
-            ? "距離：短至長"
+            ? t("距離：短至長", "Distance: shortest first")
             : sort === "descending"
-              ? "距離：長至短"
-              : "按距離排序"}
+              ? t("距離：長至短", "Distance: longest first")
+              : t("按距離排序", "Sort by distance")}
         </button>
         <table className="group-compare-table">
-          <caption className="sr-only">各組起點、資格及公眾報名比較</caption>
+          <caption className="sr-only">
+            {t(
+              "各組起點、資格及公眾報名比較",
+              "Compare starts, eligibility and public entry by category",
+            )}
+          </caption>
           <thead>
             <tr>
-              <th scope="col">組別</th>
+              <th scope="col">{t("組別", "Category")}</th>
               {fields.map((field, index) => (
                 <th key={field} scope="col" aria-sort={index === 0 ? sort : undefined}>
                   {field}
@@ -318,7 +431,7 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
             {rows.map(({ group, values }) => (
               <tr key={group.id}>
                 <th scope="row">
-                  <a href={`#group-${group.id}`}>{group.name}</a>
+                  <a href={`#group-${group.id}`}>{englishRaceTerm(group.name, english)}</a>
                 </th>
                 {values.map((value, index) => (
                   <td key={fields[index]}>{value}</td>
@@ -330,7 +443,7 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
         <ul className="group-compare-list" role="list">
           {rows.map(({ group, values }) => (
             <li key={group.id}>
-              <a href={`#group-${group.id}`}>{group.name}</a>
+              <a href={`#group-${group.id}`}>{englishRaceTerm(group.name, english)}</a>
               <dl>
                 {values.map((value, index) => (
                   <div key={fields[index]}>
@@ -351,14 +464,15 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
               open={group.channels.length + Number(!!group.charityEntry) === 1}
             >
               <summary>
-                <h3>{group.name}</h3>
+                <h3>{englishRaceTerm(group.name, english)}</h3>
                 <span>
-                  {group.channels.length + Number(!!group.charityEntry)} 個渠道 ·{" "}
+                  {group.channels.length + Number(!!group.charityEntry)}{" "}
+                  {t("個渠道 ·", "entry options ·")}{" "}
                   {
                     group.channels.filter((c) => channelStatus(race, group, c, now) === "open")
                       .length
                   }{" "}
-                  個接受申請
+                  {t("個接受申請", "accepting entries")}
                 </span>
               </summary>
               <ul className="channel-summary-list">
@@ -370,39 +484,52 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
                   )
                   .map((channel) => (
                     <li key={channel.id}>
-                      <strong>{channel.name}</strong>{" "}
-                      <StatusBadge status={channelStatus(race, group, channel, now)} />
+                      <strong>{englishRaceTerm(channel.name, english)}</strong>{" "}
+                      <StatusBadge
+                        english={english}
+                        status={channelStatus(race, group, channel, now)}
+                      />
                       <dl className="channel-comparison">
                         <div>
-                          <dt>{channelPriceHeading(channel)}</dt>
+                          <dt>{channelPriceHeading(channel, english)}</dt>
                           <dd>
-                            {channelPriceLabel(channel)}
-                            {channel.priceUnit && ` · ${channel.priceUnit}`}
+                            {channelPriceLabel(channel, english)}
+                            {channel.priceUnit &&
+                              ` · ${englishRaceTerm(channel.priceUnit, english)}`}
                           </dd>
                         </div>
                         <div>
-                          <dt>申請截止 · 香港時間</dt>
+                          <dt>
+                            {t("申請截止 · 香港時間", "Application deadline · Hong Kong time")}
+                          </dt>
                           <dd>
                             {channel.registrationClosesAt || channel.deadline ? (
                               <Timestamp
+                                english={english}
                                 value={(channel.registrationClosesAt ?? channel.deadline)!}
                               />
                             ) : (
-                              "期限待核實"
+                              t("期限待核實", "Deadline unverified")
                             )}
                           </dd>
                         </div>
                       </dl>
-                      {channel.priceNote && <p>{channel.priceNote}</p>}
-                      <p>{channel.eligibility}</p>
+                      {channel.priceNote && (
+                        <p>
+                          <RaceDataText value={channel.priceNote} english={english} />
+                        </p>
+                      )}
+                      <p>
+                        <RaceDataText value={channel.eligibility} english={english} />
+                      </p>
                       <a className="text-link" href={`#channel-${channel.id}`}>
-                        查看完整條件及官方資料 ↓
+                        {t("查看完整條件及官方資料 ↓", "See full terms and official information ↓")}
                       </a>
                     </li>
                   ))}
                 {group.charityEntry && (
                   <li>
-                    <CharityEntry group={group} />
+                    <CharityEntry english={english} group={group} />
                   </li>
                 )}
               </ul>
@@ -416,12 +543,15 @@ export function RegistrationSummary({ race, initialNow }: { race: Race; initialN
 export function RegistrationGroups({
   race,
   initialNow,
+  english = false,
   previewEdition,
 }: {
   race: Race;
   initialNow: string;
+  english?: boolean;
   previewEdition?: { groupId: string; year: number };
 }) {
+  const t = language(english);
   const now = useClock(initialNow);
   const [selectedGroup, setSelectedGroup] = useState("");
   useEffect(() => {
@@ -456,31 +586,47 @@ export function RegistrationGroups({
           tabIndex={-1}
         >
           <div className="group-card-top">
-            <strong>{distanceLabel(group.distanceKm)}</strong>
+            <strong>{(english ? englishDistance : distanceLabel)(group.distanceKm)}</strong>
           </div>
           <h3>
-            {group.name}
+            {englishRaceTerm(group.name, english)}
             {selectedGroup === `group-${group.id}` && (
-              <span className="selected-group-label"> · 所選組別</span>
+              <span className="selected-group-label">
+                {" "}
+                {t("· 所選組別", "· Selected category")}
+              </span>
             )}
           </h3>
           <dl className="group-facts">
             <div>
-              <dt>比賽日期</dt>
-              <dd>{displayDate(group.date, { year: "numeric" })}</dd>
-            </div>
-            <div>
-              <dt>組別起點</dt>
+              <dt>{t("比賽日期", "Race date")}</dt>
               <dd>
-                {groupLocations(race, [group])[0].venue ?? "起點待核實，請查看官方組別資料。"}
+                {english ? englishDate(group.date) : displayDate(group.date, { year: "numeric" })}
               </dd>
             </div>
             <div>
-              <dt>參賽資格／賽事時限</dt>
-              <dd>{group.limit ?? "待核實，請查看官方組別資料。"}</dd>
+              <dt>{t("組別起點", "Category start")}</dt>
+              <dd>
+                {englishRaceTerm(groupLocations(race, [group])[0].venue, english) ??
+                  t(
+                    "起點待核實，請查看官方組別資料。",
+                    "Start location unverified. See the organiser’s category information.",
+                  )}
+              </dd>
+            </div>
+            <div>
+              <dt>{t("參賽資格／賽事時限", "Eligibility / course time limit")}</dt>
+              <dd>
+                {(group.limit && englishRaceTerm(group.limit, english)) ??
+                  t(
+                    "待核實，請查看官方組別資料。",
+                    "Unverified. See the organiser’s category information.",
+                  )}
+              </dd>
             </div>
           </dl>
           <GroupRatings
+            english={english}
             race={race}
             group={group}
             excludedEditionYear={
@@ -488,22 +634,29 @@ export function RegistrationGroups({
             }
           />
           <h4 className="channels-heading">
-            報名渠道 · {group.channels.length + Number(!!group.charityEntry)}
+            {t("報名渠道 ·", "Entry options ·")}{" "}
+            {group.channels.length + Number(!!group.charityEntry)}
           </h4>
           <ul className="registration-channel-list" role="list">
             {group.channels.map((channel) => (
               <li id={`channel-${channel.id}`} key={channel.id}>
-                <ChannelCard race={race} group={group} channel={channel} now={now} />
+                <ChannelCard
+                  english={english}
+                  race={race}
+                  group={group}
+                  channel={channel}
+                  now={now}
+                />
               </li>
             ))}
             {group.charityEntry && (
               <li id={"channel-" + group.id + "-charity"}>
-                <CharityEntry group={group} />
+                <CharityEntry english={english} group={group} />
               </li>
             )}
           </ul>
           <a className="group-back-link" href="#registration-groups">
-            返回組別選單 ↑
+            {t("返回組別選單 ↑", "Back to categories ↑")}
           </a>
         </section>
       ))}
@@ -514,60 +667,76 @@ export function RegistrationGroups({
 export function RaceOverview({
   race,
   initialNow,
+  english = false,
   experienceHref,
   experienceLabel,
 }: {
   race: Race;
   initialNow: string;
+  english?: boolean;
   experienceHref: string;
   experienceLabel: string;
 }) {
+  const t = language(english);
   const now = useClock(initialNow);
   const statuses = race.groups.flatMap((g) =>
     g.channels.map((c) => channelStatus(race, g, c, now)),
   );
   return (
-    <section className="race-overview" aria-label="賽事重點">
+    <section className="race-overview" aria-label={t("賽事重點", "Race at a glance")}>
       <dl>
         <div>
-          <dt>比賽日期</dt>
+          <dt>{t("比賽日期", "Race date")}</dt>
           <dd>
-            {displayDate(race.date, { year: "numeric" })}
-            {race.date !== race.endDate && " 至 " + displayDate(race.endDate)}
+            {english ? englishDate(race.date) : displayDate(race.date, { year: "numeric" })}
+            {race.date !== race.endDate &&
+              (english ? " – " + englishDate(race.endDate) : " 至 " + displayDate(race.endDate))}
           </dd>
         </div>
         <div>
-          <dt>參賽組別</dt>
-          <dd>{[...new Set(race.groups.map((g) => distanceLabel(g.distanceKm)))].join(" / ")}</dd>
+          <dt>{t("參賽組別", "Race categories")}</dt>
+          <dd>
+            {[
+              ...new Set(
+                race.groups.map((g) => (english ? englishDistance : distanceLabel)(g.distanceKm)),
+              ),
+            ].join(" / ")}
+          </dd>
         </div>
         <div>
-          <dt>地區／起點</dt>
-          <dd>{race.venue}</dd>
+          <dt>{t("地區／起點", "Region / start location")}</dt>
+          <dd>{englishRaceTerm(race.venue, english)}</dd>
         </div>
         <div>
-          <dt>報名概況</dt>
+          <dt>{t("報名概況", "Registration")}</dt>
           <dd>
             {statuses.length ? (
-              <LiveRaceStatus race={race} initialNow={now} />
+              <LiveRaceStatus english={english} race={race} initialNow={now} />
             ) : (
-              "詳情請參閱大會網站"
+              t("詳情請參閱大會網站", "See the organiser’s website")
             )}
             {!!statuses.length && (
               <small>
-                {statuses.filter((s) => s === "open").length} 個渠道接受申請 ·{" "}
-                {statuses.filter((s) => s === "unknown").length} 個待核實
+                {statuses.filter((s) => s === "open").length}{" "}
+                {t("個渠道接受申請 ·", "options accepting entries ·")}{" "}
+                {statuses.filter((s) => s === "unknown").length} {t("個待核實", "unverified")}
               </small>
             )}
           </dd>
         </div>
       </dl>
-      <p>報名狀態按渠道分開，接受申請不代表獲得名額。</p>
-      <nav aria-label="賽事重點入口">
-        <a href="#race-about">賽事概覽 ↓</a>
-        <a href="#registration-groups">報名渠道 ↓</a>
+      <p>
+        {t(
+          "報名狀態按渠道分開，接受申請不代表獲得名額。",
+          "Entry status is shown separately for each option. Applying does not guarantee a place.",
+        )}
+      </p>
+      <nav aria-label={t("賽事重點入口", "Race quick links")}>
+        <a href="#race-about">{t("賽事概覽 ↓", "Race overview ↓")}</a>
+        <a href="#registration-groups">{t("報名渠道 ↓", "Entry options ↓")}</a>
         <a href={experienceHref}>{experienceLabel} ↓</a>
-        <a href="#race-transport">交通安排 ↓</a>
-        <a href="#race-sources">資料來源 ↓</a>
+        <a href="#race-transport">{t("交通安排 ↓", "Transport ↓")}</a>
+        <a href="#race-sources">{t("資料來源 ↓", "Sources ↓")}</a>
       </nav>
     </section>
   );

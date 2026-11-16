@@ -3,7 +3,13 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { Icon } from "./ui";
 
-export function RaceBackToSearch({ searchBar }: { searchBar: RefObject<HTMLDivElement | null> }) {
+export function RaceBackToSearch({
+  searchBar,
+  english = false,
+}: {
+  english?: boolean;
+  searchBar: RefObject<HTMLDivElement | null>;
+}) {
   const button = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -48,7 +54,7 @@ export function RaceBackToSearch({ searchBar }: { searchBar: RefObject<HTMLDivEl
       type="button"
       hidden={!visible}
       ref={button}
-      aria-label="返回搜尋賽事"
+      aria-label={english ? "Back to race search" : "返回搜尋賽事"}
       onClick={(event) => {
         const search = searchBar.current;
         const keyboard = event.detail === 0;

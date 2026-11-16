@@ -1,5 +1,8 @@
 "use client";
 
+import { language } from "@/lib/english-races";
+import { englishRaceTerm } from "@/lib/race-terms.en";
+
 import { useEffect, useState } from "react";
 
 const storageKey = "nxtgo:registration-checklist";
@@ -10,7 +13,8 @@ const tasks = [
   { id: "logistics", label: "核對選手包領取同集合安排" },
 ];
 
-export function RegistrationChecklist() {
+export function RegistrationChecklist({ english = false }: { english?: boolean } = {}) {
+  const t = language(english);
   const [checked, setChecked] = useState<string[]>([]);
   const [storageError, setStorageError] = useState(false);
 
@@ -37,11 +41,18 @@ export function RegistrationChecklist() {
 
   return (
     <section className="guide-checklist" aria-labelledby="registration-checklist-title">
-      <h2 id="registration-checklist-title">報名前核對清單</h2>
+      <h2 id="registration-checklist-title">{t("報名前核對清單", "Pre-entry checklist")}</h2>
       <p role="status">
-        已核對 {checked.length}／{tasks.length}
+        {t(
+          `已核對 ${checked.length}／${tasks.length}`,
+          `${checked.length} of ${tasks.length} checked`,
+        )}
       </p>
-      <progress aria-label="報名前核對進度" max={tasks.length} value={checked.length} />
+      <progress
+        aria-label={t("報名前核對進度", "Pre-entry checklist progress")}
+        max={tasks.length}
+        value={checked.length}
+      />
       <ul role="list">
         {tasks.map(({ id, label }) => (
           <li key={id}>
@@ -50,18 +61,27 @@ export function RegistrationChecklist() {
                 type="checkbox"
                 checked={checked.includes(id)}
                 onChange={(event) =>
-                  save(event.target.checked ? [...checked, id] : checked.filter((item) => item !== id))
+                  save(
+                    event.target.checked ? [...checked, id] : checked.filter((item) => item !== id),
+                  )
                 }
               />
-              {label}
+              {englishRaceTerm(label, english)}
             </label>
           </li>
         ))}
       </ul>
       <button type="button" className="button" disabled={!checked.length} onClick={() => save([])}>
-        重置清單
+        {t("重置清單", "Reset checklist")}
       </button>
-      {storageError && <p role="status">未能讀寫本機進度，重新載入後可能未能保留。</p>}
+      {storageError && (
+        <p role="status">
+          {t(
+            "未能讀寫本機進度，重新載入後可能未能保留。",
+            "Progress could not be saved locally and may be lost after reloading.",
+          )}
+        </p>
+      )}
     </section>
   );
 }

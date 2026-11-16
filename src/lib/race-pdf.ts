@@ -1,3 +1,5 @@
+import { englishDate, englishTimestamp, language } from "./english-races";
+import { englishRaceTerm } from "./race-terms.en";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { gunzipSync } from "node:zlib";
@@ -11,19 +13,23 @@ const secondary = "#526174";
 const accent = "#4c6283";
 let font: Promise<Buffer> | undefined;
 
-function dateRange(from: string, to = from) {
-  const fullDate = (date: string) => displayDate(date, { year: "numeric" });
-  return from === to ? fullDate(from) : `${fullDate(from)} 至 ${fullDate(to)}`;
-}
-
-export async function createRacePdf(race: Race): Promise<Uint8Array<ArrayBuffer>> {
+export async function createRacePdf(race: Race, english = false): Promise<Uint8Array<ArrayBuffer>> {
+  const t = language(english);
+  const term = (value: string) => englishRaceTerm(value, english);
+  const name = english ? race.englishName : race.name;
+  const date = (value: string) =>
+    english ? englishDate(value) : displayDate(value, { year: "numeric" });
+  const timestamp = (value: string) =>
+    english ? englishTimestamp(value) : `${formatTimestamp(value)} HKT`;
+  const dateRange = (from: string, to = from) =>
+    from === to ? date(from) : `${date(from)}${t(" 至 ", " – ")}${date(to)}`;
   font ??= readFile(resolve("assets/pdf/NotoSansHK-450.ttf.gz")).then(gunzipSync);
   const fontData = await font;
   const doc = new PDFDocument({
     size: "A4",
     margin: 48,
-    lang: "zh-HK",
-    info: { Title: race.name, Author: "NXTGO", Subject: "賽日資料" },
+    lang: t("zh-HK", "en"),
+    info: { Title: name, Author: "NXTGO", Subject: t("賽日資料", "Race day information") },
   });
 
   const chunks: Buffer[] = [];
@@ -49,45 +55,63 @@ export async function createRacePdf(race: Race): Promise<Uint8Array<ArrayBuffer>
   }
 
   doc.font(fontData);
-  text("NXTGO  /  賽日資料", 12, accent);
+  text(t("NXTGO  /  賽日資料", "NXTGO  /  RACE DAY"), 12, accent);
   doc.moveDown(0.8);
-  text(race.name, 24);
-  if (race.englishName) text(race.englishName, 11, secondary);
+  text(name, 24);
+  if (!english && race.englishName) text(race.englishName, 11, secondary);
   doc.moveDown(0.6);
-  text(`比賽日期  ${dateRange(race.date, race.endDate)}`, 13);
+  text(`${t("比賽日期", "Race date")}  ${dateRange(race.date, race.endDate)}`, 13);
 
   const notice = race.announcement;
   if (notice) {
-    heading(raceAnnouncementTitles[notice.kind]);
-    text(notice.summary);
+    heading(term(raceAnnouncementTitles[notice.kind]));
+    text(term(notice.summary));
     const source = race.sources?.find((item) => item.id === notice.sourceId);
     if (source) {
-      text(`官方公告 · 核對：${formatTimestamp(source.checkedAt)} HKT`, 10, accent, {
-        link: source.url,
-        underline: true,
-      });
+      text(
+        `${t("官方公告 · 核對：", "Official announcement · Checked: ")}${timestamp(source.checkedAt)}`,
+        10,
+        accent,
+        {
+          link: source.url,
+          underline: true,
+        },
+      );
     }
   }
 
-  heading("參賽組別");
+  heading(t("參賽組別", "Race categories"));
   for (const group of race.groups) {
-    const start = group.startTime ? ` · ${formatTimestamp(group.startTime)} HKT` : "";
-    text(`${group.name} · ${dateRange(group.date, group.endDate)}${start}`, 11, ink, {
+    const start = group.startTime ? ` · ${timestamp(group.startTime)}` : "";
+    text(`${term(group.name)} · ${dateRange(group.date, group.endDate)}${start}`, 11, ink, {
       paragraphGap: 4,
     });
   }
 
-  heading("交通及集合");
+  heading(t("交通及集合", "Transport and assembly"));
   for (const { venue, names } of verifiedStarts(race)) {
-    text(names.length ? `${names.join("／")} · ${venue}` : venue, 11, ink, { paragraphGap: 4 });
+    text(
+      names.length ? `${names.map(term).join(t("／", " / "))} · ${term(venue)}` : term(venue),
+      11,
+      ink,
+      { paragraphGap: 4 },
+    );
   }
-  text(race.transport, 11, secondary);
+  text(term(race.transport), 11, secondary);
 
-  heading("核實資料");
-  if (race.verifiedAt) text(`資料核對：${formatTimestamp(race.verifiedAt)} HKT`, 10, secondary);
-  text("出發前請確認大會最新安排。", 10, secondary);
+  heading(t("核實資料", "Verification"));
+  if (race.verifiedAt)
+    text(`${t("資料核對：", "Checked: ")}${timestamp(race.verifiedAt)}`, 10, secondary);
+  text(
+    t("出發前請確認大會最新安排。", "Check the organiser’s latest information before travelling."),
+    10,
+    secondary,
+  );
   if (race.sourceUrl) {
-    text("大會官方網站", 10, accent, { link: race.sourceUrl, underline: true });
+    text(t("大會官方網站", "Official race website"), 10, accent, {
+      link: race.sourceUrl,
+      underline: true,
+    });
     text(race.sourceUrl, 9, secondary);
   }
 
