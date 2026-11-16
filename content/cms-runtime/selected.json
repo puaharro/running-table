@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "records": {
+    "rmac-gold-coast-15k-2026": {
+      "file": "runner-copies/rmac-2026.json",
+      "hash": "a10465d0b74b192f697d99c14e2fd4b68ad4536f2a08d848c6b54dfb11ce649a",
+      "format": "markdown"
+    }
+  }
+}

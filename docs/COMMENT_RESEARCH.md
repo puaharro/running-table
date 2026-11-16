@@ -259,3 +259,17 @@ CLI：`npm run content:agent -- execute .editorial-private/request.json`
 - 網站稿綁定研究依據及參考草稿。依據過期時頁面停用確認／匯出，伺服器亦拒絕，須更新草稿及網站稿後重新確認。私人草稿匯出包含依據狀態及已建立的基準版本，供追溯，不是發布批准。
 - 待辦包括登入協作、材料待核實、來源待續查、私人稿待審及網站稿依據變更。單項研究決定更新後重新載入便反映；不以待辦數字代替獨立來源／跑手數。
 - 歷史搜尋表可由可信宿主整理成逐項 coverage_save 請求，保留原搜尋時間、字詞及限制。搜尋時間不能冒充完整原頁閱讀時間；來源資料不足則維持 searching，不補作核實紀錄。私人備份及遷移收據只留在 `.editorial-private/`。
+
+## 通用已確認 CMS 內容接入公開 runtime
+
+`content/cms-runtime/selected.json` 為明確選定的文字內容清單；每項綁定內容檔及完整檔案 hash。`selected-experiences.json` 保留既有已確認評分版本綁定。兩者是內容選擇，不是新增人手確認或發布批准收據。runtime 不讀私人資料庫。
+
+營運者在可信本機依次操作：
+
+1. 在原 CMS 保存並確認完整網站稿；來源／參考草稿有變時須先更新並重新確認。
+2. `npm run content:runtime -- prepare <website-id> <revision>`：重新核對確認及依據，輸出白名單公開欄位至 `.editorial-private/runtime-prepared/`，回傳完整記錄 hash。此步不修改公開檔或選擇清單。
+3. 將完整接入檔交營運者覆核。只有營運者明確批准該完整 hash 的公開選擇後，可信操作者才可執行 `npm run content:runtime -- select <website-id> <revision> <owner-approved-record-hash>`。不得由 AI 自行取 prepare 的 hash 當成營運者批准；本輪實作沒有對新稿件執行 select。命令是本機可信操作者介面，沒有新增受限 Agent API 發布權，也不假裝能驗證 OS 操作者是不是人。
+4. select 重新讀取已確認的指定 CMS 版本、核對依據與獲准 hash，只產生公開五主題文字、限制、HTTPS 來源與版本 manifest，更新資料清單；不自動 commit、push 或部署。既有數字評分不由文字自動生成；已有評分的賽事需另行更新完整評分內容選擇，不能用純文字入口直接覆蓋。
+5. 跑測試、build、check:export及test:http，覆核本機頁面；部署仍須另行授權。
+
+新增已存在於公開 catalog 的賽事只需已確認 CMS 網站稿與選擇資料，毋須修改 loader 或 component。新增私人賽事到公開 catalog 仍需獨立資料確認。過往 RMAC Markdown 原文及兩份2025評論／評分保持原有 hash；遷移只把程式內固定選擇移到資料清單，沒有重新批准文字。

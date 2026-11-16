@@ -20,14 +20,15 @@
     "test:threads": "node --test tests/threads-collector.node.mjs tests/threads-report.node.mjs tests/threads-clean.node.mjs tests/threads-review.node.mjs tests/threads-manual.node.mjs tests/threads-confirmed.node.mjs tests/threads-topics.node.mjs tests/threads-summary.node.mjs tests/threads-comparison.node.mjs tests/threads-comparison-notes.node.mjs tests/threads-verification.node.mjs",
     "test:threads:http": "node --test --test-concurrency=1 tests/threads-review-http.node.mjs tests/threads-manual-http.node.mjs tests/threads-topics-http.node.mjs tests/threads-summary-http.node.mjs tests/threads-comparison-http.node.mjs tests/threads-comparison-notes-http.node.mjs tests/threads-verification-http.node.mjs",
     "check:data": "vitest run src/lib/data.test.ts",
-    "check:export": "node scripts/check-export.mjs && node scripts/check-runner-copy-export.mjs && node scripts/check-confirmed-experience-export.mjs",
+    "check:export": "node scripts/check-export.mjs && node scripts/check-runner-copy-export.mjs && node scripts/check-confirmed-experience-export.mjs && node scripts/check-cms-runtime.mjs",
     "review:data": "node scripts/review-queue.mjs",
     "format": "prettier --write src tests scripts docs README.md package.json next.config.ts tsconfig.json vitest.config.ts .github .prettierrc.json",
     "test:http": "node scripts/smoke-http.mjs",
     "research:comments": "node scripts/import-threads.mjs --multi-source",
     "content:manage": "node scripts/import-threads.mjs --multi-source",
-    "test:research": "node --test tests/comment-research.node.mjs tests/comment-research-http.node.mjs tests/content-management.node.mjs tests/content-management-http.node.mjs tests/content-proposals.node.mjs tests/content-workflow.node.mjs tests/content-releases.node.mjs tests/content-workflow-http.node.mjs tests/content-agent.node.mjs tests/content-research-progress.node.mjs",
-    "content:agent": "node scripts/content-agent.mjs"
+    "test:research": "node --test tests/comment-research.node.mjs tests/comment-research-http.node.mjs tests/content-management.node.mjs tests/content-management-http.node.mjs tests/content-proposals.node.mjs tests/content-workflow.node.mjs tests/content-releases.node.mjs tests/content-workflow-http.node.mjs tests/content-agent.node.mjs tests/content-research-progress.node.mjs tests/content-runtime.node.mjs",
+    "content:agent": "node scripts/content-agent.mjs",
+    "content:runtime": "node scripts/content-runtime.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "5.3.0",
