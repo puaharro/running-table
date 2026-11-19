@@ -1,14 +1,19 @@
-import { englishDate, englishDistance } from "@/lib/english-races";
-import { language, localPath } from "@/lib/english-races";
+import {
+  englishDate,
+  englishDistance,
+  englishDistanceTag,
+  language,
+  localPath,
+} from "@/lib/english-races";
 import "../guides.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { englishGuides } from "@/data/guides.en";
-import { guides } from "@/data/guides";
+import { guideMatchesRace, guides } from "@/data/guides";
 import { publicRaces as races } from "@/data/races";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { RegistrationChecklist } from "@/components/registration-checklist";
-import { displayDate, distanceLabel } from "@/lib/races";
+import { displayDate, distanceLabel, hongKongToday } from "@/lib/races";
 import { pageMetadata, raceHref, siteName } from "@/lib/site";
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -41,18 +46,24 @@ export default async function GuidePage({
         })),
       }
     : original;
+  const today = hongKongToday();
   const related = races
     .filter(
       (race) =>
-        !guide.relatedDistance ||
-        race.groups.some(
-          (group) =>
-            (english ? englishDistance : distanceLabel)(group.distanceKm) === guide.relatedDistance,
-        ),
+        race.status === "scheduled" && race.endDate >= today && guideMatchesRace(guide, race),
     )
     .sort((a, b) => a.date.localeCompare(b.date))
     .slice(0, 3);
-  const searchHref = `/races/${guide.relatedDistance ? `?distance=${encodeURIComponent(guide.relatedDistance)}` : ""}#race-list`;
+  const searchHref = localPath(
+    `/races/${guide.relatedDistance ? `?distance=${encodeURIComponent(guide.relatedDistance)}` : ""}#race-list`,
+    english,
+  );
+  const calendarLabel = guide.relatedDistance
+    ? t(
+        `查看香港 ${guide.relatedDistance} 賽事時間表`,
+        `View Hong Kong ${guide.relatedDistance === "10K" ? "10K" : englishDistanceTag(guide.relatedDistance).toLowerCase()} race calendar`,
+      )
+    : t("查看完整賽事時間表", "View the full race calendar");
   return (
     <main id="main" className="guides-page guide-article">
       <div className="shell">
@@ -125,13 +136,8 @@ export default async function GuidePage({
               <p>
                 {t("按日期、距離及地區篩選賽事。", "Filter races by date, distance and region.")}
               </p>
-              <Link className="guides-primary-link" href={localPath(searchHref, english)}>
-                {english
-                  ? "View calendar"
-                  : guide.relatedDistance
-                    ? `查看${guide.relatedDistance}時間表`
-                    : "前往賽事搜尋"}{" "}
-                <Icon name="arrow" />
+              <Link className="guides-primary-link" href={searchHref}>
+                {calendarLabel} <Icon name="arrow" />
               </Link>
               <small>
                 {t(
@@ -142,49 +148,55 @@ export default async function GuidePage({
             </div>
           </article>
         </div>
-        <section className="guides-related-races" aria-labelledby="related-races-heading">
-          <div className="guides-section-heading">
-            <h2 id="related-races-heading">{t("相關賽事", "Related races")}</h2>
-            <Link href={localPath(searchHref, english)}>
-              {t("查看完整時間表", "View the full calendar")} <Icon name="arrow" size={16} />
-            </Link>
-          </div>
-          <p>
-            {t(
-              "報名安排以大會最新資料為準。",
-              "Check the organiser’s latest information for entry arrangements.",
-            )}
-          </p>
-          <div className="guides-race-grid">
-            {related.map((race) => (
-              <Link
-                key={race.id}
-                className="guides-race-card"
-                href={localPath(raceHref(race), english)}
-              >
-                <span>
-                  <Icon name="calendar" size={16} />
-                  <time dateTime={race.date}>
-                    {english ? englishDate(race.date) : displayDate(race.date, { year: "numeric" })}
-                  </time>
-                </span>
-                <h3>{english ? race.englishName : race.name}</h3>
-                <p>
-                  {[
-                    ...new Set(
-                      race.groups.map((group) =>
-                        (english ? englishDistance : distanceLabel)(group.distanceKm),
-                      ),
-                    ),
-                  ].join(" · ")}
-                </p>
-                <span className="guides-race-action">
-                  {t("查看賽事資料", "View race details")} <Icon name="arrow" size={18} />
-                </span>
+        {!!related.length && (
+          <section className="guides-related-races" aria-labelledby="related-races-heading">
+            <div className="guides-section-heading">
+              <h2 id="related-races-heading">
+                {t("即將舉行的相關賽事", "Related upcoming races")}
+              </h2>
+              <Link href={searchHref}>
+                {calendarLabel} <Icon name="arrow" size={16} />
               </Link>
-            ))}
-          </div>
-        </section>
+            </div>
+            <p>
+              {t(
+                "報名安排以大會最新資料為準。",
+                "Check the organiser’s latest information for entry arrangements.",
+              )}
+            </p>
+            <div className="guides-race-grid">
+              {related.map((race) => (
+                <Link
+                  key={race.id}
+                  className="guides-race-card"
+                  href={localPath(raceHref(race), english)}
+                >
+                  <span>
+                    <Icon name="calendar" size={16} />
+                    <time dateTime={race.date}>
+                      {english
+                        ? englishDate(race.date)
+                        : displayDate(race.date, { year: "numeric" })}
+                    </time>
+                  </span>
+                  <h3>{english ? race.englishName : race.name}</h3>
+                  <p>
+                    {[
+                      ...new Set(
+                        race.groups.map((group) =>
+                          (english ? englishDistance : distanceLabel)(group.distanceKm),
+                        ),
+                      ),
+                    ].join(" · ")}
+                  </p>
+                  <span className="guides-race-action">
+                    {t("查看賽事資料", "View race details")} <Icon name="arrow" size={18} />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
         <section className="guides-read-next" aria-labelledby="read-next-heading">
           <div className="guides-section-heading">
             <h2 id="read-next-heading">{t("繼續閱讀", "Further reading")}</h2>

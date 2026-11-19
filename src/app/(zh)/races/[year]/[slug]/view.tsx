@@ -13,7 +13,7 @@ import { RaceSaveActions } from "@/components/race-save";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { publicRaces as races } from "@/data/races";
-import { guides } from "@/data/guides";
+import { guideMatchesRace, guides } from "@/data/guides";
 import { editorialReviews } from "@/data/editorial-reviews";
 import { reviewsForGroup } from "@/lib/editorial-reviews";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
@@ -50,6 +50,7 @@ export default async function RacePage({ params, english = false }: Props & { en
   const t = language(english);
   const race = await getRace(params);
   if (!race) notFound();
+  const relatedGuides = guides.filter((guide) => guideMatchesRace(guide, race));
   const reviewedGroups = race.groups.filter((group) => {
     const reviews = reviewsForGroup(race, group, editorialReviews);
     return reviews.current.length || reviews.historical.length;
@@ -437,7 +438,7 @@ export default async function RacePage({ params, english = false }: Props & { en
             <h2>{t("報名及選賽指南", "Race selection and registration guides")}</h2>
           </div>
           <div className="guide-grid">
-            {guides.map((g) => (
+            {relatedGuides.map((g) => (
               <GuideCard english={english} key={g.slug} guide={g} />
             ))}
           </div>

@@ -8,6 +8,16 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
+## Application security
+
+- Treat form fields, URL parameters, imported race data, and CMS payloads as untrusted. Validate types and bounds where data enters the application. Allow only `http:` and `https:` for externally supplied web links, and use the existing URL and schema validation helpers where applicable.
+- Render imported text through React's default escaping. Use the existing safe serialization helpers when embedding structured data in HTML. If a feature needs to render untrusted rich HTML, sanitize it with a maintained library before rendering.
+- Keep credentials out of Git, logs, the static export, and `NEXT_PUBLIC_*` variables. Keep the editorial and content management endpoints local by default and preserve their existing authentication and request checks.
+- Give GitHub Actions only the permissions they need. Pin third-party actions to full commit SHAs. Pass untrusted GitHub event values through environment variables and quote them in shell commands.
+- Review scanner findings in context before suppressing them. Record the reason and scope of any exception next to its configuration. Keep secret values redacted in output.
+
+Reference: [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
+
 ## Editorial publication
 
 - New race scores and review wording require the human owner's explicit approval of the complete identified revision. General requests to update, test, merge or deploy do not approve a review.

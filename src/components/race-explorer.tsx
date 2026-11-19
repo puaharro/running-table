@@ -411,6 +411,9 @@ export function RaceExplorer({
     <section id="race-list" className="explorer shell" aria-labelledby="explorer-heading">
       <header className="section-heading explorer-heading">
         <h1 id="explorer-heading">{t("香港路跑時間表", "Hong Kong race calendar")}</h1>
+        <a href="#race-directory" className="text-link">
+          {t("全部賽事及往屆紀錄", "All races and past editions")}
+        </a>
       </header>
       <div className="calendar-search-bar" ref={searchBar}>
         <label className="calendar-keyword">

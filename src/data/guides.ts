@@ -1,3 +1,6 @@
+import { distanceLabel } from "@/lib/races";
+import type { Race } from "@/lib/types";
+
 export interface Guide {
   slug: string;
   category: string;
@@ -8,6 +11,13 @@ export interface Guide {
   sections: { title: string; paragraphs: string[] }[];
   relatedDistance: string;
 }
+export function guideMatchesRace(guide: Guide, race: Race) {
+  return (
+    !guide.relatedDistance ||
+    race.groups.some((group) => distanceLabel(group.distanceKm) === guide.relatedDistance)
+  );
+}
+
 export const guides: Guide[] = [
   {
     slug: "choose-your-first-10k",
