@@ -66,10 +66,10 @@ export default async function RacePage({ params, english = false }: Props & { en
         );
       })[0]
     : undefined;
-  const experienceId = confirmedExperience
-    ? "race-confirmed-experience"
-    : runnerCopy
-      ? "runner-copy"
+  const experienceId = runnerCopy
+    ? "runner-copy"
+    : confirmedExperience
+      ? "race-confirmed-experience"
       : "ratings-" + (reviewedGroups[0] ?? race.groups[0]).id;
   const now = new Date().toISOString();
   const chapters = [
@@ -121,10 +121,13 @@ export default async function RacePage({ params, english = false }: Props & { en
             initialNow={now}
             experienceHref={"#" + experienceId}
             experienceLabel={
-              confirmedExperience
-                ? t("2025 往屆體驗", "2025 race experience")
-                : runnerCopy
-                  ? t("跑手分享（無評分）", "Runner accounts (unrated)")
+              runnerCopy
+                ? t("跑手分享（無評分）", "Runner accounts (unrated)")
+                : confirmedExperience
+                  ? t(
+                      `${confirmedExperience.year} 往屆體驗`,
+                      `${confirmedExperience.year} race experience`,
+                    )
                   : reviewedGroups.length
                     ? t("參賽體驗", "Race experience")
                     : t("參賽體驗（未評）", "Race experience (unrated)")

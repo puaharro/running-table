@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { ContentStore } from "./content-management/store.mjs";
 import { ReviewStore } from "./threads/review-store.mjs";
 import { prepareRuntimeRecord } from "./content-management/runtime.mjs";
+import { assertConfirmedExperience } from "../src/lib/confirmed-race-experience-schema.mjs";
 
 const [action, id, rev, approval] = process.argv.slice(2);
 let c, r;
@@ -40,10 +41,16 @@ try {
         "Exact owner-approved record hash required. Preparing or confirming CMS text does not approve public selection.",
       );
     const rated = JSON.parse(readFileSync("content/cms-runtime/selected-experiences.json", "utf8"));
-    if (Object.hasOwn(rated, b.public_copy.race_id))
-      throw Error(
-        "This race has selected rated content; renew its complete rated selection before replacing it.",
+    if (Object.hasOwn(rated, b.public_copy.race_id)) {
+      const existing = JSON.parse(
+        readFileSync(join("content/race-experiences", rated[b.public_copy.race_id].file), "utf8"),
       );
+      assertConfirmedExperience(existing, b.public_copy.race_id);
+      if (existing.year === b.public_copy.year)
+        throw Error(
+          "This edition has selected rated content; renew its complete rated selection before replacing it.",
+        );
+    }
     const dest = `${b.public_copy.race_id}-${b.public_copy.year}-${hash}.json`;
     writeFileSync(join("content/cms-runtime", dest), JSON.stringify(record, null, 2) + "\n");
     const path = "content/cms-runtime/selected.json";

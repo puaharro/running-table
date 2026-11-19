@@ -39,9 +39,9 @@ assert.ok(!html.includes(".editorial-private"));
 for (const dir of readdirSync("out/races/2026", { withFileTypes: true }).filter(
   (x) => x.isDirectory() && x.name !== "rmac-gold-coast-15k-2026",
 )) {
-  assert.ok(
-    !readFileSync(`out/races/2026/${dir.name}/index.html`, "utf8").includes('id="runner-copy"'),
-  );
+  const otherHtml = readFileSync(`out/races/2026/${dir.name}/index.html`, "utf8");
+  const otherCopy = otherHtml.match(/<section\b[^>]*id="runner-copy"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(!otherCopy || otherCopy !== section, "RMAC copy must stay on its own race page");
 }
 console.log(
   "RMAC confirmed v2 static copy verified: five themes, exact paragraphs/limitations, eight citations, neutral labels, isolated to its race.",

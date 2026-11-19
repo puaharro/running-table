@@ -5,6 +5,11 @@
       "file": "runner-copies/rmac-2026.json",
       "hash": "a10465d0b74b192f697d99c14e2fd4b68ad4536f2a08d848c6b54dfb11ce649a",
       "format": "markdown"
+    },
+    "hzmb-half-marathon-2026": {
+      "file": "cms-runtime/hzmb-half-marathon-2026-2026-ec22bdab1617e1f637d3ae239c0de31c261f2444de6336f4afee5b0c3a1ed957.json",
+      "hash": "ec22bdab1617e1f637d3ae239c0de31c261f2444de6336f4afee5b0c3a1ed957",
+      "format": "five-topic-v1"
     }
   }
 }

@@ -1,0 +1,62 @@
+{
+  "manifest": {
+    "source_website_id": "website-44e73867-1092-421a-9e34-cb3acc1ac179",
+    "source_revision": 1,
+    "source_content_hash": "3e2a87987d2a3d8a39ab84db8ea5f6304b86b0c2d458d1b1d428f38355ff0db3",
+    "public_content_hash": "a95acc14588eb334c7a8a9cc1940b79af5628714cdd227c59815f8e9520452b0"
+  },
+  "public_copy": {
+    "race_id": "hzmb-half-marathon-2026",
+    "year": 2026,
+    "title": "港珠澳大橋（香港段）半馬拉松 2026 跑手分享",
+    "sections": [
+      {
+        "topic": "賽道",
+        "body": "有跑手提到賽道多暗斜，回程陽光猛烈，後段較吃力，有人因抽筋改為步行。也有跑手覺得路線好跑，可以在回程加速，並欣賞橋上海景。",
+        "limitations": "各人出發時間、配速及身體狀況不同。個別抽筋或減速的經歷，未能確定成因。",
+        "urls": [
+          "https://www.threads.com/@chengvanky/post/Dfyl0FREvM1",
+          "https://www.threads.com/@vicki.v_ula.fitness/post/Df05JbxlCI6",
+          "https://marathonsworld.com/artapp/rating_detail.php?rid=741157",
+          "https://facebook.com/groups/1852485348459116/permalink/2947296245644682"
+        ]
+      },
+      {
+        "topic": "補給",
+        "body": "有跑手覺得補給站足夠，也有跑手希望在較早的檢查點提供能量飲品。另有跑手提到沿途設有降溫花灑。",
+        "limitations": "各站的補給品項、供應時間及各組跑手實際取得的情況仍未核實。",
+        "urls": [
+          "https://www.youtube.com/watch?v=_In8246hZPA",
+          "https://marathonsworld.com/artapp/rating_detail.php?rid=740720",
+          "https://www.threads.com/@walterch87/post/DfzqXAfk-MG"
+        ]
+      },
+      {
+        "topic": "寄存",
+        "body": "本屆半馬的行李寄存及領取體驗未明。",
+        "limitations": "現有跑手分享未有足夠資料評估輪候時間、寄存流程或領取安排。",
+        "urls": []
+      },
+      {
+        "topic": "交通",
+        "body": "有第三組跑手表示等接駁車較久，抵達起步區時已較遲。另一位同組跑手表示曾聽到延後開車的廣播，但自己沒有遲起步。也有第一組跑手對交通安排給予正面評價。",
+        "limitations": "接駁班次及個別抵達時間仍未獨立核實。另有一則接駁評語的參賽組別未明，故未納入半馬觀察。",
+        "urls": [
+          "https://facebook.com/groups/1852485348459116/permalink/2947707258936914",
+          "https://www.youtube.com/watch?v=_In8246hZPA"
+        ]
+      },
+      {
+        "topic": "大會安排",
+        "body": "有跑手形容起步路段較窄，頭段人多。也有較後出發的跑手表示擠塞不明顯，有跑手稱讚整體配套、廁所及完賽安排。有跑手就途中被截停上車提出疑問。",
+        "limitations": "截流時限及個別執行情況仍待核對。部分社群留言未能讀取，個別投稿者的組別或參賽身份亦未明。",
+        "urls": [
+          "https://marathonsworld.com/artapp/rating_detail.php?rid=741228",
+          "https://marathonsworld.com/artapp/rating_detail.php?rid=741293",
+          "https://www.youtube.com/watch?v=_In8246hZPA",
+          "https://facebook.com/groups/1852485348459116/permalink/2947707258936914"
+        ]
+      }
+    ]
+  }
+}
