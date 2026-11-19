@@ -79,6 +79,17 @@ export default async function RacePage({ params, english = false }: Props & { en
       id: experienceId,
       label: runnerCopy ? t("跑手分享", "Runner accounts") : t("參賽體驗", "Race experience"),
     },
+    ...(runnerCopy && confirmedExperience
+      ? [
+          {
+            id: "race-confirmed-experience",
+            label: t(
+              `${confirmedExperience.year} 往屆體驗`,
+              `${confirmedExperience.year} race experience`,
+            ),
+          },
+        ]
+      : []),
     { id: "race-transport", label: t("交通及集合", "Transport and assembly") },
     { id: "race-sources", label: t("資料來源", "Sources") },
     { id: "race-changes", label: t("修改紀錄", "Update history") },
