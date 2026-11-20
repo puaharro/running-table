@@ -1,4 +1,4 @@
-import { ReviewError } from "./review-store.mjs";
+import { ReviewError } from "./review-error.mjs";
 export const VERIFICATION_STATUSES = ["pending", "in_progress", "verified", "unable"];
 export function installVerification(db) {
   db.exec(`CREATE TABLE IF NOT EXISTS verification_tasks (

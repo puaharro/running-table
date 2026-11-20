@@ -7,14 +7,11 @@ import { buildConfirmed } from "./confirmed.mjs";
 import { TOPICS, TOPIC_KEYS, TOPIC_RULE_VERSION } from "./topics.mjs";
 import { buildSummary, SUMMARY_RULE_VERSION } from "./summary.mjs";
 import { buildComparison } from "./comparison.mjs";
+import { ReviewError } from "./review-error.mjs";
 import { installVerification, verificationState, saveVerification } from "./verification-store.mjs";
 
-export class ReviewError extends Error {
-  constructor(status, message) {
-    super(message);
-    this.status = status;
-  }
-}
+export { ReviewError };
+
 function canonical(value) {
   if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
   if (value && typeof value === "object")
