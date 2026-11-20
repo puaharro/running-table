@@ -1,4 +1,4 @@
-import { Fragment, type RefObject } from "react";
+import { Fragment, type ReactNode, type RefObject } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import {
@@ -27,10 +27,26 @@ import { AdSlot, Icon } from "./ui";
 function highlightMatch(text: string, query: string) {
   const term = query.trim();
   if (!term) return text;
-  const literal = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return text
-    .split(new RegExp(`(${literal})`, "iu"))
-    .map((part, index) => (index % 2 === 0 ? part : <mark key={index}>{part}</mark>));
+  const needle = term.toLowerCase();
+  const parts: ReactNode[] = [];
+  let previousEnd = 0;
+
+  // Compare slices of the original text so case conversion cannot shift highlight offsets.
+  for (let start = 0; start <= text.length - term.length; ) {
+    const end = start + term.length;
+    const candidate = text.slice(start, end);
+    if (candidate.toLowerCase() !== needle) {
+      start += 1;
+      continue;
+    }
+    parts.push(text.slice(previousEnd, start), <mark key={start}>{candidate}</mark>);
+    previousEnd = end;
+    start = end;
+  }
+
+  if (!parts.length) return text;
+  parts.push(text.slice(previousEnd));
+  return parts;
 }
 
 type RaceResultsListProps = {
