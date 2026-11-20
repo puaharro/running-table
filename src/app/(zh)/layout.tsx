@@ -3,6 +3,7 @@ import { Footer } from "@/components/ui";
 import { Header } from "@/components/site-header";
 import { publicRaces } from "@/data/races";
 import { guides } from "@/data/guides";
+import { raceSearchText } from "@/lib/race-search";
 import { QuickNavigation, type QuickDestination } from "@/components/quick-navigation";
 import { AdFrame } from "@/components/ad-frame";
 import { favoriteResultsHref } from "@/lib/results-location";
@@ -37,7 +38,8 @@ const quickDestinations: QuickDestination[] = [
     href: raceHref(race),
     label: race.name,
     category: "賽事",
-    keywords: `${race.englishName} ${race.district} ${race.slug.includes("standard-chartered") ? "渣馬 SCHKM" : ""}`,
+    isRace: true,
+    keywords: [raceSearchText(race), ...race.groups.map((group) => group.venue)].join(" "),
   })),
 ];
 

@@ -600,6 +600,12 @@
 .race-detail-page .group-ratings .editorial-review .rating-grid dd {
   font-size: 16px;
 }
+.race-detail-page .group-entry-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+}
 .race-detail-page .channels-heading {
   font-size: 18px;
   margin: var(--space-6) 0 var(--space-2);
@@ -885,7 +891,14 @@
   outline-offset: 4px;
 }
 .race-detail-page
-  :is([id^="race-"], [id^="group-"], [id^="channel-"], [id^="ratings-"], #registration-groups) {
+  :is(
+    [id^="race-"],
+    [id^="group-"],
+    [id^="channel-"],
+    [id^="entry-options-"],
+    [id^="ratings-"],
+    #registration-groups
+  ) {
   scroll-margin-top: 160px;
 }
 @media (max-width: 1000px) {

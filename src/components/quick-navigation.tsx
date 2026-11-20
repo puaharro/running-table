@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { favoriteResultsHref } from "@/lib/results-location";
+import { favoriteResultsHref, quickSearchQueryKey } from "@/lib/results-location";
+import { normalizeRaceSearch } from "@/lib/race-search";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "./ui";
@@ -11,14 +12,8 @@ export type QuickDestination = {
   label: string;
   category: string;
   keywords?: string;
+  isRace?: boolean;
 };
-
-function normalize(value: string) {
-  return value
-    .normalize("NFKC")
-    .toLocaleLowerCase("zh-HK")
-    .replace(/[\p{P}\s]/gu, "");
-}
 
 export function QuickNavigation({
   destinations,
@@ -33,14 +28,21 @@ export function QuickNavigation({
   const trigger = useRef<HTMLButtonElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const router = useRouter();
-  const search = normalize(query);
+  const search = normalizeRaceSearch(query);
   const matches = search
     ? destinations
-        .filter(({ label, category, keywords }) =>
-          normalize(`${label} ${keywords ?? ""} ${category}`).includes(search),
+        .filter(({ label, category, keywords, isRace }) =>
+          normalizeRaceSearch(
+            isRace ? (keywords ?? label) : `${label} ${keywords ?? ""} ${category}`,
+          ).includes(search),
         )
         .slice(0, 10)
     : destinations.slice(0, 5);
+  function resultHref({ href, isRace }: QuickDestination) {
+    return isRace && search
+      ? `${href}?${new URLSearchParams({ [quickSearchQueryKey]: query.trim() })}`
+      : href;
+  }
 
   useEffect(() => {
     function shortcut(event: KeyboardEvent) {
@@ -100,7 +102,7 @@ export function QuickNavigation({
             if (matches[0].href === favoriteResultsHref) {
               window.location.assign(favoriteResultsHref);
             } else {
-              router.push(matches[0].href);
+              router.push(resultHref(matches[0]));
             }
           }}
         >
@@ -148,7 +150,8 @@ export function QuickNavigation({
             else links[next]?.focus();
           }}
         >
-          {matches.map(({ href, label, category }) => {
+          {matches.map((destination) => {
+            const { href, label, category } = destination;
             const content = (
               <>
                 <span>{label}</span>
@@ -163,7 +166,7 @@ export function QuickNavigation({
                     {content}
                   </a>
                 ) : (
-                  <Link href={href} prefetch={false} onClick={close}>
+                  <Link href={resultHref(destination)} prefetch={false} onClick={close}>
                     {content}
                   </Link>
                 )}

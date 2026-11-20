@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Header } from "@/components/site-header";
+import { raceSearchText } from "@/lib/race-search";
 import { QuickNavigation } from "@/components/quick-navigation";
 import { publicRaces } from "@/data/races";
 import { englishGuides } from "@/data/guides.en";
@@ -40,7 +41,8 @@ const destinations = [
     href: `/en${raceHref(race)}`,
     label: race.englishName,
     category: "Race",
-    keywords: race.name,
+    isRace: true,
+    keywords: [raceSearchText(race), ...race.groups.map((group) => group.venue)].join(" "),
   })),
 ];
 

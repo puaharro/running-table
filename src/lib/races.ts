@@ -11,6 +11,7 @@ import {
   type ChannelType,
   type RegistrationStatus,
 } from "./types";
+import { normalizeRaceSearch, raceSearchText } from "./race-search";
 
 export const defaultFilters: Filters = {
   q: "",
@@ -215,23 +216,18 @@ export function filterError(f: Filters) {
 export function selectRaces(races: Race[], f: Filters, now: Clock) {
   const today = hongKongToday(clockTime(now));
   if (filterError(f)) return [];
-  const q = f.q.trim().toLocaleLowerCase();
+  const q = normalizeRaceSearch(f.q);
   const result = races.flatMap((race) => {
     if (f.view === "upcoming" && race.endDate < today) return [];
     if (f.view === "past" && race.endDate >= today) return [];
     if (f.themed && !race.tags.includes("主題跑")) return [];
     if (f.countries.length && !f.countries.includes(race.country ?? "香港")) return [];
     if (f.sports.length && !f.sports.includes(race.sport)) return [];
-    const raceMatchesQuery =
-      !q ||
-      [race.name, race.englishName, race.organizer, race.district, race.venue, ...race.tags]
-        .join(" ")
-        .toLocaleLowerCase()
-        .includes(q);
+    const raceMatchesQuery = !q || normalizeRaceSearch(raceSearchText(race)).includes(q);
     const charityFilter = f.channels.includes("charity") && race.charityEntry?.available === true;
     const groups = race.groups.flatMap((g) => {
       if (f.family && !race.tags.includes("親子") && !/親子|少年/.test(g.name)) return [];
-      if (!raceMatchesQuery && !(g.venue ?? "").toLocaleLowerCase().includes(q)) return [];
+      if (!raceMatchesQuery && !normalizeRaceSearch(g.venue ?? "").includes(q)) return [];
       const region = g.region === undefined ? race.region : g.region;
       if (f.regions.length && (!region || !f.regions.includes(region))) return [];
       if (f.month && Number(g.date.slice(5, 7)) !== Number(f.month)) return [];

@@ -4,11 +4,46 @@ import { describe, expect, it } from "vitest";
 import { races } from "@/data/races";
 import { RegistrationGroups } from "@/components/live-registration";
 import { RegistrationSummary } from "@/components/registration-summary";
-import { defaultFilters, parseFilters } from "./races";
-import { resultsHref, safeResultsHref } from "./results-location";
+import { defaultFilters, parseFilters, selectRaces } from "./races";
+import { normalizeRaceSearch, raceSearchText } from "./race-search";
+import { quickSearchResultsHref, resultsHref, safeResultsHref } from "./results-location";
 
 const race = races.find((r) => r.id === "standard-chartered-hk-marathon-2027")!;
 describe("mobile list and registration journey", () => {
+  it("finds the same marathon by its bilingual aliases in quick search and the distance-filtered calendar", () => {
+    for (const keyword of ["渣馬", "SCHKM", "ＳＣＨＫＭ", "Standard Chartered"]) {
+      expect(normalizeRaceSearch(raceSearchText(race))).toContain(normalizeRaceSearch(keyword));
+      const matches = selectRaces(
+        [race],
+        { ...defaultFilters, q: keyword, view: "all", distances: ["10K"] },
+        "2026-11-20T00:00:00Z",
+      );
+      expect(matches[0]?.groups.map(({ id }) => id)).toEqual(["schkm-2027-10k"]);
+    }
+  });
+  it("restores the quick-search term to the local calendar and includes past editions", () => {
+    for (const keyword of ["渣馬", "Standard Chartered", "test & # fragment"]) {
+      const href = quickSearchResultsHref(keyword);
+      expect(href).not.toBeNull();
+      const url = new URL(href!, "https://test.invalid");
+      expect(url.pathname).toBe("/races/");
+      expect(url.hash).toBe("#race-list");
+      expect(parseFilters(url.searchParams)).toMatchObject({ q: keyword, view: "all" });
+    }
+    expect(quickSearchResultsHref(" ")).toBeNull();
+  });
+  it("links each bilingual category to its own entry options", () => {
+    for (const english of [false, true]) {
+      const html = renderToStaticMarkup(
+        createElement(RegistrationGroups, { race, english, initialNow: "2026-11-20T00:00:00Z" }),
+      );
+      expect(html).toContain(english ? "Jump to entry options" : "跳到報名渠道");
+      for (const group of race.groups) {
+        expect(html).toContain(`href="#entry-options-${group.id}"`);
+        expect(html).toContain(`id="entry-options-${group.id}"`);
+      }
+    }
+  });
   it("returns to the selected race with the same combined filters and sort order", () => {
     const filters = {
       ...defaultFilters,

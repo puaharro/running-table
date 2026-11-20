@@ -3,6 +3,7 @@ import { localPath } from "./english-races";
 import type { Filters } from "./types";
 
 export const favoriteResultsHref = "/races/?saved=1#race-list";
+export const quickSearchQueryKey = "fromSearch";
 const resultsStorageKey = "rundates:results";
 function resultsPage(params: URLSearchParams) {
   const value = params.get("page") ?? "1";
@@ -24,6 +25,11 @@ export function resultsHref(filters: Filters = defaultFilters, raceId?: string, 
   const query = params.toString();
   const anchor = raceId && /^[a-z0-9-]+$/.test(raceId) ? `race-${raceId}` : "race-list";
   return `/races/${query ? `?${query}` : ""}#${anchor}`;
+}
+
+export function quickSearchResultsHref(query: string | null) {
+  const q = query?.trim().slice(0, 100);
+  return q ? resultsHref({ ...defaultFilters, q, view: "all" }) : null;
 }
 
 export function resultsAnchorRaceId(hash: string) {

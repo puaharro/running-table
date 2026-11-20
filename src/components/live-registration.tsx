@@ -111,7 +111,10 @@ export function RegistrationGroups({
   useEffect(() => {
     const sync = () => {
       const hash = window.location.hash.slice(1);
-      setSelectedGroup(race.groups.some((group) => `group-${group.id}` === hash) ? hash : "");
+      const group = race.groups.find(
+        ({ id }) => hash === `group-${id}` || hash === `entry-options-${id}`,
+      );
+      setSelectedGroup(group ? `group-${group.id}` : "");
     };
     sync();
     window.addEventListener("hashchange", sync);
@@ -122,7 +125,7 @@ export function RegistrationGroups({
     };
   }, [race.groups]);
   useEffect(() => {
-    if (!selectedGroup) return;
+    if (!selectedGroup || window.location.hash !== `#${selectedGroup}`) return;
     const frame = window.requestAnimationFrame(() => {
       const group = document.getElementById(selectedGroup);
       group?.scrollIntoView({ block: "start", behavior: "instant" });
@@ -151,6 +154,11 @@ export function RegistrationGroups({
               </span>
             )}
           </h3>
+          {(group.channels.length > 0 || group.charityEntry) && (
+            <a className="text-link group-entry-link" href={`#entry-options-${group.id}`}>
+              {t("跳到報名渠道", "Jump to entry options")} <span aria-hidden="true">↓</span>
+            </a>
+          )}
           <dl className="group-facts">
             <div>
               <dt>{t("比賽日期", "Race date")}</dt>
@@ -187,7 +195,7 @@ export function RegistrationGroups({
               previewEdition?.groupId === group.id ? previewEdition.year : undefined
             }
           />
-          <h4 className="channels-heading">
+          <h4 className="channels-heading" id={`entry-options-${group.id}`} tabIndex={-1}>
             {t("報名渠道 ·", "Entry options ·")}{" "}
             {group.channels.length + Number(!!group.charityEntry)}
           </h4>
