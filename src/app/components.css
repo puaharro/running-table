@@ -1,13 +1,6 @@
 /* Hallmark · built: NXTGO · redesign: polish */
 /* Shared controls and data presentation; layout remains in globals/refresh. */
 /* Warm foundations, muted blue decisions, and dark anchors for quick scanning. */
-.calendar-masthead {
-  background: var(--surface-hero);
-  border-bottom: 0;
-}
-.masthead-copy h1 span {
-  color: var(--text-primary);
-}
 .race-date,
 .race-date > .race-date-month {
   background: var(--date-surface);
@@ -101,8 +94,7 @@
 .text-link,
 .summary-official-link,
 .group-official-link,
-.registration-summary-heading a,
-.masthead-guide {
+.registration-summary-heading a {
   color: var(--action-primary-hover);
 }
 .registration-card .text-link {
@@ -639,9 +631,6 @@ summary:focus-visible {
 .guide-card h3 {
   letter-spacing: 0;
   font-weight: 700;
-}
-.masthead-copy h1 {
-  letter-spacing: -0.01em;
 }
 .race-english {
   font-size: var(--text-sm);

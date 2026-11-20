@@ -5,13 +5,54 @@ import { races } from "@/data/races";
 import { RaceExplorer } from "@/components/race-explorer";
 import { defaultFilters, selectRaces } from "./races";
 import {
+  calendarFilterRelaxation,
+  calendarOptionCounts,
   filteredRaceHref,
   orderByListedDeadline,
   orderSavedResults,
   paginateResults,
 } from "./list-view";
+import { distanceOptions, regions } from "./types";
 import { resultsEntry, resultsHref, safeResultsHref } from "./results-location";
 const now = "2026-11-07T02:00:00Z";
+
+it("counts replacement location and distance options with the remaining filters applied", () => {
+  const filters = {
+    ...defaultFilters,
+    view: "all" as const,
+    countries: ["澳門"],
+    distances: ["半馬"],
+  };
+  const counts = calendarOptionCounts(races, filters, now);
+  expect(counts.regions).toEqual(
+    regions.map(
+      (region) => selectRaces(races, { ...filters, regions: [region], countries: [] }, now).length,
+    ),
+  );
+  expect(counts.distances).toEqual(
+    distanceOptions.map(
+      (distance) => selectRaces(races, { ...filters, distances: [distance] }, now).length,
+    ),
+  );
+});
+
+it("prefers removing a filter that restores results and retains the first option if none can", () => {
+  const filters = {
+    ...defaultFilters,
+    view: "all" as const,
+    q: "不存在賽事項目",
+    from: "2020-01-01",
+  };
+  expect(calendarFilterRelaxation(races, filters, now)).toEqual({
+    kind: "query",
+    next: { ...filters, q: "" },
+  });
+  expect(calendarFilterRelaxation([], filters, now)).toEqual({
+    kind: "date",
+    next: { ...filters, from: "", to: "" },
+  });
+});
+
 it("renders ten races per page and preserves all results without overlap or omissions", () => {
   const results = Array.from({ length: 21 }, (_, id) => id);
   const first = paginateResults(results, 1),

@@ -1,7 +1,7 @@
-import { clockTime, hongKongToday, type Clock } from "./races";
+import { clockTime, hongKongToday, selectRaces, type Clock } from "./races";
 import { listDeadline } from "./list-registration";
 import { raceHref } from "./site";
-import type { Filters, Race, RaceGroup } from "./types";
+import { distanceOptions, regions, type Filters, type Race, type RaceGroup } from "./types";
 
 export type RaceResult = { race: Race; groups: RaceGroup[] };
 const racesPerPage = 10;
@@ -35,6 +35,69 @@ export function orderByListedDeadline(results: RaceResult[], now: Clock) {
     })
     .sort((a, b) => a.deadline - b.deadline || a.result.race.date.localeCompare(b.result.race.date))
     .map(({ result }) => result);
+}
+
+export function calendarResults(races: Race[], filters: Filters, now: Clock, savedOnly: boolean) {
+  if (filters.sort === "deadline") {
+    return orderByListedDeadline(selectRaces(races, { ...filters, sort: "date" }, now), now);
+  }
+  const results = selectRaces(races, filters, now);
+  return savedOnly && filters.sort === "date" ? orderSavedResults(results, now) : results;
+}
+
+export function calendarOptionCounts(races: Race[], filters: Filters, now: Clock) {
+  return {
+    regions: regions.map(
+      (region) => selectRaces(races, { ...filters, countries: [], regions: [region] }, now).length,
+    ),
+    distances: distanceOptions.map(
+      (distance) => selectRaces(races, { ...filters, distances: [distance] }, now).length,
+    ),
+  };
+}
+
+export function activeCalendarFilterCount(filters: Filters) {
+  return (
+    Number(Boolean(filters.from || filters.to)) +
+    Number(Boolean(filters.month)) +
+    Number(Boolean(filters.min || filters.max)) +
+    Number(filters.family) +
+    Number(filters.themed) +
+    filters.countries.length +
+    filters.regions.length +
+    filters.distances.length +
+    filters.sports.length +
+    filters.statuses.length +
+    filters.channels.length
+  );
+}
+
+export function calendarFilterRelaxation(races: Race[], filters: Filters, now: Clock) {
+  const candidates = [
+    ["month", filters.month, { month: "" }],
+    ["date", filters.from || filters.to, { from: "", to: "" }],
+    [
+      "location",
+      filters.countries.length || filters.regions.length,
+      { countries: [], regions: [] },
+    ],
+    [
+      "distance",
+      filters.distances.length || filters.min || filters.max,
+      { distances: [], min: "", max: "" },
+    ],
+    ["themed", filters.themed, { themed: false }],
+    ["family", filters.family, { family: false }],
+    ["status", filters.statuses.length, { statuses: [] }],
+    ["channel", filters.channels.length, { channels: [] }],
+    ["query", filters.q, { q: "" }],
+  ] as const satisfies ReadonlyArray<
+    readonly [string, string | number | boolean, Partial<Filters>]
+  >;
+  const options = candidates.flatMap(([kind, active, patch]) =>
+    active ? [{ kind, next: { ...filters, ...patch } }] : [],
+  );
+  return options.find(({ next }) => selectRaces(races, next, now).length > 0) ?? options[0];
 }
 
 export function paginateResults<T>(results: T[], requestedPage: number) {

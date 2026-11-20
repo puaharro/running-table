@@ -4,9 +4,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { englishRaceTerm } from "@/lib/race-terms.en";
 import { language } from "@/lib/english-races";
 import { Icon } from "./ui";
-import { defaultFilters, filterError, selectRaces } from "@/lib/races";
+import { defaultFilters, filterError } from "@/lib/races";
 import { toggleDateShortcut, type DateShortcut } from "@/lib/filter-shortcuts";
-import { orderByListedDeadline, orderSavedResults, paginateResults } from "@/lib/list-view";
+import {
+  activeCalendarFilterCount,
+  calendarFilterRelaxation,
+  calendarOptionCounts,
+  calendarResults,
+  paginateResults,
+} from "@/lib/list-view";
 import {
   rememberResultsHref,
   replaceResultsHref,
@@ -19,7 +25,7 @@ import { RaceBackToSearch } from "./race-back-to-search";
 import { RaceFilterPanel, type FilterCategory } from "./race-filter-panel";
 import { RaceResultsList } from "./race-results-list";
 import type { EditorialReview } from "@/lib/editorial-reviews";
-import { distanceOptions, regions, type Filters, type Race } from "@/lib/types";
+import type { Filters, Race } from "@/lib/types";
 
 export function RaceExplorer({
   races,
@@ -157,30 +163,16 @@ export function RaceExplorer({
     () => (savedOnly ? races.filter((race) => favorites.ids.includes(race.id)) : races),
     [races, savedOnly, favorites.ids],
   );
-  const results = useMemo(() => {
-    const selected = selectRaces(
-      searchableRaces,
-      filters.sort === "deadline" ? { ...filters, sort: "date" } : filters,
-      now,
-    );
-    if (filters.sort === "deadline") return orderByListedDeadline(selected, now);
-    return savedOnly && filters.sort === "date" ? orderSavedResults(selected, now) : selected;
-  }, [searchableRaces, filters, now, savedOnly]);
-  const optionCounts = useMemo(() => {
-    if (!filtersExpanded && filterCategory !== "location" && filterCategory !== "distance")
-      return null;
-    return {
-      regions: regions.map(
-        (region) =>
-          selectRaces(searchableRaces, { ...filters, countries: [], regions: [region] }, now)
-            .length,
-      ),
-      distances: distanceOptions.map(
-        (distance) =>
-          selectRaces(searchableRaces, { ...filters, distances: [distance] }, now).length,
-      ),
-    };
-  }, [filterCategory, filtersExpanded, searchableRaces, filters, now]);
+  const results = useMemo(
+    () => calendarResults(searchableRaces, filters, now, savedOnly),
+    [searchableRaces, filters, now, savedOnly],
+  );
+  const showOptionCounts =
+    filtersExpanded || filterCategory === "location" || filterCategory === "distance";
+  const optionCounts = useMemo(
+    () => (showOptionCounts ? calendarOptionCounts(searchableRaces, filters, now) : null),
+    [showOptionCounts, searchableRaces, filters, now],
+  );
   const pagination = paginateResults(results, page);
   useEffect(() => {
     if (!ready || (savedOnly && !favorites.ready) || page === pagination.page) return;
@@ -209,18 +201,7 @@ export function RaceExplorer({
     setRemoved({ id: race.id, name: english ? race.englishName : race.name, keyboard });
   }
   const error = filterError(filters);
-  const activeFilterCount =
-    Number(Boolean(filters.from || filters.to)) +
-    Number(Boolean(filters.month)) +
-    Number(Boolean(filters.min || filters.max)) +
-    Number(filters.family) +
-    Number(filters.themed) +
-    filters.countries.length +
-    filters.regions.length +
-    filters.distances.length +
-    filters.sports.length +
-    filters.statuses.length +
-    filters.channels.length;
+  const activeFilterCount = activeCalendarFilterCount(filters);
   const acceptingOnly = filters.statuses.length === 1 && filters.statuses[0] === "open";
   const selectedView = savedOnly
     ? "saved"
@@ -233,55 +214,18 @@ export function RaceExplorer({
     ["saved", t("我的收藏", "Saved races")],
     ["all", t("全部", "All")],
   ] as const;
-  const relaxOptions: { label: string; next: Filters }[] = [];
-  if (!results.length) {
-    if (filters.month)
-      relaxOptions.push({ label: t("取消月份", "Remove month"), next: { ...filters, month: "" } });
-    if (filters.from || filters.to) {
-      relaxOptions.push({
-        label: t("取消日期範圍", "Remove date range"),
-        next: { ...filters, from: "", to: "" },
-      });
-    }
-    if (filters.countries.length || filters.regions.length) {
-      relaxOptions.push({
-        label: t("取消地點限制", "Remove location filter"),
-        next: { ...filters, countries: [], regions: [] },
-      });
-    }
-    if (filters.distances.length || filters.min || filters.max) {
-      relaxOptions.push({
-        label: t("取消距離限制", "Remove distance filter"),
-        next: { ...filters, distances: [], min: "", max: "" },
-      });
-    }
-    if (filters.themed)
-      relaxOptions.push({
-        label: t("取消主題跑限制", "Remove themed race filter"),
-        next: { ...filters, themed: false },
-      });
-    if (filters.family)
-      relaxOptions.push({
-        label: t("取消組別限制", "Remove category filter"),
-        next: { ...filters, family: false },
-      });
-    if (filters.statuses.length) {
-      relaxOptions.push({
-        label: t("取消報名狀態限制", "Remove entry status filter"),
-        next: { ...filters, statuses: [] },
-      });
-    }
-    if (filters.channels.length) {
-      relaxOptions.push({
-        label: t("取消報名渠道限制", "Remove entry channel filter"),
-        next: { ...filters, channels: [] },
-      });
-    }
-    if (filters.q)
-      relaxOptions.push({ label: t("清除搜尋字詞", "Clear search"), next: { ...filters, q: "" } });
-  }
-  const relaxOption =
-    relaxOptions.find(({ next }) => selectRaces(races, next, now).length > 0) ?? relaxOptions[0];
+  const relaxOption = results.length ? undefined : calendarFilterRelaxation(races, filters, now);
+  const relaxLabels = {
+    month: t("取消月份", "Remove month"),
+    date: t("取消日期範圍", "Remove date range"),
+    location: t("取消地點限制", "Remove location filter"),
+    distance: t("取消距離限制", "Remove distance filter"),
+    themed: t("取消主題跑限制", "Remove themed race filter"),
+    family: t("取消組別限制", "Remove category filter"),
+    status: t("取消報名狀態限制", "Remove entry status filter"),
+    channel: t("取消報名渠道限制", "Remove entry channel filter"),
+    query: t("清除搜尋字詞", "Clear search"),
+  };
 
   async function share() {
     const request = ++shareRequest.current;
@@ -477,7 +421,7 @@ export function RaceExplorer({
             resultsPanel={resultsPanel}
             relaxOption={
               relaxOption && {
-                label: relaxOption.label,
+                label: relaxLabels[relaxOption.kind],
                 onClick: () => {
                   if (!relaxOption.next.from && !relaxOption.next.to) setCustomDates(false);
                   update(relaxOption.next);

@@ -2,20 +2,12 @@ import { RaceDataText } from "@/components/race-data-text";
 import { englishRaceTerm } from "@/lib/race-terms.en";
 import { englishDate, englishTimestamp, language, localPath } from "@/lib/english-races";
 import "./race-detail.css";
-import { runnerCopyForRace } from "@/lib/runner-copy";
-import { RaceRunnerCopy } from "@/components/race-runner-copy";
-import { confirmedRaceExperience } from "@/lib/confirmed-race-experience";
-import { RaceConfirmedExperience } from "@/components/confirmed-race-experience";
-import { localRatingAssessment } from "@/lib/local-rating-preview";
-import { RaceRatingAssessmentPreview } from "@/components/race-rating-assessment-preview";
-import { UnscopedRunnerOpinions } from "@/components/runner-opinions";
+import { raceExperience, RaceExperienceSections } from "@/components/race-experience";
 import { RaceSaveActions } from "@/components/race-save";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { publicRaces as races } from "@/data/races";
 import { guideMatchesRace, guides } from "@/data/guides";
-import { editorialReviews } from "@/data/editorial-reviews";
-import { reviewsForGroup } from "@/lib/editorial-reviews";
 import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { ReturnLink } from "@/components/return-link";
 import { RaceAnnouncement, RaceDayInformation } from "@/components/race-day-information";
@@ -50,46 +42,13 @@ export default async function RacePage({ params, english = false }: Props & { en
   const race = await getRace(params);
   if (!race) notFound();
   const relatedGuides = guides.filter((guide) => guideMatchesRace(guide, race));
-  const reviewedGroups = race.groups.filter((group) => {
-    const reviews = reviewsForGroup(race, group, editorialReviews);
-    return reviews.current.length || reviews.historical.length;
-  });
-  const runnerCopy = runnerCopyForRace(race.id);
-  const ratingAssessment = localRatingAssessment(race.id);
-  const confirmedExperience = confirmedRaceExperience(race.id);
-  const replacedReview = confirmedExperience
-    ? race.groups.flatMap((group) => {
-        if (group.id !== confirmedExperience.groupId) return [];
-        const { current, historical } = reviewsForGroup(race, group, editorialReviews);
-        return [...current, ...historical].filter(
-          (r) => r.editionYear === confirmedExperience.year,
-        );
-      })[0]
-    : undefined;
-  const experienceId = runnerCopy
-    ? "runner-copy"
-    : confirmedExperience
-      ? "race-confirmed-experience"
-      : "ratings-" + (reviewedGroups[0] ?? race.groups[0]).id;
+  const experience = raceExperience(race, english);
+  const confirmedExperience = experience.confirmed;
   const now = new Date().toISOString();
   const chapters = [
     { id: "race-about", label: t("賽事概覽", "Race overview") },
     { id: "registration-groups", label: t("組別及報名", "Categories and entry") },
-    {
-      id: experienceId,
-      label: runnerCopy ? t("跑手分享", "Runner accounts") : t("參賽體驗", "Race experience"),
-    },
-    ...(runnerCopy && confirmedExperience
-      ? [
-          {
-            id: "race-confirmed-experience",
-            label: t(
-              `${confirmedExperience.year} 往屆體驗`,
-              `${confirmedExperience.year} race experience`,
-            ),
-          },
-        ]
-      : []),
+    ...experience.chapters,
     { id: "race-transport", label: t("交通及集合", "Transport and assembly") },
     { id: "race-sources", label: t("資料來源", "Sources") },
     { id: "race-changes", label: t("修改紀錄", "Update history") },
@@ -130,19 +89,8 @@ export default async function RacePage({ params, english = false }: Props & { en
             english={english}
             race={race}
             initialNow={now}
-            experienceHref={"#" + experienceId}
-            experienceLabel={
-              runnerCopy
-                ? t("跑手分享（無評分）", "Runner accounts (unrated)")
-                : confirmedExperience
-                  ? t(
-                      `${confirmedExperience.year} 往屆體驗`,
-                      `${confirmedExperience.year} race experience`,
-                    )
-                  : reviewedGroups.length
-                    ? t("參賽體驗", "Race experience")
-                    : t("參賽體驗（未評）", "Race experience (unrated)")
-            }
+            experienceHref={experience.overviewHref}
+            experienceLabel={experience.overviewLabel}
           />
           <div className="registration-card race-official-panel">
             <h2>{t("官方報名資料", "Official entry information")}</h2>
@@ -269,17 +217,7 @@ export default async function RacePage({ params, english = false }: Props & { en
                 />
               </div>
             </section>
-            {ratingAssessment && <RaceRatingAssessmentPreview draft={ratingAssessment} />}
-            {runnerCopy && <RaceRunnerCopy english={english} copy={runnerCopy} />}
-            {confirmedExperience && (
-              <RaceConfirmedExperience
-                english={english}
-                experience={confirmedExperience}
-                currentYear={race.date.slice(0, 4)}
-                reviewAnchor={replacedReview ? `review-${replacedReview.id}` : undefined}
-              />
-            )}
-            {!confirmedExperience && <UnscopedRunnerOpinions english={english} race={race} />}
+            <RaceExperienceSections race={race} english={english} experience={experience} />
             <AdSlot />
             {!!race.enquiryLinks?.length && (
               <section id="enquiries" tabIndex={-1}>
