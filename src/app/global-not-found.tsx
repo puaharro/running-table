@@ -5,6 +5,7 @@ import "./tokens.css";
 import "./globals.css";
 import "./refresh.css";
 import "./components.css";
+import "./site-header.css";
 
 export const metadata: Metadata = { title: "找不到此頁面 | NXTGO", robots: { index: false } };
 

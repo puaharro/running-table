@@ -3,7 +3,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { publicRaces, races } from "@/data/races";
 import { CharityEntry } from "@/components/charity-entry";
-import { RegistrationGroups, RegistrationSummary } from "@/components/live-registration";
+import { RegistrationGroups } from "@/components/live-registration";
+import { RegistrationSummary } from "@/components/registration-summary";
 import { defaultFilters, selectRaces } from "./races";
 import { listRegistration } from "./list-registration";
 

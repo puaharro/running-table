@@ -78,8 +78,7 @@
 .search-page .search-box input:focus-visible {
   outline: none;
 }
-.calendar-filter-toggle,
-.calendar-apply-filters {
+.calendar-filter-toggle {
   display: none;
 }
 .calendar-workspace {
@@ -88,182 +87,11 @@
   gap: var(--space-4);
   align-items: start;
 }
-.calendar-filter-panel,
 .calendar-results {
   min-width: 0;
 }
 .calendar-results {
   container: race-results / inline-size;
-}
-.search-page .search-engine.filter-card {
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--home-line);
-  border-radius: 10px;
-  box-shadow: none;
-}
-.calendar-filter-heading {
-  display: flex;
-  gap: var(--space-3);
-  align-items: center;
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--home-line);
-}
-.calendar-filter-heading h2 {
-  font-size: 16px;
-  margin: 0;
-}
-.calendar-reset-filters {
-  min-height: 44px;
-  margin-left: auto;
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--home-control);
-  border-radius: 6px;
-  background: var(--home-card);
-  color: var(--home-action-pressed);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-}
-.calendar-reset-filters:hover {
-  border-color: var(--home-action);
-  background: var(--home-tint);
-}
-.search-page .engine-options {
-  gap: var(--space-6);
-  padding-top: var(--space-5);
-}
-.search-page .engine-option-row {
-  display: grid;
-  gap: var(--space-3);
-  align-items: start;
-}
-.search-page .engine-label {
-  color: var(--home-ink);
-  font-size: 14px;
-  line-height: 1.5;
-  font-weight: 600;
-}
-.search-page .engine-options .option-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-.search-page .engine-options .option-row button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
-  min-height: 44px;
-  min-width: 44px;
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--home-line);
-  border-radius: 6px;
-  color: var(--home-ink);
-  background: var(--home-card);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.5;
-  transition:
-    background var(--motion-fast),
-    border-color var(--motion-fast);
-}
-.search-page .engine-options .option-row button:enabled:hover:not([aria-pressed="true"]) {
-  border-color: var(--home-action);
-  background: var(--home-tint);
-}
-.search-page .engine-options .option-row button:disabled {
-  color: var(--home-muted);
-  border-style: dashed;
-  cursor: not-allowed;
-}
-.search-page .engine-options .option-row button[aria-pressed="true"] {
-  color: var(--home-action-pressed);
-  background: var(--home-accent);
-  border-color: var(--home-action);
-  box-shadow: inset 0 -2px 0 var(--home-action);
-}
-.search-page .engine-options .option-row-checkmarks button {
-  position: relative;
-  padding-inline: var(--space-4);
-}
-.option-row-checkmarks button[aria-pressed="true"]::before {
-  content: "";
-  position: absolute;
-  inset-inline-start: var(--space-2);
-  inset-block-start: 50%;
-  width: 6px;
-  height: 10px;
-  border: solid currentColor;
-  border-width: 0 2px 2px 0;
-  transform: translateY(-60%) rotate(45deg);
-}
-.calendar-option-count {
-  min-width: 3ch;
-  padding-inline: 3px;
-  border-radius: 4px;
-  background: var(--home-metadata);
-  color: var(--home-ink);
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.5;
-  text-align: center;
-}
-.option-row-checkmarks button[aria-pressed="true"] .calendar-option-count {
-  background: var(--home-card);
-}
-.search-page .engine-month {
-  margin: 0;
-}
-.search-page .engine-month select {
-  min-height: 44px;
-  font-size: 14px;
-  border-color: var(--home-control);
-}
-.search-page .engine-dates {
-  display: grid;
-  gap: var(--space-3);
-  margin: 0;
-  width: 100%;
-  min-width: 0;
-  max-width: none;
-  padding: var(--space-3);
-  border: 1px solid var(--home-line);
-  border-radius: 8px;
-  background: var(--home-tint);
-}
-.engine-dates legend {
-  padding-inline: 4px;
-  color: var(--home-action-pressed);
-  font-size: 14px;
-  font-weight: 700;
-}
-.engine-dates :is(.calendar-date-range-summary, .calendar-date-range-error) {
-  grid-column: 1 / -1;
-  margin: 0;
-  font-size: 14px;
-  overflow-wrap: anywhere;
-}
-.calendar-date-range-error {
-  color: var(--status-error-text);
-}
-.search-page .engine-dates > span {
-  display: none;
-}
-.search-page .engine-dates > label {
-  width: 100%;
-}
-.search-page .engine-dates input {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  min-height: 44px;
-  font-size: 16px;
-  border: 1px solid var(--home-control);
-  border-radius: 6px;
-  color: var(--home-ink);
-  background: var(--home-card);
-  padding: var(--space-2);
-  box-sizing: border-box;
 }
 .search-page .results-toolbar {
   display: flex;
@@ -305,11 +133,6 @@
 }
 .search-page :is(.engine-options .option-row, .calendar-view-tabs) button:enabled:active {
   box-shadow: inset 0 0 0 2px currentColor;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .search-page .engine-options .option-row button:enabled:active {
-    translate: 0 1px;
-  }
 }
 .search-page .results-actions {
   flex-basis: 100%;
@@ -408,9 +231,6 @@
   color: var(--home-muted);
   border-color: var(--home-line);
 }
-.calendar-apply-filters:hover {
-  background: var(--home-action-pressed);
-}
 .search-page .results-footer {
   gap: var(--space-4);
   flex-wrap: wrap;
@@ -499,99 +319,6 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
-  }
-  aside.calendar-filter-panel,
-  dialog.calendar-filter-panel:not([open]) {
-    display: none;
-  }
-  dialog.calendar-filter-panel:modal {
-    position: fixed;
-    inset: auto 0 0;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    width: min(100%, 560px);
-    max-width: none;
-    max-height: 85dvh;
-    margin: 0 auto;
-    padding: 0;
-    border: 1px solid var(--home-line);
-    border-radius: 16px 16px 0 0;
-    background: var(--home-card);
-    color: var(--home-ink);
-    overscroll-behavior: contain;
-  }
-  dialog.calendar-filter-panel::backdrop {
-    background: rgb(22 40 33 / var(--calendar-backdrop-opacity, 0.5));
-    overflow: hidden;
-    overscroll-behavior: contain;
-  }
-  .calendar-sheet-dismiss {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: 4px var(--space-4) 0;
-  }
-  .calendar-sheet-grip {
-    display: grid;
-    flex: 1;
-    min-height: 44px;
-    place-items: center;
-    touch-action: pan-x pinch-zoom;
-    cursor: grab;
-  }
-  .calendar-sheet-grip:active {
-    cursor: grabbing;
-  }
-  .calendar-sheet-grip::before {
-    content: "";
-    width: 32px;
-    height: 4px;
-    border-radius: 4px;
-    background: var(--home-control);
-  }
-  .calendar-sheet-dismiss button {
-    min-height: 44px;
-    border: 0;
-    background: transparent;
-    color: var(--home-action);
-  }
-  .calendar-sheet-footer {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    background: var(--home-action);
-  }
-  .search-page dialog .search-engine.filter-card {
-    min-height: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding: var(--space-5) var(--space-4);
-    border: 0;
-  }
-  .calendar-filter-heading {
-    padding-bottom: var(--space-3);
-  }
-  .search-page .engine-options {
-    padding-top: var(--space-4);
-    gap: var(--space-5);
-  }
-  .search-page .engine-dates {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .calendar-apply-filters {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    min-height: 48px;
-    gap: var(--space-3);
-    padding: var(--space-3);
-    border: 0;
-    border-radius: 0;
-    background: var(--home-action);
-    color: var(--home-on-dark);
-    font: inherit;
-    font-size: 16px;
-    font-weight: 600;
   }
   .search-page .calendar-view-tabs {
     flex: 1 1 auto;
@@ -936,23 +663,6 @@
   .search-page .search-box {
     height: 46px;
   }
-  .search-page .engine-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3) var(--space-5);
-    padding-top: var(--space-3);
-  }
-  .search-page .engine-option-row {
-    gap: var(--space-1);
-  }
-  .search-page .engine-options .option-row {
-    gap: 4px;
-  }
-  .search-page .engine-dates {
-    order: 1;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-width: 460px;
-  }
   .search-page .results-toolbar {
     padding-bottom: var(--space-2);
     border-bottom: 0;
@@ -986,76 +696,6 @@
   .search-page .calendar-race-card:hover {
     background: var(--home-tint);
   }
-}
-
-.search-page aside .calendar-filter-heading {
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  border: 0;
-  padding-bottom: 0;
-}
-.calendar-filter-categories {
-  display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  gap: 6px;
-  min-width: 0;
-}
-.calendar-filter-categories > button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  min-height: 44px;
-  padding: 6px 10px;
-  border: 1px solid var(--home-line);
-  border-radius: 6px;
-  background: var(--home-card);
-  color: var(--home-ink);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 650;
-  cursor: pointer;
-}
-.calendar-filter-categories > button:is(:hover, [aria-expanded="true"], [data-active="true"]) {
-  border-color: var(--home-action);
-  background: var(--home-tint);
-  color: var(--home-action-pressed);
-}
-.calendar-category-chevron {
-  width: 6px;
-  height: 6px;
-  margin-bottom: 3px;
-  border: solid currentColor;
-  border-width: 0 1.5px 1.5px 0;
-  transform: rotate(45deg);
-}
-.calendar-filter-categories > button[aria-expanded="true"] .calendar-category-chevron {
-  transform: rotate(225deg);
-  margin-bottom: -3px;
-}
-.calendar-category-count {
-  min-width: 1.4em;
-  padding-inline: 3px;
-  border-radius: 4px;
-  background: var(--home-action);
-  color: var(--home-on-dark);
-  font-size: 12px;
-  text-align: center;
-}
-.search-page aside #calendar-category-options:not([hidden]) {
-  display: block;
-  margin-top: var(--space-2);
-  padding: var(--space-3);
-  border-radius: 6px;
-  background: var(--home-tint);
-}
-.search-page #calendar-category-options [hidden],
-.search-page #calendar-category-options[hidden] {
-  display: none;
-}
-.search-page #calendar-category-options .engine-dates {
-  margin-top: var(--space-2);
 }
 
 .race-directory {

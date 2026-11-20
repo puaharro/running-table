@@ -2,7 +2,8 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { races } from "@/data/races";
-import { RegistrationSummary, RegistrationGroups } from "@/components/live-registration";
+import { RegistrationGroups } from "@/components/live-registration";
+import { RegistrationSummary } from "@/components/registration-summary";
 import { defaultFilters, parseFilters } from "./races";
 import { resultsHref, safeResultsHref } from "./results-location";
 

@@ -4,7 +4,7 @@ import { raceHref } from "./site";
 import type { Filters, Race, RaceGroup } from "./types";
 
 export type RaceResult = { race: Race; groups: RaceGroup[] };
-export const racesPerPage = 10;
+const racesPerPage = 10;
 export function pastResult(result: RaceResult, now: Clock) {
   const today = hongKongToday(clockTime(now));
   return (

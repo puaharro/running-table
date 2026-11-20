@@ -2,7 +2,7 @@
 import { language, localPath } from "@/lib/english-races";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { safeResultsHref } from "@/lib/results-location";
+import { readRememberedResultsHref, resultsHref } from "@/lib/results-location";
 export function ReturnLink({
   compactOnMobile = false,
   english = false,
@@ -11,14 +11,9 @@ export function ReturnLink({
   english?: boolean;
 }) {
   const t = language(english);
-  const [href, setHref] = useState("/races/#race-list");
+  const [href, setHref] = useState(() => resultsHref());
   useEffect(() => {
-    try {
-      const saved = sessionStorage.getItem("rundates:results");
-      setHref(safeResultsHref(saved));
-    } catch {
-      /* Storage can be blocked by the visitor. */
-    }
+    setHref(readRememberedResultsHref());
   }, []);
   return (
     <Link

@@ -1,4 +1,5 @@
 import "./calendar.css";
+import "./race-filter-panel.css";
 import Link from "next/link";
 import { englishDate, language, localPath } from "@/lib/english-races";
 import { displayDate } from "@/lib/races";

@@ -103,7 +103,7 @@ export function Footer({ english = false }: { english?: boolean }) {
     </footer>
   );
 }
-export const showAdPlaceholders = process.env.NEXT_PUBLIC_SHOW_AD_PLACEHOLDERS === "true";
+const showAdPlaceholders = process.env.NEXT_PUBLIC_SHOW_AD_PLACEHOLDERS === "true";
 export function AdSlot({
   format = "inline",
 }: {
@@ -124,15 +124,6 @@ export function AdSlot({
       )}
       <small>尚未接入 Google AdSense</small>
     </aside>
-  );
-}
-export function AdSidebar({ format = "sidebar-box" }: { format?: "sidebar-tall" | "sidebar-box" }) {
-  if (!showAdPlaceholders) return null;
-  return (
-    <div className="ad-rail">
-      <AdSlot format={format} />
-      <p className="ad-rail-note">廣告位預覽 · 窄畫面自動調整</p>
-    </div>
   );
 }
 export function GuideCard({ guide, english = false }: { guide: Guide; english?: boolean }) {

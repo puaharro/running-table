@@ -25,14 +25,13 @@ import {
   PublicRegistrationCountdown,
   RaceOverview,
   RegistrationGroups,
-  RegistrationSummary,
 } from "@/components/live-registration";
+import { RegistrationSummary } from "@/components/registration-summary";
 import { formatTimestamp } from "@/lib/races";
 import { pageMetadata, raceHref } from "@/lib/site";
 import { releaseSettings } from "@/lib/release";
 import { raceStructuredData, safeJsonLd } from "@/lib/structured-data";
 
-export const dynamicParams = false;
 export function generateStaticParams() {
   return races.map((r) => ({ year: r.date.slice(0, 4), slug: r.slug }));
 }

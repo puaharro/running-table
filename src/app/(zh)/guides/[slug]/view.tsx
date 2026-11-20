@@ -15,7 +15,6 @@ import { AdSlot, Breadcrumb, GuideCard, Icon } from "@/components/ui";
 import { RegistrationChecklist } from "@/components/registration-checklist";
 import { displayDate, distanceLabel, hongKongToday } from "@/lib/races";
 import { pageMetadata, raceHref, siteName } from "@/lib/site";
-export const dynamicParams = false;
 export function generateStaticParams() {
   return guides.map((g) => ({ slug: g.slug }));
 }

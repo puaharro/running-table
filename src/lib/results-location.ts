@@ -1,8 +1,10 @@
 import { defaultFilters, parseFilters, serializeFilters } from "./races";
+import { localPath } from "./english-races";
 import type { Filters } from "./types";
 
 export const favoriteResultsHref = "/races/?saved=1#race-list";
-export function resultsPage(params: URLSearchParams) {
+const resultsStorageKey = "rundates:results";
+function resultsPage(params: URLSearchParams) {
   const value = params.get("page") ?? "1";
   return /^[1-9]\d{0,5}$/.test(value) ? Number(value) : 1;
 }
@@ -24,6 +26,32 @@ export function resultsHref(filters: Filters = defaultFilters, raceId?: string, 
   return `/races/${query ? `?${query}` : ""}#${anchor}`;
 }
 
+export function resultsAnchorRaceId(hash: string) {
+  if (hash === "#race-list") return undefined;
+  return /^#race-([a-z0-9-]+)$/.exec(hash)?.[1];
+}
+
+export function rememberResultsHref(href: string) {
+  try {
+    window.sessionStorage.setItem(resultsStorageKey, href);
+  } catch {
+    /* The current URL is still usable when browser storage is unavailable. */
+  }
+}
+
+export function replaceResultsHref(href: string, english: boolean) {
+  window.history.replaceState(null, "", localPath(href, english));
+  rememberResultsHref(href);
+}
+
+export function readRememberedResultsHref() {
+  try {
+    return safeResultsHref(window.sessionStorage.getItem(resultsStorageKey));
+  } catch {
+    return resultsHref();
+  }
+}
+
 export function safeResultsHref(saved: string | null) {
   if (!saved || !saved.startsWith("/") || saved.startsWith("//")) return "/races/#race-list";
   try {
@@ -33,10 +61,9 @@ export function safeResultsHref(saved: string | null) {
       !["/", "/races/", "/races"].includes(url.pathname)
     )
       return "/races/#race-list";
-    const raceId = /^#race-([a-z0-9-]+)$/.exec(url.hash)?.[1];
     return resultsHref(
       parseFilters(url.searchParams),
-      raceId === "list" ? undefined : raceId,
+      resultsAnchorRaceId(url.hash),
       resultsPage(url.searchParams),
     );
   } catch {

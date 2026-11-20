@@ -67,7 +67,7 @@ export type Clock = string | Date;
 export function clockTime(now: Clock) {
   return now instanceof Date ? now : new Date(now.length === 10 ? `${now}T00:00:00+08:00` : now);
 }
-export function closingTime(group: RegistrationChannel) {
+function closingTime(group: RegistrationChannel) {
   return group.registrationClosesAt
     ? Date.parse(group.registrationClosesAt)
     : group.deadline
