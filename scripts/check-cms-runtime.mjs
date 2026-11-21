@@ -12,6 +12,7 @@ for (const [id, pin] of Object.entries(index.records)) {
     JSON.parse(readFileSync(join("content", pin.file), "utf8")),
     pin,
     id,
+    Number(race.date.slice(0, 4)),
   );
   const path = join("out", "races", race.date.slice(0, 4), race.slug, "index.html");
   if (!existsSync(path)) throw Error("Missing CMS runtime race page: " + id);

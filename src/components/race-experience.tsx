@@ -12,7 +12,7 @@ import { UnscopedRunnerOpinions } from "./runner-opinions";
 
 export function raceExperience(race: Race, english: boolean) {
   const t = language(english);
-  const runnerCopy = runnerCopyForRace(race.id);
+  const runnerCopy = runnerCopyForRace(race.id, Number(race.date.slice(0, 4)));
   const confirmed = confirmedRaceExperience(race.id);
   const ratingAssessment = localRatingAssessment(race.id);
   const chapters: { id: string; label: string }[] = [];

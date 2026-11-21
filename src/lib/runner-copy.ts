@@ -11,7 +11,7 @@ export interface RunnerCopy {
   sha256: string;
 }
 // Only explicit public content selections are loaded. Never open the private CMS here.
-export function runnerCopyForRace(raceId: string): RunnerCopy | null {
+export function runnerCopyForRace(raceId: string, editionYear: number): RunnerCopy | null {
   const records = selected.records as Record<
     string,
     { file: string; hash: string; format: string }
@@ -24,5 +24,6 @@ export function runnerCopyForRace(raceId: string): RunnerCopy | null {
     JSON.parse(readFileSync(join(process.cwd(), "content", ...pin.file.split("/")), "utf8")),
     pin,
     raceId,
+    editionYear,
   );
 }

@@ -24,12 +24,18 @@ test("different races use the same confirmed copy adapter without race-specific 
     const r = record(id);
     r.manifest.public_content_hash = publicHash(r.public_copy);
     const pin = { hash: publicHash(r), format: "five-topic-v1" };
-    expect(validateRuntimeRecord(r, pin, id).markdown).toContain("未知。");
-    expect(validateRuntimeRecord(r, pin, id).revision).toBe(3);
+    expect(validateRuntimeRecord(r, pin, id, 2028).markdown).toContain("未知。");
+    expect(validateRuntimeRecord(r, pin, id, 2028).revision).toBe(3);
     expect(() =>
-      validateRuntimeRecord({ ...r, public_copy: { ...r.public_copy, title: "Changed" } }, pin, id),
+      validateRuntimeRecord(
+        { ...r, public_copy: { ...r.public_copy, title: "Changed" } },
+        pin,
+        id,
+        2028,
+      ),
     ).toThrow();
-    expect(() => validateRuntimeRecord(r, pin, "other-race")).toThrow();
+    expect(() => validateRuntimeRecord(r, pin, "other-race", 2028)).toThrow();
+    expect(() => validateRuntimeRecord(r, pin, id, 2027)).toThrow();
   }
 });
 test("private fields, unsafe links and incomplete or internal copy fail closed", () => {
@@ -43,7 +49,12 @@ test("private fields, unsafe links and incomplete or internal copy fail closed",
     change(r);
     r.manifest.public_content_hash = publicHash(r.public_copy);
     expect(() =>
-      validateRuntimeRecord(r, { hash: publicHash(r), format: "five-topic-v1" }, "fictional-race"),
+      validateRuntimeRecord(
+        r,
+        { hash: publicHash(r), format: "five-topic-v1" },
+        "fictional-race",
+        2028,
+      ),
     ).toThrow();
   }
 });

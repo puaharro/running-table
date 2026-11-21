@@ -4079,5 +4079,398 @@
         "note": "深入報名頁覆核：已逐一打開5公里、4公里個人、4公里家庭及1公里小英雄跑獨立報名頁，均有相符票種、數量及參賽者欄位，報名按鈕可用；未填資料、勾同意或提交，不保證餘額。實際瀏覽器主頁及組別頁列11月29日23:59截止，取代先前文字讀取的11月27日。"
       }
     ]
+  },
+  {
+    "id": "hkayd-run-with-us-2026",
+    "slug": "hkayd-run-with-us-2026",
+    "name": "十八區李寧陽光活力跑 2026",
+    "englishName": "HKAYD Run With Us 2026",
+    "date": "2026-12-13",
+    "endDate": "2026-12-13",
+    "region": "新界",
+    "country": "香港",
+    "district": "沙田",
+    "venue": "香港科學園",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "香港青少年發展聯會",
+    "summary": "香港科學園設10公里及5公里個人賽，公開組及學生組分開收費。2公里主席盾為邀請賽。",
+    "highlights": [],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "hkayd-run-with-us-2026-10k",
+        "name": "10公里個人賽",
+        "distanceKm": 10,
+        "date": "2026-12-13",
+        "sourceIds": ["hkayd-run-with-us-2026-official"],
+        "channels": [
+          {
+            "id": "hkayd-run-with-us-2026-10k-public",
+            "type": "general",
+            "name": "一般報名（公開組）",
+            "registrationMethod": "先到先得，額滿即止",
+            "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
+            "price": 300,
+            "currency": "HKD",
+            "status": "unknown",
+            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/event-information",
+            "registrationNote": "即時報名名額待核實。",
+            "sourceIds": ["hkayd-run-with-us-2026-official"]
+          },
+          {
+            "id": "hkayd-run-with-us-2026-10k-student",
+            "type": "general",
+            "name": "一般報名（學生組）",
+            "registrationMethod": "先到先得，額滿即止",
+            "eligibility": "領取號碼布時須出示有效香港全日制學生證。",
+            "price": 100,
+            "currency": "HKD",
+            "status": "unknown",
+            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/event-information",
+            "registrationNote": "即時報名名額待核實。",
+            "sourceIds": ["hkayd-run-with-us-2026-official"]
+          }
+        ]
+      },
+      {
+        "id": "hkayd-run-with-us-2026-5k",
+        "name": "5公里個人賽",
+        "distanceKm": 5,
+        "date": "2026-12-13",
+        "sourceIds": ["hkayd-run-with-us-2026-official"],
+        "channels": [
+          {
+            "id": "hkayd-run-with-us-2026-5k-public",
+            "type": "general",
+            "name": "一般報名（公開組）",
+            "registrationMethod": "先到先得，額滿即止",
+            "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
+            "price": 300,
+            "currency": "HKD",
+            "status": "unknown",
+            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/event-information",
+            "registrationNote": "即時報名名額待核實。",
+            "sourceIds": ["hkayd-run-with-us-2026-official"]
+          },
+          {
+            "id": "hkayd-run-with-us-2026-5k-student",
+            "type": "general",
+            "name": "一般報名（學生組）",
+            "registrationMethod": "先到先得，額滿即止",
+            "eligibility": "領取號碼布時須出示有效香港全日制學生證。",
+            "price": 100,
+            "currency": "HKD",
+            "status": "unknown",
+            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/event-information",
+            "registrationNote": "即時報名名額待核實。",
+            "sourceIds": ["hkayd-run-with-us-2026-official"]
+          }
+        ]
+      }
+    ],
+    "sourceUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/event-information",
+    "updatedAt": "2026-11-21",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-21T05:16:26.844Z",
+    "sources": [
+      {
+        "id": "hkayd-run-with-us-2026-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://hkaydrunwithus.sportsoho.com/zh-hant/event-information",
+        "checkedAt": "2026-11-21T05:16:26.844Z",
+        "fields": [
+          "date",
+          "venue",
+          "groups.distanceKm",
+          "groups.price",
+          "groups.limit",
+          "channels.registration"
+        ]
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-21",
+        "note": "按本屆官方資料新增賽事。"
+      }
+    ]
+  },
+  {
+    "id": "world-vision-global-6k-2027",
+    "slug": "world-vision-global-6k-2027",
+    "name": "Global 6K for Water 香港站 2027",
+    "englishName": "Global 6K for Water Hong Kong 2027",
+    "date": "2027-01-10",
+    "endDate": "2027-01-10",
+    "region": "九龍",
+    "country": "香港",
+    "district": "西九文化區",
+    "venue": "西九文化區藝術公園",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "香港世界宣明會",
+    "summary": "西九文化區藝術公園設6公里個人競賽、Jerrycan隊際賽及3公里開心跑。另有1公里漫步及寵物項目。",
+    "highlights": [],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "world-vision-global-6k-2027-6k",
+        "name": "6公里個人跑",
+        "distanceKm": 6,
+        "date": "2027-01-10",
+        "sourceIds": ["world-vision-global-6k-2027-official"],
+        "channels": [
+          {
+            "id": "world-vision-global-6k-2027-6k-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "先到先得，額滿即止",
+            "eligibility": "15歲或以上，未滿18歲須家長或監護人同意。",
+            "price": 330,
+            "currency": "HKD",
+            "status": "open",
+            "deadline": "2026-12-15",
+            "registrationUrl": "https://in.eventeticket.com/g6k2027",
+            "registrationVerifiedAt": "2026-11-21T05:16:26.844Z",
+            "registrationNote": "大會活動頁列明已開放，12月15日截止，未列截止時刻。即時名額以大會確認為準。",
+            "sourceIds": ["world-vision-global-6k-2027-official"]
+          }
+        ]
+      },
+      {
+        "id": "world-vision-global-6k-2027-6k-jerrycan",
+        "name": "6公里Jerrycan隊際賽（非企業組）",
+        "distanceKm": 6,
+        "date": "2027-01-10",
+        "sourceIds": ["world-vision-global-6k-2027-official"],
+        "channels": [
+          {
+            "id": "world-vision-global-6k-2027-6k-jerrycan-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "先到先得，額滿即止",
+            "eligibility": "15歲或以上，四人一隊。",
+            "price": 1320,
+            "currency": "HKD",
+            "priceUnit": "每隊",
+            "status": "open",
+            "deadline": "2026-12-15",
+            "registrationUrl": "https://in.eventeticket.com/g6k2027",
+            "registrationVerifiedAt": "2026-11-21T05:16:26.844Z",
+            "registrationNote": "大會活動頁列明已開放，12月15日截止，未列截止時刻。即時名額以大會確認為準。",
+            "sourceIds": ["world-vision-global-6k-2027-official"]
+          }
+        ]
+      },
+      {
+        "id": "world-vision-global-6k-2027-3k-individual",
+        "name": "3公里個人開心跑",
+        "distanceKm": 3,
+        "date": "2027-01-10",
+        "sourceIds": ["world-vision-global-6k-2027-official"],
+        "channels": [
+          {
+            "id": "world-vision-global-6k-2027-3k-individual-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "先到先得，額滿即止",
+            "eligibility": "12歲或以上。",
+            "price": 330,
+            "currency": "HKD",
+            "status": "open",
+            "deadline": "2026-12-15",
+            "registrationUrl": "https://in.eventeticket.com/g6k2027",
+            "registrationVerifiedAt": "2026-11-21T05:16:26.844Z",
+            "registrationNote": "大會活動頁列明已開放，12月15日截止，未列截止時刻。即時名額以大會確認為準。",
+            "sourceIds": ["world-vision-global-6k-2027-official"]
+          }
+        ]
+      },
+      {
+        "id": "world-vision-global-6k-2027-3k-family",
+        "name": "3公里親子／組合開心跑",
+        "distanceKm": 3,
+        "date": "2027-01-10",
+        "sourceIds": ["world-vision-global-6k-2027-official"],
+        "channels": [
+          {
+            "id": "world-vision-global-6k-2027-3k-family-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "先到先得，額滿即止",
+            "eligibility": "建議6歲或以上，每組2至6人。11歲或以下由成年家長或監護人報名陪同。",
+            "price": 330,
+            "currency": "HKD",
+            "priceUnit": "每位",
+            "status": "open",
+            "deadline": "2026-12-15",
+            "registrationUrl": "https://in.eventeticket.com/g6k2027",
+            "registrationVerifiedAt": "2026-11-21T05:16:26.844Z",
+            "registrationNote": "大會活動頁列明已開放，12月15日截止，未列截止時刻。即時名額以大會確認為準。",
+            "sourceIds": ["world-vision-global-6k-2027-official"]
+          }
+        ]
+      }
+    ],
+    "sourceUrl": "https://www.worldvision.org.hk/global6k",
+    "updatedAt": "2026-11-21",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-21T05:16:26.844Z",
+    "sources": [
+      {
+        "id": "world-vision-global-6k-2027-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://www.worldvision.org.hk/global6k",
+        "checkedAt": "2026-11-21T05:16:26.844Z",
+        "fields": [
+          "date",
+          "venue",
+          "groups.distanceKm",
+          "groups.price",
+          "groups.limit",
+          "channels.registration"
+        ]
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-21",
+        "note": "按本屆官方資料新增賽事。"
+      }
+    ]
+  },
+  {
+    "id": "kai-tak-run-2027",
+    "slug": "kai-tak-run-2027",
+    "name": "AXA安盛呈獻：啟德飛步跑 2027",
+    "englishName": "AXA Presents: Kai Tak Run 2027",
+    "date": "2027-02-21",
+    "endDate": "2027-02-21",
+    "region": "九龍",
+    "country": "香港",
+    "district": "啟德",
+    "venue": "啟德青年運動場",
+    "sport": "路跑",
+    "tags": ["官方資料整理"],
+    "status": "scheduled",
+    "organizer": "飛越啟德、九龍城民政事務處",
+    "summary": "啟德青年運動場舉行，設10公里及3公里公開組別。另有九龍城學界盃。",
+    "highlights": [],
+    "transport": "交通及集合安排待核實，請參閱大會最新選手資料。",
+    "groups": [
+      {
+        "id": "kai-tak-run-2027-10k-challenge",
+        "name": "10公里挑戰組",
+        "distanceKm": 10,
+        "date": "2027-02-21",
+        "sourceIds": ["kai-tak-run-2027-official"],
+        "channels": [
+          {
+            "id": "kai-tak-run-2027-10k-challenge-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "參賽資格及集合安排請參閱大會最新資料。",
+            "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
+            "price": null,
+            "currency": "HKD",
+            "status": "unknown",
+            "registrationUrl": "https://kaitakrun27.sportsoho.com/",
+            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額、費用及截止待核實。",
+            "sourceIds": ["kai-tak-run-2027-official"]
+          }
+        ]
+      },
+      {
+        "id": "kai-tak-run-2027-3k-youth",
+        "name": "3公里青少年挑戰組",
+        "distanceKm": 3,
+        "date": "2027-02-21",
+        "sourceIds": ["kai-tak-run-2027-official"],
+        "channels": [
+          {
+            "id": "kai-tak-run-2027-3k-youth-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "參賽資格及集合安排請參閱大會最新資料。",
+            "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
+            "price": null,
+            "currency": "HKD",
+            "status": "unknown",
+            "registrationUrl": "https://kaitakrun27.sportsoho.com/",
+            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額、費用及截止待核實。",
+            "sourceIds": ["kai-tak-run-2027-official"]
+          }
+        ]
+      },
+      {
+        "id": "kai-tak-run-2027-10k-fun",
+        "name": "10公里繽紛組",
+        "distanceKm": 10,
+        "date": "2027-02-21",
+        "sourceIds": ["kai-tak-run-2027-official"],
+        "channels": [
+          {
+            "id": "kai-tak-run-2027-10k-fun-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "參賽資格及集合安排請參閱大會最新資料。",
+            "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
+            "price": null,
+            "currency": "HKD",
+            "status": "unknown",
+            "registrationUrl": "https://kaitakrun27.sportsoho.com/",
+            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額、費用及截止待核實。",
+            "sourceIds": ["kai-tak-run-2027-official"]
+          }
+        ]
+      },
+      {
+        "id": "kai-tak-run-2027-3k-fun",
+        "name": "3公里繽紛組（1–2人）",
+        "distanceKm": 3,
+        "date": "2027-02-21",
+        "sourceIds": ["kai-tak-run-2027-official"],
+        "channels": [
+          {
+            "id": "kai-tak-run-2027-3k-fun-general",
+            "type": "general",
+            "name": "一般報名",
+            "registrationMethod": "參賽資格及集合安排請參閱大會最新資料。",
+            "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
+            "price": null,
+            "currency": "HKD",
+            "status": "unknown",
+            "registrationUrl": "https://kaitakrun27.sportsoho.com/",
+            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額、費用及截止待核實。",
+            "sourceIds": ["kai-tak-run-2027-official"]
+          }
+        ]
+      }
+    ],
+    "sourceUrl": "https://kaitaksportspark.com.hk/tc/community-programmes/124",
+    "updatedAt": "2026-11-21",
+    "verification": "verified",
+    "publication": "published",
+    "verifiedAt": "2026-11-21T05:16:26.844Z",
+    "sources": [
+      {
+        "id": "kai-tak-run-2027-official",
+        "title": "本屆官方賽事資料",
+        "url": "https://kaitaksportspark.com.hk/tc/community-programmes/124",
+        "checkedAt": "2026-11-21T05:16:26.844Z",
+        "fields": ["date", "venue", "groups.distanceKm", "groups.limit", "channels.registration"]
+      }
+    ],
+    "changes": [
+      {
+        "date": "2026-11-21",
+        "note": "按本屆官方資料新增賽事。"
+      }
+    ]
   }
 ]
