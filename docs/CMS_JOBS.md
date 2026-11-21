@@ -1,6 +1,6 @@
 # CMS 工作計劃與 Mac 排程
 
-例行搜尋、核對及賽後留言的次序見[每輪更新流程](CONTENT_OPERATIONS.md#每輪更新流程)。由營運者決定要處理的賽事、屆次和材料。先在 repo 根目錄執行 `mkdir -p -m 700 .editorial-private/jobs`，再把工作計劃保存在 `.editorial-private/jobs/plan.json`，由本機可信操作者執行。
+例行搜尋、資料核對、賽後留言及首頁消息的次序見[每輪更新流程](CONTENT_OPERATIONS.md#每輪更新流程)。由營運者決定要處理的賽事、屆次和材料。先在 repo 根目錄執行 `mkdir -p -m 700 .editorial-private/jobs`，再把工作計劃保存在 `.editorial-private/jobs/plan.json`，由本機可信操作者執行。
 
 ```json
 {
