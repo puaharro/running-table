@@ -273,3 +273,7 @@ CLI：`npm run content:agent -- execute .editorial-private/request.json`
 5. 跑測試、build、check:export及test:http，覆核本機頁面；部署仍須另行授權。
 
 新增已存在於公開 catalog 的賽事只需已確認 CMS 網站稿與選擇資料，毋須修改 loader 或 component。新增私人賽事到公開 catalog 仍需獨立資料確認。過往 RMAC Markdown 原文及兩份2025評論／評分保持原有 hash；遷移只把程式內固定選擇移到資料清單，沒有重新批准文字。
+
+## Mac 本機排程
+
+[CMS 工作計劃與 Mac 排程](CMS_JOBS.md) 提供報名待覆核清單和已匯入跑手材料的中文稿建議，並附可選的 macOS LaunchAgent 範本。
