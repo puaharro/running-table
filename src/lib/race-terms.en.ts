@@ -1,6 +1,15 @@
 import { englishDate } from "./english-races";
 
 const terms: Readonly<Record<string, string>> = {
+  "補登四組暫定起步時間，並重新核對半馬額滿公告及其餘組別的報名入口。":
+    "Added tentative start times for the four categories and rechecked the half-marathon sold-out notice and entry options for the other categories.",
+  "重新核對官方報名截止及指定平台四個場次，名額仍以大會確認為準。":
+    "Rechecked the official deadline and the four waves listed on the registration platform. Confirm availability with the organiser.",
+  "重新查閱官方最新消息，三個個人組維持額滿。":
+    "The organiser’s latest announcements still list the three individual categories as full.",
+  官方報名表: "Official entry form",
+  官方賽事資料: "Official race information",
+  官方最新消息: "Official news",
   "設全馬、半馬及十公里。一般、優先報名及住宿套票資料按渠道列出；設有慈善名額，詳情請查閱大會網站。":
     "Compare marathon, half marathon and 10K entries for the 2027 Standard Chartered Hong Kong Marathon, including general, priority, accommodation and charity options.",
   "2027 年 1 月 3 日於香港迪士尼樂園度假區舉行，設半馬、10K、5K 及 3K 少年賽。設有慈善名額，詳情請查閱大會網站。":
@@ -244,8 +253,8 @@ const terms: Readonly<Record<string, string>> = {
     "The organiser lists the race as full. Fees vary by age and athletics association registration status.",
   "官方列出12月20日沙田運動場21／10／3公里個人賽；指定平台列三個個人組額滿，官方報名期限10月31日23:59亦已過。家庭及手錶優惠不混作個人一般報名渠道。":
     "The organiser lists individual 21K, 10K and 3K races at Sha Tin Sports Ground on 20 December. All three categories were listed as full on the designated entry platform, and the deadline of 23:59 on 31 October has passed. Family and watch offers are separate from general individual entry.",
-  "大會11月9日公告半馬額滿；10公里、3公里及1公里親子組仍列於報名表。起步時間暫定，隊際盃登記不等於個人賽報名，實際名額以大會確認為準。":
-    "The organiser announced on 9 November that the half marathon was full. The entry form still listed the 10K, 3K and 1K family run. Start times are tentative. Team cup registration is separate from individual entry. Confirm availability with the organiser.",
+  "大會11月9日公告半馬額滿；10公里、3公里及1公里親子組仍列於報名表。暫定起步：半馬07:30、10公里07:50、3公里08:00、1公里親子組09:30（香港時間）。隊際盃登記不等於個人賽報名，實際名額以大會確認為準。":
+    "The organiser announced on 9 November that the half marathon was full. The entry form still listed the 10K, 3K and 1K family run. Tentative starts (Hong Kong time): half marathon 07:30, 10K 07:50, 3K 08:00 and 1K family run 09:30. Team cup registration is separate from individual entry. Confirm availability with the organiser.",
   "官網顯示公開組名額暫滿，預告11月10日再公布安排。沒有因此自動標示候補或重新開放；報名費與籌款要求須分開確認。":
     "The official site listed the open categories as full and scheduled a further announcement for 10 November. Reopening and a waiting list were unconfirmed. Check the entry fee and fundraising requirement separately.",
   "先收錄10公里及3公里個人路跑；親子接力、寵物行及隊際組不混作個人路跑費用。官方起跑時間暫定，相關組別仍列於報名表，實際名額以大會確認為準。":
