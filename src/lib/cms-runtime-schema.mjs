@@ -57,7 +57,7 @@ export function runtimeMarkdown(copy) {
       .join("\n\n")
   );
 }
-export function validateRuntimeRecord(record, pin, raceId) {
+export function validateRuntimeRecord(record, pin, raceId, editionYear) {
   if (publicHash(record) !== pin.hash || (record.raceId ?? record.public_copy?.race_id) !== raceId)
     throw Error("Copy does not match the selected confirmed revision.");
   if (pin.format === "markdown") {
@@ -70,6 +70,7 @@ export function validateRuntimeRecord(record, pin, raceId) {
   }
   if (
     pin.format !== "five-topic-v1" ||
+    record.public_copy?.year !== editionYear ||
     Object.keys(record.manifest ?? {})
       .sort()
       .join() !== "public_content_hash,source_content_hash,source_revision,source_website_id" ||

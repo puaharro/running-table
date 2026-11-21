@@ -3,8 +3,10 @@ import { publicHash, validatePublicCopy } from "../../src/lib/cms-runtime-schema
 export function prepareRuntimeRecord(content, id, revision) {
   const b = confirmedHandoff(content, id, revision);
   validatePublicCopy(b.public_copy);
-  if (!content.catalog.some((v) => v.id === b.public_copy.race_id && !v.private))
-    throw Error("Race must already exist in public catalog");
+  const race = content.catalog.find((v) => v.id === b.public_copy.race_id && !v.private);
+  if (!race) throw Error("Race must already exist in public catalog");
+  if (Number(race.date?.slice(0, 4)) !== b.public_copy.year)
+    throw Error("CMS copy year must match the public race edition");
   const record = {
     manifest: {
       source_website_id: id,

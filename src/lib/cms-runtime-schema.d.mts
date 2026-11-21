@@ -5,4 +5,5 @@ export function validateRuntimeRecord(
   record: any,
   pin: any,
   raceId: string,
+  editionYear: number,
 ): import("./runner-copy").RunnerCopy;

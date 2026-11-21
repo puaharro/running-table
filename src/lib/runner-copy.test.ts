@@ -13,14 +13,14 @@ test("production builds include the selected confirmed copy without a preview fl
   vi.stubEnv("NODE_ENV", "production");
   vi.stubEnv("LOCAL_RMAC_COPY_PREVIEW", "");
   vi.mocked(readFileSync).mockReturnValue(JSON.stringify(record));
-  expect(runnerCopyForRace(raceId)?.markdown).toBe(record.markdown);
+  expect(runnerCopyForRace(raceId, 2026)?.markdown).toBe(record.markdown);
   expect(readFileSync).toHaveBeenCalledWith(
     join(process.cwd(), "content", "runner-copies", "rmac-2026.json"),
     "utf8",
   );
 });
 test("unrelated races never read the RMAC copy", () => {
-  expect(runnerCopyForRace("different-race")).toBeNull();
+  expect(runnerCopyForRace("different-race", 2026)).toBeNull();
   expect(readFileSync).not.toHaveBeenCalled();
 });
 test("changed text, source identity or revision cannot silently replace confirmed content", () => {
@@ -31,6 +31,6 @@ test("changed text, source identity or revision cannot silently replace confirme
     { sourceWebsiteId: "different" },
   ]) {
     vi.mocked(readFileSync).mockReturnValue(JSON.stringify({ ...record, ...change }));
-    expect(() => runnerCopyForRace(raceId)).toThrow(/confirmed revision/);
+    expect(() => runnerCopyForRace(raceId, 2026)).toThrow(/confirmed revision/);
   }
 });

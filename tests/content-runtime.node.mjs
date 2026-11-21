@@ -9,13 +9,14 @@ test("generic CMS export requires exact human confirmation, strips private field
     w = new Workflow(c);
   try {
     const race = c.catalog[1];
+    const year = Number(race.date.slice(0, 4));
     const v = w.save({
       id: newWorkflowId("website"),
       kind: "website",
       expected_revision: 0,
       data: {
         race_id: race.id,
-        year: 2025,
+        year,
         title: "虛構通用接入測試",
         draft_id: null,
         sections: TOPICS.map((topic) => ({
@@ -38,17 +39,17 @@ test("generic CMS export requires exact human confirmation, strips private field
     const { record, hash } = prepareRuntimeRecord(c, v.id, 1);
     assert.deepEqual(Object.keys(record).sort(), ["manifest", "public_copy"]);
     assert.equal(
-      validateRuntimeRecord(record, { hash, format: "five-topic-v1" }, race.id).raceId,
+      validateRuntimeRecord(record, { hash, format: "five-topic-v1" }, race.id, year).raceId,
       race.id,
     );
     assert.throws(() => prepareRuntimeRecord(c, v.id, 2));
     w.save({
-      id: `coverage:${race.id}:2025:blog`,
+      id: `coverage:${race.id}:${year}:blog`,
       kind: "coverage",
       expected_revision: 0,
       data: {
         race_id: race.id,
-        year: 2025,
+        year,
         platform: "blog",
         state: "searching",
         query: "虛構搜尋",
