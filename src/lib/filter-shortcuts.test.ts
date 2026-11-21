@@ -135,6 +135,7 @@ it("combines a month with a calendar year and preserves it in shared search link
     "pegasus-shek-mun-10k-2026",
     "asics-hk-half-2026",
     "ocean-park-run-for-survival-2026",
+    "hkayd-run-with-us-2026",
     "garmin-run-hk-2026",
     "ymca-125-physical-run-2026",
     "tai-po-half-2026",

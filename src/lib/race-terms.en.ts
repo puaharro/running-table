@@ -479,6 +479,47 @@ const terms: Readonly<Record<string, string>> = {
   "親子組費用；隊伍人數及適用資格請查官方。":
     "Family category fee. Check the official team size and eligibility requirements.",
   "費用／最低籌款額待核實。": "Fee or minimum fundraising amount unverified.",
+  "參賽資格及集合安排請參閱大會最新資料。":
+    "Check the organiser’s latest information for eligibility and assembly arrangements.",
+  "先到先得，額滿即止": "First come, first served until full",
+  "即時報名名額待核實。": "Current entry availability is unconfirmed.",
+  "一般報名（公開組）": "General entry (open category)",
+  "一般報名（學生組）": "General entry (student category)",
+  "領取號碼布時須出示有效香港全日制學生證。":
+    "Show a valid Hong Kong full-time student ID when collecting your bib.",
+  沙田: "Sha Tin",
+  香港青少年發展聯會: "Hong Kong Association of Youth Development",
+  "香港科學園設10公里及5公里個人賽，公開組及學生組分開收費。2公里主席盾為邀請賽。":
+    "Hong Kong Science Park hosts individual 10K and 5K races, with separate rates for open and student categories. The 2K Chairman’s Shield is by invitation.",
+  "10公里個人賽": "10K individual race",
+  "5公里個人賽": "5K individual race",
+  "按本屆官方資料新增賽事。": "Added this edition from official sources.",
+  "大會活動頁列明已開放，12月15日截止，未列截止時刻。即時名額以大會確認為準。":
+    "The organiser lists entry as open and gives 15 December as the deadline without a cutoff time. Confirm availability with the organiser.",
+  "15歲或以上，未滿18歲須家長或監護人同意。":
+    "Ages 15 and above. Entrants under 18 need parental or guardian consent.",
+  "15歲或以上，四人一隊。": "Ages 15 and above, in teams of four.",
+  "12歲或以上。": "Ages 12 and above.",
+  "建議6歲或以上，每組2至6人。11歲或以下由成年家長或監護人報名陪同。":
+    "Recommended for ages 6 and above, in groups of two to six. Children aged 11 or younger must enter with an adult parent or guardian.",
+  西九文化區: "West Kowloon Cultural District",
+  西九文化區藝術公園: "West Kowloon Cultural District Art Park",
+  香港世界宣明會: "World Vision Hong Kong",
+  "西九文化區藝術公園設6公里個人競賽、Jerrycan隊際賽及3公里開心跑。另有1公里漫步及寵物項目。":
+    "The Art Park hosts a competitive 6K individual race, a Jerrycan team race and a 3K fun run. The event also offers a 1 km walk and pet activities.",
+  "6公里個人跑": "6K individual race",
+  "6公里Jerrycan隊際賽（非企業組）": "6K Jerrycan team race (non-corporate)",
+  "3公里個人開心跑": "3K individual fun run",
+  "3公里親子／組合開心跑": "3K family or group fun run",
+  "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額、費用及截止待核實。":
+    "Kai Tak Sports Park states that participants over 15 must register as members before entering. Category availability, fees and the deadline are unconfirmed.",
+  "飛越啟德、九龍城民政事務處": "Fly High Kai Tak and Kowloon City District Office",
+  "啟德青年運動場舉行，設10公里及3公里公開組別。另有九龍城學界盃。":
+    "Kai Tak Youth Sports Ground hosts public 10K and 3K categories. There is also a separate Kowloon City schools cup.",
+  "10公里挑戰組": "10K challenge",
+  "3公里青少年挑戰組": "3K youth challenge",
+  "10公里繽紛組": "10K fun run",
+  "3公里繽紛組（1–2人）": "3K fun run (one or two runners)",
 };
 
 export function englishRaceTerm<T extends string | null | undefined>(
