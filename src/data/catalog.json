@@ -190,7 +190,7 @@
             "price": 320,
             "status": "full",
             "registrationUrl": "https://mizunohkrun.com/zh-hant",
-            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00",
+            "registrationVerifiedAt": "2026-11-21T13:02:00+08:00",
             "registrationMethod": "個人報名",
             "id": "mizuno-2026-3k-general",
             "type": "general",
@@ -200,7 +200,8 @@
             "sourceIds": [
               "mizuno-info",
               "mizuno-news",
-              "mizuno-hk-run-fest-2026-registration-recheck-20261110"
+              "mizuno-hk-run-fest-2026-registration-recheck-20261110",
+              "mizuno-hk-run-fest-2026-recheck-20261121-news"
             ],
             "registrationNote": "大會最新消息仍列6月24日全部組別額滿；本次讀取未見重開公告。"
           }
@@ -218,7 +219,7 @@
             "price": 360,
             "status": "full",
             "registrationUrl": "https://mizunohkrun.com/zh-hant",
-            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00",
+            "registrationVerifiedAt": "2026-11-21T13:02:00+08:00",
             "registrationMethod": "個人報名",
             "id": "mizuno-2026-5k-general",
             "type": "general",
@@ -228,7 +229,8 @@
             "sourceIds": [
               "mizuno-info",
               "mizuno-news",
-              "mizuno-hk-run-fest-2026-registration-recheck-20261110"
+              "mizuno-hk-run-fest-2026-registration-recheck-20261110",
+              "mizuno-hk-run-fest-2026-recheck-20261121-news"
             ],
             "registrationNote": "大會最新消息仍列6月24日全部組別額滿；本次讀取未見重開公告。"
           }
@@ -246,7 +248,7 @@
             "price": 400,
             "status": "full",
             "registrationUrl": "https://mizunohkrun.com/zh-hant",
-            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00",
+            "registrationVerifiedAt": "2026-11-21T13:02:00+08:00",
             "registrationMethod": "個人報名",
             "id": "mizuno-2026-10k-general",
             "type": "general",
@@ -256,7 +258,8 @@
             "sourceIds": [
               "mizuno-info",
               "mizuno-news",
-              "mizuno-hk-run-fest-2026-registration-recheck-20261110"
+              "mizuno-hk-run-fest-2026-registration-recheck-20261110",
+              "mizuno-hk-run-fest-2026-recheck-20261121-news"
             ],
             "registrationNote": "大會最新消息仍列6月24日全部組別額滿；本次讀取未見重開公告。"
           }
@@ -264,7 +267,7 @@
       }
     ],
     "sourceUrl": "https://mizunohkrun.com/zh-hant/event-information",
-    "updatedAt": "2026-11-10",
+    "updatedAt": "2026-11-21",
     "verifiedAt": "2026-10-25T13:01:03+08:00",
     "verification": "verified",
     "publication": "published",
@@ -291,6 +294,13 @@
         "checkedAt": "2026-11-10T13:42:07+08:00",
         "fields": ["channels.registration"],
         "note": "大會最新消息仍列6月24日全部組別額滿；本次讀取未見重開公告。"
+      },
+      {
+        "id": "mizuno-hk-run-fest-2026-recheck-20261121-news",
+        "title": "官方最新消息",
+        "url": "https://mizunohkrun.com/zh-hant",
+        "checkedAt": "2026-11-21T13:02:00+08:00",
+        "fields": ["channels.registration"]
       }
     ],
     "changes": [
@@ -309,6 +319,10 @@
       {
         "date": "2026-11-10",
         "note": "重新閱讀官方報名來源：大會最新消息仍列6月24日全部組別額滿；本次讀取未見重開公告。"
+      },
+      {
+        "date": "2026-11-21",
+        "note": "重新查閱官方最新消息，三個個人組維持額滿。"
       }
     ]
   },
@@ -795,7 +809,7 @@
             "registrationUrl": "https://www.hkmarathon.com/youth-run",
             "registrationOpensAt": "2026-10-20T12:00:00+08:00",
             "registrationClosesAt": "2026-11-27T23:59:00+08:00",
-            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00",
+            "registrationVerifiedAt": "2026-11-21T13:02:00+08:00",
             "registrationMethod": "先到先得",
             "registrationNote": "大會列11月27日23:59截止；已另開指定平台少年跑表格，可見四個場次及參賽者欄位。只讀未提交，不保證即時名額。",
             "id": "schkm-2027-youth2-general",
@@ -806,7 +820,9 @@
             "sourceIds": [
               "schkm-youth",
               "schkm-youth-entry",
-              "schkm-youth-2027-registration-recheck-20261110"
+              "schkm-youth-2027-registration-recheck-20261110",
+              "schkm-youth-2027-recheck-20261121-info",
+              "schkm-youth-2027-recheck-20261121-entry"
             ]
           }
         ],
@@ -819,7 +835,7 @@
       }
     ],
     "sourceUrl": "https://www.hkmarathon.com/youth-run",
-    "updatedAt": "2026-11-10",
+    "updatedAt": "2026-11-21",
     "verifiedAt": "2026-10-26T13:03:31+08:00",
     "verification": "verified",
     "publication": "published",
@@ -853,6 +869,20 @@
         "checkedAt": "2026-11-10T13:42:07+08:00",
         "fields": ["channels.registration"],
         "note": "大會列11月27日23:59截止；已另開指定平台少年跑表格，可見四個場次及參賽者欄位。只讀未提交，不保證即時名額。"
+      },
+      {
+        "id": "schkm-youth-2027-recheck-20261121-info",
+        "title": "官方賽事資料",
+        "url": "https://www.hkmarathon.com/youth-run",
+        "checkedAt": "2026-11-21T13:02:00+08:00",
+        "fields": ["channels.registration"]
+      },
+      {
+        "id": "schkm-youth-2027-recheck-20261121-entry",
+        "title": "官方報名表",
+        "url": "https://hkmarathon.fringebackerevents.com/events/standard-chartered-hong-kong-marathon-2027/register/select-type/",
+        "checkedAt": "2026-11-21T13:02:00+08:00",
+        "fields": ["channels.registration"]
       }
     ],
     "changes": [
@@ -875,6 +905,10 @@
       {
         "date": "2026-11-10",
         "note": "重新閱讀官方報名來源：大會列11月27日23:59截止；已另開指定平台少年跑表格，可見四個場次及參賽者欄位。只讀未提交，不保證即時名額。"
+      },
+      {
+        "date": "2026-11-21",
+        "note": "重新核對官方報名截止及指定平台四個場次，名額仍以大會確認為準。"
       }
     ]
   },
@@ -2722,7 +2756,7 @@
     "tags": ["官方資料整理"],
     "status": "scheduled",
     "organizer": "大埔體育會、運動版圖",
-    "summary": "大會11月9日公告半馬額滿；10公里、3公里及1公里親子組仍列於報名表。起步時間暫定，隊際盃登記不等於個人賽報名，實際名額以大會確認為準。",
+    "summary": "大會11月9日公告半馬額滿；10公里、3公里及1公里親子組仍列於報名表。暫定起步：半馬07:30、10公里07:50、3公里08:00、1公里親子組09:30（香港時間）。隊際盃登記不等於個人賽報名，實際名額以大會確認為準。",
     "highlights": [
       "日期及所列距離按本屆官方來源整理。",
       "未核實的名額、資格及安排保留待核實，付款前請向大會確認。"
@@ -2734,7 +2768,7 @@
         "name": "半程馬拉松個人組",
         "distanceKm": 21.0975,
         "date": "2026-12-27",
-        "sourceIds": ["tai-po-half-2026-official"],
+        "sourceIds": ["tai-po-half-2026-official", "tai-po-half-2026-recheck-20261121-info"],
         "channels": [
           {
             "id": "tai-po-half-2026-0-general",
@@ -2752,9 +2786,12 @@
               "tai-po-half-2026-official",
               "tai-po-half-2026-registration-recheck-20261110",
               "tai-po-half-2026-registration-browser-20261110",
-              "tai-po-half-2026-registration-browser-20261110-news"
+              "tai-po-half-2026-registration-browser-20261110-news",
+              "tai-po-half-2026-recheck-20261121-info",
+              "tai-po-half-2026-recheck-20261121-entry",
+              "tai-po-half-2026-recheck-20261121-news"
             ],
-            "registrationVerifiedAt": "2026-11-10T13:52:28+08:00"
+            "registrationVerifiedAt": "2026-11-21T13:02:00+08:00"
           }
         ],
         "venue": "組別起點待核實",
@@ -2765,7 +2802,7 @@
         "name": "10公里個人組",
         "distanceKm": 10,
         "date": "2026-12-27",
-        "sourceIds": ["tai-po-half-2026-official"],
+        "sourceIds": ["tai-po-half-2026-official", "tai-po-half-2026-recheck-20261121-info"],
         "channels": [
           {
             "id": "tai-po-half-2026-1-general",
@@ -2782,9 +2819,11 @@
             "sourceIds": [
               "tai-po-half-2026-official",
               "tai-po-half-2026-registration-recheck-20261110",
-              "tai-po-half-2026-registration-browser-20261110"
+              "tai-po-half-2026-registration-browser-20261110",
+              "tai-po-half-2026-recheck-20261121-info",
+              "tai-po-half-2026-recheck-20261121-entry"
             ],
-            "registrationVerifiedAt": "2026-11-10T13:52:28+08:00"
+            "registrationVerifiedAt": "2026-11-21T13:02:00+08:00"
           }
         ],
         "venue": "組別起點待核實",
@@ -2795,7 +2834,7 @@
         "name": "3公里個人組",
         "distanceKm": 3,
         "date": "2026-12-27",
-        "sourceIds": ["tai-po-half-2026-official"],
+        "sourceIds": ["tai-po-half-2026-official", "tai-po-half-2026-recheck-20261121-info"],
         "channels": [
           {
             "id": "tai-po-half-2026-2-general",
@@ -2812,9 +2851,11 @@
             "sourceIds": [
               "tai-po-half-2026-official",
               "tai-po-half-2026-registration-recheck-20261110",
-              "tai-po-half-2026-registration-browser-20261110"
+              "tai-po-half-2026-registration-browser-20261110",
+              "tai-po-half-2026-recheck-20261121-info",
+              "tai-po-half-2026-recheck-20261121-entry"
             ],
-            "registrationVerifiedAt": "2026-11-10T13:52:28+08:00"
+            "registrationVerifiedAt": "2026-11-21T13:02:00+08:00"
           }
         ],
         "venue": "組別起點待核實",
@@ -2825,7 +2866,7 @@
         "name": "1公里親子組",
         "distanceKm": 1,
         "date": "2026-12-27",
-        "sourceIds": ["tai-po-half-2026-official"],
+        "sourceIds": ["tai-po-half-2026-official", "tai-po-half-2026-recheck-20261121-info"],
         "channels": [
           {
             "id": "tai-po-half-2026-3-general",
@@ -2842,9 +2883,11 @@
             "sourceIds": [
               "tai-po-half-2026-official",
               "tai-po-half-2026-registration-recheck-20261110",
-              "tai-po-half-2026-registration-browser-20261110"
+              "tai-po-half-2026-registration-browser-20261110",
+              "tai-po-half-2026-recheck-20261121-info",
+              "tai-po-half-2026-recheck-20261121-entry"
             ],
-            "registrationVerifiedAt": "2026-11-10T13:52:28+08:00"
+            "registrationVerifiedAt": "2026-11-21T13:02:00+08:00"
           }
         ],
         "venue": "組別起點待核實",
@@ -2852,7 +2895,7 @@
       }
     ],
     "sourceUrl": "https://tphm.sportsoho.com/",
-    "updatedAt": "2026-11-10",
+    "updatedAt": "2026-11-21",
     "verification": "verified",
     "publication": "published",
     "verifiedAt": "2026-11-06T16:43:15Z",
@@ -2888,6 +2931,27 @@
         "checkedAt": "2026-11-10T13:52:28+08:00",
         "fields": ["channels.registration"],
         "note": "當屆官方最新消息公告半程馬拉松名額已滿。"
+      },
+      {
+        "id": "tai-po-half-2026-recheck-20261121-info",
+        "title": "官方賽事資料",
+        "url": "https://tphm.sportsoho.com/",
+        "checkedAt": "2026-11-21T13:02:00+08:00",
+        "fields": ["groups.startTime", "channels.registration"]
+      },
+      {
+        "id": "tai-po-half-2026-recheck-20261121-news",
+        "title": "官方最新消息",
+        "url": "https://tphm.sportsoho.com/latest-news",
+        "checkedAt": "2026-11-21T13:02:00+08:00",
+        "fields": ["channels.registration"]
+      },
+      {
+        "id": "tai-po-half-2026-recheck-20261121-entry",
+        "title": "官方報名表",
+        "url": "https://tphm.sportsoho.com/form/enrolment-form",
+        "checkedAt": "2026-11-21T13:02:00+08:00",
+        "fields": ["channels.registration"]
       }
     ],
     "changes": [
@@ -2902,6 +2966,10 @@
       {
         "date": "2026-11-10",
         "note": "深入報名頁覆核：報名表可見10公里、3公里及1公里親子組可選項；未填資料或提交，不保證名額。半馬未列於表格，另已讀大會11月9日最新消息明確公告半程馬拉松額滿。無固定報名截止日期，隊際盃期限不套用個人報名。"
+      },
+      {
+        "date": "2026-11-21",
+        "note": "補登四組暫定起步時間，並重新核對半馬額滿公告及其餘組別的報名入口。"
       }
     ]
   },

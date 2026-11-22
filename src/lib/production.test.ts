@@ -117,9 +117,9 @@ describe("exact deadlines, freshness and truthful channel statuses", () => {
   });
   it("honours an official sold-out notice rather than a directory tag", () => {
     const r = catalog().find((r) => r.id === "mizuno-hk-run-fest-2026")!;
-    expect(r.groups.every((g) => groupStatus(r, g, "2026-11-10T14:00:00+08:00") === "full")).toBe(
-      true,
-    );
+    for (const group of r.groups) {
+      expect(groupStatus(r, group, group.channels[0].registrationVerifiedAt!)).toBe("full");
+    }
   });
   it("matches the region and distance on the same group", () => {
     const r = catalog().find((r) => r.id === "standard-chartered-hk-marathon-2027")!;
