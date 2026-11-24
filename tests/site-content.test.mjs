@@ -35,12 +35,14 @@ describe("confirmed content regression check", () => {
       expect(() => checkContent(render(record).replaceAll(text, "遺漏內容"), record)).toThrow();
     }
   });
-  it("rejects scores swapped between dimensions despite the same set of numbers", () => {
-    const html = render(record)
-      .replace("<strong>3 / 5</strong>", "<strong>SWAP</strong>")
-      .replace("<strong>4 / 5</strong>", "<strong>3 / 5</strong>")
-      .replace("SWAP", "4 / 5");
-    expect(() => checkContent(html, record)).toThrow(/scores/);
+  it("rejects a legacy score grid in the published experience", () => {
+    const original = render(record);
+    const html = original.replace(
+      "</h2>",
+      '</h2><dl class="rating-grid experience-scores"><dt>賽道體驗</dt><dd>3 / 5</dd></dl>',
+    );
+    expect(html).not.toBe(original);
+    expect(() => checkContent(html, record)).toThrow();
   });
   it("rejects unapproved baseline changes rather than accepting matching changed HTML", () => {
     const changed = structuredClone(record);
@@ -57,11 +59,12 @@ describe("confirmed content regression check", () => {
       ),
     ).toThrow(/sources/);
   });
-  it("rejects turning unassessed into zero and private preview markup", () => {
+  it("rejects editorial score labels and private preview markup", () => {
     const r = targets[1].record;
-    expect(() =>
-      checkContent(render(r).replace("<strong>未評</strong>", "<strong>0 / 5</strong>"), r),
-    ).toThrow(/scores/);
+    const original = render(r);
+    const html = original.replace("</h2>", "</h2><p>編輯總評分：0 / 5</p>");
+    expect(html).not.toBe(original);
+    expect(() => checkContent(html, r)).toThrow(/編輯總評分/);
     expect(() =>
       checkContent(render(r) + '<aside id="rating-assessment-preview">private</aside>', r),
     ).toThrow(/private/);
