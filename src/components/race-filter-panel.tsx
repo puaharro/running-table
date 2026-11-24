@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { englishDate, englishDistanceTag, language } from "@/lib/english-races";
 import { englishRaceTerm } from "@/lib/race-terms.en";
 import { dateShortcutIsActive, type DateShortcut } from "@/lib/filter-shortcuts";
@@ -12,9 +12,7 @@ const filterCategories = (t: ReturnType<typeof language>) =>
     ["date", t("比賽日期", "Race date")],
     ["location", t("地點", "Location")],
     ["distance", t("距離", "Distance")],
-    ["registration", t("報名狀態", "Entry status")],
     ["type", t("賽事類型", "Race type")],
-    ["difficulty", t("賽事難易度", "Race difficulty")],
   ] as const;
 export type FilterCategory = ReturnType<typeof filterCategories>[number][0];
 
@@ -72,8 +70,48 @@ export function RaceFilterPanel({
 }: RaceFilterPanelProps) {
   const t = language(english);
   const categories = filterCategories(t);
+  const filterCard = useRef<HTMLDivElement>(null);
+  const filterHeading = useRef<HTMLDivElement>(null);
   const categoryButtons = useRef<Partial<Record<FilterCategory, HTMLButtonElement>>>({});
   const categoryOptions = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (filtersExpanded || !filterCategory) return;
+    const card = filterCard.current;
+    const heading = filterHeading.current;
+    const trigger = categoryButtons.current[filterCategory];
+    const options = categoryOptions.current;
+    if (!card || !heading || !trigger || !options) return;
+
+    const positionOptions = () => {
+      const cardRect = card.getBoundingClientRect();
+      const triggerRect = trigger.getBoundingClientRect();
+      const triggerLeft = triggerRect.left - cardRect.left - card.clientLeft;
+      const maxLeft = card.clientWidth - options.offsetWidth;
+      options.style.setProperty(
+        "--filter-popup-left",
+        `${Math.max(0, Math.min(triggerLeft, maxLeft))}px`,
+      );
+      options.style.setProperty(
+        "--filter-popup-top",
+        `${triggerRect.bottom - cardRect.top - card.clientTop}px`,
+      );
+    };
+    positionOptions();
+    const observer = new ResizeObserver(positionOptions);
+    observer.observe(heading);
+    observer.observe(options);
+    for (const button of Object.values(categoryButtons.current)) observer.observe(button);
+
+    const dismissOnOutsidePress = (event: PointerEvent) => {
+      if (event.target instanceof Node && !card.contains(event.target)) setFilterCategory(null);
+    };
+    document.addEventListener("pointerdown", dismissOnOutsidePress);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("pointerdown", dismissOnOutsidePress);
+    };
+  }, [filterCategory, filtersExpanded, setFilterCategory]);
+
   useEffect(() => {
     if (!filtersExpanded) return;
     const panel = document.getElementById("calendar-filter-panel");
@@ -101,9 +139,7 @@ export function RaceFilterPanel({
     date: Number(Boolean(filters.from || filters.to)) + Number(Boolean(filters.month)),
     location: filters.regions.length + filters.countries.length,
     distance: filters.distances.length + Number(Boolean(filters.min || filters.max)),
-    registration: filters.statuses.length + filters.channels.length,
     type: Number(filters.themed || filters.family) + filters.sports.length,
-    difficulty: 0,
   };
   return (
     <FilterPanel
@@ -123,6 +159,7 @@ export function RaceFilterPanel({
       {filtersExpanded && <CalendarSheetDismiss english={english} />}
       <div
         className="filter-card search-engine"
+        ref={filterCard}
         onKeyDown={(event) => {
           if (event.key !== "Escape" || filtersExpanded || !filterCategory) return;
           event.preventDefault();
@@ -130,7 +167,7 @@ export function RaceFilterPanel({
           categoryButtons.current[filterCategory]?.focus();
         }}
       >
-        <div className="calendar-filter-heading">
+        <div className="calendar-filter-heading" ref={filterHeading}>
           {filtersExpanded ? (
             <>
               <Icon name="filter" size={18} />
@@ -180,6 +217,7 @@ export function RaceFilterPanel({
         <div
           className="engine-options"
           id="calendar-category-options"
+          data-category={filtersExpanded ? undefined : (filterCategory ?? undefined)}
           ref={categoryOptions}
           role={filtersExpanded ? undefined : "group"}
           aria-label={
@@ -292,7 +330,7 @@ export function RaceFilterPanel({
             hidden={!filtersExpanded && filterCategory !== "location"}
           >
             {filtersExpanded && <span className="engine-label">{t("地點", "Location")}</span>}
-            <div className="option-row option-row-checkmarks">
+            <div className="option-row option-row-padded">
               {regions.map((region, index) => (
                 <button
                   key={region}
@@ -325,7 +363,7 @@ export function RaceFilterPanel({
             hidden={!filtersExpanded && filterCategory !== "distance"}
           >
             {filtersExpanded && <span className="engine-label">{t("距離", "Distance")}</span>}
-            <div className="option-row option-row-checkmarks">
+            <div className="option-row option-row-padded">
               {distanceOptions.map((distance, index) => (
                 <button
                   key={distance}
@@ -340,24 +378,23 @@ export function RaceFilterPanel({
               ))}
             </div>
           </div>
-          <div
-            className="engine-option-row"
-            role="group"
-            aria-label={t("報名狀態", "Entry status")}
-            hidden={!filtersExpanded && filterCategory !== "registration"}
-          >
-            {filtersExpanded && (
+          {filtersExpanded && (
+            <div
+              className="engine-option-row"
+              role="group"
+              aria-label={t("報名狀態", "Entry status")}
+            >
               <span className="engine-label">{t("報名狀態", "Entry status")}</span>
-            )}
-            <div className="option-row">
-              <button
-                aria-pressed={acceptingOnly}
-                onClick={() => field("statuses", acceptingOnly ? [] : ["open"])}
-              >
-                {t("接受申請", "Accepting entries")}
-              </button>
+              <div className="option-row">
+                <button
+                  aria-pressed={acceptingOnly}
+                  onClick={() => field("statuses", acceptingOnly ? [] : ["open"])}
+                >
+                  {t("接受申請", "Accepting entries")}
+                </button>
+              </div>
             </div>
-          </div>
+          )}
           <div
             className="engine-option-row"
             role="group"
@@ -365,7 +402,7 @@ export function RaceFilterPanel({
             hidden={!filtersExpanded && filterCategory !== "type"}
           >
             {filtersExpanded && <span className="engine-label">{t("賽事類型", "Race type")}</span>}
-            <div className="option-row option-row-checkmarks">
+            <div className="option-row option-row-padded">
               <button
                 aria-pressed={filters.themed}
                 onClick={() => update({ ...filters, themed: !filters.themed, family: false })}
@@ -373,27 +410,6 @@ export function RaceFilterPanel({
                 {t("主題跑", "Themed races")}
               </button>
             </div>
-          </div>
-          <div
-            className="engine-option-row"
-            role="group"
-            aria-label={t("賽事難易度", "Race difficulty")}
-            hidden={!filtersExpanded && filterCategory !== "difficulty"}
-            aria-describedby="difficulty-note"
-          >
-            {filtersExpanded && (
-              <span className="engine-label">{t("賽事難易度", "Race difficulty")}</span>
-            )}
-            <div className="option-row">
-              {["困難", "適中", "容易"].map((difficulty) => (
-                <button key={englishRaceTerm(difficulty, english)} disabled>
-                  {englishRaceTerm(difficulty, english)}
-                </button>
-              ))}
-            </div>
-            <small id="difficulty-note">
-              {t("正式難易度評級推出後開放", "Available when difficulty ratings are published")}
-            </small>
           </div>
         </div>
       </div>

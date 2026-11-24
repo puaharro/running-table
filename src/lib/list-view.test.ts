@@ -7,6 +7,7 @@ import { defaultFilters, selectRaces } from "./races";
 import {
   calendarFilterRelaxation,
   calendarOptionCounts,
+  calendarResults,
   filteredRaceHref,
   orderByListedDeadline,
   orderSavedResults,
@@ -106,6 +107,32 @@ it("keeps upcoming saved races first, past saved races newest first, and does no
     "old",
   ]);
   expect(input[0].race.id).toBe("old");
+});
+it("sorts by the date of the matching group shown in the list", () => {
+  const base = races[0];
+  const group = { ...base.groups[0], distanceKm: 10, endDate: undefined };
+  const lateGroup = {
+    ...base,
+    id: "early-event",
+    date: "2026-12-01",
+    groups: [
+      { ...group, distanceKm: 5, date: "2026-12-01" },
+      { ...group, date: "2026-12-06" },
+    ],
+  };
+  const earlyGroup = {
+    ...base,
+    id: "later-event",
+    date: "2026-12-03",
+    groups: [{ ...group, date: "2026-12-03" }],
+  };
+  const result = calendarResults(
+    [lateGroup, earlyGroup],
+    { ...defaultFilters, view: "all", distances: ["10K"] },
+    now,
+    false,
+  );
+  expect(result.map(({ race }) => race.id)).toEqual(["later-event", "early-event"]);
 });
 it("exports only ten list cards while retaining total count and accessible next-page controls", () => {
   const html = renderToStaticMarkup(createElement(RaceExplorer, { races, initialNow: now }));

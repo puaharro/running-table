@@ -92,20 +92,8 @@
   border-color: var(--home-action);
   box-shadow: inset 0 -2px 0 var(--home-action);
 }
-.search-page .engine-options .option-row-checkmarks button {
-  position: relative;
+.search-page .engine-options .option-row-padded button {
   padding-inline: var(--space-4);
-}
-.option-row-checkmarks button[aria-pressed="true"]::before {
-  content: "";
-  position: absolute;
-  inset-inline-start: var(--space-2);
-  inset-block-start: 50%;
-  width: 6px;
-  height: 10px;
-  border: solid currentColor;
-  border-width: 0 2px 2px 0;
-  transform: translateY(-60%) rotate(45deg);
 }
 .calendar-option-count {
   min-width: 3ch;
@@ -118,7 +106,7 @@
   line-height: 1.5;
   text-align: center;
 }
-.option-row-checkmarks button[aria-pressed="true"] .calendar-option-count {
+.option-row button[aria-pressed="true"] .calendar-option-count {
   background: var(--home-card);
 }
 .search-page .engine-month {
@@ -350,14 +338,32 @@
   background: var(--home-action);
   color: var(--home-on-dark);
   font-size: 12px;
+  font-variant-numeric: tabular-nums;
   text-align: center;
 }
-.search-page aside #calendar-category-options:not([hidden]) {
-  display: block;
-  margin-top: var(--space-2);
-  padding: var(--space-3);
-  border-radius: 6px;
-  background: var(--home-tint);
+@media (min-width: 768px) {
+  .search-page aside .search-engine.filter-card {
+    position: relative;
+    overflow: visible;
+  }
+  .search-page aside #calendar-category-options:not([hidden]) {
+    position: absolute;
+    z-index: 5;
+    top: calc(var(--filter-popup-top, 100%) + var(--space-2));
+    left: var(--filter-popup-left, var(--space-4));
+    display: block;
+    box-sizing: border-box;
+    width: min(20rem, 100%);
+    max-height: 65dvh;
+    overflow-y: auto;
+    padding: var(--space-3);
+    border-radius: 12px;
+    background: var(--home-card);
+    box-shadow: 0 6px 24px rgb(22 40 33 / 0.2);
+  }
+  .search-page aside #calendar-category-options[data-category="date"] {
+    width: min(27rem, 100%);
+  }
 }
 .search-page #calendar-category-options [hidden],
 .search-page #calendar-category-options[hidden] {

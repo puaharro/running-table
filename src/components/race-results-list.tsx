@@ -1,13 +1,7 @@
 import { Fragment, type ReactNode, type RefObject } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import {
-  englishDate,
-  englishDistanceTag,
-  englishTimestamp,
-  language,
-  localPath,
-} from "@/lib/english-races";
+import { englishDate, englishDistanceTag, language, localPath } from "@/lib/english-races";
 import { englishRaceTerm } from "@/lib/race-terms.en";
 import { groupLocations } from "@/lib/group-locations";
 import { listDeadline, listRegistration } from "@/lib/list-registration";
@@ -54,13 +48,14 @@ type RaceResultsListProps = {
   now: string;
   ready: boolean;
   savedOnly: boolean;
+  highlightDeadlines: boolean;
   error: string;
   noListedCountry: boolean;
   total: number;
   pagination: ReturnType<typeof paginateResults<RaceResult>>;
   resultsPanel: RefObject<HTMLDivElement | null>;
   relaxOption?: { label: string; onClick: () => void };
-  onSortByDeadline: () => void;
+  onSort: (sort: "date" | "deadline") => void;
   onOpenRace: (raceId: string) => void;
   onRemoveFavorite?: (race: Race, keyboard: boolean) => void;
   onViewAll: () => void;
@@ -74,13 +69,14 @@ export function RaceResultsList({
   now,
   ready,
   savedOnly,
+  highlightDeadlines,
   error,
   noListedCountry,
   total,
   pagination,
   resultsPanel,
   relaxOption,
-  onSortByDeadline,
+  onSort,
   onOpenRace,
   onRemoveFavorite,
   onViewAll,
@@ -88,6 +84,7 @@ export function RaceResultsList({
   onChangePage,
 }: RaceResultsListProps) {
   const t = language(english);
+  const dateLabel = (day: string) => (english ? englishDate(day) : day.replaceAll("-", "/"));
   const visibleResults = pagination.items;
   const resultKey = JSON.stringify(
     visibleResults.map(({ race, groups }) => [race.id, groups.map((group) => group.id)]),
@@ -97,7 +94,7 @@ export function RaceResultsList({
   return (
     <div className="race-results-layout" ref={resultsPanel}>
       <div className="race-results-main">
-        <div className="race-list">
+        <div className="race-list" data-highlight-deadlines={highlightDeadlines || undefined}>
           {visibleResults.length > 0 && (
             <div
               className="calendar-row-head"
@@ -105,15 +102,24 @@ export function RaceResultsList({
               aria-label={t("賽事列表欄位", "Race list columns")}
             >
               <span>{t("賽事／起點", "Race / Start")}</span>
-              <span>{t("比賽日", "Race day")}</span>
+              <button
+                type="button"
+                aria-pressed={filters.sort === "date"}
+                onClick={() => onSort("date")}
+              >
+                {t("比賽日", "Race day")}{" "}
+                {filters.sort === "date" && <span aria-hidden="true">↑</span>}
+              </button>
               <span>{t("距離", "Distance")}</span>
               <span>{t("報名概況", "Registration")}</span>
               <button
                 type="button"
                 aria-pressed={filters.sort === "deadline"}
-                onClick={() => onSortByDeadline()}
+                onClick={() => onSort("deadline")}
               >
-                {t("最近截止", "Next deadline")}{" "}
+                {highlightDeadlines
+                  ? t("已核實報名截止", "Verified entry deadline")
+                  : t("最近截止", "Next deadline")}{" "}
                 {filters.sort === "deadline" && <span aria-hidden="true">↑</span>}
               </button>
               <span>{t("收藏", "Save")}</span>
@@ -122,6 +128,7 @@ export function RaceResultsList({
           {visibleResults.map(({ race, groups }, index) => {
             const detailHref = localPath(filteredRaceHref(race, groups, filters), english);
             const deadline = listDeadline(race, groups, now, english);
+            const registration = listRegistration(race, groups, now, english);
             const distances = [
               ...new Set(
                 race.groups
@@ -188,13 +195,10 @@ export function RaceResultsList({
                     <Icon name="calendar" size={18} />
                     <span className="sr-only">{t("起跑日期：", "Race date:")}</span>
                     <span>
-                      {[...new Set(groups.map((group) => group.date))].sort().map((date, index) => (
-                        <Fragment key={date}>
-                          {index > 0 && " ／ "}
-                          <time dateTime={date}>
-                            {english ? englishDate(date) : date.replaceAll("-", "/")}
-                          </time>
-                        </Fragment>
+                      {[...new Set(groups.map((group) => group.date))].sort().map((date) => (
+                        <time key={date} dateTime={date}>
+                          {dateLabel(date)}
+                        </time>
                       ))}
                     </span>
                   </p>
@@ -223,28 +227,36 @@ export function RaceResultsList({
                     className="calendar-race-registration"
                     aria-label={t("報名概況", "Registration")}
                   >
-                    {listRegistration(race, groups, now, english)}
+                    <strong data-open={registration.open || undefined}>
+                      {registration.primary}
+                    </strong>
+                    {registration.secondary && <span>{registration.secondary}</span>}
                   </p>
                   <div className="calendar-race-deadline" data-empty={!deadline}>
                     {deadline ? (
                       <>
-                        <span className="sr-only">
-                          {t("最近已核實報名截止：", "Next verified entry deadline:")}
+                        <span
+                          className={highlightDeadlines ? "calendar-verified-deadline" : "sr-only"}
+                        >
+                          {t("已核實報名截止", "Verified entry deadline")}
                         </span>
                         <strong>
-                          <time dateTime={deadline.date}>
-                            {english
-                              ? deadline.date.length > 10
-                                ? englishTimestamp(deadline.date)
-                                : englishDate(deadline.date)
-                              : deadline.label}
-                          </time>
+                          <time dateTime={deadline.day}>{dateLabel(deadline.day)}</time>
                         </strong>
+                        <span>
+                          {deadline.time ? (
+                            <time dateTime={deadline.date}>
+                              {deadline.time} {t("香港時間", "HKT")}
+                            </time>
+                          ) : (
+                            t("時刻待核實", "Time unverified")
+                          )}
+                        </span>
                         <span>{deadline.scope}</span>
                       </>
                     ) : (
                       <span aria-label={t("暫無已核實截止日期", "No verified entry deadline")}>
-                        —
+                        {highlightDeadlines ? t("暫無已核實截止", "No verified deadline") : "—"}
                       </span>
                     )}
                   </div>

@@ -5,6 +5,9 @@ import { distanceOptions, regions, type Filters, type Race, type RaceGroup } fro
 
 export type RaceResult = { race: Race; groups: RaceGroup[] };
 const racesPerPage = 10;
+function firstResultDate({ race, groups }: RaceResult) {
+  return groups.map((group) => group.date).sort()[0] ?? race.date;
+}
 export function pastResult(result: RaceResult, now: Clock) {
   const today = hongKongToday(clockTime(now));
   return (
@@ -13,14 +16,14 @@ export function pastResult(result: RaceResult, now: Clock) {
   );
 }
 export function orderSavedResults(results: RaceResult[], now: Clock) {
-  const firstDate = (result: RaceResult) =>
-    result.groups.map((group) => group.date).sort()[0] ?? result.race.date;
   return [...results].sort((a, b) => {
     const pastA = pastResult(a, now),
       pastB = pastResult(b, now);
     return (
       Number(pastA) - Number(pastB) ||
-      (pastA ? firstDate(b).localeCompare(firstDate(a)) : firstDate(a).localeCompare(firstDate(b)))
+      (pastA
+        ? firstResultDate(b).localeCompare(firstResultDate(a))
+        : firstResultDate(a).localeCompare(firstResultDate(b)))
     );
   });
 }
@@ -42,7 +45,10 @@ export function calendarResults(races: Race[], filters: Filters, now: Clock, sav
     return orderByListedDeadline(selectRaces(races, { ...filters, sort: "date" }, now), now);
   }
   const results = selectRaces(races, filters, now);
-  return savedOnly && filters.sort === "date" ? orderSavedResults(results, now) : results;
+  if (filters.sort !== "date") return results;
+  return savedOnly
+    ? orderSavedResults(results, now)
+    : results.sort((a, b) => firstResultDate(a).localeCompare(firstResultDate(b)));
 }
 
 export function calendarOptionCounts(races: Race[], filters: Filters, now: Clock) {

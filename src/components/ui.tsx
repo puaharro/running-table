@@ -8,7 +8,7 @@ export function Icon({
   name,
   size = 18,
 }: {
-  name: "search" | "arrow" | "pin" | "filter" | "calendar" | "check" | "clock";
+  name: "search" | "arrow" | "pin" | "filter" | "calendar" | "check" | "clock" | "close";
   size?: number;
 }) {
   const paths = {
@@ -44,6 +44,7 @@ export function Icon({
       </>
     ),
     check: <path d="m5 12 4 4L19 6" />,
+    close: <path d="m6 6 12 12M18 6 6 18" />,
     clock: (
       <>
         <circle cx="12" cy="12" r="9" />
