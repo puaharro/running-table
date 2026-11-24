@@ -1338,3 +1338,44 @@
   outline: 2px solid var(--home-ink);
   outline-offset: 3px;
 }
+
+.runner-account-editions-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+}
+.runner-account-editions-header h2 {
+  margin: 0;
+}
+.runner-account-editions-header nav {
+  display: flex;
+  gap: 8px;
+}
+.runner-account-editions-header a {
+  display: inline-flex;
+  min-height: 44px;
+  min-width: 54px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding-inline: 10px;
+  color: var(--home-ink);
+  text-decoration: none;
+  font-weight: 650;
+}
+.runner-account-editions:not(:has(.runner-account-past :target)) .runner-account-current-link,
+.runner-account-editions:has(.runner-account-past :target) .runner-account-past-link {
+  background: var(--home-ink);
+  color: var(--paper, white);
+}
+.runner-account-editions:not(:has(.runner-account-past :target)) .runner-account-past,
+.runner-account-editions:has(.runner-account-past :target) .runner-account-current {
+  display: none;
+}
+.runner-account-editions :is(#runner-copy, #race-confirmed-experience, [id^="review-"]) {
+  scroll-margin-top: 8rem;
+}

@@ -2,12 +2,20 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import selected from "../../content/cms-runtime/selected.json";
 import { validateRuntimeRecord } from "./cms-runtime-schema.mjs";
+export interface RunnerCopySection {
+  topic: string;
+  body: string;
+  limitations: string;
+  urls: string[];
+}
+
 export interface RunnerCopy {
   revision: number;
   raceId: string;
   sourceWebsiteId: string;
   sourceContentHash: string;
   markdown: string;
+  sections?: RunnerCopySection[];
   sha256: string;
 }
 // Only explicit public content selections are loaded. Never open the private CMS here.

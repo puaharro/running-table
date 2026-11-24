@@ -89,6 +89,7 @@ export function validateRuntimeRecord(record, pin, raceId, editionYear) {
     sourceWebsiteId: record.manifest.source_website_id,
     sourceContentHash: record.manifest.source_content_hash,
     markdown,
+    sections: record.public_copy.sections,
     sha256: createHash("sha256").update(markdown).digest("hex"),
   };
 }

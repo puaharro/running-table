@@ -43,12 +43,6 @@ export function raceExperience(race: Race, english: boolean) {
   }
 
   if (confirmed) {
-    if (runnerCopy) {
-      chapters.push({
-        id: "race-confirmed-experience",
-        label: t(`${confirmed.year} 往屆體驗`, `${confirmed.year} race experience`),
-      });
-    }
     const group = race.groups.find(({ id }) => id === confirmed.groupId);
     if (group) {
       const { current, historical } = reviewsForGroup(race, group, editorialReviews);
@@ -80,19 +74,54 @@ export function RaceExperienceSections({
   experience: ReturnType<typeof raceExperience>;
 }) {
   const { runnerCopy, confirmed, ratingAssessment, reviewAnchor } = experience;
+  const currentYear = race.date.slice(0, 4);
+  const t = language(english);
   return (
     <>
       {ratingAssessment && <RaceRatingAssessmentPreview draft={ratingAssessment} />}
-      {runnerCopy && <RaceRunnerCopy english={english} copy={runnerCopy} />}
-      {confirmed ? (
-        <RaceConfirmedExperience
-          english={english}
-          experience={confirmed}
-          currentYear={race.date.slice(0, 4)}
-          reviewAnchor={reviewAnchor}
-        />
+      {runnerCopy && confirmed ? (
+        <section
+          className="race-runner-copy runner-account-editions"
+          aria-labelledby="runner-account-editions-title"
+        >
+          <header className="runner-account-editions-header">
+            <h2 id="runner-account-editions-title">{t("跑手分享", "Runner accounts")}</h2>
+            <nav aria-label={t("選擇跑手分享年份", "Choose race edition")}>
+              <a className="runner-account-current-link" href="#runner-copy">
+                {currentYear}
+              </a>
+              <a className="runner-account-past-link" href="#race-confirmed-experience">
+                {confirmed.year}
+              </a>
+            </nav>
+          </header>
+          <div className="runner-account-current">
+            <RaceRunnerCopy english={english} copy={runnerCopy} embedded />
+          </div>
+          <div className="runner-account-past">
+            <RaceConfirmedExperience
+              english={english}
+              experience={confirmed}
+              currentYear={currentYear}
+              reviewAnchor={reviewAnchor}
+              embedded
+            />
+          </div>
+        </section>
       ) : (
-        <UnscopedRunnerOpinions english={english} race={race} />
+        <>
+          {runnerCopy && <RaceRunnerCopy english={english} copy={runnerCopy} />}
+          {confirmed ? (
+            <RaceConfirmedExperience
+              english={english}
+              experience={confirmed}
+              currentYear={currentYear}
+              reviewAnchor={reviewAnchor}
+            />
+          ) : (
+            <UnscopedRunnerOpinions english={english} race={race} />
+          )}
+        </>
       )}
     </>
   );

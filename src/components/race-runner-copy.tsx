@@ -1,4 +1,5 @@
 import type { RunnerCopy } from "@/lib/runner-copy";
+import { RunnerAccountTopics } from "./runner-account-topics";
 
 // Render the small Markdown subset in the confirmed copy without changing wording
 // or interpreting source text as HTML. Links remain HTTPS and open separately.
@@ -17,28 +18,46 @@ function inline(text: string) {
   });
 }
 
-export function RaceRunnerCopy({ copy, english = false }: { copy: RunnerCopy; english?: boolean }) {
+export function RaceRunnerCopy({
+  copy,
+  english = false,
+  embedded = false,
+}: {
+  copy: RunnerCopy;
+  english?: boolean;
+  embedded?: boolean;
+}) {
   const [heading, ...blocks] = copy.markdown.trim().split(/\n\n+/);
   return (
     <section
       id="runner-copy"
-      className="race-runner-copy"
+      className={embedded ? "experience-compact" : "race-runner-copy"}
       tabIndex={-1}
       aria-labelledby="runner-copy-heading"
     >
-      <h2 id="runner-copy-heading" lang={english ? "zh-HK" : undefined}>
+      <h2
+        className={embedded ? "sr-only" : undefined}
+        id="runner-copy-heading"
+        lang={english ? "zh-HK" : undefined}
+      >
         {heading.replace(/^# /, "").replace("【候選・待覆核】", "")}
       </h2>
       {english && <p lang="en">Original runner account in Chinese.</p>}
-      <div className="runner-copy-body" lang={english ? "zh-HK" : undefined}>
-        {blocks.map((block, index) =>
-          block.startsWith("## ") ? (
-            <h3 key={index}>{block.slice(3)}</h3>
-          ) : (
-            <p key={index}>{inline(block)}</p>
-          ),
-        )}
-      </div>
+      {embedded && copy.sections ? (
+        <div className="runner-copy-body experience-topics">
+          <RunnerAccountTopics sections={copy.sections} english={english} />
+        </div>
+      ) : (
+        <div className="runner-copy-body" lang={english ? "zh-HK" : undefined}>
+          {blocks.map((block, index) =>
+            block.startsWith("## ") ? (
+              <h3 key={index}>{block.slice(3)}</h3>
+            ) : (
+              <p key={index}>{inline(block)}</p>
+            ),
+          )}
+        </div>
+      )}
     </section>
   );
 }
