@@ -103,7 +103,7 @@ export function RegistrationGroups({
   race: Race;
   initialNow: string;
   english?: boolean;
-  previewEdition?: { groupId: string; year: number };
+  previewEdition?: { groupId: string; year: number; relocatedReviewId?: string };
 }) {
   const t = language(english);
   const now = useClock(initialNow);
@@ -191,6 +191,9 @@ export function RegistrationGroups({
             english={english}
             race={race}
             group={group}
+            relocatedReviewId={
+              previewEdition?.groupId === group.id ? previewEdition.relocatedReviewId : undefined
+            }
             excludedEditionYear={
               previewEdition?.groupId === group.id ? previewEdition.year : undefined
             }

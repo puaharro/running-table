@@ -1,12 +1,13 @@
 import { editorialReviews } from "@/data/editorial-reviews";
 import { confirmedRaceExperience } from "@/lib/confirmed-race-experience";
-import { reviewsForGroup } from "@/lib/editorial-reviews";
+import { reviewsForGroup, type EditorialReview } from "@/lib/editorial-reviews";
 import { language } from "@/lib/english-races";
 import { localRatingAssessment } from "@/lib/local-rating-preview";
 import { runnerCopyForRace } from "@/lib/runner-copy";
 import type { Race } from "@/lib/types";
 import { RaceConfirmedExperience } from "./confirmed-race-experience";
 import { RaceRatingAssessmentPreview } from "./race-rating-assessment-preview";
+import { EditorialReviewCard } from "./group-ratings";
 import { RaceRunnerCopy } from "./race-runner-copy";
 import { UnscopedRunnerOpinions } from "./runner-opinions";
 
@@ -18,9 +19,29 @@ export function raceExperience(race: Race, english: boolean) {
   const chapters: { id: string; label: string }[] = [];
   let overviewLabel: string;
   let reviewAnchor: string | undefined;
+  let laterReview: EditorialReview | undefined;
 
-  if (runnerCopy) {
-    chapters.push({ id: "runner-copy", label: t("跑手分享", "Runner accounts") });
+  if (confirmed) {
+    const group = race.groups.find(({ id }) => id === confirmed.groupId);
+    if (group) {
+      const { current, historical } = reviewsForGroup(race, group, editorialReviews);
+      const review = [...current, ...historical].find(
+        ({ editionYear }) => editionYear === confirmed.year,
+      );
+      if (!runnerCopy) {
+        laterReview = [...current, ...historical].find(
+          ({ editionYear }) => editionYear > confirmed.year,
+        );
+      }
+      if (review) reviewAnchor = `review-${review.id}`;
+    }
+  }
+
+  if (runnerCopy || laterReview) {
+    chapters.push({
+      id: runnerCopy ? "runner-copy" : "runner-account-latest",
+      label: t("跑手分享", "Runner accounts"),
+    });
     overviewLabel = t("跑手分享", "Runner accounts");
   } else {
     const reviewedGroup = confirmed
@@ -37,20 +58,7 @@ export function raceExperience(race: Race, english: boolean) {
     });
     overviewLabel = confirmed
       ? t(`${confirmed.year} 往屆體驗`, `${confirmed.year} race experience`)
-      : reviewedGroup
-        ? t("參賽體驗", "Race experience")
-        : t("參賽體驗", "Race experience");
-  }
-
-  if (confirmed) {
-    const group = race.groups.find(({ id }) => id === confirmed.groupId);
-    if (group) {
-      const { current, historical } = reviewsForGroup(race, group, editorialReviews);
-      const review = [...current, ...historical].find(
-        ({ editionYear }) => editionYear === confirmed.year,
-      );
-      if (review) reviewAnchor = `review-${review.id}`;
-    }
+      : t("參賽體驗", "Race experience");
   }
 
   return {
@@ -61,6 +69,7 @@ export function raceExperience(race: Race, english: boolean) {
     confirmed,
     ratingAssessment,
     reviewAnchor,
+    laterReview,
   };
 }
 
@@ -73,13 +82,14 @@ export function RaceExperienceSections({
   english: boolean;
   experience: ReturnType<typeof raceExperience>;
 }) {
-  const { runnerCopy, confirmed, ratingAssessment, reviewAnchor } = experience;
+  const { runnerCopy, confirmed, ratingAssessment, reviewAnchor, laterReview } = experience;
   const currentYear = race.date.slice(0, 4);
   const t = language(english);
+  const latestId = runnerCopy ? "runner-copy" : "runner-account-latest";
   return (
     <>
       {ratingAssessment && <RaceRatingAssessmentPreview draft={ratingAssessment} />}
-      {runnerCopy && confirmed ? (
+      {confirmed && (runnerCopy || laterReview) ? (
         <section
           className="race-runner-copy runner-account-editions"
           aria-labelledby="runner-account-editions-title"
@@ -87,8 +97,8 @@ export function RaceExperienceSections({
           <header className="runner-account-editions-header">
             <h2 id="runner-account-editions-title">{t("跑手分享", "Runner accounts")}</h2>
             <nav aria-label={t("選擇跑手分享年份", "Choose race edition")}>
-              <a className="runner-account-current-link" href="#runner-copy">
-                {currentYear}
+              <a className="runner-account-current-link" href={"#" + latestId}>
+                {laterReview?.editionYear ?? currentYear}
               </a>
               <a className="runner-account-past-link" href="#race-confirmed-experience">
                 {confirmed.year}
@@ -96,7 +106,23 @@ export function RaceExperienceSections({
             </nav>
           </header>
           <div className="runner-account-current">
-            <RaceRunnerCopy english={english} copy={runnerCopy} embedded />
+            {runnerCopy ? (
+              <RaceRunnerCopy english={english} copy={runnerCopy} embedded />
+            ) : laterReview ? (
+              <div id={latestId} tabIndex={-1}>
+                {laterReview.editionYear < Number(currentYear) && (
+                  <p className="review-edition-note">
+                    {t(
+                      "往屆體驗，不代表 " + currentYear + " 年安排或表現。",
+                      "Past edition. The " +
+                        currentYear +
+                        " arrangements and experience may differ.",
+                    )}
+                  </p>
+                )}
+                <EditorialReviewCard english={english} review={laterReview} />
+              </div>
+            ) : null}
           </div>
           <div className="runner-account-past">
             <RaceConfirmedExperience

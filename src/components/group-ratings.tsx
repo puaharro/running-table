@@ -202,18 +202,22 @@ export function GroupRatings({
   race,
   group,
   excludedEditionYear,
+  relocatedReviewId,
   english = false,
 }: {
   race: Race;
   group: RaceGroup;
   excludedEditionYear?: number;
+  relocatedReviewId?: string;
   english?: boolean;
 }) {
   const t = language(english);
   const { current, historical } = reviewsForGroup(
     race,
     group,
-    editorialReviews.filter((r) => r.editionYear !== excludedEditionYear),
+    editorialReviews.filter(
+      (r) => r.editionYear !== excludedEditionYear && r.id !== relocatedReviewId,
+    ),
   );
   const opinions = runnerOpinionsForGroup(race, group).filter(
     (r) => r.editionYear !== excludedEditionYear,
@@ -280,7 +284,12 @@ export function GroupRatings({
           </details>
         </>
       )}
-      {!current.length && !historical.length && !opinions.length && (
+      {relocatedReviewId && (
+        <a className="text-link" href={"#review-" + relocatedReviewId}>
+          {t("查看跑手分享", "Read runner accounts")}
+        </a>
+      )}
+      {!relocatedReviewId && !current.length && !historical.length && !opinions.length && (
         <p>{t("暫未有已發布參賽評論。", "No race experience reviews have been published here.")}</p>
       )}
       {!!groupNotices.length && (

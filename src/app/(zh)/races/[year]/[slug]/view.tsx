@@ -213,7 +213,11 @@ export default async function RacePage({ params, english = false }: Props & { en
                   initialNow={now}
                   previewEdition={
                     confirmedExperience
-                      ? { groupId: confirmedExperience.groupId, year: confirmedExperience.year }
+                      ? {
+                          groupId: confirmedExperience.groupId,
+                          year: confirmedExperience.year,
+                          relocatedReviewId: experience.laterReview?.id,
+                        }
                       : undefined
                   }
                 />

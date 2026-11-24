@@ -1376,6 +1376,7 @@
 .runner-account-editions:has(.runner-account-past :target) .runner-account-current {
   display: none;
 }
-.runner-account-editions :is(#runner-copy, #race-confirmed-experience, [id^="review-"]) {
+.runner-account-editions
+  :is(#runner-copy, #runner-account-latest, #race-confirmed-experience, [id^="review-"]) {
   scroll-margin-top: 8rem;
 }

@@ -32,3 +32,7 @@ Reference: [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
 - When a source requires login, ask the owner to complete login in the browser, then resume that same source. Never request passwords, cookies or tokens. Continue independent source checks while waiting, but keep the blocked source pending.
 - Record each category's query, actual review time, links inspected, results and access limitations. Distinguish not searched, awaiting login, searched with no relevant result, inspected original sources, and inaccessible after an attempted review.
 - Do not describe research as complete while a source remains pending. If access cannot be resolved, report that specific limitation; an empty or inaccessible platform is not evidence that runners expressed no opinion.
+
+## Runner accounts presentation
+
+For runner accounts across editions, use the [Hong Kong–Zhuhai–Macao Bridge Half Marathon layout](skills/nxtgo-site-qa/SKILL.md#跑手分享年份切換) as the format for race pages.
