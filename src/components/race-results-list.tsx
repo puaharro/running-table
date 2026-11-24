@@ -9,7 +9,6 @@ import {
   localPath,
 } from "@/lib/english-races";
 import { englishRaceTerm } from "@/lib/race-terms.en";
-import type { EditorialReview } from "@/lib/editorial-reviews";
 import { groupLocations } from "@/lib/group-locations";
 import { listDeadline, listRegistration } from "@/lib/list-registration";
 import {
@@ -20,8 +19,8 @@ import {
 } from "@/lib/list-view";
 import { distanceLabel } from "@/lib/races";
 import type { Filters, Race } from "@/lib/types";
+import { RaceRecommendation } from "./race-recommendation";
 import { FavoriteButton } from "./race-save";
-import { RaceOverallRating } from "./race-overall-rating";
 import { AdSlot, Icon } from "./ui";
 
 function highlightMatch(text: string, query: string) {
@@ -32,7 +31,7 @@ function highlightMatch(text: string, query: string) {
   let previousEnd = 0;
 
   // Compare slices of the original text so case conversion cannot shift highlight offsets.
-  for (let start = 0; start <= text.length - term.length; ) {
+  for (let start = 0; start <= text.length - term.length;) {
     const end = start + term.length;
     const candidate = text.slice(start, end);
     if (candidate.toLowerCase() !== needle) {
@@ -54,7 +53,6 @@ type RaceResultsListProps = {
   filters: Filters;
   now: string;
   ready: boolean;
-  reviews: EditorialReview[];
   savedOnly: boolean;
   error: string;
   noListedCountry: boolean;
@@ -75,7 +73,6 @@ export function RaceResultsList({
   filters,
   now,
   ready,
-  reviews,
   savedOnly,
   error,
   noListedCountry,
@@ -119,7 +116,6 @@ export function RaceResultsList({
                 {t("最近截止", "Next deadline")}{" "}
                 {filters.sort === "deadline" && <span aria-hidden="true">↑</span>}
               </button>
-              <span>{t("推薦指數", "Runner rating")}</span>
               <span>{t("收藏", "Save")}</span>
             </div>
           )}
@@ -252,12 +248,6 @@ export function RaceResultsList({
                       </span>
                     )}
                   </div>
-                  <RaceOverallRating
-                    english={english}
-                    race={race}
-                    groups={groups}
-                    reviews={reviews}
-                  />
                   <FavoriteButton
                     english={english}
                     compact
@@ -266,6 +256,7 @@ export function RaceResultsList({
                       onRemoveFavorite ? (keyboard) => onRemoveFavorite(race, keyboard) : undefined
                     }
                   />
+                  <RaceRecommendation race={race} groups={groups} english={english} compact />
                 </motion.article>
                 {index === 5 && visibleResults.length > 7 && <AdSlot />}
               </Fragment>

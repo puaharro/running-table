@@ -97,7 +97,7 @@ export default function GuidesPage({ english = false }: { english?: boolean }) {
               {t("查看路跑時間表", "View the race calendar")} <Icon name="arrow" />
             </Link>
             <Link className="guides-secondary-link" href={localPath("/ratings/", english)}>
-              {t("查看體驗評級", "View runner ratings")}
+              {t("查看參賽評論", "View race reviews")}
             </Link>
           </div>
         </div>

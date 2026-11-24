@@ -72,22 +72,12 @@ export function checkContent(html, record) {
     `${record.year} 年 · ${record.group} · 往屆體驗，不代表 ${currentYear} 年安排或表現。`,
     "historical edition/group label changed",
   );
-  const grid = only(elements(root, "dl", hasClass("experience-scores")), "scores");
-  assert.deepEqual(
-    elements(grid, "dt").map(plain),
-    ["賽道體驗", "大會執行", "補給體驗"],
-    "score dimensions changed",
-  );
-  // Use the record's actual dimension order below; never accept a score found elsewhere on the page.
-  assert.deepEqual(
-    elements(grid, "dd").map(plain),
-    Object.values(record.assessments).map((a) => (a.score === null ? "未評" : `${a.score} / 5`)),
-    "scores changed or moved",
-  );
   const details = only(
-    elements(root, "details", hasClass("experience-rating-details")),
+    elements(root, "details", hasClass("experience-written-review")),
     "rating details",
   );
+  assert.equal(elements(root, "dl", hasClass("experience-scores")).length, 0);
+  assert.doesNotMatch(plain(root), /編輯總評分|編輯評分/);
   const ratings = elements(details, "section");
   assert.equal(ratings.length, 3, "missing complete rating");
   Object.values(record.assessments).forEach((a, i) => {
@@ -104,7 +94,9 @@ export function checkContent(html, record) {
     );
   });
   assert.ok(plain(details).includes(record.ruleVersion), "missing rating rule version");
-  const topics = elements(root, "details", hasClass("experience-topic"));
+  const topics = elements(root, "details", hasClass("experience-topic")).filter(
+    (topic) => topic !== details,
+  );
   assert.equal(topics.length, 5, "missing topic");
   record.sections.forEach((part, i) => {
     const summary = only(elements(topics[i], "summary"), "topic summary");
@@ -142,7 +134,6 @@ export function checkContent(html, record) {
     year: record.year,
     copyRevision: record.copyRevision,
     ratingRevision: record.ratingRevision,
-    scores: Object.values(record.assessments).map((a) => a.score),
     topics: 5,
   };
 }

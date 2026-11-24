@@ -1,16 +1,9 @@
 import { language, localPath } from "@/lib/english-races";
 import { englishRaceTerm } from "@/lib/race-terms.en";
 import Link from "next/link";
-import { ReviewOverallScore } from "./review-overall-score";
 import { Icon } from "./ui";
 import { reviewsForGroup, type EditorialReview } from "@/lib/editorial-reviews";
-import {
-  ratingDimensions,
-  ratingPolicy,
-  reviewTargets,
-  segmentLabels,
-  scoreLabels,
-} from "@/lib/rating-policy";
+import { reviewTargets, segmentLabels } from "@/lib/rating-policy";
 import { formatTimestamp } from "@/lib/races";
 import { raceHref } from "@/lib/site";
 import type { Race } from "@/lib/types";
@@ -58,43 +51,15 @@ export function PublishedReviewCards({ races, reviews, english = false }: Props)
                       : t("其他年份評論", "Other edition")}
                 </span>
               </div>
-              <ReviewOverallScore english={english} review={review} compact />
-              <dl
-                className="ratings-score-grid"
-                aria-label={t("三項獨立評分", "Three independent ratings")}
-              >
-                {ratingDimensions.map((key) => {
-                  const score = review.assessments[key].score;
-                  return (
-                    <div key={key}>
-                      <dt>{englishRaceTerm(ratingPolicy.dimensions[key].title, english)}</dt>
-                      <dd>
-                        {score === null ? (
-                          <strong className="ratings-unrated-score">{t("未評", "Unrated")}</strong>
-                        ) : (
-                          <>
-                            <strong>{score}</strong>
-                            <span> / 5</span>
-                            <small>{englishRaceTerm(scoreLabels[score], english)}</small>
-                          </>
-                        )}
-                      </dd>
-                    </div>
-                  );
-                })}
-              </dl>
               {review.quickTake && (
                 <p className="ratings-review-summary" lang={english ? "zh-HK" : undefined}>
                   {review.quickTake.summary}
                 </p>
               )}
               <details className="ratings-observation">
-                <summary>{t("計分說明及資料範圍", "Scoring and scope of evidence")}</summary>
+                <summary>{t("評論背景及資料範圍", "Review context and evidence")}</summary>
                 <p className="ratings-edition-context">
-                  {t(
-                    `於 ${year} 年賽事頁閱讀 · 編輯點評`,
-                    `Editorial review on the ${year} race page`,
-                  )}
+                  {t(`於 ${year} 年賽事頁閱讀`, `Read the review on the ${year} race page`)}
                 </p>
                 {historical && (
                   <p className="ratings-year-notice">
@@ -104,7 +69,6 @@ export function PublishedReviewCards({ races, reviews, english = false }: Props)
                     )}
                   </p>
                 )}
-                <ReviewOverallScore english={english} review={review} />
                 <p className="ratings-runner-context">
                   {review.runnerSegment === "unknown"
                     ? t(
@@ -161,12 +125,7 @@ export function EditionReviewCoverage({ races, reviews, english = false }: Props
         <span>{t("當屆賽事及組別評論狀態", "Review coverage by edition and category")}</span>
         <span className="ratings-coverage-hint">{t("查看各組別", "View race categories")}</span>
       </summary>
-      <p>
-        {t(
-          "當屆未有評分，並不代表體驗欠佳。如有往屆評論，將另作標示。",
-          "An unrated edition has no current rating. Past reviews are marked separately.",
-        )}
-      </p>
+      <p>{t("評論按屆次及組別列出。", "Reviews are listed by edition and category.")}</p>
       <ul className="ratings-coverage-list">
         {[...races]
           .sort((a, b) => a.date.localeCompare(b.date))
@@ -188,13 +147,10 @@ export function EditionReviewCoverage({ races, reviews, english = false }: Props
                           className={`ratings-coverage-status ${current.length ? "ratings-coverage-status--current" : ""}`}
                         >
                           {current.length
-                            ? t("當屆已評", "Current edition rated")
+                            ? t("有當屆評論", "Current review available")
                             : historical.length
-                              ? t(
-                                  "當屆未評 · 有往屆評論",
-                                  "Unrated this edition · past review available",
-                                )
-                              : t("未評", "Unrated")}
+                              ? t("有往屆評論", "Past review available")
+                              : t("暫無評論", "No review yet")}
                         </span>
                         <Icon name="arrow" size={16} />
                       </Link>

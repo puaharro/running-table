@@ -28,7 +28,7 @@ it("separates missing editions from empty topics, preserving quotes and provenan
   expect(html).toContain("2026 年");
   expect(html).toContain("此年份／組別暫未收錄留言，無法比較。");
   expect(html).toContain("此主題未有相關原文");
-  expect(html).toContain("不影響編輯總評分");
+  expect(html).not.toContain("編輯總評分");
   expect(html).not.toContain(" / 5");
 });
 

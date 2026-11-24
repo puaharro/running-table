@@ -26,8 +26,8 @@ export function RunnerOpinionSummary({
     >
       <p className="review-context">
         {t(
-          `${record.editionYear} 年${record.groupLabel ?? "半馬"} · 外站跑手意見整理 · 不設分數`,
-          `${record.editionYear} · ${englishRaceTerm(record.groupLabel ?? "半馬", true)} · External runner comments (unscored)`,
+          `${record.editionYear} 年${record.groupLabel ?? "半馬"} · 外站跑手意見整理`,
+          `${record.editionYear} · ${englishRaceTerm(record.groupLabel ?? "半馬", true)} · External runner comments`,
         )}
       </p>
       {record.editionYear < currentYear && (

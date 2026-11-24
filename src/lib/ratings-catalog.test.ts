@@ -4,10 +4,10 @@ import { expect, it } from "vitest";
 import { PublishedReviewCards, EditionReviewCoverage } from "@/components/ratings-catalog";
 import { editorialReviews } from "@/data/editorial-reviews";
 import { races } from "@/data/races";
-import { ratingDimensions, reviewTargets } from "./rating-policy";
+import { reviewTargets } from "./rating-policy";
 import { raceHref } from "./site";
 
-it("keeps the original summaries and independent scores tied to the reviewed year and group", () => {
+it("keeps the original summaries tied to the reviewed year and group", () => {
   const html = renderToStaticMarkup(
     createElement(PublishedReviewCards, { races, reviews: editorialReviews }),
   );
@@ -23,23 +23,21 @@ it("keeps the original summaries and independent scores tied to the reviewed yea
     expect(html).toContain(summary);
     const card = html.split(`aria-labelledby="index-${review.id}"`)[1].split("</article>")[0];
     const overview = card.slice(0, card.indexOf("<details"));
-    expect(overview).toContain("編輯總評分");
+    expect(overview).not.toContain("編輯總評分");
     expect(overview).toContain(review.quickTake!.summary);
     expect(overview).not.toContain("評論更新");
     expect(overview).not.toContain("受訪跑手數");
     expect(overview).not.toContain("計分說明：");
-    expect(card).toContain("計分說明及資料範圍</summary>");
+    expect(card).toContain("評論背景及資料範圍</summary>");
     expect(card).not.toMatch(/<details[^>]* open/);
-    for (const key of ratingDimensions) {
-      expect(card).toContain(`<strong>${review.assessments[key].score}</strong><span> / 5</span>`);
-    }
+    expect(card).not.toContain(" / 5");
   }
   expect(html.indexOf("index-schkm-marathon-2026")).toBeLessThan(
     html.indexOf("index-hzmb-half-2025"),
   );
 });
 
-it("shows null as unrated and never labels a different edition as the current edition", () => {
+it("hides scores and never labels a different edition as the current edition", () => {
   // Display-only fixture: does not create an approval or alter published records.
   const review = structuredClone(editorialReviews[0]);
   review.assessments.aid.score = null;
@@ -51,7 +49,7 @@ it("shows null as unrated and never labels a different edition as the current ed
   const html = renderToStaticMarkup(
     createElement(PublishedReviewCards, { races: catalog, reviews: [review] }),
   );
-  expect(html).toContain('ratings-unrated-score">未評');
+  expect(html).not.toContain("ratings-score-grid");
   expect(html).not.toContain("<strong>0</strong>");
   expect(html).toContain("其他年份評論");
   expect(html).not.toContain(">當屆評論<");
@@ -60,8 +58,8 @@ it("shows null as unrated and never labels a different edition as the current ed
 it("keeps current-edition coverage separate across years and groups", () => {
   const props = { races, reviews: editorialReviews };
   const html = renderToStaticMarkup(createElement(EditionReviewCoverage, props));
-  expect(html).not.toContain("當屆已評");
-  expect(html.match(/當屆未評 · 有往屆評論/g)).toHaveLength(2);
+  expect(html).not.toContain("有當屆評論");
+  expect(html.match(/有往屆評論/g)).toHaveLength(2);
   for (const race of races)
     for (const group of race.groups) {
       expect(html).toContain(`${raceHref(race).replace(/\/$/, "")}#ratings-${group.id}`);
@@ -75,6 +73,6 @@ it("keeps current-edition coverage separate across years and groups", () => {
   const matching = renderToStaticMarkup(
     createElement(EditionReviewCoverage, { ...props, races: catalog }),
   );
-  expect(matching.match(/當屆已評/g)).toHaveLength(1);
-  expect(matching.match(/當屆未評 · 有往屆評論/g)).toHaveLength(1);
+  expect(matching.match(/有當屆評論/g)).toHaveLength(1);
+  expect(matching.match(/有往屆評論/g)).toHaveLength(1);
 });

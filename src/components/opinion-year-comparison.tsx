@@ -101,8 +101,8 @@ export function OpinionYearComparison({
       <p role="status">{warning}</p>
       <p>
         {t(
-          "只比較此賽事、此組別已發布留言；年份為賽事屆次，不是出帖年份。數量反映本站收錄量，不代表體驗改善或變差，不影響編輯總評分。同一留言可屬多個主題，各主題數不可相加。",
-          "This compares published comments for this race and category. Years refer to race editions. Counts reflect what we collected and do not measure changes in experience or affect editorial scores. Comments can appear in multiple topics.",
+          "只比較此賽事、此組別已發布留言；年份為賽事屆次，不是出帖年份。數量反映本站收錄量，不代表體驗改善或變差。同一留言可屬多個主題，各主題數不可相加。",
+          "This compares published comments for this race and category. Years refer to race editions. Counts reflect what we collected and do not measure changes in experience. Comments can appear in multiple topics.",
         )}
       </p>
       {opinionTopics.map((topic) => (

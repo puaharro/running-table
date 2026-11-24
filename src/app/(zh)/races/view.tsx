@@ -6,7 +6,6 @@ import { displayDate } from "@/lib/races";
 import { raceHref } from "@/lib/site";
 import { RaceExplorer } from "@/components/race-explorer";
 import { publicRaces as races } from "@/data/races";
-import { editorialReviews } from "@/data/editorial-reviews";
 
 const racesByYear = Map.groupBy(
   [...races].sort((first, second) => second.date.localeCompare(first.date)),
@@ -17,12 +16,7 @@ export function RaceSearchView({ english = false }: { english?: boolean }) {
   const t = language(english);
   return (
     <main id="main" className="search-page">
-      <RaceExplorer
-        english={english}
-        races={races}
-        reviews={editorialReviews}
-        initialNow={new Date().toISOString()}
-      />
+      <RaceExplorer english={english} races={races} initialNow={new Date().toISOString()} />
       <details id="race-directory" className="shell race-directory">
         <summary>{t("全部賽事及往屆紀錄", "All races and past editions")}</summary>
         {Array.from(racesByYear, ([year, entries]) => (

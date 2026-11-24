@@ -3,6 +3,7 @@ import { englishRaceTerm } from "@/lib/race-terms.en";
 import { englishDate, englishTimestamp, language, localPath } from "@/lib/english-races";
 import "./race-detail.css";
 import { raceExperience, RaceExperienceSections } from "@/components/race-experience";
+import { RaceRecommendation } from "@/components/race-recommendation";
 import { RaceSaveActions } from "@/components/race-save";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -81,6 +82,7 @@ export default async function RacePage({ params, english = false }: Props & { en
               <p className="english-title" lang={english ? "zh-HK" : "en"}>
                 {english ? race.name : race.englishName}
               </p>
+              <RaceRecommendation race={race} groups={race.groups} english={english} />
             </div>
           </div>
           <PublicRegistrationCountdown english={english} race={race} initialNow={now} />

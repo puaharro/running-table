@@ -21,7 +21,7 @@ export function raceExperience(race: Race, english: boolean) {
 
   if (runnerCopy) {
     chapters.push({ id: "runner-copy", label: t("跑手分享", "Runner accounts") });
-    overviewLabel = t("跑手分享（無評分）", "Runner accounts (unrated)");
+    overviewLabel = t("跑手分享", "Runner accounts");
   } else {
     const reviewedGroup = confirmed
       ? undefined
@@ -39,7 +39,7 @@ export function raceExperience(race: Race, english: boolean) {
       ? t(`${confirmed.year} 往屆體驗`, `${confirmed.year} race experience`)
       : reviewedGroup
         ? t("參賽體驗", "Race experience")
-        : t("參賽體驗（未評）", "Race experience (unrated)");
+        : t("參賽體驗", "Race experience");
   }
 
   if (confirmed) {

@@ -23,17 +23,13 @@ describe("approved external runner opinions", () => {
     expect(runnerOpinionsForGroup(bridge, { ...half, date: "2025-01-05" })).toEqual([record]);
   });
 
-  it("keeps an unscored external panel separate from the default editorial panel", () => {
+  it("renders the approved review and runner comments in the same visible section", () => {
     const html = renderToStaticMarkup(createElement(GroupRatings, { race: bridge, group: half }));
-    const runnerPanel = html.slice(html.indexOf('aria-label="2025年外站跑手意見"'));
-    expect(html).toMatch(/role="tabpanel"[^>]+hidden=""[^>]*><article class="runner-opinions"/);
-    expect(html).toContain("編輯點評");
-    expect(html).toContain("跑手心得");
-    expect(runnerPanel).not.toContain("rating-grid");
-    expect(runnerPanel).not.toContain("/ 5");
-    expect(runnerPanel).not.toContain("編輯評分</");
-    expect(runnerPanel).toContain("與編輯評論分開，不新增分數");
-    expect(html).not.toContain("未有已發布跑手心得");
+    expect(html).toContain('id="review-hzmb-half-2025-participant-notes"');
+    expect(html).toContain('aria-label="2025年外站跑手意見"');
+    expect(html).not.toContain('role="tabpanel"');
+    expect(html).not.toContain("編輯評分");
+    expect(html).not.toContain(" / 5");
   });
 
   it("shows concise balanced topics and preserves the batch and year limits", () => {
@@ -79,7 +75,7 @@ describe("approved external runner opinions", () => {
     const html = renderToStaticMarkup(
       createElement(GroupRatings, { race: bridge, group: bridge.groups[1] }),
     );
-    expect(html).toContain("未有已發布跑手心得");
+    expect(html).toContain("暫未有已發布參賽評論");
     expect(html).not.toContain("Marathon’s World");
     expect(html).not.toContain("希望多加一個補給站");
   });

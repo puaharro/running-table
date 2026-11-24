@@ -45,5 +45,5 @@ for (const year of readdirSync("out/races", { withFileTypes: true }).filter(
   }
 }
 console.log(
-  "Two confirmed 2025 experiences verified: exact copy v2, ratings, citations, edition isolation and no private files.",
+  "Two confirmed 2025 experiences verified: exact copy v2, review wording, citations, edition isolation and no private files.",
 );

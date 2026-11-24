@@ -1729,3 +1729,24 @@ time,
   min-height: 44px;
   white-space: nowrap;
 }
+
+.race-recommendation {
+  margin-block-start: var(--space-2);
+  border-block-start: 1px solid var(--home-line);
+  font-size: 13px;
+}
+.race-recommendation-primary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+.race-recommendation-stars {
+  display: inline-flex;
+  gap: 1px;
+  color: var(--home-orange-ink);
+}
+.race-recommendation-source {
+  margin: 0;
+  color: var(--home-muted);
+}

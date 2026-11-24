@@ -62,7 +62,7 @@ it("counts each edition/group independently and renders five labelled filter con
       expect(html).toContain(
         `${topic}（${comments.filter((entry) => entry.topics.includes(topic)).length}）`,
       );
-    expect(html).toContain("不計入編輯總評分或評分人數");
+    expect(html).not.toContain("編輯總評分");
     expect(html).not.toContain(" / 5");
   }
 });

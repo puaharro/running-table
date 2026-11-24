@@ -100,8 +100,8 @@ export function ComparisonTopicNote({
       <h6>{t("人工備註", "Notes")}</h6>
       <p>
         {t(
-          "只儲存於此瀏覽器及此網站位址，未上傳或跨裝置同步；清除網站資料會遺失備註，請匯出備份。不影響編輯總評分。",
-          "Notes stay in this browser for this site and do not sync across devices. Export a backup before clearing site data. Notes do not affect editorial scores.",
+          "只儲存於此瀏覽器及此網站位址，未上傳或跨裝置同步；清除網站資料會遺失備註，請匯出備份。",
+          "Notes stay in this browser for this site and do not sync across devices. Export a backup before clearing site data.",
         )}
       </p>
       {latest && latest.basis !== basis && (

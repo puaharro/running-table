@@ -59,7 +59,7 @@ export async function run(args) {
       } else html = await readFile(resolve(config.directory, target.path), "utf8");
       const result = checkContent(html, target.record);
       console.log(
-        `PASS ${result.raceId}: copy v${result.copyRevision}, rating v${result.ratingRevision}; ${result.scores.map((v) => v ?? "未評").join(" / ")}; five topics, complete wording, sources and limitations match.`,
+        `PASS ${result.raceId}: copy v${result.copyRevision}, review v${result.ratingRevision}; five topics, complete wording, sources and limitations match.`,
       );
     } catch (error) {
       failed = true;

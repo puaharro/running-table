@@ -68,11 +68,11 @@ export default function About({ english = false }: { english?: boolean }) {
           </p>
           <p>
             {t(
-              "賽事體驗評級由編輯按參賽紀錄或跑手訪問撰寫，年份及組別分開，評審與觀察限制清楚列明。",
+              "參賽評論整理自參賽紀錄或跑手訪問，按年份及組別列出，並交代來源及觀察限制。",
               " Our editors use race records and runner interviews. Reviews are specific to the edition and category, and list the reviewer and observation limits. ",
             )}
             <Link href={localPath("/ratings/", english)}>
-              {t("了解體驗評級準則", "How runner ratings work")}
+              {t("了解評論整理方式", "How reviews are compiled")}
             </Link>
           </p>
           <p>

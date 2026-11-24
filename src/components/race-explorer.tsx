@@ -24,18 +24,15 @@ import { useFavorites } from "./race-save";
 import { RaceBackToSearch } from "./race-back-to-search";
 import { RaceFilterPanel, type FilterCategory } from "./race-filter-panel";
 import { RaceResultsList } from "./race-results-list";
-import type { EditorialReview } from "@/lib/editorial-reviews";
 import type { Filters, Race } from "@/lib/types";
 
 export function RaceExplorer({
   races,
   initialNow,
-  reviews = [],
   english = false,
 }: {
   races: Race[];
   initialNow: string;
-  reviews?: EditorialReview[];
   english?: boolean;
 }) {
   const t = language(english);
@@ -409,7 +406,6 @@ export function RaceExplorer({
             filters={filters}
             now={now}
             ready={ready}
-            reviews={reviews}
             savedOnly={savedOnly}
             error={error}
             noListedCountry={

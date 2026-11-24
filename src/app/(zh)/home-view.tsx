@@ -109,7 +109,7 @@ export function HomeView({ english = false }: { english?: boolean }) {
               </p>
             </div>
             <Link href={localPath("/ratings/", english)}>
-              {t("評論與評分準則", "Reviews and rating criteria")} <Icon name="arrow" />
+              {t("更多參賽評論", "More race reviews")} <Icon name="arrow" />
             </Link>
           </div>
           <div className="home-review-grid">
@@ -127,7 +127,7 @@ export function HomeView({ english = false }: { english?: boolean }) {
                     </Link>
                   </h3>
                   <div className="home-review-meta">
-                    <span>{t("編輯點評 · 跑手訪談", "Editorial review · Runner interview")}</span>
+                    <span>{t("跑手訪談", "Runner interview")}</span>
                     <span>
                       {review.editionYear}
                       {t(" 年", "")} ·{" "}
@@ -169,12 +169,7 @@ export function HomeView({ english = false }: { english?: boolean }) {
               );
             })}
             {!editorialReviews.length && (
-              <p>
-                {t(
-                  "評論正在整理，您可先查閱本站的評分準則。",
-                  "Reviews are being prepared. You can read our rating criteria in the meantime.",
-                )}
-              </p>
+              <p>{t("評論正在整理。", "Reviews are being prepared.")}</p>
             )}
           </div>
           <div className="home-review-method">
@@ -184,8 +179,7 @@ export function HomeView({ english = false }: { english?: boolean }) {
             <i />
             <span>{t("補給體驗", "Aid stations")}</span>
             <Link href={localPath("/ratings/#method", english)}>
-              {t("查閱三項獨立評分的依據", "How the three ratings are assessed")}{" "}
-              <Icon name="arrow" size={16} />
+              {t("了解評論如何整理", "How reviews are compiled")} <Icon name="arrow" size={16} />
             </Link>
           </div>
         </div>

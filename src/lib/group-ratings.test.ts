@@ -68,13 +68,9 @@ describe("original editorial experience reviews", () => {
     for (const race of races)
       for (const group of race.groups) {
         const html = renderToStaticMarkup(createElement(GroupRatings, { race, group }));
-        expect(html).toContain("賽道體驗");
-        expect(html).toContain("大會執行");
-        expect(html).toContain("補給體驗");
         expect(reviewsForGroup(race, group, editorialReviews).current).toHaveLength(0);
         for (const old of ["時限寬鬆度", "距離負荷", "集合交通要求"])
           expect(html).not.toContain(old);
-        expect(html).toContain("/ratings");
       }
   });
   it("validates published reviews and allows an explicitly unrated dimension", () => {
@@ -90,7 +86,7 @@ describe("original editorial experience reviews", () => {
     };
     expect(() => assertEditorialReviews([r], now)).not.toThrow();
     const html = renderToStaticMarkup(createElement(EditorialReviewCard, { review: r }));
-    expect(html).toContain("未評");
+    expect(html).toContain("No aid observation");
     expect(html).not.toContain("0 / 5");
     expect(html).not.toContain("總分：");
     expect(html).toContain("評審：");
@@ -181,14 +177,14 @@ describe("original editorial experience reviews", () => {
     const html = renderToStaticMarkup(
       createElement(GroupRatings, { race: main, group: result.groups[0] }),
     );
-    expect(html).toContain("十公里賽事體驗評級");
-    expect(html).not.toContain("全馬賽事體驗評級");
+    expect(html).toContain("十公里參賽評論");
+    expect(html).not.toContain("全馬參賽評論");
   });
-  it("generates public anchors from the same editable rubric", () => {
+  it("describes review topics using the existing rubric", () => {
     const html = renderToStaticMarkup(createElement(RatingsPage));
     for (const key of ratingDimensions) {
       expect(ratingPolicy.dimensions[key].anchors).toHaveLength(5);
-      for (const anchor of ratingPolicy.dimensions[key].anchors) expect(html).toContain(anchor);
+      expect(html).toContain(ratingPolicy.dimensions[key].prompt);
     }
     expect(html).toContain(ratingPolicy.version);
     expect(html).toContain("往屆體驗不代表下一屆");
@@ -225,16 +221,15 @@ describe("ten-second review view", () => {
     r.quickTake.reminders = ["One"] as unknown as [string, string];
     expect(() => assertEditorialReviews([r], now)).toThrow("quick take");
   });
-  it("defaults to editor content and keeps reader reviews separate and honest", () => {
+  it("shows both reviews and runner comments without source tabs", () => {
     const html = renderToStaticMarkup(
       createElement(GroupRatings, { race: main, group: main.groups[0] }),
     );
-    expect(html).toContain('aria-selected="true"');
-    expect(html).toContain("編輯點評");
-    expect(html).toContain("跑手心得");
     expect(html).toContain("2025 年全馬");
+    expect(html).toContain("review-quicklook");
+    expect(html).not.toContain("編輯評分");
+    expect(html).not.toContain('role="tablist"');
     expect(html).not.toContain("未有已發布跑手心得");
-    expect(html).toContain('hidden=""');
     expect(html).not.toContain('class="rating-method-details" open');
   });
 });
@@ -334,7 +329,7 @@ describe("race detail as the main review reading location", () => {
       expect(html).not.toContain(review.assessments.course.comment);
       expect(html).toContain(review.quickTake!.summary);
     }
-    expect(html).toContain("三項獨立評分");
+    expect(html).toContain("從三個角度");
   });
   it.each([bridge, main])(
     "renders $id highlights directly, with a year warning and reachable anchors",

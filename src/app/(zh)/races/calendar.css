@@ -468,7 +468,7 @@
 
 .search-page .race-list {
   --race-row-columns: minmax(0, 2fr) minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1fr)
-    minmax(0, 1.15fr) 94px 44px;
+    minmax(0, 1.15fr) 44px;
 }
 .calendar-row-head {
   display: none;
@@ -479,7 +479,7 @@
   grid-template-areas:
     "name name save"
     "date distances distances"
-    "registration rating rating"
+    "registration registration registration"
     "deadline deadline deadline";
   align-items: start;
   gap: 6px var(--space-3);
@@ -573,17 +573,6 @@
 .calendar-race-deadline[data-empty="true"] {
   display: none;
 }
-.calendar-race-overall {
-  grid-area: rating;
-  display: flex;
-  flex-wrap: wrap;
-  justify-self: end;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 4px;
-  color: var(--home-muted);
-  font-size: 13px;
-}
 .calendar-race-card > .favorite-control {
   display: contents;
 }
@@ -596,6 +585,13 @@
 }
 .calendar-race-card .favorite-error {
   grid-column: 1 / -1;
+}
+.calendar-recommendation-compact {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
 }
 @container race-results (min-width: 860px) {
   .calendar-row-head,
@@ -634,18 +630,13 @@
     text-underline-offset: 3px;
   }
   .search-page .calendar-race-card {
-    grid-template-areas: "name date distances registration deadline rating save";
+    grid-template-areas: "name date distances registration deadline save";
   }
-  .calendar-race-card .calendar-race-start svg,
-  .calendar-race-card .calendar-rating-label {
+  .calendar-race-card .calendar-race-start svg {
     display: none;
   }
   .calendar-race-deadline[data-empty="true"] {
     display: block;
-  }
-  .calendar-race-overall {
-    justify-self: start;
-    justify-content: flex-start;
   }
 }
 

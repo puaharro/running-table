@@ -64,8 +64,8 @@ export function OpinionTopicFilter({
       </div>
       <p className="opinion-topic-help">
         {t(
-          "只計本年份／組別已發布來源，按連結、作者及原文去重。同一留言可屬多個主題，各主題數不可相加；不計入編輯總評分或評分人數。",
-          "Counts cover published sources for this edition and category, with duplicates removed by link, author and text. A comment may appear under several topics. Comment counts do not contribute to editorial scores or reviewer totals.",
+          "只計本年份／組別已發布來源，按連結、作者及原文去重。同一留言可屬多個主題，各主題數不可相加。",
+          "Counts cover published sources for this edition and category, with duplicates removed by link, author and text. A comment may appear under several topics.",
         )}
       </p>
       <div id={id}>
