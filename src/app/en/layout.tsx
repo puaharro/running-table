@@ -29,7 +29,7 @@ export const viewport: Viewport = { themeColor: "#ffffff" };
 const destinations = [
   { href: "/en/races/", label: "Race calendar", category: "Page" },
   { href: "/en/races/?saved=1#race-list", label: "Saved races", category: "Page" },
-  { href: "/en/ratings/", label: "Runner reviews", category: "Page" },
+  { href: "/en/ratings/", label: "Runner accounts", category: "Page" },
   { href: "/en/guides/", label: "Race guides", category: "Page" },
   { href: "/en/about/", label: "About NXTGO", category: "Page" },
   ...englishGuides.map((guide) => ({

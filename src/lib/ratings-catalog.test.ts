@@ -1,78 +1,43 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
-import { PublishedReviewCards, EditionReviewCoverage } from "@/components/ratings-catalog";
-import { editorialReviews } from "@/data/editorial-reviews";
-import { races } from "@/data/races";
-import { reviewTargets } from "./rating-policy";
+import { RunnerAccountsCatalog } from "@/components/ratings-catalog";
+import { publicRaces } from "@/data/races";
 import { raceHref } from "./site";
 
-it("keeps the original summaries tied to the reviewed year and group", () => {
+const selected = (id: string) => publicRaces.find((race) => race.id === id)!;
+
+it("includes CMS and editorial accounts in the same group, with one link per year", () => {
+  const hzmb = selected("hzmb-half-marathon-2026");
+  const schkm = selected("standard-chartered-hk-marathon-2027");
+  const rmac = selected("rmac-gold-coast-15k-2026");
   const html = renderToStaticMarkup(
-    createElement(PublishedReviewCards, { races, reviews: editorialReviews }),
+    createElement(RunnerAccountsCatalog, { races: [hzmb, schkm, rmac] }),
   );
-  for (const review of editorialReviews) {
-    const target = reviewTargets.find((item) => item.id === review.targetId)!;
-    const race = races.find((item) => item.id === target.raceId)!;
-    expect(html).toContain(`${review.editionYear} 年 · ${target.group}`);
-    expect(html).toContain(`往屆評論 · 不代表 ${race.date.slice(0, 4)} 年安排或表現`);
-    expect(html).toContain(`${raceHref(race).replace(/\/$/, "")}#review-${review.id}`);
-    const summary = renderToStaticMarkup(
-      createElement("p", { className: "ratings-review-summary" }, review.quickTake!.summary),
-    );
-    expect(html).toContain(summary);
-    const card = html.split(`aria-labelledby="index-${review.id}"`)[1].split("</article>")[0];
-    const overview = card.slice(0, card.indexOf("<details"));
-    expect(overview).not.toContain("編輯總評分");
-    expect(overview).toContain(review.quickTake!.summary);
-    expect(overview).not.toContain("評論更新");
-    expect(overview).not.toContain("受訪跑手數");
-    expect(overview).not.toContain("計分說明：");
-    expect(card).toContain("評論背景及資料範圍</summary>");
-    expect(card).not.toMatch(/<details[^>]* open/);
-    expect(card).not.toContain(" / 5");
+  const [published, empty] = html.split('<details class="ratings-coverage"');
+  for (const [race, latest] of [
+    [hzmb, "runner-copy"],
+    [schkm, "review-schkm-marathon-2026-participant-notes"],
+  ] as const) {
+    const pastHref = raceHref(race) + "#race-confirmed-experience";
+    const latestHref = raceHref(race) + "#" + latest;
+    expect(published.split(pastHref)).toHaveLength(2);
+    expect(published.split(latestHref)).toHaveLength(2);
+    expect(published.indexOf(latestHref)).toBeLessThan(published.indexOf(pastHref));
   }
-  expect(html.indexOf("index-schkm-marathon-2026")).toBeLessThan(
-    html.indexOf("index-hzmb-half-2025"),
-  );
+  expect(published).toContain("index-hzmb-half-2025-participant-notes");
+  expect(published).toContain("index-schkm-marathon-2026-participant-notes");
+  expect(published).toContain(raceHref(rmac) + "#runner-copy");
+  expect(published).not.toContain("十公里");
+  expect(empty).toContain('id="edition-coverage"');
+  expect(empty).toContain(raceHref(hzmb) + "#ratings-hzmb-2026-10k");
 });
 
-it("hides scores and never labels a different edition as the current edition", () => {
-  // Display-only fixture: does not create an approval or alter published records.
-  const review = structuredClone(editorialReviews[0]);
-  review.assessments.aid.score = null;
-  const catalog = structuredClone(races);
-  const target = reviewTargets.find((item) => item.id === review.targetId)!;
-  catalog
-    .find((race) => race.id === target.raceId)!
-    .groups.find((group) => group.id === target.groupId)!.date = "2024-01-01";
+it("links to the localized race page from the English directory", () => {
+  const race = selected("hzmb-half-marathon-2026");
   const html = renderToStaticMarkup(
-    createElement(PublishedReviewCards, { races: catalog, reviews: [review] }),
+    createElement(RunnerAccountsCatalog, { races: [race], english: true }),
   );
-  expect(html).not.toContain("ratings-score-grid");
-  expect(html).not.toContain("<strong>0</strong>");
-  expect(html).toContain("其他年份評論");
-  expect(html).not.toContain(">當屆評論<");
-});
-
-it("keeps current-edition coverage separate across years and groups", () => {
-  const props = { races, reviews: editorialReviews };
-  const html = renderToStaticMarkup(createElement(EditionReviewCoverage, props));
-  expect(html).not.toContain("有當屆評論");
-  expect(html.match(/有往屆評論/g)).toHaveLength(2);
-  for (const race of races)
-    for (const group of race.groups) {
-      expect(html).toContain(`${raceHref(race).replace(/\/$/, "")}#ratings-${group.id}`);
-    }
-  const catalog = structuredClone(races);
-  const target = reviewTargets.find((item) => item.id === editorialReviews[0].targetId)!;
-  catalog
-    .find((race) => race.id === target.raceId)!
-    .groups.find((group) => group.id === target.groupId)!.date =
-    `${editorialReviews[0].editionYear}-01-01`;
-  const matching = renderToStaticMarkup(
-    createElement(EditionReviewCoverage, { ...props, races: catalog }),
-  );
-  expect(matching.match(/有當屆評論/g)).toHaveLength(1);
-  expect(matching.match(/有往屆評論/g)).toHaveLength(1);
+  expect(html).toContain("/en" + raceHref(race) + "#runner-copy");
+  expect(html).toContain("/en" + raceHref(race) + "#race-confirmed-experience");
 });

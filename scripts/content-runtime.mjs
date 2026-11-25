@@ -55,10 +55,12 @@ try {
     writeFileSync(join("content/cms-runtime", dest), JSON.stringify(record, null, 2) + "\n");
     const path = "content/cms-runtime/selected.json";
     const index = JSON.parse(readFileSync(path, "utf8"));
+    const groupId = index.records[b.public_copy.race_id]?.groupId;
     index.records[b.public_copy.race_id] = {
       file: "cms-runtime/" + dest,
       hash,
       format: "five-topic-v1",
+      ...(groupId ? { groupId } : {}),
     };
     writeFileSync(path + ".tmp", JSON.stringify(index, null, 2) + "\n");
     renameSync(path + ".tmp", path);

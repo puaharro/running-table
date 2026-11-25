@@ -18,7 +18,7 @@ export default function EditorialProcessPage({ english = false }: { english?: bo
       <Breadcrumb
         english={english}
         items={[
-          { label: t("體驗評級", "Runner reviews and ratings"), href: "/ratings/" },
+          { label: t("跑手分享", "Runner accounts"), href: "/ratings/" },
           { label: t("審閱及更正流程", "Review and correction process") },
         ]}
       />

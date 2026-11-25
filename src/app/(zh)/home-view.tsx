@@ -109,7 +109,7 @@ export function HomeView({ english = false }: { english?: boolean }) {
               </p>
             </div>
             <Link href={localPath("/ratings/", english)}>
-              {t("更多參賽評論", "More race reviews")} <Icon name="arrow" />
+              {t("更多跑手分享", "More runner accounts")} <Icon name="arrow" />
             </Link>
           </div>
           <div className="home-review-grid">

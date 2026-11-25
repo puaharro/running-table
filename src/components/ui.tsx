@@ -84,7 +84,7 @@ export function Footer({ english = false }: { english?: boolean }) {
         </div>
         <div className="footer-links">
           <Link href={localPath("/races/", english)}>{t("賽事搜尋／時間表", "Race calendar")}</Link>
-          <Link href={localPath("/ratings/", english)}>{t("參賽評論", "Race reviews")}</Link>
+          <Link href={localPath("/ratings/", english)}>{t("跑手分享", "Runner accounts")}</Link>
           <Link href={localPath("/guides/", english)}>{t("原創指南", "Guides")}</Link>
           <Link href={localPath("/about/", english)}>
             {t("關於及資料政策", "About and information policy")}

@@ -10,6 +10,7 @@ export interface RunnerCopySection {
 }
 
 export interface RunnerCopy {
+  groupId?: string;
   revision: number;
   raceId: string;
   sourceWebsiteId: string;
@@ -22,16 +23,17 @@ export interface RunnerCopy {
 export function runnerCopyForRace(raceId: string, editionYear: number): RunnerCopy | null {
   const records = selected.records as Record<
     string,
-    { file: string; hash: string; format: string }
+    { file: string; hash: string; format: string; groupId?: string }
   >;
   const pin = Object.hasOwn(records, raceId) ? records[raceId] : null;
   if (!pin) return null;
   if (!/^(runner-copies|cms-runtime)\/[a-zA-Z0-9-]+\.json$/.test(pin.file))
     throw Error("Invalid public runtime path");
-  return validateRuntimeRecord(
+  const copy: RunnerCopy = validateRuntimeRecord(
     JSON.parse(readFileSync(join(process.cwd(), "content", ...pin.file.split("/")), "utf8")),
     pin,
     raceId,
     editionYear,
   );
+  return { ...copy, groupId: pin.groupId };
 }
