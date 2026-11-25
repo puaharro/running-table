@@ -52,22 +52,35 @@ it("keeps closed general and open charity separate, without claiming guaranteed 
   expect(listRegistration(race, race.groups, now)).toEqual({
     primary: "接受申請",
     secondary: "慈善報名 · 一般報名：已截止",
-    open: true,
+    status: "open",
   });
 });
 it("uses only matching groups and channels", () => {
   const race = fixture();
   expect(
     listRegistration(race, [{ ...race.groups[0], channels: [race.groups[0].channels[1]] }], now),
-  ).toEqual({ primary: "接受申請", secondary: "慈善報名", open: true });
+  ).toEqual({ primary: "接受申請", secondary: "慈善報名", status: "open" });
+});
+it.each(["upcoming", "waitlist"] as const)("exposes %s for a verified channel", (status) => {
+  const race = fixture();
+  const channel = { ...race.groups[0].channels[1], status };
+  expect(listRegistration(race, [{ ...race.groups[0], channels: [channel] }], now).status).toBe(
+    status,
+  );
 });
 it("requires field-specific official provenance, including for expired deadlines", () => {
   const race = fixture();
   race.sources![0].fields = ["date"];
-  expect(listRegistration(race, race.groups, now)).toEqual({ primary: "報名待核實" });
+  expect(listRegistration(race, race.groups, now)).toEqual({
+    primary: "報名待核實",
+    status: "unknown",
+  });
   race.sources![0].fields = ["channels.registration"];
   race.sources![0].checkedAt = "2026-11-08T02:00:00Z";
-  expect(listRegistration(race, race.groups, now)).toEqual({ primary: "報名待核實" });
+  expect(listRegistration(race, race.groups, now)).toEqual({
+    primary: "報名待核實",
+    status: "unknown",
+  });
 });
 it("keeps stale availability unknown alongside verified closed channels", () => {
   const race = fixture();
@@ -75,7 +88,7 @@ it("keeps stale availability unknown alongside verified closed channels", () => 
   expect(listRegistration(race, race.groups, now)).toEqual({
     primary: "待核實",
     secondary: "慈善報名 · 一般報名：已截止",
-    open: false,
+    status: "unknown",
   });
 });
 it("does not hide unknown groups behind an open channel of the same type", () => {
@@ -86,7 +99,7 @@ it("does not hide unknown groups behind an open channel of the same type", () =>
   expect(listRegistration(race, race.groups, now)).toEqual({
     primary: "部分接受申請",
     secondary: "慈善報名 · 部分待核實",
-    open: true,
+    status: "open",
   });
 });
 it("limits visible categories and flags further channels", () => {
@@ -95,7 +108,7 @@ it("limits visible categories and flags further channels", () => {
   expect(listRegistration(race, race.groups, now)).toEqual({
     primary: "接受申請",
     secondary: "慈善報名 · 住宿連名額：接受申請 · 另 1 類渠道",
-    open: true,
+    status: "open",
   });
 });
 it("gives lifecycle changes precedence over registration", () => {

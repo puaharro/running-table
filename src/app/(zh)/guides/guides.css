@@ -128,16 +128,16 @@
 .guides-page .guide-graphic {
   height: 112px;
   padding: var(--space-5) var(--space-6);
-  background: var(--home-cover-orange);
-  color: var(--home-orange-ink);
+  background: var(--surface-muted);
+  color: var(--text-secondary);
 }
 .guides-page .green .guide-graphic {
   background: var(--home-cover-green);
   color: var(--home-action-pressed);
 }
 .guides-page .blue .guide-graphic {
-  background: var(--home-cover-blue);
-  color: var(--home-blue-ink);
+  background: var(--info-surface);
+  color: var(--info-text);
 }
 .guides-page .guide-graphic > span {
   color: inherit;
@@ -296,9 +296,9 @@
   grid-column: 2;
   grid-row: 1;
   padding: var(--space-6);
-  border: 1px solid var(--home-line);
+  border: 1px solid var(--info-border);
   border-radius: 10px;
-  background: var(--home-card);
+  background: var(--info-surface);
   position: sticky;
   top: calc(var(--site-header-height) + 24px);
 }
@@ -318,7 +318,7 @@
   padding: 0;
 }
 .guides-toc li + li {
-  border-top: 1px solid var(--home-line);
+  border-top: 1px solid var(--info-border);
 }
 .guides-toc a {
   display: flex;
@@ -326,7 +326,7 @@
   gap: var(--space-3);
   min-height: 44px;
   padding: var(--space-3) 0;
-  color: var(--home-action);
+  color: var(--info-text);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -336,7 +336,7 @@
 }
 .guides-toc a > span {
   font-size: 12px;
-  color: var(--home-muted);
+  color: var(--info-text);
 }
 .guides-article-body {
   grid-column: 1;
@@ -372,11 +372,10 @@
   margin: 0 0 var(--space-6);
 }
 .guides-article-body > section:last-of-type {
-  border: 0;
-  border-left: 3px solid var(--home-action);
+  border: 1px solid var(--border-subtle);
   padding: var(--space-6);
   background: var(--home-tint);
-  border-radius: 0 8px 8px 0;
+  border-radius: var(--radius-control);
 }
 .guides-article-body > section > p:last-child {
   margin-bottom: 0;
@@ -410,6 +409,10 @@
   border-top: 1px solid var(--home-line);
   font-size: 16px;
   cursor: pointer;
+}
+.guide-checklist label:has(input:checked) {
+  background: var(--status-open-surface);
+  color: var(--status-open-text);
 }
 .guide-checklist input {
   flex: none;
@@ -623,7 +626,6 @@
     position: static;
     width: 100%;
     padding: var(--space-5);
-    background: var(--home-tint);
     border: 0;
   }
   .guides-toc h2 {

@@ -130,16 +130,16 @@
   font-weight: 700;
 }
 .ratings-scope {
-  color: var(--home-action-pressed);
-  background: var(--home-tint);
+  color: var(--status-open-text);
+  background: var(--status-open-surface);
   padding: var(--space-1) var(--space-2);
   border-radius: 4px;
   font-size: 12px;
   font-weight: 600;
 }
 .ratings-scope--historical {
-  background: var(--home-distance-bg);
-  color: var(--home-orange-ink);
+  background: var(--surface-muted);
+  color: var(--text-secondary);
 }
 .ratings-review-card h3 {
   font-size: 24px;
@@ -159,9 +159,9 @@
   line-height: 1.8;
 }
 .ratings-year-notice {
-  padding-left: var(--space-3);
-  border-left: 3px solid var(--home-orange-ink);
-  color: var(--home-orange-ink);
+  padding-inline-start: var(--space-3);
+  border-inline-start: 1px solid var(--border-control);
+  color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.7;
   margin: var(--space-4) 0 0;
@@ -403,7 +403,7 @@
   text-align: right;
 }
 .ratings-coverage-status--current {
-  color: var(--home-action);
+  color: var(--status-open-text);
   font-weight: 600;
 }
 .ratings-method-section {
@@ -433,10 +433,6 @@
   padding: 0;
 }
 .ratings-page .ratings-method-body .editorial-notice {
-  background: var(--home-tint);
-  color: var(--home-ink);
-  border: 0;
-  border-left: 3px solid var(--home-action);
   padding: var(--space-5);
 }
 .ratings-page .ratings-method-body h2 {

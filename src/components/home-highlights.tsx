@@ -63,7 +63,7 @@ export function HomeHighlights({
             {news.length ? (
               <ul className="home-news-list" role="list">
                 {news.map((item) => (
-                  <li key={item.id}>
+                  <li key={item.id} data-news-kind={item.kind}>
                     <Link href={item.href}>
                       <div className="home-news-copy">
                         <p className="home-news-category">{item.category}</p>

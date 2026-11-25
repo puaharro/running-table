@@ -379,7 +379,7 @@ body {
   line-height: 1.9;
 }
 .site-footer {
-  background: var(--surface-brand);
+  background: var(--surface-muted);
   border-top-color: var(--border-subtle);
 }
 .key-facts,

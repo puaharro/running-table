@@ -15,6 +15,7 @@ import { distanceLabel } from "@/lib/races";
 import type { Filters, Race } from "@/lib/types";
 import { RaceRecommendation } from "./race-recommendation";
 import { FavoriteButton } from "./race-save";
+import { StatusBadge } from "./status-badge";
 import { AdSlot, Icon } from "./ui";
 
 function highlightMatch(text: string, query: string) {
@@ -227,9 +228,11 @@ export function RaceResultsList({
                     className="calendar-race-registration"
                     aria-label={t("報名概況", "Registration")}
                   >
-                    <strong data-open={registration.open || undefined}>
-                      {registration.primary}
-                    </strong>
+                    {registration.status ? (
+                      <StatusBadge status={registration.status}>{registration.primary}</StatusBadge>
+                    ) : (
+                      <strong>{registration.primary}</strong>
+                    )}
                     {registration.secondary && <span>{registration.secondary}</span>}
                   </p>
                   <div className="calendar-race-deadline" data-empty={!deadline}>

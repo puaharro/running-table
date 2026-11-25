@@ -205,17 +205,25 @@
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-.home-news-list a > svg,
-.home-news-category {
+.home-news-list a > svg {
   color: var(--home-action);
 }
 .home-news-copy {
   overflow-wrap: anywhere;
 }
 .home-news-category {
-  margin: 0 0 var(--space-1);
+  display: inline-block;
+  margin: 0 0 var(--space-2);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-badge);
+  color: var(--info-text);
+  background: var(--info-surface);
   font-size: 13px;
   font-weight: 650;
+}
+.home-news-list [data-news-kind="deadline"] .home-news-category {
+  color: var(--urgent-text);
+  background: var(--urgent-surface);
 }
 .home-news-list h3 {
   margin: 0;
@@ -759,9 +767,7 @@
   outline-offset: 4px;
 }
 .focus-banner-slide {
-  --banner-surface: var(--home-ink);
-  --banner-text: var(--home-on-dark);
-  --banner-muted: var(--home-on-dark-muted);
+  --banner-surface: var(--surface-hero);
   position: relative;
   isolation: isolate;
   flex: 0 0 100%;
@@ -774,15 +780,10 @@
   scroll-snap-align: start;
   scroll-snap-stop: always;
   background: var(--banner-surface);
-  color: var(--banner-text);
+  color: var(--text-primary);
 }
 .focus-banner-slide--blue {
-  --banner-surface: var(--home-blue-ink);
-}
-.focus-banner-slide--sand {
-  --banner-surface: var(--home-cover-orange);
-  --banner-text: var(--home-orange-ink);
-  --banner-muted: var(--home-orange-ink);
+  --banner-surface: var(--surface-brand);
 }
 .focus-banner-copy {
   position: relative;
@@ -792,13 +793,13 @@
 .focus-banner-category {
   font-size: 13px;
   font-weight: 600;
-  color: var(--banner-muted);
+  color: var(--text-secondary);
 }
 .focus-banner-copy h2 {
   font-size: clamp(28px, 3vw, 42px);
   line-height: 1.3;
   margin: var(--space-3) 0 var(--space-3);
-  color: var(--banner-text);
+  color: var(--text-primary);
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
@@ -809,13 +810,13 @@
   margin-bottom: var(--space-3);
   font-size: 15px;
   font-weight: 650;
-  color: var(--banner-text);
+  color: var(--text-primary);
   font-variant-numeric: tabular-nums;
 }
 .focus-banner-copy p {
   font-size: 16px;
   line-height: 1.85;
-  color: var(--banner-muted);
+  color: var(--text-secondary);
   max-width: 45ch;
   margin: 0 0 var(--space-5);
 }
@@ -827,8 +828,8 @@
   min-height: 48px;
   padding: var(--space-3) var(--space-5);
   border-radius: 5px;
-  background: var(--home-accent);
-  color: var(--home-action-pressed);
+  background: var(--action-primary);
+  color: var(--text-on-dark);
   font-size: 15px;
   font-weight: 600;
 }
@@ -836,14 +837,11 @@
   flex: none;
 }
 .homepage .focus-banner-cta:focus-visible {
-  outline-color: var(--home-accent);
-}
-.homepage .focus-banner-slide--sand .focus-banner-cta:focus-visible {
-  outline-color: var(--home-action-pressed);
+  outline-color: var(--focus-ring);
 }
 .homepage .focus-banner-cta:hover {
-  background: var(--home-accent-hover);
-  color: var(--home-action-pressed);
+  background: var(--action-primary-hover);
+  color: var(--text-on-dark);
 }
 .focus-banner-art {
   position: absolute;
@@ -853,7 +851,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: var(--banner-text);
+  color: var(--action-primary);
   pointer-events: none;
 }
 .focus-banner-art > span {

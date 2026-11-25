@@ -176,9 +176,9 @@
   min-height: 36px;
   max-width: 100%;
   padding: var(--space-1) var(--space-2);
-  border: 1px solid var(--home-control);
+  border: 1px solid var(--action-primary);
   border-radius: 6px;
-  background: var(--home-tint);
+  background: var(--surface-brand);
   color: var(--home-action-pressed);
   font: inherit;
   font-size: 13px;
@@ -252,24 +252,30 @@
   background: var(--home-tint);
   border-radius: 6px;
 }
-.search-page .calendar-race-content :is(h2, h3) a:hover {
-  color: var(--home-action);
+.search-page :is(.calendar-race-content h2, .calendar-race-content h3, .race-directory li) a {
+  color: var(--race-link);
+  letter-spacing: 0.025em;
   text-decoration: underline;
-  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+.search-page :is(.calendar-race-content h2, .calendar-race-content h3, .race-directory li) a:is(:hover, :focus-visible) {
+  color: var(--race-link-emphasis);
+  text-decoration-thickness: 2px;
 }
 .calendar-race-content mark {
-  background: var(--home-distance-bg);
+  background: var(--state-selected);
   color: inherit;
   border-radius: 2px;
 }
 .search-page .calendar-race-distances li[data-distance-match="true"] {
-  background: var(--home-action);
-  color: var(--home-on-dark);
+  background: var(--state-selected);
+  color: var(--action-primary-hover);
   border-color: var(--home-action);
   font-weight: 700;
 }
 .search-page .calendar-race-distances li[data-distance-match="false"] {
-  background: var(--home-metadata);
+  background: var(--surface-card);
   color: var(--home-muted);
   border-color: var(--home-line);
 }
@@ -591,9 +597,9 @@
   padding: 0;
 }
 .search-page .calendar-race-distances li {
-  background: var(--home-distance-bg);
-  color: var(--home-orange-ink);
-  border: 1px solid var(--home-cover-orange);
+  background: var(--surface-muted);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
   border-radius: 5px;
   padding: 2px 6px;
   font-size: 12px;
@@ -611,10 +617,11 @@
   font-size: var(--text-sm);
   font-weight: 600;
 }
-.calendar-race-registration strong[data-open] {
-  color: var(--home-action-pressed);
+.calendar-race-registration .status-badge {
+  justify-self: start;
+  font-weight: 600;
 }
-.calendar-race-registration > span {
+.calendar-race-registration > span:not(.status-badge) {
   color: var(--home-muted);
 }
 .calendar-race-deadline {
@@ -627,7 +634,7 @@
   overflow-wrap: anywhere;
 }
 .calendar-race-deadline strong {
-  color: var(--home-orange-ink);
+  color: var(--text-primary);
   font-size: var(--text-sm);
   font-weight: 650;
 }
@@ -640,10 +647,12 @@
 .race-list[data-highlight-deadlines] .calendar-race-deadline[data-empty="false"] {
   padding: var(--space-2);
   border-radius: 6px;
-  background: var(--home-distance-bg);
+  background: var(--urgent-surface);
+}
+.race-list[data-highlight-deadlines] .calendar-race-deadline[data-empty="false"] :is(strong, span) {
+  color: var(--urgent-text);
 }
 .race-list[data-highlight-deadlines] .calendar-race-deadline .calendar-verified-deadline {
-  color: var(--home-orange-ink);
   font-weight: 650;
 }
 .race-list[data-highlight-deadlines] .calendar-race-deadline[data-empty="true"] {
@@ -792,11 +801,6 @@
 
 .race-directory li {
   padding-block: 0.375rem;
-}
-
-.race-directory li a {
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
 }
 
 .race-directory time {
