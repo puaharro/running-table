@@ -38,7 +38,10 @@ it("keeps the winter expansion sourced and within the researched window without 
   expect(
     batch
       .find((r) => r.id === "run-with-love-2027")!
-      .groups.every((g) => g.channels[0].price === null && !g.startTime),
+      .groups.every(
+        (g) =>
+          g.channels[0].price === 380 && g.channels[0].deadline === "2026-12-31" && !g.startTime,
+      ),
   ).toBe(true);
   expect(
     batch.find((r) => r.id === "disney-magic-run-fest-2026")!.groups.map((g) => g.date),

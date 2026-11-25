@@ -1,3 +1,4 @@
+import { registrationPanel } from "./registration-view.mjs";
 import { Workflow, COVERAGE } from "./workflow.mjs";
 import { SOURCES } from "../research/sources.mjs";
 import { materials } from "./materials.mjs";
@@ -168,5 +169,5 @@ export function renderResearchDashboard(content, filter) {
     )
     .join(
       "",
-    )}</section><section class="panel" id="source-progress"><h2>來源研究進度</h2><p>已入庫 ${d.summary.recorded}／${d.summary.total} 類來源紀錄 · 已完成 ${d.summary.complete} 類。</p><p class="meta">「已搜尋但無相關結果」只表示該次搜尋沒有相關結果；有候選原帖、待登入或閱讀限制的來源仍須續查。材料保留不等於整類來源已查齊。</p><details><summary>逐賽事及來源紀錄</summary><ul>${d.coverage.map((r) => `<li><a href="/research-progress?race=${encodeURIComponent(r.data.race_id)}&year=${r.data.year}#source-${r.data.platform}">${e(content.catalog.find((c) => c.id === r.data.race_id)?.name)} · ${r.data.year} · ${e(SOURCES[r.data.platform].label)}</a>：${e(COVERAGE[r.data.state])} · 第 ${r.revision} 版</li>`).join("") || "<li>請先選擇賽事並建立研究材料或來源進度。</li>"}</ul></details></section>`;
+    )}${registrationPanel(content, filter ?? {})}</section><section class="panel" id="source-progress"><h2>來源研究進度</h2><p>已入庫 ${d.summary.recorded}／${d.summary.total} 類來源紀錄 · 已完成 ${d.summary.complete} 類。</p><p class="meta">「已搜尋但無相關結果」只表示該次搜尋沒有相關結果；有候選原帖、待登入或閱讀限制的來源仍須續查。材料保留不等於整類來源已查齊。</p><details><summary>逐賽事及來源紀錄</summary><ul>${d.coverage.map((r) => `<li><a href="/research-progress?race=${encodeURIComponent(r.data.race_id)}&year=${r.data.year}#source-${r.data.platform}">${e(content.catalog.find((c) => c.id === r.data.race_id)?.name)} · ${r.data.year} · ${e(SOURCES[r.data.platform].label)}</a>：${e(COVERAGE[r.data.state])} · 第 ${r.revision} 版</li>`).join("") || "<li>請先選擇賽事並建立研究材料或來源進度。</li>"}</ul></details></section>`;
 }

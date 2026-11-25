@@ -10,7 +10,7 @@ import type { Race } from "@/lib/types";
 import { useClock } from "@/lib/use-clock";
 import { CharityEntry } from "./charity-entry";
 import { RaceDataText } from "./race-data-text";
-import { RegistrationTimestamp } from "./registration-timestamp";
+import { RegistrationDeadline } from "./registration-timestamp";
 import { StatusBadge } from "./status-badge";
 
 export function RegistrationSummary({
@@ -168,17 +168,18 @@ export function RegistrationSummary({
                         </div>
                         <div>
                           <dt>
-                            {t("申請截止 · 香港時間", "Application deadline · Hong Kong time")}
+                            {channel.registrationDeadlineCondition === "until-full" &&
+                            !channel.registrationClosesAt &&
+                            !channel.deadline
+                              ? t("申請截止", "Application deadline")
+                              : t("申請截止 · 香港時間", "Application deadline · Hong Kong time")}
                           </dt>
                           <dd>
-                            {channel.registrationClosesAt || channel.deadline ? (
-                              <RegistrationTimestamp
-                                english={english}
-                                value={(channel.registrationClosesAt ?? channel.deadline)!}
-                              />
-                            ) : (
-                              t("期限待核實", "Deadline unverified")
-                            )}
+                            <RegistrationDeadline
+                              channel={channel}
+                              english={english}
+                              fallback={t("期限待核實", "Deadline unverified")}
+                            />
                           </dd>
                         </div>
                       </dl>

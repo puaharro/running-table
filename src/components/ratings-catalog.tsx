@@ -1,166 +1,128 @@
 import { language, localPath } from "@/lib/english-races";
 import { englishRaceTerm } from "@/lib/race-terms.en";
-import Link from "next/link";
-import { Icon } from "./ui";
-import { reviewsForGroup, type EditorialReview } from "@/lib/editorial-reviews";
-import { reviewTargets, segmentLabels } from "@/lib/rating-policy";
-import { formatTimestamp } from "@/lib/races";
+import { publishedRaceExperience, publishedReviewsForGroup } from "@/lib/published-race-experience";
 import { raceHref } from "@/lib/site";
 import type { Race } from "@/lib/types";
 
-type Props = { races: Race[]; reviews: EditorialReview[]; english?: boolean };
-
-export function PublishedReviewCards({ races, reviews, english = false }: Props) {
-  const t = language(english);
-  return (
-    <div className="ratings-review-grid">
-      {[...reviews]
-        .sort((a, b) => b.editionYear - a.editionYear || b.eventDate.localeCompare(a.eventDate))
-        .map((review) => {
-          const target = reviewTargets.find((item) => item.id === review.targetId);
-          const race = races.find((item) => item.id === target?.raceId);
-          const group = race?.groups.find((item) => item.id === target?.groupId);
-          if (!target || !race || !group) return null;
-          const year = Number(group.date.slice(0, 4));
-          const historical = review.editionYear < year;
-          const current = review.editionYear === year;
-          const href = localPath(`${raceHref(race)}#review-${review.id}`, english);
-          return (
-            <article
-              key={review.id}
-              className="ratings-review-card"
-              aria-labelledby={`index-${review.id}`}
-            >
-              <h3 id={`index-${review.id}`}>
-                <Link href={href}>{englishRaceTerm(target.name, english)}</Link>
-              </h3>
-              <div className="ratings-review-meta">
-                <span className="ratings-edition">
-                  <span className="sr-only">
-                    {t("評論年份及組別：", "Review edition and category: ")}
-                  </span>
-                  {review.editionYear}
-                  {t(" 年 · ", " · ")}
-                  {englishRaceTerm(target.group, english)}
-                </span>
-                <span className={`ratings-scope ${historical ? "ratings-scope--historical" : ""}`}>
-                  {historical
-                    ? t("往屆評論", "Past edition")
-                    : current
-                      ? t("當屆評論", "Current edition")
-                      : t("其他年份評論", "Other edition")}
-                </span>
-              </div>
-              {review.quickTake && (
-                <p className="ratings-review-summary" lang={english ? "zh-HK" : undefined}>
-                  {review.quickTake.summary}
-                </p>
-              )}
-              <details className="ratings-observation">
-                <summary>{t("評論背景及資料範圍", "Review context and evidence")}</summary>
-                <p className="ratings-edition-context">
-                  {t(`於 ${year} 年賽事頁閱讀`, `Read the review on the ${year} race page`)}
-                </p>
-                {historical && (
-                  <p className="ratings-year-notice">
-                    {t(
-                      `往屆評論 · 不代表 ${year} 年安排或表現`,
-                      `Past edition review · Arrangements and experience may differ in ${year}`,
-                    )}
-                  </p>
-                )}
-                <p className="ratings-runner-context">
-                  {review.runnerSegment === "unknown"
-                    ? t(
-                        "一位跑手觀察（位置未記錄）",
-                        "One runner’s observations (position unrecorded)",
-                      )
-                    : t(
-                        `一位${segmentLabels[review.runnerSegment]}跑手觀察`,
-                        `One runner’s observations · ${englishRaceTerm(segmentLabels[review.runnerSegment], true)}`,
-                      )}
-                </p>
-                <h4>{t("評審及觀察範圍", "Reviewer and scope of observation")}</h4>
-                <p>
-                  {t("評審：", "Reviewer: ")}
-                  <span lang={english ? "zh-HK" : undefined}>{review.reviewer}</span>
-                </p>
-                <p>
-                  {t("參賽／利益關係：", "Participation and conflicts of interest: ")}
-                  <span lang={english ? "zh-HK" : undefined}>{review.disclosure}</span>
-                </p>
-                <p>
-                  {t("觀察範圍：", "Observation scope: ")}
-                  <span lang={english ? "zh-HK" : undefined}>{review.observationLimits}</span>
-                </p>
-                <small>
-                  {t("評論更新：", "Review updated: ")}
-                  <time dateTime={review.reviewedAt}>{formatTimestamp(review.reviewedAt)} HKT</time>
-                </small>
-              </details>
-              <div className="ratings-review-footer">
-                <Link
-                  className="ratings-review-action"
-                  href={href}
-                  aria-label={t(
-                    `${target.name} ${review.editionYear} 年${target.group}：查看完整評論`,
-                    `${englishRaceTerm(target.name, true)} ${review.editionYear} ${englishRaceTerm(target.group, true)}: read full review`,
-                  )}
-                >
-                  {t("查看完整評論", "Read full review")} <Icon name="arrow" size={18} />
-                </Link>
-              </div>
-            </article>
-          );
-        })}
-    </div>
-  );
+interface Edition {
+  year: number;
+  anchor: string;
+  reviewIds: string[];
 }
 
-export function EditionReviewCoverage({ races, reviews, english = false }: Props) {
+function runnerAccountRows(races: Race[]) {
+  return races.flatMap((race) => {
+    const { runnerCopy, runnerCopyGroup, confirmed } = publishedRaceExperience(race);
+    const raceYear = Number(race.date.slice(0, 4));
+    const groups = race.groups.map((group) => {
+      const editions = new Map<number, Edition>();
+      const { current, historical } = publishedReviewsForGroup(race, group);
+      for (const review of [...current, ...historical]) {
+        const edition = editions.get(review.editionYear) ?? {
+          year: review.editionYear,
+          anchor: "review-" + review.id,
+          reviewIds: [],
+        };
+        edition.reviewIds.push(review.id);
+        editions.set(review.editionYear, edition);
+      }
+      if (confirmed?.groupId === group.id) {
+        editions.set(confirmed.year, {
+          year: confirmed.year,
+          anchor: "race-confirmed-experience",
+          reviewIds: editions.get(confirmed.year)?.reviewIds ?? [],
+        });
+      }
+      if (runnerCopy && runnerCopyGroup?.id === group.id) {
+        editions.set(raceYear, {
+          year: raceYear,
+          anchor: "runner-copy",
+          reviewIds: editions.get(raceYear)?.reviewIds ?? [],
+        });
+      }
+      return { race, group, editions: [...editions.values()].sort((a, b) => b.year - a.year) };
+    });
+    if (!runnerCopy || runnerCopyGroup) return groups;
+    return [
+      ...groups,
+      { race, group: null, editions: [{ year: raceYear, anchor: "runner-copy", reviewIds: [] }] },
+    ];
+  });
+}
+
+export function RunnerAccountsCatalog({
+  races,
+  english = false,
+}: {
+  races: Race[];
+  english?: boolean;
+}) {
   const t = language(english);
+  const rows = runnerAccountRows(races);
+  const published = rows
+    .filter((row) => row.editions.length)
+    .sort(
+      (a, b) => b.editions[0].year - a.editions[0].year || b.race.date.localeCompare(a.race.date),
+    );
+  const empty = rows.filter((row) => !row.editions.length);
   return (
-    <details className="ratings-coverage" id="edition-coverage">
-      <summary>
-        <span>{t("當屆賽事及組別評論狀態", "Review coverage by edition and category")}</span>
-        <span className="ratings-coverage-hint">{t("查看各組別", "View race categories")}</span>
-      </summary>
-      <p>{t("評論按屆次及組別列出。", "Reviews are listed by edition and category.")}</p>
-      <ul className="ratings-coverage-list">
-        {[...races]
-          .sort((a, b) => a.date.localeCompare(b.date))
-          .map((race) => (
-            <li key={race.id}>
-              <h3>
-                <Link href={localPath(raceHref(race), english)}>
-                  {english ? race.englishName : race.name}
-                </Link>
-              </h3>
-              <ul>
-                {race.groups.map((group) => {
-                  const { current, historical } = reviewsForGroup(race, group, reviews);
-                  return (
-                    <li key={group.id}>
-                      <Link href={localPath(`${raceHref(race)}#ratings-${group.id}`, english)}>
-                        <span>{englishRaceTerm(group.name, english)}</span>
-                        <span
-                          className={`ratings-coverage-status ${current.length ? "ratings-coverage-status--current" : ""}`}
-                        >
-                          {current.length
-                            ? t("有當屆評論", "Current review available")
-                            : historical.length
-                              ? t("有往屆評論", "Past review available")
-                              : t("暫無評論", "No review yet")}
-                        </span>
-                        <Icon name="arrow" size={16} />
-                      </Link>
+    <>
+      {published.length ? (
+        <ul className="ratings-account-list">
+          {published.map(({ race, group, editions }) => {
+            const name = (english ? race.englishName : race.name).replace(
+              / \d{4}(?: — 主賽事)?$/,
+              "",
+            );
+            const category = group
+              ? englishRaceTerm(group.name, english)
+              : t("賽事整體", "Race-wide");
+            return (
+              <li key={race.id + "/" + (group?.id ?? "")}>
+                <div>
+                  <h3>{name}</h3>
+                  <span>{category}</span>
+                </div>
+                <ul>
+                  {editions.map(({ year, anchor, reviewIds }) => (
+                    <li key={year}>
+                      {reviewIds.map((id) => (
+                        <span key={id} id={"index-" + id} />
+                      ))}
+                      <a
+                        href={localPath(raceHref(race) + "#" + anchor, english)}
+                        aria-label={[name, category, year].join(" · ")}
+                      >
+                        {year}
+                      </a>
                     </li>
-                  );
-                })}
-              </ul>
-            </li>
-          ))}
-      </ul>
-    </details>
+                  ))}
+                </ul>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p>{t("尚未有已發布分享。", "No runner accounts have been published yet.")}</p>
+      )}
+      {!!empty.length && (
+        <details className="ratings-coverage" id="edition-coverage">
+          <summary>{t("暫無分享嘅組別", "Categories without runner accounts")}</summary>
+          <ul className="ratings-empty-groups">
+            {empty.map(
+              ({ race, group }) =>
+                group && (
+                  <li key={race.id + "/" + group.id}>
+                    <a href={localPath(raceHref(race) + "#ratings-" + group.id, english)}>
+                      {english ? race.englishName : race.name} ·{" "}
+                      {englishRaceTerm(group.name, english)}
+                    </a>
+                  </li>
+                ),
+            )}
+          </ul>
+        </details>
+      )}
+    </>
   );
 }

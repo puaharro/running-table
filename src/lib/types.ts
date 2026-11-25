@@ -48,6 +48,7 @@ export interface RegistrationChannel {
   status: RegistrationStatus;
   registrationStart?: string;
   deadline?: string;
+  registrationDeadlineCondition?: "until-full";
   registrationUrl?: string;
   registrationOpensAt?: string;
   registrationClosesAt?: string;

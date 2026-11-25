@@ -36,7 +36,7 @@ describe("charity directory is an enquiry resource rather than a registration ch
       "schkm-2027-10k-charity-herfund",
     ]);
   });
-  it("keeps four genuinely unresolved entries and two separate deadline reminders in the review queue", () => {
+  it("keeps charity channels with existing links out of the routine field review queue", () => {
     const queue = JSON.parse(
       execFileSync(process.execPath, ["scripts/review-queue.mjs", "--as-of", now], {
         encoding: "utf8",
@@ -44,19 +44,7 @@ describe("charity directory is an enquiry resource rather than a registration ch
     );
     const legacyNames = races.slice(0, 6).map((r) => r.name);
     queue.items = queue.items.filter((item: { race: string }) => legacyNames.includes(item.race));
-    expect(queue.items).toHaveLength(6);
-    const missing = queue.items.filter((item: { reasons: string[] }) =>
-      item.reasons.some((r) => r !== "7日內報名截止，優先覆核"),
-    );
-    expect(missing).toHaveLength(4);
-    expect(missing.map((item: { channel: string }) => item.channel).sort()).toEqual(
-      [
-        "慈善報名（個人）",
-        "慈善報名（維護家庭基金）",
-        "慈善報名（維護家庭基金）",
-        "慈善報名（維護家庭基金）",
-      ].sort(),
-    );
+    expect(queue.items).toEqual([]);
   });
   it("rejects unsafe enquiry links and broken evidence references", () => {
     const data = structuredClone(races);

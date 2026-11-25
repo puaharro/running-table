@@ -11,7 +11,7 @@ import {
 } from "@/lib/types";
 import { registrationUncertaintyReason } from "@/lib/verification";
 import { RaceDataText } from "./race-data-text";
-import { RegistrationTimestamp } from "./registration-timestamp";
+import { RegistrationDeadline, RegistrationTimestamp } from "./registration-timestamp";
 import { StatusBadge } from "./status-badge";
 
 function RegistrationVerification({
@@ -105,7 +105,10 @@ export function RegistrationChannelCard({
       document.removeEventListener("click", revealLink);
     };
   }, [channel.id]);
-  const deadline = channel.registrationClosesAt ?? channel.deadline;
+  const untilFull =
+    channel.registrationDeadlineCondition === "until-full" &&
+    !channel.registrationClosesAt &&
+    !channel.deadline;
   return (
     <article
       className="registration-channel"
@@ -126,11 +129,11 @@ export function RegistrationChannelCard({
             </span>
             <span>
               {t("截止：", "Deadline:")}
-              {deadline ? (
-                <RegistrationTimestamp english={english} value={deadline} />
-              ) : (
-                t("待核實", "Unverified")
-              )}
+              <RegistrationDeadline
+                channel={channel}
+                english={english}
+                fallback={t("待核實", "Unverified")}
+              />
             </span>
           </span>
         </summary>
@@ -180,13 +183,17 @@ export function RegistrationChannelCard({
               </div>
             )}
             <div>
-              <dt>{t("申請截止 · 香港時間", "Application deadline · Hong Kong time")}</dt>
+              <dt>
+                {untilFull
+                  ? t("申請截止", "Application deadline")
+                  : t("申請截止 · 香港時間", "Application deadline · Hong Kong time")}
+              </dt>
               <dd>
-                {deadline ? (
-                  <RegistrationTimestamp english={english} value={deadline} />
-                ) : (
-                  t("待核實／未有已核對期限", "No verified deadline")
-                )}
+                <RegistrationDeadline
+                  channel={channel}
+                  english={english}
+                  fallback={t("待核實／未有已核對期限", "No verified deadline")}
+                />
               </dd>
             </div>
             {channel.resultAnnouncedAt && (

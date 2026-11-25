@@ -20,7 +20,7 @@ import PrivacyView from "@/app/(zh)/privacy/view";
 const titles: Record<string, string> = {
   "": "Hong Kong road races",
   races: "Hong Kong race calendar",
-  ratings: "Runner reviews and ratings",
+  ratings: "Runner accounts",
   "ratings/process": "How reviews are assessed",
   "ratings/feedback": "Editorial feedback",
   "ratings/notebook": "Race notebook",
@@ -32,8 +32,7 @@ const descriptions: Record<string, string> = {
   "": "Find Hong Kong road races, official entry information, runner experiences and guides to choosing your next race.",
   races:
     "Browse Hong Kong road races by date, distance, region and entry status. Compare categories and see official deadlines.",
-  ratings:
-    "Read first-hand Hong Kong race reviews by edition and category, with ratings for the course, organisation and aid stations.",
+  ratings: "Browse published Hong Kong race accounts by race, category and edition.",
   "ratings/process":
     "Learn how NXTGO checks race reviews, records corrections and handles organiser responses.",
   "ratings/feedback":

@@ -204,6 +204,16 @@ export function assertCatalog(input: unknown): asserts input is Race[] {
           fail(channel.id, "missing channel source references");
         if (channel.registrationUrl && !isHttpsUrl(channel.registrationUrl))
           fail(channel.id, "registration link must use HTTPS");
+        if (
+          channel.registrationDeadlineCondition !== undefined &&
+          (channel.registrationDeadlineCondition !== "until-full" ||
+            !race.sources?.some(
+              (source) =>
+                channel.sourceIds.includes(source.id) &&
+                source.fields.includes("channels.registration"),
+            ))
+        )
+          fail(channel.id, "invalid or unsourced registration deadline condition");
         for (const date of [channel.registrationStart, channel.deadline])
           if (date && !validDate(date)) fail(channel.id, "invalid registration date");
         for (const timestamp of [

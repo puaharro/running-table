@@ -5,14 +5,14 @@ import Link from "next/link";
 import { publicRaces as races } from "@/data/races";
 import { editorialReviews } from "@/data/editorial-reviews";
 import notices from "@/data/editorial-notices.json";
-import { EditionReviewCoverage, PublishedReviewCards } from "@/components/ratings-catalog";
+import { RunnerAccountsCatalog } from "@/components/ratings-catalog";
 import { RatingMethodDisclosure } from "@/components/rating-method-disclosure";
 import { Breadcrumb, Icon } from "@/components/ui";
 import { ratingDimensions, ratingPolicy, reviewTargets } from "@/lib/rating-policy";
 import { pageMetadata } from "@/lib/site";
 export const metadata = pageMetadata(
-  "賽事體驗評論",
-  "NXTGO 原創賽事評論：賽道體驗、大會執行與補給體驗，收錄參賽觀察及跑手訪問。",
+  "跑手分享",
+  "按賽事、組別及年份查閱 NXTGO 已發布的跑手分享。",
   "/ratings/",
 );
 export default function RatingsPage({ english = false }: { english?: boolean }) {
@@ -23,21 +23,18 @@ export default function RatingsPage({ english = false }: { english?: boolean }) 
   return (
     <main id="main" className="ratings-page">
       <div className="shell">
-        <Breadcrumb
-          english={english}
-          items={[{ label: t("賽事體驗評論", "Race experience reviews") }]}
-        />
+        <Breadcrumb english={english} items={[{ label: t("跑手分享", "Runner accounts") }]} />
         <header className="ratings-heading">
-          <h1>{t("賽事體驗評論", "Race experience reviews")}</h1>
+          <h1>{t("跑手分享", "Runner accounts")}</h1>
           <p>
             {t(
               "查閱指定年份及組別的參賽體驗，了解跑手在賽事中的實際觀察。",
               "Read first-hand runner observations by edition and race category.",
             )}
           </p>
-          <nav aria-label={t("評級頁入口", "Reviews quick links")}>
+          <nav aria-label={t("跑手分享頁入口", "Reviews quick links")}>
             <a href="#published-reviews">
-              {t("查看已發布評論", "Read published reviews")} <Icon name="arrow" size={16} />
+              {t("查看有分享的賽事", "Browse runner accounts")} <Icon name="arrow" size={16} />
             </a>
             <a href="#method">{t("了解評論整理方式 ↓", "Review methodology ↓")}</a>
           </nav>
@@ -51,23 +48,10 @@ export default function RatingsPage({ english = false }: { english?: boolean }) 
               tabIndex={-1}
             >
               <div className="ratings-section-heading">
-                <h2 id="published-heading">
-                  {t("已發布評論", "Published reviews")}{" "}
-                  <span>
-                    {editorialReviews.length}
-                    {t(" 篇", "")}
-                  </span>
-                </h2>
-                <span>{t("按評論年份，由近至遠", "Newest editions first")}</span>
+                <h2 id="published-heading">{t("選擇賽事及年份", "Choose a race and edition")}</h2>
               </div>
-              {!editorialReviews.length && (
-                <p className="ratings-empty">
-                  {t("尚未有已發布評論。", "No reviews have been published yet.")}
-                </p>
-              )}
-              <PublishedReviewCards english={english} races={races} reviews={editorialReviews} />
+              <RunnerAccountsCatalog english={english} races={races} />
             </section>
-            <EditionReviewCoverage english={english} races={races} reviews={editorialReviews} />
           </div>
           <details className="ratings-explainer">
             <summary>{t("如何閱讀參賽評論？", "How to read the reviews")}</summary>

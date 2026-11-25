@@ -21,7 +21,7 @@ export default function FeedbackPage({ english = false }: { english?: boolean })
       <Breadcrumb
         english={english}
         items={[
-          { label: t("體驗評級", "Runner reviews and ratings"), href: "/ratings/" },
+          { label: t("跑手分享", "Runner accounts"), href: "/ratings/" },
           { label: t("更正、投訴及回應", "Corrections, complaints and responses") },
         ]}
       />

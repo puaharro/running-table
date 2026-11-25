@@ -18,7 +18,7 @@ export default function NotebookPage({ english = false }: { english?: boolean })
       <Breadcrumb
         english={english}
         items={[
-          { label: t("賽事體驗評級", "Runner reviews and ratings"), href: "/ratings/" },
+          { label: t("跑手分享", "Runner accounts"), href: "/ratings/" },
           { label: t("參賽筆記", "Race notebook") },
         ]}
       />

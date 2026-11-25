@@ -23,7 +23,7 @@ assertReleaseReady();
 const quickDestinations: QuickDestination[] = [
   { href: "/races/", label: "賽事搜尋／時間表", category: "頁面", keywords: "賽程 calendar" },
   { href: favoriteResultsHref, label: "我的收藏", category: "頁面" },
-  { href: "/ratings/", label: "參賽評論", category: "頁面" },
+  { href: "/ratings/", label: "跑手分享", category: "頁面" },
   { href: "/guides/", label: "報名及選賽指南", category: "頁面" },
   { href: "/guides/race-registration-checklist/", label: "報名前清單", category: "指南" },
   ...guides
