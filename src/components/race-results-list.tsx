@@ -128,6 +128,16 @@ export function RaceResultsList({
           {visibleResults.map(({ race, groups }, index) => {
             const detailHref = localPath(filteredRaceHref(race, groups, filters), english);
             const deadline = listDeadline(race, groups, now, english);
+            const channels = groups.flatMap((group) => group.channels);
+            const untilFull =
+              race.status === "scheduled" &&
+              channels.length > 0 &&
+              channels.every(
+                (channel) =>
+                  channel.registrationDeadlineCondition === "until-full" &&
+                  !channel.deadline &&
+                  !channel.registrationClosesAt,
+              );
             const registration = listRegistration(race, groups, now, english);
             const distances = [
               ...new Set(
@@ -254,6 +264,8 @@ export function RaceResultsList({
                         </span>
                         <span>{deadline.scope}</span>
                       </>
+                    ) : untilFull ? (
+                      <strong>{t("額滿即止", "Until full")}</strong>
                     ) : (
                       <span aria-label={t("暫無已核實截止日期", "No verified entry deadline")}>
                         {highlightDeadlines ? t("暫無已核實截止", "No verified deadline") : "—"}

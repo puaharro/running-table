@@ -3186,17 +3186,22 @@
             "name": "一般報名",
             "registrationMethod": "以官方本屆安排為準",
             "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
-            "price": null,
+            "price": 380,
             "currency": "HKD",
-            "priceNote": "費用／最低籌款額待核實。",
+            "priceNote": "大會報名表所列個人組費用。",
             "status": "open",
             "registrationUrl": "https://runwithlove.org.hk/zh-hant/registration/step/1/",
-            "registrationNote": "已開啟大會報名第一步，1K、3K、5K及10K個人組均列可選項；未提交或付款，未核實精確截止，不保證名額。",
+            "registrationNote": "已開啟大會報名第一步，1K、3K、5K及10K個人組均列可選項；未提交或付款，大會列明 12 月 31 日截止，不保證名額。",
             "sourceIds": [
               "run-with-love-2027-official",
-              "run-with-love-2027-registration-recheck-20261110"
+              "run-with-love-2027-registration-recheck-20261110",
+              "run-with-love-2027-registration-deadline-20261125",
+              "run-with-love-2027-registration-fee-20261125"
             ],
-            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00"
+            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00",
+            "deadline": "2026-12-31",
+            "priceType": "entry-fee",
+            "priceUnit": "每位"
           }
         ],
         "venue": "組別起點待核實",
@@ -3215,17 +3220,22 @@
             "name": "一般報名",
             "registrationMethod": "以官方本屆安排為準",
             "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
-            "price": null,
+            "price": 380,
             "currency": "HKD",
-            "priceNote": "費用／最低籌款額待核實。",
+            "priceNote": "大會報名表所列個人組費用。",
             "status": "open",
             "registrationUrl": "https://runwithlove.org.hk/zh-hant/registration/step/1/",
-            "registrationNote": "已開啟大會報名第一步，1K、3K、5K及10K個人組均列可選項；未提交或付款，未核實精確截止，不保證名額。",
+            "registrationNote": "已開啟大會報名第一步，1K、3K、5K及10K個人組均列可選項；未提交或付款，大會列明 12 月 31 日截止，不保證名額。",
             "sourceIds": [
               "run-with-love-2027-official",
-              "run-with-love-2027-registration-recheck-20261110"
+              "run-with-love-2027-registration-recheck-20261110",
+              "run-with-love-2027-registration-deadline-20261125",
+              "run-with-love-2027-registration-fee-20261125"
             ],
-            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00"
+            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00",
+            "deadline": "2026-12-31",
+            "priceType": "entry-fee",
+            "priceUnit": "每位"
           }
         ],
         "venue": "組別起點待核實",
@@ -3244,17 +3254,22 @@
             "name": "一般報名",
             "registrationMethod": "以官方本屆安排為準",
             "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
-            "price": null,
+            "price": 380,
             "currency": "HKD",
-            "priceNote": "費用／最低籌款額待核實。",
+            "priceNote": "大會報名表所列個人組費用。",
             "status": "open",
             "registrationUrl": "https://runwithlove.org.hk/zh-hant/registration/step/1/",
-            "registrationNote": "已開啟大會報名第一步，1K、3K、5K及10K個人組均列可選項；未提交或付款，未核實精確截止，不保證名額。",
+            "registrationNote": "已開啟大會報名第一步，1K、3K、5K及10K個人組均列可選項；未提交或付款，大會列明 12 月 31 日截止，不保證名額。",
             "sourceIds": [
               "run-with-love-2027-official",
-              "run-with-love-2027-registration-recheck-20261110"
+              "run-with-love-2027-registration-recheck-20261110",
+              "run-with-love-2027-registration-deadline-20261125",
+              "run-with-love-2027-registration-fee-20261125"
             ],
-            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00"
+            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00",
+            "deadline": "2026-12-31",
+            "priceType": "entry-fee",
+            "priceUnit": "每位"
           }
         ],
         "venue": "組別起點待核實",
@@ -3273,17 +3288,22 @@
             "name": "一般報名",
             "registrationMethod": "以官方本屆安排為準",
             "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
-            "price": null,
+            "price": 380,
             "currency": "HKD",
-            "priceNote": "費用／最低籌款額待核實。",
+            "priceNote": "大會報名表所列個人組費用。",
             "status": "open",
             "registrationUrl": "https://runwithlove.org.hk/zh-hant/registration/step/1/",
-            "registrationNote": "已開啟大會報名第一步，1K、3K、5K及10K個人組均列可選項；未提交或付款，未核實精確截止，不保證名額。",
+            "registrationNote": "已開啟大會報名第一步，1K、3K、5K及10K個人組均列可選項；未提交或付款，大會列明 12 月 31 日截止，不保證名額。",
             "sourceIds": [
               "run-with-love-2027-official",
-              "run-with-love-2027-registration-recheck-20261110"
+              "run-with-love-2027-registration-recheck-20261110",
+              "run-with-love-2027-registration-deadline-20261125",
+              "run-with-love-2027-registration-fee-20261125"
             ],
-            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00"
+            "registrationVerifiedAt": "2026-11-10T13:42:07+08:00",
+            "deadline": "2026-12-31",
+            "priceType": "entry-fee",
+            "priceUnit": "每位"
           }
         ],
         "venue": "組別起點待核實",
@@ -3311,13 +3331,26 @@
         "checkedAt": "2026-11-10T13:42:07+08:00",
         "fields": ["channels.registration"],
         "note": "已開啟大會報名第一步，1K、3K、5K及10K個人組均列可選項；未提交或付款，未核實精確截止，不保證名額。"
+      },
+      {
+        "id": "run-with-love-2027-registration-deadline-20261125",
+        "title": "大會重要日程｜報名截止日",
+        "url": "https://runwithlove.org.hk/zh-hant/",
+        "checkedAt": "2026-11-25T05:50:02.958Z",
+        "fields": ["channels.registration"],
+        "note": "官方日程列 2026 年 12 月 31 日截止。"
+      },
+      {
+        "id": "run-with-love-2027-registration-fee-20261125",
+        "title": "官方報名表｜個人組報名費",
+        "url": "https://runwithlove.org.hk/zh-hant/registration/step/1/",
+        "checkedAt": "2026-11-25T05:50:02.958Z",
+        "fields": ["channels.registration"],
+        "note": "四個個人組每人 HK$380。"
       }
     ],
     "changes": [
-      {
-        "date": "2026-11-06",
-        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
-      },
+      { "date": "2026-11-06", "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。" },
       {
         "date": "2026-11-10",
         "note": "重新閱讀官方報名來源：已開啟大會報名第一步，1K、3K、5K及10K個人組均列可選項；未提交或付款，未核實精確截止，不保證名額。"
@@ -4376,12 +4409,19 @@
             "name": "一般報名",
             "registrationMethod": "參賽資格及集合安排請參閱大會最新資料。",
             "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
-            "price": null,
+            "price": 260,
             "currency": "HKD",
             "status": "unknown",
             "registrationUrl": "https://kaitakrun27.sportsoho.com/",
-            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額、費用及截止待核實。",
-            "sourceIds": ["kai-tak-run-2027-official"]
+            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額待核實。",
+            "sourceIds": [
+              "kai-tak-run-2027-official",
+              "kai-tak-run-2027-registration-fee-20261125",
+              "kai-tak-run-2027-registration-deadline-20261125"
+            ],
+            "priceType": "entry-fee",
+            "priceUnit": "每位",
+            "registrationDeadlineCondition": "until-full"
           }
         ]
       },
@@ -4398,12 +4438,19 @@
             "name": "一般報名",
             "registrationMethod": "參賽資格及集合安排請參閱大會最新資料。",
             "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
-            "price": null,
+            "price": 160,
             "currency": "HKD",
             "status": "unknown",
             "registrationUrl": "https://kaitakrun27.sportsoho.com/",
-            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額、費用及截止待核實。",
-            "sourceIds": ["kai-tak-run-2027-official"]
+            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額待核實。",
+            "sourceIds": [
+              "kai-tak-run-2027-official",
+              "kai-tak-run-2027-registration-fee-20261125",
+              "kai-tak-run-2027-registration-deadline-20261125"
+            ],
+            "priceType": "entry-fee",
+            "priceUnit": "每位",
+            "registrationDeadlineCondition": "until-full"
           }
         ]
       },
@@ -4420,12 +4467,19 @@
             "name": "一般報名",
             "registrationMethod": "參賽資格及集合安排請參閱大會最新資料。",
             "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
-            "price": null,
+            "price": 260,
             "currency": "HKD",
             "status": "unknown",
             "registrationUrl": "https://kaitakrun27.sportsoho.com/",
-            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額、費用及截止待核實。",
-            "sourceIds": ["kai-tak-run-2027-official"]
+            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額待核實。",
+            "sourceIds": [
+              "kai-tak-run-2027-official",
+              "kai-tak-run-2027-registration-fee-20261125",
+              "kai-tak-run-2027-registration-deadline-20261125"
+            ],
+            "priceType": "entry-fee",
+            "priceUnit": "每位",
+            "registrationDeadlineCondition": "until-full"
           }
         ]
       },
@@ -4442,12 +4496,19 @@
             "name": "一般報名",
             "registrationMethod": "參賽資格及集合安排請參閱大會最新資料。",
             "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
-            "price": null,
+            "price": 160,
             "currency": "HKD",
             "status": "unknown",
             "registrationUrl": "https://kaitakrun27.sportsoho.com/",
-            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額、費用及截止待核實。",
-            "sourceIds": ["kai-tak-run-2027-official"]
+            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額待核實。",
+            "sourceIds": [
+              "kai-tak-run-2027-official",
+              "kai-tak-run-2027-registration-fee-20261125",
+              "kai-tak-run-2027-registration-deadline-20261125"
+            ],
+            "priceType": "entry-fee",
+            "priceUnit": "每位",
+            "registrationDeadlineCondition": "until-full"
           }
         ]
       }
@@ -4464,13 +4525,24 @@
         "url": "https://kaitaksportspark.com.hk/tc/community-programmes/124",
         "checkedAt": "2026-11-21T05:16:26.844Z",
         "fields": ["date", "venue", "groups.distanceKm", "groups.limit", "channels.registration"]
+      },
+      {
+        "id": "kai-tak-run-2027-registration-fee-20261125",
+        "title": "大會活動簡介｜公開組報名費",
+        "url": "https://kaitakrun27.sportsoho.com/",
+        "checkedAt": "2026-11-25T05:50:02.958Z",
+        "fields": ["channels.registration"],
+        "note": "兩個 10 公里公開組每人 HK$260，兩個 3 公里公開組每人 HK$160。"
+      },
+      {
+        "id": "kai-tak-run-2027-registration-deadline-20261125",
+        "title": "大會活動簡介｜公開組報名截止條件",
+        "url": "https://kaitakrun27.sportsoho.com/",
+        "checkedAt": "2026-11-25T05:50:02.958Z",
+        "fields": ["channels.registration"],
+        "note": "大會列明公開組先到先得，額滿即止。"
       }
     ],
-    "changes": [
-      {
-        "date": "2026-11-21",
-        "note": "按本屆官方資料新增賽事。"
-      }
-    ]
+    "changes": [{ "date": "2026-11-21", "note": "按本屆官方資料新增賽事。" }]
   }
 ]

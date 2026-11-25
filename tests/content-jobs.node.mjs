@@ -10,7 +10,7 @@ import { ContentStore, raceCatalog } from "../scripts/content-management/store.m
 
 test("editorial jobs use selected materials, survive a retry and leave publication untouched", (t) => {
   const root = mkdtempSync(join(tmpdir(), "nxtgo-editorial-jobs-"));
-  t.after(() => rmSync(root, { recursive: true, force: true }));
+
   cpSync(new URL("../scripts/", import.meta.url), join(root, "scripts"), { recursive: true });
   mkdirSync(join(root, "src"));
   cpSync(new URL("../src/data/", import.meta.url), join(root, "src/data"), { recursive: true });
@@ -18,7 +18,10 @@ test("editorial jobs use selected materials, survive a retry and leave publicati
   const race = raceCatalog[0];
   const database = join(root, ".editorial-private/content-management/manual.sqlite");
   const content = new ContentStore(database);
-  t.after(() => content.close());
+  t.after(() => {
+    content.close();
+    rmSync(root, { recursive: true, force: true });
+  });
   importMaterials(content, [
     {
       race_id: race.id,

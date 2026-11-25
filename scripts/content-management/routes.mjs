@@ -1,3 +1,4 @@
+import { RegistrationReview } from "./registration-review.mjs";
 import { Releases, releasePage } from "./releases.mjs";
 import { Workflow } from "./workflow.mjs";
 import { confirmedHandoff, handoffHtml } from "./handoff.mjs";
@@ -33,6 +34,10 @@ export async function serveContent({
       .end(JSON.stringify(body));
   const html = (body) =>
     response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }).end(body);
+  if (request.method === "POST" && url.pathname === "/api/content/registration/decide") {
+    json(new RegistrationReview(content).decide(await readBody(request)));
+    return true;
+  }
   const workflow = new Workflow(content);
   if (request.method === "GET" && url.pathname === "/site-release") {
     html(releasePage(content, token, url.searchParams.get("id")));

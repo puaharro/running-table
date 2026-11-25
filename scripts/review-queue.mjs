@@ -1,4 +1,9 @@
 import { readFileSync } from "node:fs";
+import {
+  confirmedGroupSoldOut,
+  confirmedSoldOut,
+  isLinkOnly,
+} from "./content-management/registration-sources.mjs";
 const records = JSON.parse(
   readFileSync(new URL("../src/data/catalog.json", import.meta.url), "utf8"),
 );
@@ -9,9 +14,26 @@ if (!Number.isFinite(now.getTime()))
 const queue = [];
 for (const race of records) {
   if (race.publication !== "published") continue;
+  const soldOut = confirmedSoldOut(race);
   for (const group of race.groups) {
+    const groupSoldOut = soldOut ?? confirmedGroupSoldOut(race, group);
     for (const channel of group.channels) {
       const reasons = [];
+      if (isLinkOnly(channel)) {
+        if (
+          !channel.registrationUrl &&
+          race.date >= new Date(now.getTime() + 8 * 3600000).toISOString().slice(0, 10)
+        )
+          queue.push({
+            race: race.name,
+            group: group.name,
+            channel: channel.name,
+            reasons: ["欠當屆官方或指定夥伴連結"],
+            officialUrl: race.sourceUrl,
+          });
+        continue;
+      }
+      if (groupSoldOut) continue;
       const age = channel.registrationVerifiedAt
         ? now.getTime() - Date.parse(channel.registrationVerifiedAt)
         : Infinity;

@@ -26,6 +26,7 @@
 | priceUnit／priceNote                      | 每位、每套／晚等計價單位及內容；有金額的套票必填單位                     |
 | status                                    | open、upcoming、waitlist、full、closed、unknown                          |
 | registrationStart／deadline               | 只有日期的申請窗口                                                       |
+| registrationDeadlineCondition             | 官方截止條件，`until-full` 表示額滿即止，須連到報名來源                  |
 | registrationOpensAt／registrationClosesAt | 有時區的精確申請窗口；截止與日期欄須對應香港同一天                       |
 | resultAnnouncedAt／paymentClosesAt        | 結果公布及獲確認後付款期限，不能代替申請截止；同時有值時付款不得早於結果 |
 | registrationVerifiedAt                    | 此渠道的實際核對時間；已知狀態必填                                       |
