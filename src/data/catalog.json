@@ -355,11 +355,11 @@
             "priceType": "minimum-donation",
             "priceNote": "官方最低籌款額，並非一般報名費；額外捐款及籌款安排以官方為準。",
             "status": "unknown",
-            "deadline": "2026-11-15",
+            "deadline": "2026-11-23",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
             "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
             "registrationMethod": "個人報名",
-            "registrationNote": "10月27日再核公開個人選單，仍只列10K一組、5K、3K，未列半馬。報名FAQ第4題只說額滿可提早終止，沒有半馬現況公告，故保持待核實，不推斷額滿或接受申請。團體配額須大會確認，不能推斷個人半馬現況。官方只列11月15日截止，無精確時刻。",
+            "registrationNote": "官方日程列明 2026 年 11 月 23 日中午 12 時截止，個人報名入口已關閉。",
             "id": "unicef-2027-half-charity",
             "type": "charity",
             "name": "慈善報名（個人）",
@@ -370,8 +370,10 @@
               "unicef-schedule",
               "unicef-individual",
               "unicef-enrolment-faq",
-              "unicef-group-procedure"
-            ]
+              "unicef-group-procedure",
+              "unicef-individual-closed-20261125"
+            ],
+            "registrationClosesAt": "2026-11-23T12:00:00+08:00"
           }
         ],
         "venue": "香港迪士尼樂園旅遊巴士停車場",
@@ -403,11 +405,11 @@
             "priceType": "minimum-donation",
             "priceNote": "官方最低籌款額，並非一般報名費；額外捐款及籌款安排以官方為準。",
             "status": "open",
-            "deadline": "2026-11-15",
+            "deadline": "2026-11-23",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
             "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
             "registrationMethod": "個人報名",
-            "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，不保證即時名額。",
+            "registrationNote": "官方日程列明 2026 年 11 月 23 日中午 12 時截止，個人報名入口已關閉。",
             "id": "unicef-2027-10k-charity",
             "type": "charity",
             "name": "慈善報名（個人）",
@@ -417,8 +419,10 @@
               "unicef-race-info",
               "unicef-schedule",
               "unicef-individual",
-              "unicef-enrolment-faq"
-            ]
+              "unicef-enrolment-faq",
+              "unicef-individual-closed-20261125"
+            ],
+            "registrationClosesAt": "2026-11-23T12:00:00+08:00"
           }
         ],
         "venue": "香港迪士尼樂園旅遊巴士停車場",
@@ -449,11 +453,11 @@
             "priceType": "minimum-donation",
             "priceNote": "官方最低籌款額，並非一般報名費；額外捐款及籌款安排以官方為準。",
             "status": "open",
-            "deadline": "2026-11-15",
+            "deadline": "2026-11-23",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
             "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
             "registrationMethod": "個人報名",
-            "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，不保證即時名額。",
+            "registrationNote": "官方日程列明 2026 年 11 月 23 日中午 12 時截止，個人報名入口已關閉。",
             "id": "unicef-2027-5k-charity",
             "type": "charity",
             "name": "慈善報名（個人）",
@@ -463,8 +467,10 @@
               "unicef-race-info",
               "unicef-schedule",
               "unicef-individual",
-              "unicef-enrolment-faq"
-            ]
+              "unicef-enrolment-faq",
+              "unicef-individual-closed-20261125"
+            ],
+            "registrationClosesAt": "2026-11-23T12:00:00+08:00"
           }
         ],
         "venue": "香港迪士尼樂園旅遊巴士停車場",
@@ -495,11 +501,11 @@
             "priceType": "minimum-donation",
             "priceNote": "官方最低籌款額，並非一般報名費；額外捐款及籌款安排以官方為準。",
             "status": "open",
-            "deadline": "2026-11-15",
+            "deadline": "2026-11-23",
             "registrationUrl": "https://run.unicef.org.hk/powerun/zh/individual",
             "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
             "registrationMethod": "個人報名",
-            "registrationNote": "官方只列截止日期，未列精確時刻。核對時公開個人報名選單可選此組別，不保證即時名額。",
+            "registrationNote": "官方日程列明 2026 年 11 月 23 日中午 12 時截止，個人報名入口已關閉。",
             "id": "unicef-2027-3k-charity",
             "type": "charity",
             "name": "慈善報名（個人）",
@@ -509,8 +515,10 @@
               "unicef-race-info",
               "unicef-schedule",
               "unicef-individual",
-              "unicef-enrolment-faq"
-            ]
+              "unicef-enrolment-faq",
+              "unicef-individual-closed-20261125"
+            ],
+            "registrationClosesAt": "2026-11-23T12:00:00+08:00"
           }
         ],
         "venue": "香港迪士尼樂園旅遊巴士停車場",
@@ -598,13 +606,18 @@
         "checkedAt": "2026-10-26T13:40:20+08:00",
         "fields": ["channels.registration"],
         "note": "團體須20人或以上，公司／團體提交後由大會回覆，個別配額依報名情況安排。未填寫公司或聯絡資料，未提交、未索取驗證碼；此程序不能佐證個人半馬仍接受申請。"
+      },
+      {
+        "id": "unicef-individual-closed-20261125",
+        "title": "官方超能跑日程及個人報名頁",
+        "url": "https://run.unicef.org.hk/powerun/zh",
+        "checkedAt": "2026-11-25T06:03:05.565Z",
+        "fields": ["channels.registration"],
+        "note": "官方當屆日程列明 2026 年 11 月 23 日中午 12 時截止；個人報名連結已轉往截止頁。"
       }
     ],
     "changes": [
-      {
-        "date": "2026-10-21",
-        "note": "僅加入官方已核實活動欄位，報名保持待核實。"
-      },
+      { "date": "2026-10-21", "note": "僅加入官方已核實活動欄位，報名保持待核實。" },
       {
         "date": "2026-10-25",
         "note": "補核最低籌款額、集合地點及截止日期；公開個人報名選單可選 10K 一組、5K、3K，半馬未列為可選，狀態保持待核實。"
@@ -1072,7 +1085,12 @@
             "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
             "registrationUrl": "https://www.familyvalue.org.hk/marathon.html",
             "registrationNote": "官網9月30日14:00公告三距離名額均0及全部額滿；10月27日再查官網連結的官方表格，明確顯示所有慈善跑手招募已完成。保留額滿狀態；表格關閉亦不能補證最低費用，籌款目標不當成最低額。",
-            "sourceIds": ["schkm-familyvalue", "schkm-charity-directory", "schkm-familyvalue-form"]
+            "sourceIds": [
+              "schkm-familyvalue",
+              "schkm-charity-directory",
+              "schkm-familyvalue-form",
+              "schkm-familyvalue-sold-out-recheck-20261125"
+            ]
           }
         ],
         "ratingEvidence": {
@@ -1283,7 +1301,7 @@
             "status": "open",
             "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
             "registrationUrl": "https://herfund.org.hk/tc/work/events/detail/30002038142140495",
-            "registrationNote": "核對時公開招募表格有此距離可用選項，接受意向申請，名額須由機構確認；未提交或付款，不保證餘額。官網只列11月2日或之前，無精確截止時刻。",
+            "registrationNote": "機構慈善跑手招募截止日為 2026 年 11 月 2 日，官方公告未列精確時刻。",
             "sourceIds": ["schkm-herfund", "schkm-herfund-form", "schkm-charity-directory"],
             "deadline": "2026-11-02"
           },
@@ -1302,7 +1320,12 @@
             "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
             "registrationUrl": "https://www.familyvalue.org.hk/marathon.html",
             "registrationNote": "官網9月30日14:00公告三距離名額均0及全部額滿；10月27日再查官網連結的官方表格，明確顯示所有慈善跑手招募已完成。保留額滿狀態；表格關閉亦不能補證最低費用，籌款目標不當成最低額。",
-            "sourceIds": ["schkm-familyvalue", "schkm-charity-directory", "schkm-familyvalue-form"]
+            "sourceIds": [
+              "schkm-familyvalue",
+              "schkm-charity-directory",
+              "schkm-familyvalue-form",
+              "schkm-familyvalue-sold-out-recheck-20261125"
+            ]
           }
         ],
         "ratingEvidence": {
@@ -1494,7 +1517,7 @@
             "status": "open",
             "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
             "registrationUrl": "https://herfund.org.hk/tc/work/events/detail/30002038142140495",
-            "registrationNote": "核對時公開招募表格有此距離可用選項，接受意向申請，名額須由機構確認；未提交或付款，不保證餘額。官網只列11月2日或之前，無精確截止時刻。",
+            "registrationNote": "機構慈善跑手招募截止日為 2026 年 11 月 2 日，官方公告未列精確時刻。",
             "sourceIds": ["schkm-herfund", "schkm-herfund-form", "schkm-charity-directory"],
             "deadline": "2026-11-02"
           },
@@ -1531,7 +1554,12 @@
             "registrationVerifiedAt": "2026-10-27T00:30:00+08:00",
             "registrationUrl": "https://www.familyvalue.org.hk/marathon.html",
             "registrationNote": "官網9月30日14:00公告三距離名額均0及全部額滿；10月27日再查官網連結的官方表格，明確顯示所有慈善跑手招募已完成。保留額滿狀態；表格關閉亦不能補證最低費用，籌款目標不當成最低額。",
-            "sourceIds": ["schkm-familyvalue", "schkm-charity-directory", "schkm-familyvalue-form"]
+            "sourceIds": [
+              "schkm-familyvalue",
+              "schkm-charity-directory",
+              "schkm-familyvalue-form",
+              "schkm-familyvalue-sold-out-recheck-20261125"
+            ]
           }
         ],
         "ratingEvidence": {
@@ -1747,13 +1775,18 @@
         "checkedAt": "2026-11-10T13:42:07+08:00",
         "fields": ["channels.registration"],
         "note": "官方重要日期確認優先9月7日19:00、公眾抽籤9月20日19:00、住宿套票11月6日23:59截止；分渠道記錄，全部非慈善渠道已截止。"
+      },
+      {
+        "id": "schkm-familyvalue-sold-out-recheck-20261125",
+        "title": "維護家庭基金｜三組慈善跑手名額公告",
+        "url": "https://www.familyvalue.org.hk/marathon.html",
+        "checkedAt": "2026-11-25T06:03:05.565Z",
+        "fields": ["channels.registration"],
+        "note": "大會指定慈善機構 9 月 30 日公告確認，全馬、半馬及十公里全部慈善跑手名額已滿。"
       }
     ],
     "changes": [
-      {
-        "date": "2026-10-21",
-        "note": "建立主賽事紀錄，只填已核實欄位，其他費用及起點留空。"
-      },
+      { "date": "2026-10-21", "note": "建立主賽事紀錄，只填已核實欄位，其他費用及起點留空。" },
       {
         "date": "2026-10-25",
         "note": "逐一核對全馬、半馬及 10K 官方頁籤，補齊半馬／10K 本地費用、起點、年齡及時限；公眾抽籤仍已截止。"

@@ -9,6 +9,7 @@ import {
   charityDirectory,
   checkPartnerLink,
   isLinkOnly,
+  endedPartnerRegistration,
   confirmedSoldOut,
   confirmedGroupSoldOut,
 } from "./registration-sources.mjs";
@@ -70,7 +71,7 @@ export function registrationTargets(catalog, now, recorded = []) {
           const close = channel.status === "closed" || (end < now && channel.status !== "unknown");
           const priority = ["priority", "elite"].includes(channel.type);
           const linkOnly = isLinkOnly(channel);
-          if (!linkOnly && groupSoldOut) return [];
+          if (linkOnly ? endedPartnerRegistration(race, channel, now) : groupSoldOut) return [];
           if (
             !linkOnly &&
             !priority &&

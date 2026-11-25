@@ -3,6 +3,7 @@ import {
   confirmedGroupSoldOut,
   confirmedSoldOut,
   isLinkOnly,
+  endedPartnerRegistration,
 } from "./content-management/registration-sources.mjs";
 const records = JSON.parse(
   readFileSync(new URL("../src/data/catalog.json", import.meta.url), "utf8"),
@@ -21,6 +22,7 @@ for (const race of records) {
       const reasons = [];
       if (isLinkOnly(channel)) {
         if (
+          !endedPartnerRegistration(race, channel, now.getTime()) &&
           !channel.registrationUrl &&
           race.date >= new Date(now.getTime() + 8 * 3600000).toISOString().slice(0, 10)
         )

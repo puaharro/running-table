@@ -1,5 +1,9 @@
 import { fields, RegistrationReview, registrationTargets } from "./registration-review.mjs";
-import { confirmedGroupSoldOut, confirmedSoldOut } from "./registration-sources.mjs";
+import {
+  confirmedGroupSoldOut,
+  confirmedSoldOut,
+  endedPartnerRegistration,
+} from "./registration-sources.mjs";
 
 const escape = (value) =>
   String(value ?? "").replace(
@@ -82,6 +86,31 @@ export function registrationPanel(content, { race, year }) {
           '" target="_blank" rel="noopener noreferrer">官方公告 ↗</a></p></li>',
       );
     });
+  const endedLinks = new Map();
+  for (const item of content.baseCatalog.filter(
+    (item) =>
+      item.publication === "published" &&
+      item.date >= today &&
+      (!race || item.id === race) &&
+      (!year || Number(item.date.slice(0, 4)) === year),
+  )) {
+    for (const group of item.groups)
+      for (const channel of group.channels) {
+        const status = endedPartnerRegistration(item, channel, Date.now());
+        if (!status) continue;
+        const deadline = channel.registrationClosesAt ?? channel.deadline;
+        const key = JSON.stringify([
+          item.id,
+          channel.name,
+          channel.registrationUrl,
+          status,
+          deadline,
+        ]);
+        if (!endedLinks.has(key))
+          endedLinks.set(key, { name: item.name, channel, status, deadline, groups: [] });
+        endedLinks.get(key).groups.push(group.name);
+      }
+  }
   function groupResults(states, linkOnly = false, raceId = null) {
     const channels = new Map();
     for (const row of rows
@@ -229,6 +258,32 @@ export function registrationPanel(content, { race, year }) {
     "</summary><ul>" +
     groupResults(["accepted", "rejected"]) +
     "</ul></details>" +
+    (endedLinks.size
+      ? '<details id="registration-ended-links"><summary>慈善／旅遊渠道已截止或額滿 · ' +
+        endedLinks.size +
+        "</summary><ul>" +
+        [...endedLinks.values()]
+          .map(
+            (item) =>
+              "<li>" +
+              escape(
+                [item.name, item.groups.join("／"), item.channel.name, labels[item.status]].join(
+                  " · ",
+                ),
+              ) +
+              (item.deadline
+                ? " · " + escape(display(item.deadline, "registrationClosesAt"))
+                : "") +
+              (item.channel.registrationUrl
+                ? ' · <a href="' +
+                  escape(item.channel.registrationUrl) +
+                  '" target="_blank" rel="noopener noreferrer">官方詳情 ↗</a>'
+                : "") +
+              "</li>",
+          )
+          .join("") +
+        "</ul></details>"
+      : "") +
     '<details id="registration-links"><summary>慈善／旅遊連結待查 · ' +
     linkCount("pending") +
     "</summary><ul>" +

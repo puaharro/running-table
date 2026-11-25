@@ -24,6 +24,24 @@ const charityNames = {
 export const isLinkOnly = (channel) =>
   ["charity", "hotel", "travel", "tour"].includes(channel.type);
 
+export function endedPartnerRegistration(race, channel, now) {
+  if (
+    !isLinkOnly(channel) ||
+    !race.sources?.some(
+      (source) =>
+        channel.sourceIds?.includes(source.id) &&
+        source.fields?.includes("channels.registration") &&
+        Date.parse(source.checkedAt) <= now,
+    )
+  )
+    return null;
+  if (channel.status === "full") return "full";
+  const deadline =
+    channel.registrationClosesAt ??
+    (channel.deadline ? channel.deadline + "T23:59:59.999+08:00" : null);
+  return channel.status === "closed" || (deadline && Date.parse(deadline) <= now) ? "closed" : null;
+}
+
 export function checkPartnerLink(race, channel, page, directory) {
   if (!channel.registrationUrl || !page) return null;
   const target = new URL(channel.registrationUrl);
