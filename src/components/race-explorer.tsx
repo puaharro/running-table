@@ -24,6 +24,7 @@ import { useFavorites } from "./race-save";
 import { RaceBackToSearch } from "./race-back-to-search";
 import { RaceFilterPanel, type FilterCategory } from "./race-filter-panel";
 import { RaceResultsList } from "./race-results-list";
+import { CalendarActiveFilters } from "./calendar-active-filters";
 import type { Filters, Race } from "@/lib/types";
 
 export function RaceExplorer({
@@ -388,6 +389,15 @@ export function RaceExplorer({
               </p>
             )}
           </div>
+          <CalendarActiveFilters
+            english={english}
+            filters={filters}
+            onRemove={(patch) => {
+              if (patch.from === "" && patch.to === "") setCustomDates(false);
+              update({ ...filters, ...patch });
+              resultsCount.current?.focus({ preventScroll: true });
+            }}
+          />
           <span className="sr-only" role="status">
             {copyState === "copied"
               ? t("已複製篩選連結", "Filter link copied")
@@ -407,6 +417,7 @@ export function RaceExplorer({
             now={now}
             ready={ready}
             savedOnly={savedOnly}
+            highlightDeadlines={acceptingOnly && !savedOnly}
             error={error}
             noListedCountry={
               filters.countries.length > 0 &&
@@ -425,7 +436,7 @@ export function RaceExplorer({
                 },
               }
             }
-            onSortByDeadline={() => field("sort", "deadline")}
+            onSort={(sort) => field("sort", sort)}
             onOpenRace={rememberRacePosition}
             onRemoveFavorite={savedOnly ? recordRemovedFavorite : undefined}
             onViewAll={() => {

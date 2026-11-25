@@ -49,49 +49,66 @@ function fixture() {
 }
 it("keeps closed general and open charity separate, without claiming guaranteed places", () => {
   const race = fixture();
-  expect(listRegistration(race, race.groups, now)).toBe("慈善報名接受申請 · 一般報名已截止");
+  expect(listRegistration(race, race.groups, now)).toEqual({
+    primary: "接受申請",
+    secondary: "慈善報名 · 一般報名：已截止",
+    open: true,
+  });
 });
 it("uses only matching groups and channels", () => {
   const race = fixture();
   expect(
     listRegistration(race, [{ ...race.groups[0], channels: [race.groups[0].channels[1]] }], now),
-  ).toBe("慈善報名接受申請");
+  ).toEqual({ primary: "接受申請", secondary: "慈善報名", open: true });
 });
 it("requires field-specific official provenance, including for expired deadlines", () => {
   const race = fixture();
   race.sources![0].fields = ["date"];
-  expect(listRegistration(race, race.groups, now)).toBe("報名待核實");
+  expect(listRegistration(race, race.groups, now)).toEqual({ primary: "報名待核實" });
   race.sources![0].fields = ["channels.registration"];
   race.sources![0].checkedAt = "2026-11-08T02:00:00Z";
-  expect(listRegistration(race, race.groups, now)).toBe("報名待核實");
+  expect(listRegistration(race, race.groups, now)).toEqual({ primary: "報名待核實" });
 });
 it("keeps stale availability unknown alongside verified closed channels", () => {
   const race = fixture();
   race.groups[0].channels[1].registrationVerifiedAt = "2026-11-01T02:00:00Z";
-  expect(listRegistration(race, race.groups, now)).toBe("慈善報名待核實 · 一般報名已截止");
+  expect(listRegistration(race, race.groups, now)).toEqual({
+    primary: "待核實",
+    secondary: "慈善報名 · 一般報名：已截止",
+    open: false,
+  });
 });
 it("does not hide unknown groups behind an open channel of the same type", () => {
   const race = fixture();
   race.groups[0].channels[0].type = "charity";
   race.groups[0].channels[0].deadline = undefined;
   race.groups[0].channels[0].status = "unknown";
-  expect(listRegistration(race, race.groups, now)).toBe("慈善報名部分接受申請，部分待核實");
+  expect(listRegistration(race, race.groups, now)).toEqual({
+    primary: "部分接受申請",
+    secondary: "慈善報名 · 部分待核實",
+    open: true,
+  });
 });
 it("limits visible categories and flags further channels", () => {
   const race = fixture();
   race.groups[0].channels.push({ ...race.groups[0].channels[1], id: "hotel", type: "hotel" });
-  expect(listRegistration(race, race.groups, now)).toBe(
-    "慈善報名接受申請 · 住宿連名額接受申請 · 另 1 類渠道",
-  );
+  expect(listRegistration(race, race.groups, now)).toEqual({
+    primary: "接受申請",
+    secondary: "慈善報名 · 住宿連名額：接受申請 · 另 1 類渠道",
+    open: true,
+  });
 });
 it("gives lifecycle changes precedence over registration", () => {
   const race = fixture();
   race.status = "cancelled";
-  expect(listRegistration(race, race.groups, now)).toBe("賽事取消");
+  expect(listRegistration(race, race.groups, now)).toEqual({ primary: "賽事取消" });
   race.status = "postponed";
-  expect(listRegistration(race, race.groups, now)).toBe("賽事延期 · 報名待核實");
+  expect(listRegistration(race, race.groups, now)).toEqual({
+    primary: "賽事延期",
+    secondary: "報名待核實",
+  });
   race.status = "completed";
-  expect(listRegistration(race, race.groups, now)).toBe("賽事已完成");
+  expect(listRegistration(race, race.groups, now)).toEqual({ primary: "賽事已完成" });
 });
 
 it("selects only the nearest verified future application deadline, scoped to filtered channels", () => {
@@ -104,6 +121,8 @@ it("selects only the nearest verified future application deadline, scoped to fil
   charity.deadline = "2026-12-01";
   expect(listDeadline(race, race.groups, now)).toMatchObject({
     date: "2026-11-20",
+    day: "2026-11-20",
+    time: null,
     label: "11月20日截止（時刻待核實）",
     scope: `一般報名 · ${race.groups[0].name}`,
   });
@@ -137,7 +156,11 @@ it("renders exact Hong Kong times, removes them at cutoff and retains date-only 
   channel.status = "unknown";
   channel.deadline = "2026-11-07";
   channel.registrationClosesAt = "2026-11-07T11:30:00+08:00";
-  expect(listDeadline(race, race.groups, now)?.label).toBe("11月7日 11:30 截止（香港時間）");
+  expect(listDeadline(race, race.groups, now)).toMatchObject({
+    day: "2026-11-07",
+    time: "11:30",
+    label: "11月7日 11:30 截止（香港時間）",
+  });
   expect(listDeadline(race, race.groups, "2026-11-07T03:30:00Z")).toBeNull();
   channel.registrationClosesAt = undefined;
   expect(listDeadline(race, race.groups, "2026-11-07T15:59:00Z")?.label).toBe(

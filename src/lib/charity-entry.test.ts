@@ -42,7 +42,9 @@ describe("public charity entry referral", () => {
     expect(result.map(({ race }) => race.id).sort()).toEqual([main.id, unicef.id].sort());
     expect(result.find(({ race }) => race.id === unicef.id)!.groups).toHaveLength(4);
     expect(unicef.groups.every((group) => group.channels.length === 0)).toBe(true);
-    expect(listRegistration(unicef, unicef.groups, now)).toBe("報名詳情請參閱大會網站");
+    expect(listRegistration(unicef, unicef.groups, now)).toEqual({
+      primary: "報名詳情請參閱大會網站",
+    });
     expect(JSON.stringify(unicef)).not.toContain("最低籌款額");
     expect(
       selectRaces([unicef], { ...defaultFilters, channels: ["charity"], statuses: ["open"] }, now),
