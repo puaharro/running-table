@@ -7,11 +7,12 @@ import { groupLocations } from "@/lib/group-locations";
 import { listDeadline, listRegistration } from "@/lib/list-registration";
 import {
   filteredRaceHref,
+  isNewRaceListing,
   pastResult,
   type paginateResults,
   type RaceResult,
 } from "@/lib/list-view";
-import { distanceLabel } from "@/lib/races";
+import { clockTime, distanceLabel, hongKongToday } from "@/lib/races";
 import type { Filters, Race } from "@/lib/types";
 import { RaceRecommendation } from "./race-recommendation";
 import { FavoriteButton } from "./race-save";
@@ -84,6 +85,7 @@ export function RaceResultsList({
   onChangePage,
 }: RaceResultsListProps) {
   const t = language(english);
+  const today = hongKongToday(clockTime(now));
   const dateLabel = (day: string) => (english ? englishDate(day) : day.replaceAll("-", "/"));
   const visibleResults = pagination.items;
   const resultKey = JSON.stringify(
@@ -182,6 +184,13 @@ export function RaceResultsList({
                       <Link href={detailHref}>
                         {highlightMatch(english ? race.englishName : race.name, filters.q)}
                       </Link>
+                      {isNewRaceListing(race, today) && (
+                        <>
+                          {" "}
+                          <span className="calendar-race-new" aria-hidden="true">NEW</span>
+                          <span className="sr-only">{t("新上架賽事", "Newly listed race")}</span>
+                        </>
+                      )}
                     </h2>
                     <p className="calendar-race-venue">
                       <Icon name="pin" size={18} />

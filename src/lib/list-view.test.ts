@@ -9,6 +9,7 @@ import {
   calendarOptionCounts,
   calendarResults,
   filteredRaceHref,
+  isNewRaceListing,
   orderByListedDeadline,
   orderSavedResults,
   paginateResults,
@@ -16,6 +17,24 @@ import {
 import { distanceOptions, regions } from "./types";
 import { resultsEntry, resultsHref, safeResultsHref } from "./results-location";
 const now = "2026-11-07T02:00:00Z";
+
+it("marks newly added races for 14 Hong Kong dates without resetting on edits", () => {
+  const race = {
+    ...races[0],
+    status: "scheduled" as const,
+    endDate: "2026-12-27",
+    changes: [
+      { date: "2026-11-21", note: "新增賽事" },
+      { date: "2026-11-26", note: "更新報名" },
+    ],
+  };
+  expect(isNewRaceListing(race, "2026-11-20")).toBe(false);
+  expect(isNewRaceListing(race, "2026-11-21")).toBe(true);
+  expect(isNewRaceListing(race, "2026-12-04")).toBe(true);
+  expect(isNewRaceListing(race, "2026-12-05")).toBe(false);
+  expect(isNewRaceListing({ ...race, changes: [] }, "2026-11-26")).toBe(false);
+  expect(isNewRaceListing({ ...race, endDate: "2026-11-25" }, "2026-11-26")).toBe(false);
+});
 
 it("counts replacement location and distance options with the remaining filters applied", () => {
   const filters = {

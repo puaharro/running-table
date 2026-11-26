@@ -1,10 +1,21 @@
-import { clockTime, hongKongToday, selectRaces, type Clock } from "./races";
+import { clockTime, hongKongToday, selectRaces, validDate, type Clock } from "./races";
 import { listDeadline } from "./list-registration";
 import { raceHref } from "./site";
 import { distanceOptions, regions, type Filters, type Race, type RaceGroup } from "./types";
 
 export type RaceResult = { race: Race; groups: RaceGroup[] };
 const racesPerPage = 10;
+const newListingDays = 14;
+
+export function isNewRaceListing(race: Race, today: string) {
+  if (race.status !== "scheduled" || race.endDate < today) return false;
+  // The earliest catalogue entry records the addition. Later edits append to this history.
+  const addedOn = race.changes?.[0]?.date;
+  if (!addedOn || !validDate(addedOn)) return false;
+  const age = Date.parse(today) - Date.parse(addedOn);
+  return age >= 0 && age < newListingDays * 86_400_000;
+}
+
 function firstResultDate({ race, groups }: RaceResult) {
   return groups.map((group) => group.date).sort()[0] ?? race.date;
 }
