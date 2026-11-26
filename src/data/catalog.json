@@ -805,7 +805,7 @@
             "status": "open",
             "registrationStart": "2026-10-20",
             "deadline": "2026-11-27",
-            "registrationUrl": "https://www.hkmarathon.com/youth-run",
+            "registrationUrl": "https://hkmarathon.fringebackerevents.com/events/standard-chartered-hong-kong-marathon-2027/register/select-type/",
             "registrationOpensAt": "2026-10-20T12:00:00+08:00",
             "registrationClosesAt": "2026-11-27T23:59:00+08:00",
             "registrationVerifiedAt": "2026-11-10T13:42:07+08:00",
@@ -819,7 +819,8 @@
             "sourceIds": [
               "schkm-youth",
               "schkm-youth-entry",
-              "schkm-youth-2027-registration-recheck-20261110"
+              "schkm-youth-2027-registration-recheck-20261110",
+              "schkm-youth-2027-registration-registrationurl-20261126"
             ]
           }
         ],
@@ -832,7 +833,7 @@
       }
     ],
     "sourceUrl": "https://www.hkmarathon.com/youth-run",
-    "updatedAt": "2026-11-10",
+    "updatedAt": "2026-11-26",
     "verifiedAt": "2026-10-26T13:03:31+08:00",
     "verification": "verified",
     "publication": "published",
@@ -866,13 +867,18 @@
         "checkedAt": "2026-11-10T13:42:07+08:00",
         "fields": ["channels.registration"],
         "note": "大會列11月27日23:59截止；已另開指定平台少年跑表格，可見四個場次及參賽者欄位。只讀未提交，不保證即時名額。"
+      },
+      {
+        "id": "schkm-youth-2027-registration-registrationurl-20261126",
+        "title": "當屆官方報名覆核",
+        "url": "https://hkmarathon.fringebackerevents.com/events/standard-chartered-hong-kong-marathon-2027/register/select-type/",
+        "checkedAt": "2026-11-26T05:03:58.464Z",
+        "fields": ["channels.registration"],
+        "note": "大會少年跑頁連至官方平台，少年跑分頁可進入當屆專用表格。"
       }
     ],
     "changes": [
-      {
-        "date": "2026-10-21",
-        "note": "記錄報名窗口、年齡限制及提前額滿條款。"
-      },
+      { "date": "2026-10-21", "note": "記錄報名窗口、年齡限制及提前額滿條款。" },
       {
         "date": "2026-10-25",
         "note": "核對官方期限及指定報名入口，少年跑仍列有登記入口；名額可提前額滿。"
@@ -888,7 +894,8 @@
       {
         "date": "2026-11-10",
         "note": "重新閱讀官方報名來源：大會列11月27日23:59截止；已另開指定平台少年跑表格，可見四個場次及參賽者欄位。只讀未提交，不保證即時名額。"
-      }
+      },
+      { "date": "2026-11-26", "note": "接入已批准的官方報名覆核（1 項）。" }
     ]
   },
   {
@@ -952,7 +959,7 @@
             "type": "priority",
             "name": "優先報名",
             "registrationMethod": "達標資格審核",
-            "eligibility": "只適用所選距離挑戰組；須以2025年1月1日至2026年8月31日獲認可賽事成績達標，並通過大會審核。",
+            "eligibility": "只限所選距離挑戰組。渣馬 2026 對應挑戰組年齡組首三名，或以 2025-01-01 至 2026-08-31 大會／世界田聯／AIMS 舉辦或認可賽事的個人完成時間達到當屆性別及年齡組門檻。報名時提交成績證明（條款所列大會舉辦或認可本地賽事除外），由大會核實。門檻及認可賽事見第 2 節。",
             "price": 600,
             "currency": "HKD",
             "status": "closed",
@@ -964,7 +971,8 @@
               "schkm-channel-dates",
               "schkm-main",
               "schkm-faq",
-              "standard-chartered-hk-marathon-2027-registration-recheck-20261110"
+              "standard-chartered-hk-marathon-2027-registration-recheck-20261110",
+              "standard-chartered-hk-marathon-2027-registration-eligibility-20261126"
             ],
             "priceType": "entry-fee",
             "priceUnit": "每位",
@@ -1137,7 +1145,7 @@
             "type": "priority",
             "name": "優先報名",
             "registrationMethod": "達標資格審核",
-            "eligibility": "只適用所選距離挑戰組；須以2025年1月1日至2026年8月31日獲認可賽事成績達標，並通過大會審核。",
+            "eligibility": "只限所選距離挑戰組。渣馬 2026 對應挑戰組年齡組首三名，或以 2025-01-01 至 2026-08-31 大會／世界田聯／AIMS 舉辦或認可賽事的個人完成時間達到當屆性別及年齡組門檻。報名時提交成績證明（條款所列大會舉辦或認可本地賽事除外），由大會核實。門檻及認可賽事見第 2 節。 半馬另須符合 2:15:00 時限及換算上限（10K 1:04:58、半馬 2:15:00、全馬 5:25:46）。",
             "price": 520,
             "currency": "HKD",
             "status": "closed",
@@ -1149,7 +1157,8 @@
               "schkm-channel-dates",
               "schkm-half",
               "schkm-faq",
-              "standard-chartered-hk-marathon-2027-registration-recheck-20261110"
+              "standard-chartered-hk-marathon-2027-registration-recheck-20261110",
+              "standard-chartered-hk-marathon-2027-registration-eligibility-20261126"
             ],
             "priceType": "entry-fee",
             "priceUnit": "每位",
@@ -1372,7 +1381,7 @@
             "type": "priority",
             "name": "優先報名",
             "registrationMethod": "達標資格審核",
-            "eligibility": "只適用所選距離挑戰組；須以2025年1月1日至2026年8月31日獲認可賽事成績達標，並通過大會審核。",
+            "eligibility": "只限所選距離挑戰組。渣馬 2026 對應挑戰組年齡組首三名，或以 2025-01-01 至 2026-08-31 大會／世界田聯／AIMS 舉辦或認可賽事的個人完成時間達到當屆性別及年齡組門檻。報名時提交成績證明（條款所列大會舉辦或認可本地賽事除外），由大會核實。門檻及認可賽事見第 2 節。",
             "price": 420,
             "currency": "HKD",
             "status": "closed",
@@ -1384,7 +1393,8 @@
               "schkm-channel-dates",
               "schkm-10k",
               "schkm-faq",
-              "standard-chartered-hk-marathon-2027-registration-recheck-20261110"
+              "standard-chartered-hk-marathon-2027-registration-recheck-20261110",
+              "standard-chartered-hk-marathon-2027-registration-eligibility-20261126"
             ],
             "priceType": "entry-fee",
             "priceUnit": "每位",
@@ -1570,7 +1580,7 @@
       }
     ],
     "sourceUrl": "https://www.hkmarathon.com/race-information",
-    "updatedAt": "2026-11-10",
+    "updatedAt": "2026-11-26",
     "verifiedAt": "2026-10-27T00:30:00+08:00",
     "verification": "verified",
     "publication": "published",
@@ -1783,6 +1793,14 @@
         "checkedAt": "2026-11-25T06:03:05.565Z",
         "fields": ["channels.registration"],
         "note": "大會指定慈善機構 9 月 30 日公告確認，全馬、半馬及十公里全部慈善跑手名額已滿。"
+      },
+      {
+        "id": "standard-chartered-hk-marathon-2027-registration-eligibility-20261126",
+        "title": "當屆官方報名覆核",
+        "url": "https://www.hkmarathon.com/zh-hant/terms-and-conditions",
+        "checkedAt": "2026-11-26T05:03:58.464Z",
+        "fields": ["channels.registration"],
+        "note": "條款第 2 節列資格途徑、分齡分性別門檻、成績期及證明豁免。"
       }
     ],
     "changes": [
@@ -1822,7 +1840,8 @@
       {
         "date": "2026-11-10",
         "note": "重新閱讀官方報名來源：官方重要日期確認優先9月7日19:00、公眾抽籤9月20日19:00、住宿套票11月6日23:59截止；分渠道記錄，全部非慈善渠道已截止。"
-      }
+      },
+      { "date": "2026-11-26", "note": "接入已批准的官方報名覆核（3 項）。" }
     ],
     "enquiryLinks": [
       {
@@ -3426,16 +3445,17 @@
             "name": "一般報名",
             "registrationMethod": "以官方本屆安排為準",
             "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
-            "price": null,
+            "price": 200,
             "currency": "HKD",
-            "priceNote": "按年齡及身份收費，詳見官方。",
+            "priceNote": "HK$200 適用於 20 至 59 歲。19 歲或以下、60 歲或以上及殘疾人士為 HK$160。",
             "status": "open",
             "registrationUrl": "https://in.njuko.com/saikung2026",
             "registrationNote": "大會指定Njuko平台成功載入10公里、5公里及兩個2公里親子組報名選項；10公里及5公里可進入個人資料表，親子組列有團隊報名入口。未填資料、建立隊伍、同意條款或提交，不保證名額。原大會頁11月18日截止仍為依據。",
             "sourceIds": [
               "sai-kung-official",
               "sai-kung-district-run-2026-registration-recheck-20261110",
-              "sai-kung-district-run-2026-registration-browser-20261110"
+              "sai-kung-district-run-2026-registration-browser-20261110",
+              "sai-kung-district-run-2026-registration-price-20261126"
             ],
             "deadline": "2026-11-18",
             "registrationVerifiedAt": "2026-11-10T13:52:28+08:00"
@@ -3456,16 +3476,17 @@
             "name": "一般報名",
             "registrationMethod": "以官方本屆安排為準",
             "eligibility": "參賽資格及年齡限制待核實，請向大會確認。",
-            "price": null,
+            "price": 200,
             "currency": "HKD",
-            "priceNote": "按年齡及身份收費，詳見官方。",
+            "priceNote": "HK$200 適用於 20 至 59 歲。19 歲或以下、60 歲或以上及殘疾人士為 HK$160。",
             "status": "open",
             "registrationUrl": "https://in.njuko.com/saikung2026",
             "registrationNote": "大會指定Njuko平台成功載入10公里、5公里及兩個2公里親子組報名選項；10公里及5公里可進入個人資料表，親子組列有團隊報名入口。未填資料、建立隊伍、同意條款或提交，不保證名額。原大會頁11月18日截止仍為依據。",
             "sourceIds": [
               "sai-kung-official",
               "sai-kung-district-run-2026-registration-recheck-20261110",
-              "sai-kung-district-run-2026-registration-browser-20261110"
+              "sai-kung-district-run-2026-registration-browser-20261110",
+              "sai-kung-district-run-2026-registration-price-20261126"
             ],
             "deadline": "2026-11-18",
             "registrationVerifiedAt": "2026-11-10T13:52:28+08:00"
@@ -3534,7 +3555,7 @@
       }
     ],
     "sourceUrl": "https://www.sksa.com.hk/5544/",
-    "updatedAt": "2026-11-10",
+    "updatedAt": "2026-11-26",
     "verification": "verified",
     "publication": "published",
     "verifiedAt": "2026-11-06T16:43:15Z",
@@ -3562,13 +3583,18 @@
         "checkedAt": "2026-11-10T13:52:28+08:00",
         "fields": ["channels.registration"],
         "note": "大會指定Njuko平台成功載入10公里、5公里及兩個2公里親子組報名選項；10公里及5公里可進入個人資料表，親子組列有團隊報名入口。未填資料、建立隊伍、同意條款或提交，不保證名額。原大會頁11月18日截止仍為依據。"
+      },
+      {
+        "id": "sai-kung-district-run-2026-registration-price-20261126",
+        "title": "當屆官方報名覆核",
+        "url": "https://www.sksa.com.hk/5544/%E6%85%B6%E7%A5%9D%E4%B8%AD%E8%8F%AF%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9C%8B%E6%88%90%E7%AB%8B76%E5%91%A8%E5%B9%B4-%E8%A5%BF%E8%B2%A2%E5%8D%8010%E5%85%AC%E9%87%8C%E5%85%AC%E9%96%8B%E9%95%B7/",
+        "checkedAt": "2026-11-26T05:03:58.464Z",
+        "fields": ["channels.registration"],
+        "note": "當屆主辦方列標準 HK$200（20 至 59 歲）；19 歲或以下、60 歲或以上及殘疾人士 HK$160。"
       }
     ],
     "changes": [
-      {
-        "date": "2026-11-06",
-        "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。"
-      },
+      { "date": "2026-11-06", "note": "按本屆官方資料新增；未核實欄位及即時報名餘額保持待核實。" },
       {
         "date": "2026-11-10",
         "note": "重新閱讀官方報名來源：大會頁列11月18日截止，連結到指定Njuko平台但平台未返回可讀文字；維持待核實，不以連結存在判定有餘額。"
@@ -3576,7 +3602,8 @@
       {
         "date": "2026-11-10",
         "note": "深入報名頁覆核：大會指定Njuko平台成功載入10公里、5公里及兩個2公里親子組報名選項；10公里及5公里可進入個人資料表，親子組列有團隊報名入口。未填資料、建立隊伍、同意條款或提交，不保證名額。原大會頁11月18日截止仍為依據。"
-      }
+      },
+      { "date": "2026-11-26", "note": "接入已批准的官方報名覆核（2 項）。" }
     ]
   },
   {
@@ -3874,15 +3901,17 @@
             "registrationNote": "瀏覽器已讀取實體跑詳情及指定報名表，選實體跑後可見12.5公里個人長跑選項。截止條件為額滿即止；10月14日23:59只屬早鳥優惠。未填個人資料或提交，不保證名額。",
             "sourceIds": [
               "ymca-125-physical-run-2026-official",
-              "ymca-125-physical-run-2026-registration-browser-20261110"
+              "ymca-125-physical-run-2026-registration-browser-20261110",
+              "ymca-125-physical-run-2026-registration-registrationclosesat-20261126"
             ],
-            "registrationVerifiedAt": "2026-11-10T13:52:28+08:00"
+            "registrationVerifiedAt": "2026-11-10T13:52:28+08:00",
+            "registrationDeadlineCondition": "until-full"
           }
         ]
       }
     ],
     "sourceUrl": "https://ymca125.sportsoho.com/zh-hant/physical-run/event-details",
-    "updatedAt": "2026-11-10",
+    "updatedAt": "2026-11-26",
     "verification": "verified",
     "publication": "published",
     "verifiedAt": "2026-11-06T16:57:08.805Z",
@@ -3917,6 +3946,14 @@
         "checkedAt": "2026-11-10T13:52:28+08:00",
         "fields": ["channels.registration"],
         "note": "瀏覽器已讀取實體跑詳情及指定報名表，選實體跑後可見12.5公里個人長跑選項。截止條件為額滿即止；10月14日23:59只屬早鳥優惠。未填個人資料或提交，不保證名額。"
+      },
+      {
+        "id": "ymca-125-physical-run-2026-registration-registrationclosesat-20261126",
+        "title": "當屆官方報名覆核",
+        "url": "https://ymca125.sportsoho.com/zh-hant/physical-run/event-details",
+        "checkedAt": "2026-11-26T05:03:58.464Z",
+        "fields": ["channels.registration"],
+        "note": "實體跑章程列截止報名日期為額滿即止。"
       }
     ],
     "changes": [
@@ -3927,7 +3964,8 @@
       {
         "date": "2026-11-10",
         "note": "深入報名頁覆核：瀏覽器已讀取實體跑詳情及指定報名表，選實體跑後可見12.5公里個人長跑選項。截止條件為額滿即止；10月14日23:59只屬早鳥優惠。未填個人資料或提交，不保證名額。"
-      }
+      },
+      { "date": "2026-11-26", "note": "接入已批准的官方報名覆核（1 項）。" }
     ]
   },
   {
@@ -4180,10 +4218,15 @@
             "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
             "price": 300,
             "currency": "HKD",
-            "status": "unknown",
-            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/event-information",
-            "registrationNote": "即時報名名額待核實。",
-            "sourceIds": ["hkayd-run-with-us-2026-official"]
+            "status": "open",
+            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/form/enrolment-form",
+            "registrationNote": "大會報名表可選本組，實際名額以大會為準。",
+            "sourceIds": [
+              "hkayd-run-with-us-2026-official",
+              "hkayd-run-with-us-2026-registration-status-20261126",
+              "hkayd-run-with-us-2026-registration-registrationurl-20261126"
+            ],
+            "registrationVerifiedAt": "2026-11-26T05:03:58.464Z"
           },
           {
             "id": "hkayd-run-with-us-2026-10k-student",
@@ -4193,10 +4236,15 @@
             "eligibility": "領取號碼布時須出示有效香港全日制學生證。",
             "price": 100,
             "currency": "HKD",
-            "status": "unknown",
-            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/event-information",
-            "registrationNote": "即時報名名額待核實。",
-            "sourceIds": ["hkayd-run-with-us-2026-official"]
+            "status": "open",
+            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/form/enrolment-form",
+            "registrationNote": "大會報名表可選本組，實際名額以大會為準。",
+            "sourceIds": [
+              "hkayd-run-with-us-2026-official",
+              "hkayd-run-with-us-2026-registration-status-20261126",
+              "hkayd-run-with-us-2026-registration-registrationurl-20261126"
+            ],
+            "registrationVerifiedAt": "2026-11-26T05:03:58.464Z"
           }
         ]
       },
@@ -4215,10 +4263,15 @@
             "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
             "price": 300,
             "currency": "HKD",
-            "status": "unknown",
-            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/event-information",
-            "registrationNote": "即時報名名額待核實。",
-            "sourceIds": ["hkayd-run-with-us-2026-official"]
+            "status": "open",
+            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/form/enrolment-form",
+            "registrationNote": "大會報名表可選本組，實際名額以大會為準。",
+            "sourceIds": [
+              "hkayd-run-with-us-2026-official",
+              "hkayd-run-with-us-2026-registration-status-20261126",
+              "hkayd-run-with-us-2026-registration-registrationurl-20261126"
+            ],
+            "registrationVerifiedAt": "2026-11-26T05:03:58.464Z"
           },
           {
             "id": "hkayd-run-with-us-2026-5k-student",
@@ -4228,16 +4281,21 @@
             "eligibility": "領取號碼布時須出示有效香港全日制學生證。",
             "price": 100,
             "currency": "HKD",
-            "status": "unknown",
-            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/event-information",
-            "registrationNote": "即時報名名額待核實。",
-            "sourceIds": ["hkayd-run-with-us-2026-official"]
+            "status": "open",
+            "registrationUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/form/enrolment-form",
+            "registrationNote": "大會報名表可選本組，實際名額以大會為準。",
+            "sourceIds": [
+              "hkayd-run-with-us-2026-official",
+              "hkayd-run-with-us-2026-registration-status-20261126",
+              "hkayd-run-with-us-2026-registration-registrationurl-20261126"
+            ],
+            "registrationVerifiedAt": "2026-11-26T05:03:58.464Z"
           }
         ]
       }
     ],
     "sourceUrl": "https://hkaydrunwithus.sportsoho.com/zh-hant/event-information",
-    "updatedAt": "2026-11-21",
+    "updatedAt": "2026-11-26",
     "verification": "verified",
     "publication": "published",
     "verifiedAt": "2026-11-21T05:16:26.844Z",
@@ -4255,13 +4313,27 @@
           "groups.limit",
           "channels.registration"
         ]
+      },
+      {
+        "id": "hkayd-run-with-us-2026-registration-status-20261126",
+        "title": "當屆官方報名覆核",
+        "url": "https://hkaydrunwithus.sportsoho.com/zh-hant/form/enrolment-form",
+        "checkedAt": "2026-11-26T05:03:58.464Z",
+        "fields": ["channels.registration"],
+        "note": "當屆選組頁列出 5K、10K 公開及學生組四個可選項。"
+      },
+      {
+        "id": "hkayd-run-with-us-2026-registration-registrationurl-20261126",
+        "title": "當屆官方報名覆核",
+        "url": "https://hkaydrunwithus.sportsoho.com/zh-hant/form/enrolment-form",
+        "checkedAt": "2026-11-26T05:03:58.464Z",
+        "fields": ["channels.registration"],
+        "note": "大會詳情頁的立即報名連至這份當屆表格。"
       }
     ],
     "changes": [
-      {
-        "date": "2026-11-21",
-        "note": "按本屆官方資料新增賽事。"
-      }
+      { "date": "2026-11-21", "note": "按本屆官方資料新增賽事。" },
+      { "date": "2026-11-26", "note": "接入已批准的官方報名覆核（8 項）。" }
     ]
   },
   {
@@ -4473,17 +4545,19 @@
             "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
             "price": 160,
             "currency": "HKD",
-            "status": "unknown",
+            "status": "open",
             "registrationUrl": "https://kaitakrun27.sportsoho.com/",
-            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額待核實。",
+            "registrationNote": "大會報名表可選本組。參加者須按大會要求登記啟德體育園會員，實際名額以大會為準。",
             "sourceIds": [
               "kai-tak-run-2027-official",
               "kai-tak-run-2027-registration-fee-20261125",
-              "kai-tak-run-2027-registration-deadline-20261125"
+              "kai-tak-run-2027-registration-deadline-20261125",
+              "kai-tak-run-2027-registration-status-20261126"
             ],
             "priceType": "entry-fee",
             "priceUnit": "每位",
-            "registrationDeadlineCondition": "until-full"
+            "registrationDeadlineCondition": "until-full",
+            "registrationVerifiedAt": "2026-11-26T05:03:58.464Z"
           }
         ]
       },
@@ -4502,17 +4576,19 @@
             "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
             "price": 260,
             "currency": "HKD",
-            "status": "unknown",
+            "status": "open",
             "registrationUrl": "https://kaitakrun27.sportsoho.com/",
-            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額待核實。",
+            "registrationNote": "大會報名表可選本組。參加者須按大會要求登記啟德體育園會員，實際名額以大會為準。",
             "sourceIds": [
               "kai-tak-run-2027-official",
               "kai-tak-run-2027-registration-fee-20261125",
-              "kai-tak-run-2027-registration-deadline-20261125"
+              "kai-tak-run-2027-registration-deadline-20261125",
+              "kai-tak-run-2027-registration-status-20261126"
             ],
             "priceType": "entry-fee",
             "priceUnit": "每位",
-            "registrationDeadlineCondition": "until-full"
+            "registrationDeadlineCondition": "until-full",
+            "registrationVerifiedAt": "2026-11-26T05:03:58.464Z"
           }
         ]
       },
@@ -4531,23 +4607,25 @@
             "eligibility": "參賽資格及集合安排請參閱大會最新資料。",
             "price": 160,
             "currency": "HKD",
-            "status": "unknown",
+            "status": "open",
             "registrationUrl": "https://kaitakrun27.sportsoho.com/",
-            "registrationNote": "啟德體育園列明15歲以上參加者須先登記為體育園會員。各組即時名額待核實。",
+            "registrationNote": "大會報名表可選本組。參加者須按大會要求登記啟德體育園會員，實際名額以大會為準。",
             "sourceIds": [
               "kai-tak-run-2027-official",
               "kai-tak-run-2027-registration-fee-20261125",
-              "kai-tak-run-2027-registration-deadline-20261125"
+              "kai-tak-run-2027-registration-deadline-20261125",
+              "kai-tak-run-2027-registration-status-20261126"
             ],
             "priceType": "entry-fee",
             "priceUnit": "每位",
-            "registrationDeadlineCondition": "until-full"
+            "registrationDeadlineCondition": "until-full",
+            "registrationVerifiedAt": "2026-11-26T05:03:58.464Z"
           }
         ]
       }
     ],
     "sourceUrl": "https://kaitaksportspark.com.hk/tc/community-programmes/124",
-    "updatedAt": "2026-11-21",
+    "updatedAt": "2026-11-26",
     "verification": "verified",
     "publication": "published",
     "verifiedAt": "2026-11-21T05:16:26.844Z",
@@ -4574,8 +4652,19 @@
         "checkedAt": "2026-11-25T05:50:02.958Z",
         "fields": ["channels.registration"],
         "note": "大會列明公開組先到先得，額滿即止。"
+      },
+      {
+        "id": "kai-tak-run-2027-registration-status-20261126",
+        "title": "當屆官方報名覆核",
+        "url": "https://kaitakrun27.sportsoho.com/form/enrolment-form",
+        "checkedAt": "2026-11-26T05:03:58.464Z",
+        "fields": ["channels.registration"],
+        "note": "第二步可選 3 公里青少年挑戰、10 公里繽紛及 3 公里繽紛；參加者須先成為啟德體育園會員。"
       }
     ],
-    "changes": [{ "date": "2026-11-21", "note": "按本屆官方資料新增賽事。" }]
+    "changes": [
+      { "date": "2026-11-21", "note": "按本屆官方資料新增賽事。" },
+      { "date": "2026-11-26", "note": "接入已批准的官方報名覆核（3 項）。" }
+    ]
   }
 ]

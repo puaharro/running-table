@@ -90,7 +90,11 @@ export function registrationTargets(catalog, now, recorded = []) {
             registrationClosesAt: deadlineValue,
             price: channel.price ?? null,
           };
-          if (verifiedOpen.get(channel.id) === channel.status) delete baseline.registrationOpensAt;
+          if (
+            verifiedOpen.has(channel.id) &&
+            (verifiedOpen.get(channel.id) === channel.status || channel.status === "open")
+          )
+            delete baseline.registrationOpensAt;
           if (priority) baseline.eligibility = channel.eligibility ?? null;
           for (const field of ["resultAnnouncedAt", "paymentClosesAt"]) {
             if (channel[field]) baseline[field] = channel[field];
