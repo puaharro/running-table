@@ -11,26 +11,18 @@ export default function Privacy({ english = false }: { english?: boolean }) {
   const t = language(english);
   return (
     <main id="main" className="content-main shell">
-      <Breadcrumb
-        english={english}
-        items={[{ label: t("測試版私隱說明", "Beta privacy notice") }]}
-      />
+      <Breadcrumb english={english} items={[{ label: t("私隱說明", "Privacy notice") }]} />
       <div className="page-heading">
-        <h1>{t("測試版私隱說明", "Beta privacy notice")}</h1>
-        <p>
-          {t(
-            "更新日期：2026 年 11 月 7 日。以下只描述目前測試版的功能。",
-            "Updated 7 November 2026. This notice covers the current beta features.",
-          )}
-        </p>
+        <h1>{t("私隱說明", "Privacy notice")}</h1>
+        <p>{t("更新日期：2026 年 11 月 22 日。", "Updated 22 November 2026.")}</p>
       </div>
       <div className="prose narrow">
         <section>
           <h2>{t("目前網站功能", "Current site features")}</h2>
           <p>
             {t(
-              "此測試版無會員登入、個人報名或付款表格，亦未加入 Google AdSense 或流量分析程式。賽事資料按公開官方來源整理；未知欄位保留待核實。",
-              "This beta has no account sign-in, event entry or payment forms, Google AdSense, or analytics scripts. Race information comes from public official sources. Unknown fields are marked unverified.",
+              "NXTGO 無會員登入、個人報名或付款表格，亦未加入 Google AdSense 或流量分析程式。賽事資料按公開官方來源整理；未知欄位保留待核實。",
+              "NXTGO has no account sign-in, event entry or payment forms, Google AdSense, or analytics scripts. Race information comes from public official sources. Unknown fields are marked unverified.",
             )}
           </p>
         </section>
@@ -50,7 +42,7 @@ export default function Privacy({ english = false }: { english?: boolean }) {
           </p>
           <p>
             {t(
-              "加入日曆會在本機產生 .ics 檔案須由您自行匯入日曆。網站不會存取您的日曆帳戶。匯入後，行程由您使用的日曆服務處理，大會改期或更新截止日期時，網站不會自動同步。",
+              "加入日曆會在本機產生 .ics 檔案，由您自行匯入日曆。網站不會存取您的日曆帳戶。匯入後，行程由您使用的日曆服務處理，大會改期或更新截止日期時，網站不會自動同步。",
               "Adding a race to your calendar creates a local .ics file for you to import. NXTGO does not access your calendar account. Your calendar service manages the imported entry. Date and deadline changes do not sync automatically.",
             )}
           </p>
@@ -71,8 +63,8 @@ export default function Privacy({ english = false }: { english?: boolean }) {
           </p>
           <p>
             {t(
-              "評級更正、投訴及大會回應表格只在頁面準備電郵內容，未建立伺服器收件或自動儲存功能。由你確認及寄出後，電郵及附件會由收件郵箱接收，用於核實、回覆及保存必要的處理紀錄；請只提供處理所需資料。",
-              "The review feedback form prepares a local email draft and does not submit or automatically save it. Once you send it, the recipient mailbox receives the email and attachments for verification, reply and necessary record keeping. Include only the information needed to handle the request.",
+              "資料更正、評級投訴及大會回應表格只在頁面準備電郵內容，未建立伺服器收件或自動儲存功能。由你確認及寄出後，電郵及附件會由收件郵箱接收，用於核實、回覆及保存必要的處理紀錄；請只提供處理所需資料。",
+              "The correction and review feedback forms prepare local email drafts and do not submit or automatically save them. Once you send it, the recipient mailbox receives the email and attachments for verification, reply and necessary record keeping. Include only the information needed to handle the request.",
             )}
           </p>
           <p>
@@ -83,23 +75,29 @@ export default function Privacy({ english = false }: { english?: boolean }) {
           </p>
         </section>
         <section>
-          <h2>{t("網站託管與正式上線", "Hosting and launch")}</h2>
+          <h2>{t("網站託管及外部連結", "Hosting and external links")}</h2>
           <p>
             {t(
-              "託管服務可能按自身運作記錄請求資訊。本說明不涵蓋託管平台本身的完整資料政策。接入正式網域、廣告、分析或會員功能前，會按實際服務更新私隱政策及所需的同意機制。",
-              "The hosting provider may log requests under its own data policy. We will update our privacy notice and consent mechanisms for the services in use before activating a production domain, ads, analytics or accounts.",
+              "NXTGO 由 ChatGPT Sites 託管。服務供應商可能處理 IP 位址及請求紀錄，以提供及維護託管服務。",
+              "NXTGO is hosted on ChatGPT Sites. The provider may process IP addresses and request logs to operate and maintain the hosting service.",
             )}
           </p>
           <p>
             {t(
-              "此頁說明測試版功能。網站正式營運所需的私隱或法律文件尚未因此完成。",
-              "This notice describes the beta. Privacy and legal documents required for full operation are still pending.",
+              "透過本網站前往賽事主辦方或報名平台時，請參閱該網站的私隱說明。賽事報名及付款由該平台處理。",
+              "When you follow a link to a race organiser or registration platform, check that website’s privacy notice. It handles event registration and payment.",
             )}
           </p>
         </section>
         {releaseSettings.contactEmail && (
           <section>
             <h2>{t("聯絡", "Contact")}</h2>
+            {releaseSettings.operatorName && (
+              <p>
+                {t("網站營運者：", "Site operator: ")}
+                {releaseSettings.operatorName}
+              </p>
+            )}
             <p>
               {t("關於網站資料處理的查詢，請電郵", "For questions about data handling, email ")}{" "}
               <a href={`mailto:${releaseSettings.contactEmail}`}>{releaseSettings.contactEmail}</a>

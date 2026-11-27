@@ -28,11 +28,13 @@ it("keeps the winter expansion sourced and within the researched window without 
         expect(
           channel.sourceIds.some((id) =>
             race.sources?.some(
-              (source) => source.id === id && source.fields.includes("channels.registration"),
+              (source) =>
+                source.id === id &&
+                source.fields.includes("channels.registration") &&
+                source.checkedAt === channel.registrationVerifiedAt,
             ),
           ),
         ).toBe(true);
-        expect(channel.registrationVerifiedAt?.startsWith("2026-11-10T")).toBe(true);
       }
   }
   expect(
