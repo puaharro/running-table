@@ -104,7 +104,11 @@ export function validateRuntimeRecord(record, pin, raceId, editionYear) {
     Object.keys(record.manifest ?? {})
       .sort()
       .join() !== "public_content_hash,source_content_hash,source_revision,source_website_id" ||
-    Object.keys(record).sort().join() !== "manifest,public_copy" ||
+    !["manifest,public_copy", "group_id,manifest,public_copy"].includes(
+      Object.keys(record).sort().join(),
+    ) ||
+    (Object.hasOwn(record, "group_id") &&
+      (!/^[a-z0-9-]+$/.test(record.group_id ?? "") || record.group_id !== pin.groupId)) ||
     record.manifest.public_content_hash !== publicHash(record.public_copy) ||
     !Number.isInteger(record.manifest.source_revision) ||
     record.manifest.source_revision < 1 ||
@@ -115,6 +119,7 @@ export function validateRuntimeRecord(record, pin, raceId, editionYear) {
   const markdown = runtimeMarkdown(record.public_copy);
   return {
     revision: record.manifest.source_revision,
+    groupId: pin.groupId,
     raceId,
     sourceWebsiteId: record.manifest.source_website_id,
     sourceContentHash: record.manifest.source_content_hash,

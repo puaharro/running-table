@@ -3,6 +3,8 @@ import { Workflow, TOPICS, COVERAGE, newWorkflowId } from "./workflow.mjs";
 import { SOURCES } from "../research/sources.mjs";
 import { workspacePanel, websiteChanges } from "./workspace-view.mjs";
 import { titleWarning } from "./handoff.mjs";
+import { compareRuntimeCopy, prepareRuntimeRecord } from "./runtime.mjs";
+import { runtimeTargets } from "../site-qa/runtime-targets.mjs";
 const e = (v) =>
   String(v ?? "").replace(
     /[&<>"']/g,
@@ -116,7 +118,39 @@ function neutralPreview(d) {
   const urls = [...new Set(d.sections.flatMap((s) => s.urls))];
   return `<article class="panel"><h2>${e(d.title)}</h2><p class="meta">跑手分享 · 無評分。個人自述不代表所有參賽者，未經逐項獨立核實。</p>${d.sections.map((s) => `<section><h3>${e(s.topic)}</h3><p style="white-space:pre-wrap">${e(s.body)}</p><p style="white-space:pre-wrap"><strong>觀察限制：</strong>${e(s.limitations)}</p><p>${s.urls.map((u) => `<a href="${e(u)}" target="_blank" rel="noopener noreferrer">來源${urls.indexOf(u) + 1} ↗</a>`).join(" · ") || "來源：未知／未有足夠材料"}</p></section>`).join("")}</article>`;
 }
-export function renderWebsite(content, token, { id, raceId, year, draftId, workspace = false }) {
+function publicationPreview(content, row, groupId) {
+  if (row.status !== "confirmed") return "";
+  const { race_id: raceId, year } = row.data;
+  const race = content.catalog.find((entry) => entry.id === raceId && !entry.private);
+  if (!race || Number(race.date.slice(0, 4)) !== year || !race.groups.length) return "";
+  const selected = groupId ?? (race.groups.length === 1 ? race.groups[0].id : "");
+  const form = `<form method="get" action="/website-copy"><input type="hidden" name="id" value="${e(row.id)}"><label>公開組別<select name="group" required><option value="">選擇組別</option>${race.groups.map((group) => `<option value="${e(group.id)}"${group.id === selected ? " selected" : ""}>${e(group.name)}</option>`).join("")}</select></label><button>比較公開版本</button></form>`;
+  const result = (body) =>
+    `<details class="panel"${selected ? " open" : ""}><summary>選稿及差異預覽</summary>${form}${body}</details>`;
+  if (!selected) return result("");
+  try {
+    const { record, hash } = prepareRuntimeRecord(content, row.id, row.revision, selected);
+    const current = runtimeTargets().find((target) => target.raceId === raceId);
+    const changes = compareRuntimeCopy(record.public_copy, current?.copy);
+    const labels = { body: "正文", limitations: "觀察限制", urls: "來源" };
+    const lines = (value) => (Array.isArray(value) ? value.join("\n") : value) || "—";
+    const comparison = changes
+      .map(
+        ({ topic, changes: fields }) =>
+          `<details><summary>${e(topic)} · ${fields.map(({ key }) => labels[key]).join("、")}</summary>${fields.map(({ key, before, after }) => `<h3>${labels[key]}</h3><div class="grid"><div>現行<pre>${e(lines(before))}</pre></div><div>候選<pre>${e(lines(after))}</pre></div></div>`).join("")}</details>`,
+      )
+      .join("");
+    return result(`<p>${current ? `現行第 ${current.copy.revision} 版 · ${e(race.groups.find(({ id }) => id === current.groupId)?.name ?? current.groupId)}` : "首次選稿"} → 候選第 ${row.revision} 版</p>${comparison || "<p>五個主題的內容相同。</p>"}<details><summary>選稿及驗收指令</summary><pre>npm run content:runtime -- select ${e(row.id)} ${row.revision} ${hash} --group ${e(record.group_id)}
+npm run check:content -- --race ${e(raceId)} --year ${year} --group ${e(record.group_id)} --revision ${row.revision}</pre><p>營運者確認完整稿件、組別及雜湊後執行選稿。</p></details>`);
+  } catch (error) {
+    return result(`<p class="banner">${e(error.message)}</p>`);
+  }
+}
+export function renderWebsite(
+  content,
+  token,
+  { id, raceId, year, draftId, workspace = false, groupId },
+) {
   const w = new Workflow(content);
   let r;
   if (id) {
@@ -159,7 +193,7 @@ export function renderWebsite(content, token, { id, raceId, year, draftId, works
     "website",
     content.mode,
     token,
-    `${panel.body}${basisMessage}<h${workspace ? "2" : "1"}>網站稿版本及預覽</h${workspace ? "2" : "1"}><p>工作狀態：${r.status === "confirmed" ? "文字已確認" : "草稿／待覆核"}；公開標題請勿填入工作狀態。</p><p>五個主題固定保留。正文請用中性稱呼，不顯示人名、帳號名及機構／傳媒名；來源自動用編號顯示，原連結仍可識別作者。呢個介面唔會自動匿名化你輸入嘅正文。</p><p>${e(w.race(d.race_id).name)} · ${d.year} 年 · ${r.revision ? `第 ${r.revision} 版` : "未保存"}</p><p class="banner">研究覆蓋：${coverage.filter((c) => ["reviewed", "no_results"].includes(c.data.state)).length}/7 類完成。<a href="/research-progress?race=${e(d.race_id)}&year=${d.year}">查看未完成來源／登入需要</a></p>${draft ? `<details class="panel"><summary>參考草稿：${e(draft.title)} · 第 ${draft.revision} 版</summary><pre>${e(draft.body)}</pre><p>${e(draft.sources)}</p><p>${e(draft.scope)}</p></details>` : ""}${websiteChanges(w, r)}<div id="website-saved-preview">${neutralPreview(d)}</div><form id="website-form" class="panel">${hidden(r)}<label>公開標題（不填候選／待覆核等內部狀態）<input name="title" maxlength="160" required value="${e(d.title)}"></label>${d.sections.map((s, i) => `<fieldset><legend>${e(s.topic)}</legend><label>正文（不足請標明未知）<textarea name="body${i}" maxlength="4000" rows="4" required>${e(s.body)}</textarea></label><label>觀察限制<textarea name="limitations${i}" maxlength="2000" rows="2" required>${e(s.limitations)}</textarea></label><label>原文來源連結（每行一條）<textarea name="urls${i}" rows="2">${e(s.urls.join("\n"))}</textarea></label></fieldset>`).join("")}<button>保存新版本並預覽</button><p class="meta">下方確認及匯出針對已保存版本。有未保存修改時會鎖定確認及匯出。</p></form>${confirmation(w, r)}<p id="workflow-status" role="status"></p>${history(w, r)}`,
+    `${panel.body}${basisMessage}<h${workspace ? "2" : "1"}>網站稿版本及預覽</h${workspace ? "2" : "1"}><p>工作狀態：${r.status === "confirmed" ? "文字已確認" : "草稿／待覆核"}；公開標題請勿填入工作狀態。</p><p>五個主題固定保留。正文請用中性稱呼，不顯示人名、帳號名及機構／傳媒名；來源自動用編號顯示，原連結仍可識別作者。呢個介面唔會自動匿名化你輸入嘅正文。</p><p>${e(w.race(d.race_id).name)} · ${d.year} 年 · ${r.revision ? `第 ${r.revision} 版` : "未保存"}</p><p class="banner">研究覆蓋：${coverage.filter((c) => ["reviewed", "no_results"].includes(c.data.state)).length}/7 類完成。<a href="/research-progress?race=${e(d.race_id)}&year=${d.year}">查看未完成來源／登入需要</a></p>${draft ? `<details class="panel"><summary>參考草稿：${e(draft.title)} · 第 ${draft.revision} 版</summary><pre>${e(draft.body)}</pre><p>${e(draft.sources)}</p><p>${e(draft.scope)}</p></details>` : ""}${websiteChanges(w, r)}${publicationPreview(content, r, groupId)}<details class="panel" id="website-saved-preview"><summary>預覽完整稿件</summary>${neutralPreview(d)}</details><form id="website-form" class="panel">${hidden(r)}<label>公開標題（不填候選／待覆核等內部狀態）<input name="title" maxlength="160" required value="${e(d.title)}"></label>${d.sections.map((s, i) => `<fieldset><legend>${e(s.topic)}</legend><label>正文（不足請標明未知）<textarea name="body${i}" maxlength="4000" rows="4" required>${e(s.body)}</textarea></label><label>觀察限制<textarea name="limitations${i}" maxlength="2000" rows="2" required>${e(s.limitations)}</textarea></label><label>原文來源連結（每行一條）<textarea name="urls${i}" rows="2">${e(s.urls.join("\n"))}</textarea></label></fieldset>`).join("")}<button>保存新版本並預覽</button><p class="meta">下方確認及匯出針對已保存版本。有未保存修改時會鎖定確認及匯出。</p></form>${confirmation(w, r)}<p id="workflow-status" role="status"></p>${history(w, r)}`,
     baseScript +
       `const form=document.querySelector('#website-form');const basis=${JSON.stringify({ race_id: d.race_id, year: d.year, draft_id: d.draft_id }).replaceAll("<", "\\u003c")},topics=${JSON.stringify(TOPICS)};form.addEventListener('submit',e=>{e.preventDefault();submit(form.querySelector('button'),async()=>{const f=data(form);const r=await post('/api/content/workflow/save',{id:f.id,expected_revision:Number(f.revision),kind:'website',data:{...basis,title:f.title,sections:topics.map((topic,i)=>({topic,body:f['body'+i],limitations:f['limitations'+i],urls:f['urls'+i].split(/\\n/).map(v=>v.trim()).filter(Boolean)}))}});dirty=false;location.href='/website-copy?id='+encodeURIComponent(r.id);});});` +
       confirmScript +

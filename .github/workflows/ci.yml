@@ -23,7 +23,7 @@ jobs:
       - run: npm run test:threads:http
       - run: npm run test:research
       - run: npm run build
-      - name: Verify static export and runner account format
+      - name: Verify static export and runner account edition, group and revision
         run: npm run check:export
       - run: npm run test:http
       - name: Check production SEO output with test values

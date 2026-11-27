@@ -5,6 +5,8 @@ description: Run NXTGO’s Hong Kong road race update cycle. Discover missing ra
 
 # NXTGO 賽事更新
 
+交接網站稿時列出賽事 ID、屆次、組別 ID、修訂版及待補來源。以 CMS「選稿及差異預覽」核對現行公開版，再把完整稿和包含組別的記錄雜湊交營運者批准。
+
 先讀 repo 的 `AGENTS.md` 及[每輪更新流程](../../docs/CONTENT_OPERATIONS.md#每輪更新流程)。讀取私人工作區的上一輪摘要及待辦。除非營運者指定範圍，每輪按以下次序做四項：
 
 1. **搵新賽事。** 查主辦方、田總及官方報名平台的香港路跑公告。按中英文賽名、屆次、日期及主辦方對照 `src/data/catalog.json` 及可見 CMS 建議。比賽組別、報名渠道和同一屆的不同寫法保留在同一賽事下。以官方當屆資料核對後，先進 CMS 待覆核清單。

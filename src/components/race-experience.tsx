@@ -78,6 +78,7 @@ export function RaceExperienceSections({
           copy={runnerCopy}
           year={currentYear}
           group={runnerCopyGroup?.name}
+          groupId={runnerCopyGroup?.id}
         />
       )}
       {confirmed && (combinedRunnerCopy || laterReview) ? (
@@ -104,6 +105,7 @@ export function RaceExperienceSections({
                 copy={combinedRunnerCopy}
                 year={currentYear}
                 group={runnerCopyGroup?.name}
+                groupId={runnerCopyGroup?.id}
                 embedded
               />
             ) : laterReview ? (

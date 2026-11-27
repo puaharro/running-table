@@ -150,14 +150,11 @@ export function renderResearchDashboard(content, filter) {
       draft: "私人草稿待審",
       website: "網站稿待確認",
     };
-  return `<section class="panel" id="research-todo"><h2>需要處理</h2><p class="meta">待辦按目前資料即時計算；一份草稿可以同時有待核實來源。清單更新不會確認稿件或發布。</p><div class="actions">${Object.entries(
-    names,
-  )
-    .map(([k, v]) => `<a href="#todo-${k}">${e(v)} ${d.counts[k]}</a>`)
-    .join("")}</div>${Object.entries(names)
+  const active = Object.entries(names).filter(([key]) => d.counts[key] > 0);
+  return `<section class="panel" id="research-todo"><h2>需要處理</h2>${active.length ? "" : "<p>暫無研究待辦。</p>"}${active
     .map(
       ([k, v]) =>
-        `<details id="todo-${k}"${k === "login" && d.counts[k] ? " open" : ""}><summary>${e(v)} · ${d.counts[k]}</summary><ul>${
+        `<details id="todo-${k}"><summary>${e(v)} · ${d.counts[k]}</summary><ul>${
           d.tasks
             .filter((t) => t.type === k)
             .map(

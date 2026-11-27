@@ -267,10 +267,10 @@ CLI：`npm run content:agent -- execute .editorial-private/request.json`
 營運者在可信本機依次操作：
 
 1. 在原 CMS 保存並確認完整網站稿；來源／參考草稿有變時須先更新並重新確認。
-2. `npm run content:runtime -- prepare <website-id> <revision>`：重新核對確認及依據，輸出白名單公開欄位至 `.editorial-private/runtime-prepared/`，回傳完整記錄 hash。此步不修改公開檔或選擇清單。
-3. 將完整接入檔交營運者覆核。只有營運者明確批准該完整 hash 的公開選擇後，可信操作者才可執行 `npm run content:runtime -- select <website-id> <revision> <owner-approved-record-hash>`。不得由 AI 自行取 prepare 的 hash 當成營運者批准；本輪實作沒有對新稿件執行 select。命令是本機可信操作者介面，沒有新增受限 Agent API 發布權，也不假裝能驗證 OS 操作者是不是人。
+2. 已確認網站稿可展開「選稿及差異預覽」。選擇公開組別後，按主題查看現行版與候選版的正文、觀察限制及來源。命令介面可用 `npm run content:runtime -- prepare <website-id> <revision> --group <group-id>`，在 `.editorial-private/runtime-prepared/` 保存完整接入檔並輸出差異。單組別賽事可省略 `--group`。
+3. 營運者核對完整稿件、屆次及組別，批准包含組別的記錄雜湊後，可信操作者可執行 `npm run content:runtime -- select <website-id> <revision> <owner-approved-record-hash> --group <group-id>`。目前每場公開賽事有一份 CMS 選稿，差異預覽會列出被取代的版本及組別。
 4. select 重新讀取已確認的指定 CMS 版本、核對依據與獲准 hash，只產生公開五主題文字、限制、HTTPS 來源與版本 manifest，更新資料清單；不自動 commit、push 或部署。既有數字評分不由文字自動生成；已有評分的賽事需另行更新完整評分內容選擇，不能用純文字入口直接覆蓋。
-5. 執行 `npm run build`、`npm run check:export` 和 `npm run test:http`。CMS 選稿的中英文賽事頁共用[港珠澳半馬 2025 跑手分享版型](../skills/nxtgo-site-qa/SKILL.md#跑手分享年份切換)。核對每題預設摺合，展開後可查閱正文、觀察限制及來源。舊 Markdown 選稿在顯示時轉換，原核准檔及雜湊維持原值。部署仍須另行授權。
+5. 執行 `npm run build`、`npm run check:export` 和 `npm run test:http`。用 `npm run check:content -- --race <race-id> --year <year> --group <group-id> --revision <revision>` 核對指定中英文頁。加 `--base-url <origin>` 可核對實際網站。正式站需要登入時，以已登入瀏覽器核對同一屆次、組別及版本的全文及來源。互動驗收按[港珠澳半馬 2025 跑手分享版型](../skills/nxtgo-site-qa/SKILL.md#跑手分享年份切換)執行。
 
 新增已存在於公開 catalog 的賽事只需已確認 CMS 網站稿與選擇資料，毋須修改 loader 或 component。新增私人賽事到公開 catalog 仍需獨立資料確認。過往 RMAC Markdown 原文及兩份2025評論／評分保持原有 hash；遷移只把程式內固定選擇移到資料清單，沒有重新批准文字。
 

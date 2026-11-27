@@ -90,11 +90,35 @@ export function checkRunnerTopics(root, sections, englishTopicLabels) {
   });
 }
 
-export function checkRuntimeRunnerCopy(html, copy, englishTopicLabels) {
+export const englishRunnerTopics = [
+  "Course",
+  "Aid stations",
+  "Bag drop",
+  "Transport",
+  "Event organisation",
+];
+
+export function checkRuntimeRunnerCopy(html, copy, englishTopicLabels, target) {
   const root = only(
     elements(html, "section", (tag) => /\bid="runner-copy"/.test(tag)),
     "runner account",
   );
+  if (target) {
+    const opening = root.slice(0, root.indexOf(">"));
+    for (const [attribute, expected] of Object.entries({
+      "race-id": target.raceId,
+      edition: target.year,
+      "group-id": target.groupId,
+      "copy-revision": copy.revision,
+      "copy-hash": copy.sha256,
+    })) {
+      assert.equal(
+        new RegExp(` data-${attribute}="([^"]+)"`).exec(opening)?.[1],
+        String(expected),
+        `Incorrect runner account ${attribute}`,
+      );
+    }
+  }
   assert.equal(
     plain(only(elements(root, "h2"), "runner account heading")),
     englishTopicLabels ? "Runner accounts" : "跑手分享",

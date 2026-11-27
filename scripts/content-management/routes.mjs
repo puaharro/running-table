@@ -140,7 +140,7 @@ export async function serveContent({
     const id = url.searchParams.get("id"),
       raceId = url.searchParams.get("race");
     if (url.pathname === "/website-copy" && id) {
-      html(renderWebsite(content, token, { id }));
+      html(renderWebsite(content, token, { id, groupId: url.searchParams.get("group") }));
       return true;
     }
     const race = workflow.race(raceId);
