@@ -4,6 +4,7 @@ import { language } from "@/lib/english-races";
 import { useId, useRef, useState } from "react";
 import { RaceDialog } from "./race-dialog";
 import { siteUrl } from "@/lib/site";
+import { Icon } from "./ui";
 
 export function RaceShare({
   name,
@@ -17,33 +18,35 @@ export function RaceShare({
   const t = language(english);
   const fieldId = useId();
   const field = useRef<HTMLInputElement>(null);
+  const request = useRef(0);
   const [url, setUrl] = useState("");
   const [nativeShare, setNativeShare] = useState(false);
-  const [message, setMessage] = useState("");
+  const [feedback, setFeedback] = useState<"copied" | "manual" | "share-error" | null>(null);
 
   async function share() {
+    const attempt = ++request.current;
     try {
       await navigator.share({ title: name, url });
     } catch (error) {
-      if (!(error instanceof DOMException && error.name === "AbortError")) {
-        setMessage(
-          t(
-            "未能開啟分享選單，可以複製網址。",
-            "Sharing options could not open. You can copy the URL.",
-          ),
-        );
+      if (
+        attempt === request.current &&
+        !(error instanceof DOMException && error.name === "AbortError")
+      ) {
+        setFeedback("share-error");
       }
     }
   }
 
   async function copy() {
+    const attempt = ++request.current;
     try {
       await navigator.clipboard.writeText(url);
-      setMessage(t("已複製賽事網址。", "Race URL copied."));
+      if (attempt === request.current) setFeedback("copied");
     } catch {
+      if (attempt !== request.current) return;
       field.current?.focus();
       field.current?.select();
-      setMessage(t("請手動複製已選取的網址。", "Copy the selected URL manually."));
+      setFeedback("manual");
     }
   }
 
@@ -52,9 +55,10 @@ export function RaceShare({
       english={english}
       title={t("分享賽事", "Share race")}
       onOpen={() => {
+        request.current += 1;
         setUrl(new URL(href, siteUrl || window.location.origin).href);
         setNativeShare(typeof navigator.share === "function");
-        setMessage("");
+        setFeedback(null);
       }}
     >
       <p className="race-dialog-name">{name}</p>
@@ -68,12 +72,32 @@ export function RaceShare({
             {t("開啟分享選單", "Open sharing options")}
           </button>
         )}
-        <button className="button" type="button" onClick={copy}>
-          {t("複製網址", "Copy URL")}
+        <button
+          className="button race-copy-button"
+          type="button"
+          onClick={copy}
+          data-copied={feedback === "copied"}
+        >
+          {feedback === "copied" ? (
+            <>
+              {t("已複製", "Copied")} <Icon name="check" size={16} />
+            </>
+          ) : (
+            t("複製網址", "Copy URL")
+          )}
         </button>
       </div>
       <p role="status" className="race-share-status">
-        {message}
+        {feedback === "copied"
+          ? t("已複製賽事網址。", "Race URL copied.")
+          : feedback === "manual"
+            ? t("請手動複製已選取的網址。", "Copy the selected URL manually.")
+            : feedback === "share-error"
+              ? t(
+                  "未能開啟分享選單，可以複製網址。",
+                  "Sharing options could not open. You can copy the URL.",
+                )
+              : null}
       </p>
     </RaceDialog>
   );

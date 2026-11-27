@@ -426,6 +426,11 @@
   margin: 0;
   accent-color: var(--home-action);
 }
+@media (prefers-reduced-motion: no-preference) {
+  .guide-checklist input[data-confirmed="true"] {
+    animation: control-confirm 240ms ease-out;
+  }
+}
 .guide-checklist button {
   min-height: 44px;
 }

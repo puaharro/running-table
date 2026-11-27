@@ -46,12 +46,6 @@
 .home-description-mobile {
   display: none;
 }
-.home-search-label {
-  display: block;
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: var(--space-3);
-}
 .home-search {
   display: flex;
   align-items: center;
@@ -62,6 +56,7 @@
   background: var(--home-card);
 }
 .home-search > svg {
+  flex: none;
   color: var(--home-muted);
 }
 .home-search input {
@@ -566,10 +561,6 @@
   .home-hero-description br {
     display: none;
   }
-  .home-search-label {
-    font-size: 14px;
-    margin-bottom: var(--space-2);
-  }
   .home-search {
     gap: var(--space-2);
     padding-left: var(--space-3);
@@ -739,9 +730,9 @@
 
 /* Focus placements lead the homepage; full filtering remains on /races/. */
 .home-intro {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
   gap: var(--space-6);
   padding-block: var(--space-7) var(--space-6);
 }
@@ -749,53 +740,37 @@
   font-size: clamp(25px, 3vw, 36px);
   margin: 0;
   line-height: 1.5;
+  text-wrap: balance;
 }
 .home-intro p {
   margin: var(--space-1) 0 0;
   color: var(--home-muted);
   font-size: 14px;
 }
+.home-intro-search {
+  max-width: 38rem;
+  margin-top: var(--space-4);
+}
 .home-intro-links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: 0 var(--space-5);
 }
 .home-intro-links > a {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
   min-height: 44px;
-  padding-inline: var(--space-3);
-  border: 1px solid var(--review-border);
-  border-radius: var(--radius-control);
-  background: var(--review-surface);
-  color: var(--review-text);
+  color: var(--home-ink);
   font-size: 14px;
   font-weight: 650;
 }
 .home-intro-links > a:first-child {
-  background: var(--action-primary);
-  border-color: var(--action-primary);
-  color: var(--text-on-dark);
-}
-.home-intro-links > a:last-child {
-  background: var(--guide-surface);
-  border-color: var(--guide-border);
-  color: var(--guide-text);
+  color: var(--home-action);
 }
 .homepage .home-intro-links > a:is(:hover, :focus-visible) {
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-.homepage .home-intro-links > a:hover {
-  color: var(--review-text);
-}
-.homepage .home-intro-links > a:first-child:hover {
-  background: var(--action-primary-hover);
-  color: var(--text-on-dark);
-}
-.homepage .home-intro-links > a:last-child:hover {
-  color: var(--guide-text);
 }
 .home-focus-banner {
   border: 1px solid var(--home-line);
@@ -1012,74 +987,51 @@
 .focus-banner-controls button:hover:enabled {
   background: var(--home-tint);
 }
-.home-search-strip {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-7);
-  padding-block: var(--space-7);
-  border-bottom: 1px solid var(--home-line);
-}
-.home-search-strip form {
-  display: flex;
-  align-items: center;
-  gap: var(--space-5);
-  flex: 1;
-}
-.home-search-strip .home-search-label {
-  margin: 0;
-  font-size: 15px;
-  flex-shrink: 0;
-}
-.home-search-strip .home-search {
-  flex: 1;
-  max-width: 600px;
-}
-.home-search-full {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-3);
-  min-height: 44px;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-@media (max-width: 1000px) {
-  .home-search-strip form {
-    flex-wrap: wrap;
-    gap: var(--space-3);
-  }
-  .home-search-strip .home-search-label {
-    width: 100%;
-  }
-}
 @media (max-width: 767px) {
   .home-intro {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-3);
-    padding-block: var(--space-5) var(--space-4);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+    padding-block: var(--space-5) var(--space-3);
   }
   .home-intro h1 {
-    font-size: 21px;
+    font-size: 24px;
+    line-height: 1.35;
+  }
+  .home-intro-links {
+    column-gap: var(--space-3);
+  }
+  .home-intro-links > a {
+    font-size: 13px;
   }
   .home-focus-banner[data-multiple="true"] .focus-banner-track {
     gap: var(--space-2);
     padding-inline-end: 20px;
   }
   .focus-banner-slide {
-    padding: var(--space-7) var(--space-6);
-    min-height: 355px;
+    padding: var(--space-5) var(--space-4);
+    min-height: 0;
     align-items: flex-start;
   }
   .focus-banner-copy {
     width: 100%;
   }
   .focus-banner-copy h2 {
-    font-size: 27px;
+    font-size: 23px;
+    margin-block: var(--space-2);
+  }
+  .focus-banner-date {
+    font-size: 14px;
+    margin-bottom: var(--space-2);
   }
   .focus-banner-copy p {
-    font-size: 16px;
-    margin-bottom: var(--space-5);
+    font-size: 14px;
+    line-height: 1.65;
+    margin-bottom: var(--space-3);
+  }
+  .focus-banner-cta {
+    min-height: 44px;
+    padding: var(--space-2) var(--space-3);
+    font-size: 14px;
   }
   .focus-banner-art {
     width: 55%;
@@ -1105,22 +1057,6 @@
   .focus-banner-counter {
     font-size: 12px;
     min-width: 66px;
-  }
-  .home-search-strip {
-    flex-direction: column;
-    align-items: stretch;
-    padding-block: var(--space-6) var(--space-3);
-    gap: var(--space-2);
-  }
-  .home-search-strip form {
-    display: block;
-  }
-  .home-search-strip .home-search-label {
-    margin-bottom: var(--space-2);
-  }
-  .home-search-full {
-    font-size: 13px;
-    justify-content: space-between;
   }
 }
 

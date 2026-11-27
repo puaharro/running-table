@@ -22,35 +22,6 @@ export function HomeHighlights({
   const news = homeRaceNews(races, now, english);
   return (
     <>
-      <section className="shell home-search-strip" aria-label={t("搜尋賽事入口", "Race search")}>
-        <form
-          action={localPath("/races/", english)}
-          role="search"
-          aria-label={t("搜尋香港路跑賽事", "Search Hong Kong road races")}
-        >
-          <label htmlFor="home-query" className="home-search-label">
-            {t("已有目標賽事？", "Looking for a specific race?")}
-          </label>
-          <div className="home-search">
-            <Icon name="search" size={21} />
-            <input
-              id="home-query"
-              name="q"
-              type="search"
-              placeholder={t("賽事名稱、地點或主辦方", "Race name, venue or organiser")}
-              maxLength={200}
-              enterKeyHint="search"
-            />
-            <button type="submit">
-              {t("搜尋", "Search")} <Icon name="arrow" size={18} />
-            </button>
-          </div>
-        </form>
-        <Link href={localPath("/races/", english)} className="home-search-full">
-          {t("按日期、地區及距離搜尋賽事", "Search by date, region and distance")}{" "}
-          <Icon name="arrow" size={18} />
-        </Link>
-      </section>
       <section className="shell home-calendar-section" aria-labelledby="home-news-heading">
         <div className="home-calendar-section-head">
           <h2 id="home-news-heading">{t("最新消息", "Latest news")}</h2>

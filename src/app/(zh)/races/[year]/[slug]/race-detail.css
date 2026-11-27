@@ -183,38 +183,21 @@
   font-size: 14px;
   text-underline-offset: 3px;
 }
-.race-detail-page .race-official-panel {
+.race-primary-panel {
   grid-column: 2;
   grid-row: 2 / 4;
   background: var(--home-ink);
   border: 0;
   border-radius: 10px;
-  padding: var(--space-7) var(--space-6);
+  padding: var(--space-6);
   color: var(--home-on-dark);
 }
-.race-detail-page .race-official-panel .eyebrow {
-  color: var(--home-on-dark-muted);
-  font-size: 11px;
-}
-.race-detail-page .race-official-panel h2 {
-  font-size: 26px;
+.race-primary-panel h2 {
+  font-size: 22px;
   line-height: 1.45;
-  margin: var(--space-4) 0;
+  margin: 0 0 var(--space-3);
 }
-.race-detail-page .race-official-panel p {
-  color: var(--home-on-dark-muted);
-  font-size: 16px;
-  line-height: 1.8;
-  margin-bottom: var(--space-6);
-}
-.race-detail-page .race-official-panel small {
-  display: block;
-  margin-top: var(--space-4);
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--home-on-dark-muted);
-}
-.race-detail-page .official-cta {
+.race-detail-page .race-primary-cta {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -226,10 +209,19 @@
   color: var(--home-ink);
   font-size: 16px;
   border-radius: 6px;
+  text-align: center;
 }
-.race-detail-page .official-cta:hover {
+.race-detail-page .race-primary-cta:hover {
   background: var(--home-card);
   color: var(--home-ink);
+}
+.race-primary-cta svg {
+  flex: none;
+}
+.race-official-source {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 .race-verification {
   margin: var(--space-6) 0 var(--space-10);
@@ -959,16 +951,6 @@
     flex: 0 1 auto;
     justify-content: flex-start;
     padding: var(--space-2) var(--space-3);
-  }
-  .race-detail-page .race-official-panel {
-    padding: var(--space-6);
-  }
-  .race-detail-page .race-official-panel h2 {
-    font-size: 24px;
-    margin: var(--space-3) 0;
-  }
-  .race-detail-page .race-official-panel p {
-    margin-bottom: var(--space-5);
   }
   .race-verification {
     margin: var(--space-6) 0 var(--space-8);

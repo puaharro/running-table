@@ -16,6 +16,7 @@ const tasks = [
 export function RegistrationChecklist({ english = false }: { english?: boolean } = {}) {
   const t = language(english);
   const [checked, setChecked] = useState<string[]>([]);
+  const [lastChecked, setLastChecked] = useState<string | null>(null);
   const [storageError, setStorageError] = useState(false);
 
   useEffect(() => {
@@ -60,11 +61,12 @@ export function RegistrationChecklist({ english = false }: { english?: boolean }
               <input
                 type="checkbox"
                 checked={checked.includes(id)}
-                onChange={(event) =>
-                  save(
-                    event.target.checked ? [...checked, id] : checked.filter((item) => item !== id),
-                  )
-                }
+                data-confirmed={lastChecked === id && checked.includes(id)}
+                onChange={(event) => {
+                  const isChecked = event.target.checked;
+                  setLastChecked(isChecked ? id : null);
+                  save(isChecked ? [...checked, id] : checked.filter((item) => item !== id));
+                }}
               />
               {englishRaceTerm(label, english)}
             </label>

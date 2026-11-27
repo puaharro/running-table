@@ -8,6 +8,7 @@ import { raceHref } from "@/lib/site";
 import { displayDate, formatTimestamp } from "@/lib/races";
 import type { Race } from "@/lib/types";
 import { favoriteResultsHref } from "@/lib/results-location";
+import { Icon } from "./ui";
 const changed = "nxtgo:favorites-change";
 export function useFavorites() {
   const [ids, setIds] = useState<string[]>([]),
@@ -110,7 +111,7 @@ export function FavoriteButton({
           aria-hidden="true"
           data-confirmed={saved && message === "已收藏於此瀏覽器。"}
         >
-          {saved ? "★" : "☆"}
+          <Icon name="star" size={19} />
         </span>{" "}
         {!compact && (english ? (saved ? "Saved" : "Save") : saved ? "已收藏" : "收藏")}
       </button>

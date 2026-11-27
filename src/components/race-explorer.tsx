@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { LayoutGroup, motion, useReducedMotion } from "motion/react";
 import { englishRaceTerm } from "@/lib/race-terms.en";
 import { language } from "@/lib/english-races";
 import { Icon } from "./ui";
@@ -37,7 +38,9 @@ export function RaceExplorer({
   english?: boolean;
 }) {
   const t = language(english);
+  const reduceMotion = useReducedMotion();
   const [filters, setFilters] = useState<Filters>(defaultFilters);
+  const [instantQuickView, setInstantQuickView] = useState(false);
   const [page, setPage] = useState(1);
   const favorites = useFavorites();
   const [savedOnly, setSavedOnly] = useState(false);
@@ -322,24 +325,40 @@ export function RaceExplorer({
               role="group"
               aria-label={t("賽事快捷篩選", "Quick race filters")}
             >
-              {quickViews.map(([key, label]) => (
-                <button
-                  key={key}
-                  aria-pressed={selectedView === key}
-                  onClick={() =>
-                    changeSavedOnly(key === "saved", {
-                      ...filters,
-                      view: key === "open" ? "upcoming" : key === "saved" ? "all" : key,
-                      statuses:
-                        key === "open"
-                          ? ["open"]
-                          : filters.statuses.filter((status) => status !== "open"),
-                    })
-                  }
-                >
-                  {label}
-                </button>
-              ))}
+              <LayoutGroup>
+                {quickViews.map(([key, label]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    aria-pressed={selectedView === key}
+                    onClick={(event) => {
+                      setInstantQuickView(event.detail === 0);
+                      changeSavedOnly(key === "saved", {
+                        ...filters,
+                        view: key === "open" ? "upcoming" : key === "saved" ? "all" : key,
+                        statuses:
+                          key === "open"
+                            ? ["open"]
+                            : filters.statuses.filter((status) => status !== "open"),
+                      });
+                    }}
+                  >
+                    {selectedView === key && (
+                      <motion.span
+                        aria-hidden="true"
+                        className="calendar-view-indicator"
+                        layoutId={ready && !reduceMotion ? "calendar-view-indicator" : undefined}
+                        transition={{
+                          layout: instantQuickView
+                            ? { duration: 0 }
+                            : { type: "spring", stiffness: 480, damping: 32, mass: 0.65 },
+                        }}
+                      />
+                    )}
+                    <span className="calendar-view-label">{label}</span>
+                  </button>
+                ))}
+              </LayoutGroup>
             </div>
             <span
               ref={resultsCount}
@@ -369,7 +388,6 @@ export function RaceExplorer({
                 type="button"
                 className="share-button"
                 onClick={share}
-                aria-label={t("分享篩選", "Share filters")}
                 data-copied={copyState === "copied"}
               >
                 {copyState === "copied" ? (

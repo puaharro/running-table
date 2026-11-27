@@ -237,12 +237,6 @@
   color: var(--muted);
   font-size: var(--text-xs);
 }
-.official-cta {
-  width: 100%;
-  margin: var(--space-3) 0 var(--space-4);
-  gap: var(--space-3);
-  font-size: var(--text-xs);
-}
 * {
   box-sizing: border-box;
 }

@@ -89,13 +89,37 @@ export function HomeView({ english = false }: { english?: boolean }) {
               "Hong Kong race dates, registration details and runner experiences.",
             )}
           </p>
+          <form
+            className="home-intro-search"
+            action={localPath("/races/", english)}
+            role="search"
+            aria-label={t("搜尋香港路跑賽事", "Search Hong Kong road races")}
+          >
+            <label htmlFor="home-query" className="sr-only">
+              {t("搜尋賽事", "Search races")}
+            </label>
+            <div className="home-search">
+              <Icon name="search" size={21} />
+              <input
+                id="home-query"
+                name="q"
+                type="search"
+                placeholder={t("賽事名稱或地點", "Name or venue")}
+                maxLength={200}
+                enterKeyHint="search"
+              />
+              <button type="submit">
+                {t("搜尋", "Search")} <Icon name="arrow" size={18} />
+              </button>
+            </div>
+          </form>
         </div>
         <nav className="home-intro-links" aria-label={t("首頁快速入口", "Home quick links")}>
           <Link href={localPath("/races/", english)}>
-            {t("賽事時間表", "Race calendar")} <Icon name="arrow" size={18} />
+            {t("賽事時間表", "Calendar")} <Icon name="arrow" size={16} />
           </Link>
           <Link href={localPath("/ratings/", english)}>{t("跑手分享", "Runner accounts")}</Link>
-          <Link href={localPath("/guides/", english)}>{t("選賽指南", "Race guides")}</Link>
+          <Link href={localPath("/guides/", english)}>{t("選賽指南", "Guides")}</Link>
         </nav>
       </header>
       <HomeFocusBanner english={english} slides={slides} initialNow={initialNow} />

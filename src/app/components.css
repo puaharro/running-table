@@ -1526,16 +1526,32 @@ time,
   border-style: dashed;
 }
 .favorite-icon {
-  display: inline-block;
+  display: inline-flex;
+  vertical-align: middle;
+}
+.favorite-control button[aria-pressed="true"] .favorite-icon svg {
+  fill: currentColor;
+}
+.race-dialog-actions .race-copy-button {
+  min-width: 7rem;
+}
+.race-copy-button[data-copied="true"] {
+  border-color: var(--status-open-text);
+  background: var(--status-open-surface);
+  color: var(--status-open-text);
 }
 @media (prefers-reduced-motion: no-preference) {
-  .favorite-icon[data-confirmed="true"] {
-    animation: favorite-confirm 220ms ease-out;
+  .favorite-icon[data-confirmed="true"],
+  :is(.share-button, .race-copy-button)[data-copied="true"] svg {
+    animation: control-confirm 240ms ease-out;
   }
 }
-@keyframes favorite-confirm {
-  45% {
-    transform: scale(1.18);
+@keyframes control-confirm {
+  30% {
+    transform: scale(1.2);
+  }
+  65% {
+    transform: scale(0.96);
   }
 }
 @media (max-width: 600px) {

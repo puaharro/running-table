@@ -14,6 +14,7 @@ import { ReturnLink } from "@/components/return-link";
 import { RaceAnnouncement, RaceDayInformation } from "@/components/race-day-information";
 import { RegistrationTimeline } from "@/components/registration-timeline";
 import { RaceChapterNav } from "@/components/race-chapter-nav";
+import { RacePrimaryAction } from "@/components/race-primary-action";
 import {
   PublicRegistrationCountdown,
   RaceOverview,
@@ -24,6 +25,8 @@ import { formatTimestamp } from "@/lib/races";
 import { pageMetadata, raceHref } from "@/lib/site";
 import { releaseSettings } from "@/lib/release";
 import { raceStructuredData, safeJsonLd } from "@/lib/structured-data";
+import { isHttpsUrl } from "@/lib/catalog";
+import { verifiedStarts } from "@/lib/race-day";
 
 export function generateStaticParams() {
   return races.map((r) => ({ year: r.date.slice(0, 4), slug: r.slug }));
@@ -45,6 +48,9 @@ export default async function RacePage({ params, english = false }: Props & { en
   const relatedGuides = guides.filter((guide) => guideMatchesRace(guide, race));
   const experience = raceExperience(race, english);
   const confirmedExperience = experience.confirmed;
+  const hasRaceDayInformation =
+    verifiedStarts(race).length > 0 ||
+    race.sources?.some((source) => source.fields.includes("transport")) === true;
   const now = new Date().toISOString();
   const chapters = [
     { id: "race-about", label: t("賽事概覽", "Race overview") },
@@ -86,6 +92,15 @@ export default async function RacePage({ params, english = false }: Props & { en
             </div>
           </div>
           <PublicRegistrationCountdown english={english} race={race} initialNow={now} />
+          <RacePrimaryAction
+            english={english}
+            race={race}
+            initialNow={now}
+            runnerAccountsHref={
+              experience.runnerCopy || confirmedExperience ? experience.overviewHref : undefined
+            }
+            hasRaceDayInformation={hasRaceDayInformation}
+          />
           <RaceSaveActions english={english} race={race} initialNow={now} />
           <RaceOverview
             english={english}
@@ -94,29 +109,6 @@ export default async function RacePage({ params, english = false }: Props & { en
             experienceHref={experience.overviewHref}
             experienceLabel={experience.overviewLabel}
           />
-          <div className="registration-card race-official-panel">
-            <h2>{t("官方報名資料", "Official entry information")}</h2>
-            <p>
-              {t(
-                "查看大會當屆資料，確認您的組別、名額渠道及付款安排。",
-                "Check the organiser’s current information for your category, entry channel and payment arrangements.",
-              )}
-            </p>
-            <a
-              className="button button-coral official-cta"
-              href={race.sourceUrl!}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t("前往官方賽事網站", "Visit the official race website")} <Icon name="arrow" />
-            </a>
-            <small>
-              {t(
-                "將開啟大會網站。本站不收取報名費，亦不保證即時名額。",
-                "Opens the organiser’s website. NXTGO does not collect entry fees or guarantee availability.",
-              )}
-            </small>
-          </div>
         </div>
         <details className="race-verification">
           <summary>
@@ -248,6 +240,25 @@ export default async function RacePage({ params, english = false }: Props & { en
             </section>
             <section id="race-sources" tabIndex={-1}>
               <h2>{t("資料來源及核實範圍", "Sources and scope of verification")}</h2>
+              {isHttpsUrl(race.sourceUrl) && (
+                <p>
+                  <a
+                    className="text-link race-official-source"
+                    href={race.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t("前往官方賽事網站 ↗", "Visit the official race website ↗")}
+                  </a>
+                  <br />
+                  <small>
+                    {t(
+                      "將開啟大會網站。本站不收取報名費，亦不保證即時名額。",
+                      "Opens the organiser’s website. NXTGO does not collect entry fees or guarantee availability.",
+                    )}
+                  </small>
+                </p>
+              )}
               {english && <p>Some source names and notes are shown in the original Chinese.</p>}
               <p>
                 {t(
@@ -329,10 +340,8 @@ export default async function RacePage({ params, english = false }: Props & { en
             <section id="race-changes" tabIndex={-1}>
               <h2>{t("修改紀錄", "Update history")}</h2>
               <ul className="change-log">
-                {race.changes?.map((change) => (
-                  <li
-                    key={`${change.date}-$<RaceDataText value={change.note} english={english} />`}
-                  >
+                {race.changes?.map((change, index) => (
+                  <li key={`${change.date}-${index}`}>
                     <time dateTime={change.date}>
                       {english ? englishDate(change.date) : change.date}
                     </time>

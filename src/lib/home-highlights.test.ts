@@ -1,16 +1,24 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
+import { HomeView } from "@/app/(zh)/home-view";
 import { HomeHighlights } from "@/components/home-highlights";
 import { publicRaces as races } from "@/data/races";
 import { homeRaceNews } from "@/lib/home-race-news";
 
 const initialNow = "2026-11-16T12:00:00+08:00";
 
-it("keeps search and links localised deadline headlines to registration details", () => {
+it("places the localised search before the banner and links deadline headlines to registration details", () => {
+  for (const english of [false, true]) {
+    const home = renderToStaticMarkup(createElement(HomeView, { english }));
+    const action = `action="${english ? "/en/races/" : "/races/"}"`;
+    expect(home).toContain(action);
+    expect(home).toContain('name="q"');
+    expect(home).toContain("home-focus-banner");
+    expect(home.indexOf(action)).toBeLessThan(home.indexOf("home-focus-banner"));
+  }
+
   const html = renderToStaticMarkup(createElement(HomeHighlights, { races, initialNow }));
-  expect(html).toContain('action="/races/"');
-  expect(html).toContain('name="q"');
   expect(html).toContain("最新消息");
   const news = html.split('class="home-news-sheet"')[1].split("<aside")[0];
   expect(news).toMatch(/sai-kung-district-run-2026\/?#registration-groups/);
@@ -22,7 +30,6 @@ it("keeps search and links localised deadline headlines to registration details"
   const english = renderToStaticMarkup(
     createElement(HomeHighlights, { races, initialNow, english: true }),
   );
-  expect(english).toContain('action="/en/races/"');
   expect(english).toContain("Latest news");
   expect(english).toMatch(/sai-kung-district-run-2026\/?#registration-groups/);
   expect(english).toContain("/en/races/2026/sai-kung-district-run-2026");
