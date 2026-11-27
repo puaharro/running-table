@@ -225,6 +225,16 @@
   color: var(--urgent-text);
   background: var(--urgent-surface);
 }
+.home-news-list [data-news-kind="deadline"] h3 {
+  color: var(--race-link);
+}
+.home-news-list [data-news-kind="deadline"] a:is(:hover, :focus-visible) h3 {
+  color: var(--race-link-emphasis);
+}
+.home-news-list [data-news-kind="deadline"] time {
+  color: var(--registration-deadline-text);
+  font-weight: 650;
+}
 .home-news-list h3 {
   margin: 0;
   font-size: 18px;
@@ -348,8 +358,12 @@
   font-weight: 600;
 }
 .home-reviews {
-  background: var(--home-tint);
+  background: var(--review-surface);
   border-block: 1px solid var(--home-line);
+}
+.home-reviews :is(h2, h3, .home-review-read, .home-section-head > a),
+.homepage .home-reviews :is(h3 a, .home-review-read, .home-section-head > a):hover {
+  color: var(--review-text);
 }
 .home-review-grid {
   display: grid;
@@ -444,7 +458,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  border-top: 2px solid var(--home-control);
+  border-top: 2px solid var(--guide-border);
   padding: var(--space-6) 0 0;
 }
 .home-guide-top {
@@ -456,7 +470,14 @@
 }
 .home-guide-top > span {
   font-size: 13px;
-  color: var(--home-muted);
+  color: var(--guide-text);
+  background: var(--guide-surface);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-badge);
+}
+.home-guides :is(h2, h3, .home-guide-read, .home-section-head > a),
+.homepage .home-guides :is(.home-guide, .home-section-head > a):hover {
+  color: var(--guide-text);
 }
 .home-guide h3 {
   font-size: 21px;
@@ -734,13 +755,47 @@
   color: var(--home-muted);
   font-size: 14px;
 }
-.home-intro > a {
+.home-intro-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.home-intro-links > a {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
   min-height: 44px;
+  padding-inline: var(--space-3);
+  border: 1px solid var(--review-border);
+  border-radius: var(--radius-control);
+  background: var(--review-surface);
+  color: var(--review-text);
   font-size: 14px;
-  flex-shrink: 0;
+  font-weight: 650;
+}
+.home-intro-links > a:first-child {
+  background: var(--action-primary);
+  border-color: var(--action-primary);
+  color: var(--text-on-dark);
+}
+.home-intro-links > a:last-child {
+  background: var(--guide-surface);
+  border-color: var(--guide-border);
+  color: var(--guide-text);
+}
+.homepage .home-intro-links > a:is(:hover, :focus-visible) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.homepage .home-intro-links > a:hover {
+  color: var(--review-text);
+}
+.homepage .home-intro-links > a:first-child:hover {
+  background: var(--action-primary-hover);
+  color: var(--text-on-dark);
+}
+.homepage .home-intro-links > a:last-child:hover {
+  color: var(--guide-text);
 }
 .home-focus-banner {
   border: 1px solid var(--home-line);
@@ -999,13 +1054,13 @@
 }
 @media (max-width: 767px) {
   .home-intro {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
     padding-block: var(--space-5) var(--space-4);
   }
   .home-intro h1 {
     font-size: 21px;
-  }
-  .home-intro > a {
-    display: none;
   }
   .home-focus-banner[data-multiple="true"] .focus-banner-track {
     gap: var(--space-2);

@@ -90,9 +90,13 @@ export function HomeView({ english = false }: { english?: boolean }) {
             )}
           </p>
         </div>
-        <Link href={localPath("/races/", english)}>
-          {t("查看完整時間表", "View the full calendar")} <Icon name="arrow" size={18} />
-        </Link>
+        <nav className="home-intro-links" aria-label={t("首頁快速入口", "Home quick links")}>
+          <Link href={localPath("/races/", english)}>
+            {t("賽事時間表", "Race calendar")} <Icon name="arrow" size={18} />
+          </Link>
+          <Link href={localPath("/ratings/", english)}>{t("跑手分享", "Runner accounts")}</Link>
+          <Link href={localPath("/guides/", english)}>{t("選賽指南", "Race guides")}</Link>
+        </nav>
       </header>
       <HomeFocusBanner english={english} slides={slides} initialNow={initialNow} />
       <HomeHighlights english={english} races={races} initialNow={initialNow} />

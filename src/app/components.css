@@ -1763,10 +1763,21 @@ time,
   align-items: center;
   gap: 4px 8px;
 }
+.race-recommendation-primary > strong,
+.calendar-recommendation-compact > strong,
+[data-rating-dimension="course"] {
+  color: var(--review-text);
+}
+[data-rating-dimension="organization"] {
+  color: var(--rating-organization-text);
+}
+[data-rating-dimension="aid"] {
+  color: var(--guide-text);
+}
 .race-recommendation-stars {
   display: inline-flex;
   gap: 1px;
-  color: var(--home-orange-ink);
+  color: var(--review-text);
 }
 .race-recommendation-source {
   margin: 0;

@@ -51,7 +51,7 @@ export function RaceConfirmedExperience({
               const a = e.assessments[key];
               return (
                 <section key={key}>
-                  <h3>
+                  <h3 data-rating-dimension={key}>
                     {englishRaceTerm(ratingPolicy.dimensions[key].title, english)}{" "}
                     {t("· 完整評語", "· Full comments")}
                   </h3>

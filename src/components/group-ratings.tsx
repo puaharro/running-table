@@ -46,7 +46,7 @@ function DetailedReview({
           const assessment = review.assessments[key];
           return (
             <div key={key}>
-              <dt>{ratingPolicy.dimensions[key].title}</dt>
+              <dt data-rating-dimension={key}>{ratingPolicy.dimensions[key].title}</dt>
               <dd>
                 <p>{assessment.comment}</p>
                 <details>

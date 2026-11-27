@@ -8,7 +8,7 @@ import notices from "@/data/editorial-notices.json";
 import { RunnerAccountsCatalog } from "@/components/ratings-catalog";
 import { RatingMethodDisclosure } from "@/components/rating-method-disclosure";
 import { Breadcrumb, Icon } from "@/components/ui";
-import { ratingDimensions, ratingPolicy, reviewTargets } from "@/lib/rating-policy";
+import { ratingDimensions, ratingPolicy, reviewTargets, scoreLabels } from "@/lib/rating-policy";
 import { pageMetadata } from "@/lib/site";
 export const metadata = pageMetadata(
   "跑手分享",
@@ -36,7 +36,7 @@ export default function RatingsPage({ english = false }: { english?: boolean }) 
             <a href="#published-reviews">
               {t("查看有分享的賽事", "Browse runner accounts")} <Icon name="arrow" size={16} />
             </a>
-            <a href="#method">{t("了解評論整理方式 ↓", "Review methodology ↓")}</a>
+            <a href="#method">{t("查看評分準則 ↓", "View rating criteria ↓")}</a>
           </nav>
         </header>
         <div className="ratings-layout">
@@ -68,7 +68,9 @@ export default function RatingsPage({ english = false }: { english?: boolean }) 
                 <li key={key}>
                   <span aria-hidden="true">0{index + 1}</span>
                   <div>
-                    <h3>{englishRaceTerm(ratingPolicy.dimensions[key].title, english)}</h3>
+                    <h3 data-rating-dimension={key}>
+                      {englishRaceTerm(ratingPolicy.dimensions[key].title, english)}
+                    </h3>
                     <p>{englishRaceTerm(ratingPolicy.dimensions[key].prompt, english)}</p>
                   </div>
                 </li>
@@ -128,9 +130,21 @@ export default function RatingsPage({ english = false }: { english?: boolean }) 
                 )}
               </p>
             </section>
+            <section>
+              <h2>{t("評分級別", "Rating scale")}</h2>
+              <ul className="ratings-scale">
+                {scoreLabels.slice(1).map((label, index) => (
+                  <li key={label} data-score={index + 1}>
+                    <strong>{index + 1}/5</strong> {englishRaceTerm(label, english)}
+                  </li>
+                ))}
+              </ul>
+            </section>
             {ratingDimensions.map((key) => (
               <section key={key}>
-                <h2>{englishRaceTerm(ratingPolicy.dimensions[key].title, english)}</h2>
+                <h2 data-rating-dimension={key}>
+                  {englishRaceTerm(ratingPolicy.dimensions[key].title, english)}
+                </h2>
                 <p>{englishRaceTerm(ratingPolicy.dimensions[key].prompt, english)}</p>
               </section>
             ))}

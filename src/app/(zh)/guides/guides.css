@@ -34,6 +34,7 @@
 }
 .guides-heading h1,
 .guides-article-heading h1 {
+  color: var(--guide-text);
   font-size: clamp(30px, 3.2vw, 42px);
   line-height: 1.4;
   letter-spacing: -0.03em;
@@ -83,6 +84,7 @@
   margin-bottom: var(--space-2);
 }
 .guides-section-heading h2 {
+  color: var(--guide-text);
   font-size: 26px;
   line-height: 1.5;
   margin: 0;
@@ -382,9 +384,12 @@
 }
 .guides-article-body > .guide-checklist {
   padding: clamp(14px, 3vw, 24px);
-  border: 1px solid var(--home-line);
+  border: 1px solid var(--guide-border);
   border-radius: 10px;
-  background: var(--home-tint);
+  background: var(--guide-surface);
+}
+.guides-article-body > .guide-checklist > h2 {
+  color: var(--guide-text);
 }
 .guides-article-body > .guide-checklist > :is(h2, p) {
   margin-bottom: var(--space-2);

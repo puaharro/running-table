@@ -658,13 +658,15 @@
 }
 .race-list[data-highlight-deadlines] .calendar-race-deadline[data-empty="false"] {
   padding: var(--space-2);
+  border-inline-start: 2px solid var(--urgent-border);
   border-radius: 6px;
   background: var(--urgent-surface);
 }
-.race-list[data-highlight-deadlines] .calendar-race-deadline[data-empty="false"] :is(strong, span) {
-  color: var(--urgent-text);
+.calendar-race-deadline time {
+  color: var(--registration-deadline-text);
 }
-.race-list[data-highlight-deadlines] .calendar-race-deadline .calendar-verified-deadline {
+.calendar-race-deadline > .calendar-verified-deadline {
+  color: var(--urgent-text);
   font-weight: 650;
 }
 .race-list[data-highlight-deadlines] .calendar-race-deadline[data-empty="true"] {

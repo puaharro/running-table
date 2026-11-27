@@ -52,6 +52,15 @@
   --date-text: var(--text-on-dark);
   --urgent-text: #704609;
   --urgent-surface: #fbefd3;
+  --urgent-border: #a76b18;
+  --registration-deadline-text: #b91c1c;
+  --review-text: #383c83;
+  --review-surface: #eeeffb;
+  --review-border: #6869a8;
+  --guide-text: #165771;
+  --guide-surface: #eaf5fa;
+  --guide-border: #507e94;
+  --rating-organization-text: #1e684e;
   --font-body:
     "Inter Variable", "Noto Sans HK Variable", "PingFang HK", "Microsoft JhengHei", sans-serif;
   --font-display: "Inter Variable", "Noto Sans HK Variable", sans-serif;
