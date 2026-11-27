@@ -332,6 +332,12 @@
   --badge-text: var(--status-unknown-text);
   --badge-surface: var(--status-unknown-surface);
 }
+.status-badge:is(.open, .upcoming, .waitlist, .full) {
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-badge);
+  color: var(--badge-text);
+  background: var(--badge-surface);
+}
 .option-row button,
 .date-shortcuts button {
   border-color: var(--border-control);
@@ -472,6 +478,7 @@ summary:focus-visible {
   margin: var(--space-3) 0;
   font-size: 0.85rem;
   line-height: 1.65;
+  color: var(--info-text);
 }
 .registration-verification p {
   margin: var(--space-1) 0;
@@ -1036,8 +1043,10 @@ time,
 }
 .notebook-notice {
   padding: var(--space-4);
-  background: var(--surface, var(--surface-page));
-  border-left: 3px solid var(--ink, var(--text-primary));
+  border: 1px solid var(--info-border);
+  border-radius: var(--radius-control);
+  color: var(--info-text);
+  background: var(--info-surface);
 }
 .review-notebook fieldset {
   border: 1px solid var(--border-subtle);
@@ -1127,10 +1136,12 @@ time,
   outline-offset: 3px;
 }
 .editorial-notice {
-  border-left: 3px solid var(--ink, var(--text-primary));
+  border: 1px solid var(--info-border);
+  border-radius: var(--radius-control);
   padding: var(--space-4);
   margin: var(--space-5) 0;
-  background: var(--surface, var(--surface-page));
+  color: var(--info-text);
+  background: var(--info-surface);
   font-size: 14px;
   line-height: 1.8;
 }
@@ -1148,10 +1159,20 @@ time,
   font-size: 16px;
 }
 .prepared-feedback {
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--info-border);
+  border-radius: var(--radius-control);
   padding: var(--space-4);
   margin-top: var(--space-5);
+  color: var(--info-text);
+  background: var(--info-surface);
   overflow-wrap: anywhere;
+}
+.correction-form > [role="alert"] {
+  padding: var(--space-3);
+  border: 1px solid var(--status-error-border);
+  border-radius: var(--radius-control);
+  color: var(--status-error-text);
+  background: var(--status-error-surface);
 }
 .prepared-feedback textarea {
   width: 100%;
@@ -1496,8 +1517,9 @@ time,
   white-space: nowrap;
 }
 .favorite-control button[aria-pressed="true"] {
-  background: var(--home-action-pressed);
-  color: var(--surface-card);
+  border-color: var(--favorite-text);
+  background: var(--favorite-surface);
+  color: var(--favorite-text);
 }
 .favorite-control button:disabled {
   cursor: not-allowed;

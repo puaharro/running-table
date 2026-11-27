@@ -100,7 +100,7 @@
   padding-inline: 3px;
   border-radius: 4px;
   background: var(--home-metadata);
-  color: var(--home-ink);
+  color: var(--text-secondary);
   font-size: 12px;
   font-variant-numeric: tabular-nums;
   line-height: 1.5;
@@ -108,6 +108,11 @@
 }
 .option-row button[aria-pressed="true"] .calendar-option-count {
   background: var(--home-card);
+  color: var(--action-primary-hover);
+}
+.option-row button .calendar-option-count[data-empty] {
+  background: transparent;
+  color: var(--text-secondary);
 }
 .search-page .engine-month {
   margin: 0;
@@ -314,10 +319,15 @@
   font-weight: 650;
   cursor: pointer;
 }
-.calendar-filter-categories > button:is(:hover, [aria-expanded="true"], [data-active="true"]) {
+.calendar-filter-categories > button:is(:hover, [aria-expanded="true"]) {
   border-color: var(--home-action);
   background: var(--home-tint);
   color: var(--home-action-pressed);
+}
+.calendar-filter-categories > button[data-active="true"] {
+  border-color: var(--action-primary);
+  background: var(--surface-brand);
+  color: var(--action-primary-hover);
 }
 .calendar-category-chevron {
   width: 6px;

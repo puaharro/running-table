@@ -1219,6 +1219,9 @@ p {
   color: var(--text-secondary);
   margin: 0 var(--space-2);
 }
+.breadcrumbs a {
+  color: var(--action-primary);
+}
 .breadcrumbs [aria-current="page"] {
   color: var(--text-primary);
 }

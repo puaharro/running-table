@@ -10,6 +10,7 @@ const courseMapWindow = 30;
 
 type NewsItem = {
   id: string;
+  kind: "deadline" | "course-map";
   href: string;
   category: string;
   headline: string;
@@ -66,6 +67,7 @@ export function homeRaceNews(races: Race[], now: string, english = false) {
           : deadline.label;
         deadlines.push({
           id: `${race.id}-deadline`,
+          kind: "deadline",
           href: `${href}#registration-groups`,
           category: t("報名截止", "Entry deadline"),
           headline: t(`${name}：${remaining}`, `${name}: ${remaining}`),
@@ -83,6 +85,7 @@ export function homeRaceNews(races: Race[], now: string, english = false) {
     if (map && current - Date.parse(map.checkedAt) <= courseMapWindow * dayMs) {
       courseMaps.push({
         id: `${race.id}-course-map`,
+        kind: "course-map",
         href: `${href}#source-${map.id}`,
         category: t("路線圖", "Course map"),
         headline: t(`${name}公布官方路線圖`, `${name}: official course map available`),

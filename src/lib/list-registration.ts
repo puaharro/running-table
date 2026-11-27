@@ -71,7 +71,7 @@ export function listRegistration(
   groups: RaceGroup[],
   now: Clock,
   english = false,
-): { primary: string; secondary?: string; open?: boolean } {
+): { primary: string; secondary?: string; status?: RegistrationStatus } {
   const t = language(english);
   if (race.status === "cancelled") return { primary: t("賽事取消", "Race cancelled") };
   if (race.status === "postponed")
@@ -103,7 +103,7 @@ export function listRegistration(
   if (!entries.length && race.charityEntry?.available)
     return { primary: t("報名詳情請參閱大會網站", "See the official website for entry details") };
   if (!entries.length || entries.every((entry) => entry.status === "unknown"))
-    return { primary: t("報名待核實", "Entry status unverified") };
+    return { primary: t("報名待核實", "Entry status unverified"), status: "unknown" };
   const parts = Object.entries(english ? englishChannels : channelTypeLabels)
     .flatMap(([type, channel]) => {
       const statuses = new Set(
@@ -112,28 +112,29 @@ export function listRegistration(
       if (!statuses.size) return [];
       const open = statuses.has("open");
       const unknown = statuses.has("unknown");
-      const status =
-        statuses.size === 1
-          ? (english ? englishStatus : registrationLabels)[[...statuses][0]]
-          : open
-            ? t("部分接受申請", "Some categories open")
-            : unknown
-              ? t("部分待核實", "Partly unverified")
-              : t("按組別而異", "Varies by category");
+      const singleStatus = statuses.size === 1 ? [...statuses][0] : undefined;
+      const label = singleStatus
+        ? (english ? englishStatus : registrationLabels)[singleStatus]
+        : open
+          ? t("部分接受申請", "Some categories open")
+          : unknown
+            ? t("部分待核實", "Partly unverified")
+            : t("按組別而異", "Varies by category");
       const detail = open && unknown ? t("部分待核實", "Some unverified") : undefined;
-      return [{ channel, status, detail, open, priority: open ? 0 : unknown ? 1 : 2 }];
+      const status = open ? "open" : unknown ? "unknown" : singleStatus;
+      return [{ channel, label, detail, status, priority: open ? 0 : unknown ? 1 : 2 }];
     })
     .sort((a, b) => a.priority - b.priority);
   const [first, second] = parts;
   const secondary = [first.channel, first.detail];
   if (second) {
-    secondary.push(`${second.channel}${t("：", ": ")}${second.status}`, second.detail);
+    secondary.push(`${second.channel}${t("：", ": ")}${second.label}`, second.detail);
   }
   if (parts.length > 2)
     secondary.push(t(`另 ${parts.length - 2} 類渠道`, `+${parts.length - 2} more channels`));
   return {
-    primary: first.status,
+    primary: first.label,
     secondary: secondary.filter(Boolean).join(" · "),
-    open: first.open,
+    status: first.status,
   };
 }

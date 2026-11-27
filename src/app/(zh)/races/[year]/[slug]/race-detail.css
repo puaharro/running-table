@@ -156,7 +156,7 @@
   text-wrap: balance;
 }
 .public-registration-state[data-urgent="true"] {
-  color: var(--home-orange-ink);
+  color: var(--urgent-text);
 }
 .public-registration-countdown .public-registration-deadline {
   display: flex;
@@ -247,7 +247,7 @@
 .race-verification > summary > svg {
   vertical-align: middle;
   margin-inline: var(--space-2);
-  color: var(--home-action);
+  color: var(--info-text);
 }
 .race-verification > summary > span {
   margin-left: var(--space-4);
@@ -550,8 +550,8 @@
   opacity: 1;
 }
 .race-detail-page .review-edition-note {
-  color: var(--home-orange-ink);
-  border-left: 3px solid var(--home-orange-ink);
+  color: var(--text-secondary);
+  border-inline-start: 1px solid var(--border-control);
   padding-left: var(--space-3);
 }
 .race-detail-page .historical-reviews {
@@ -1085,7 +1085,6 @@
   margin-block: var(--space-4);
   padding: var(--space-4);
   border: 1px solid var(--border-control);
-  border-inline-start: 4px solid var(--urgent-text);
   border-radius: var(--radius-control);
   background: var(--urgent-surface);
   color: var(--text-primary);
@@ -1167,7 +1166,7 @@
   gap: var(--space-1);
   padding: var(--space-3);
   background: var(--home-tint);
-  border-inline-start: 3px solid var(--home-action);
+  border: 1px solid var(--border-subtle);
 }
 .registration-timeline-next > span,
 .registration-timeline-next small,

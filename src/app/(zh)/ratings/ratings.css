@@ -280,10 +280,6 @@
   padding: 0;
 }
 .ratings-page .ratings-method-body .editorial-notice {
-  background: var(--home-tint);
-  color: var(--home-ink);
-  border: 0;
-  border-left: 3px solid var(--home-action);
   padding: var(--space-5);
 }
 .ratings-page .ratings-method-body h2 {

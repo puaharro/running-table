@@ -18,7 +18,7 @@ export type FilterCategory = ReturnType<typeof filterCategories>[number][0];
 
 function FilterOptionCount({ count, english }: { count: number; english: boolean }) {
   return (
-    <span className="calendar-option-count">
+    <span className="calendar-option-count" data-empty={count === 0 || undefined}>
       {count}
       <span className="sr-only">{english ? " races" : " 場"}</span>
     </span>
