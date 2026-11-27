@@ -9,11 +9,13 @@ const plain = section
   .replace(/<!--.*?-->/g, "")
   .replaceAll("&amp;", "&")
   .replaceAll("&quot;", '"');
-for (const block of record.markdown.split(/\n\n+/)) {
-  if (block.startsWith("#"))
-    assert.ok(plain.includes(block.replace(/^#+ /, "").replace("【候選・待覆核】", "")));
+for (const block of record.markdown.split(/\n\n+/).slice(1)) {
+  if (block.startsWith("## ")) assert.ok(plain.includes(block.slice(3)));
   else if (!block.startsWith("[來源"))
-    assert.ok(plain.includes(block.replaceAll("**", "")), "Missing exact confirmed paragraph");
+    assert.ok(
+      plain.includes(block.replaceAll("**", "").replace(/^觀察限制： /, "觀察限制：")),
+      "Missing exact confirmed paragraph",
+    );
 }
 const expected = [...record.markdown.matchAll(/\]\((https:\/\/[^)]+)\)/g)].map((x) => x[1]);
 const actual = [...section.matchAll(/href="([^"]+)"/g)].map((x) => x[1].replaceAll("&amp;", "&"));

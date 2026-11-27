@@ -7,6 +7,8 @@ export interface RunnerCopySection {
   body: string;
   limitations: string;
   urls: string[];
+  sourceLabels?: string[];
+  missingSources?: string;
 }
 
 export interface RunnerCopy {
@@ -16,7 +18,7 @@ export interface RunnerCopy {
   sourceWebsiteId: string;
   sourceContentHash: string;
   markdown: string;
-  sections?: RunnerCopySection[];
+  sections: RunnerCopySection[];
   sha256: string;
 }
 // Only explicit public content selections are loaded. Never open the private CMS here.

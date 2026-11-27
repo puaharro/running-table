@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 export const publicHash = (value) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
+export const runnerAccountTopics = ["賽道", "補給", "寄存", "交通", "大會安排"];
 export function validatePublicCopy(copy) {
   if (
     !copy ||
@@ -17,11 +18,10 @@ export function validatePublicCopy(copy) {
     copy.sections.length !== 5
   )
     throw Error("Invalid confirmed public copy");
-  const topics = ["賽道", "補給", "寄存", "交通", "大會安排"];
   copy.sections.forEach((s, i) => {
     if (
       Object.keys(s).sort().join() !== "body,limitations,topic,urls" ||
-      s.topic !== topics[i] ||
+      s.topic !== runnerAccountTopics[i] ||
       typeof s.body !== "string" ||
       !s.body.trim() ||
       typeof s.limitations !== "string" ||
@@ -35,6 +35,36 @@ export function validatePublicCopy(copy) {
     }
   });
   return copy;
+}
+
+// The legacy selection is hash-verified before adapting its original Markdown for display.
+function legacyRunnerSections(markdown) {
+  const [, ...blocks] = markdown.trim().split(/\r?\n\r?\n+/);
+  if (blocks.length !== runnerAccountTopics.length * 4)
+    throw Error("Invalid legacy runner account layout");
+  return runnerAccountTopics.map((topic, index) => {
+    const [heading, body, note, sources] = blocks.slice(index * 4, index * 4 + 4);
+    const prefix = "**觀察限制：** ";
+    const missingSources = "來源：未知／未有足夠材料";
+    const citations = sources
+      .split(" · ")
+      .map((source) => /^\[(來源\d+)\]\((https:\/\/[^)\s]+)\)$/.exec(source));
+    if (
+      heading !== "## " + topic ||
+      !note.startsWith(prefix) ||
+      (sources !== missingSources && citations.some((citation) => !citation))
+    )
+      throw Error("Invalid legacy runner account topic");
+    return {
+      topic,
+      body,
+      limitations: note.slice(prefix.length),
+      urls: sources === missingSources ? [] : citations.map((citation) => citation[2]),
+      ...(sources === missingSources
+        ? { missingSources }
+        : { sourceLabels: citations.map((citation) => citation[1]) }),
+    };
+  });
 }
 export function runtimeMarkdown(copy) {
   validatePublicCopy(copy);
@@ -66,7 +96,7 @@ export function validateRuntimeRecord(record, pin, raceId, editionYear) {
       createHash("sha256").update(record.markdown).digest("hex") !== record.sha256
     )
       throw Error("Invalid selected confirmed revision");
-    return record;
+    return { ...record, sections: legacyRunnerSections(record.markdown) };
   }
   if (
     pin.format !== "five-topic-v1" ||

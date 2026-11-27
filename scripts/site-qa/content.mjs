@@ -42,6 +42,66 @@ const only = (values, label) => {
   return values[0];
 };
 
+export function checkRunnerTopics(root, sections, englishTopicLabels) {
+  const english = !!englishTopicLabels;
+  const topics = elements(root, "details", hasClass("experience-topic")).filter(
+    (topic) => !hasClass("experience-written-review")(topic.slice(0, topic.indexOf(">"))),
+  );
+  assert.equal(topics.length, sections.length, "missing topic");
+  sections.forEach((part, i) => {
+    assert.doesNotMatch(topics[i].slice(0, topics[i].indexOf(">")), /\sopen[\s=]|\sopen$/);
+    const summary = only(elements(topics[i], "summary"), "topic summary");
+    assert.equal(
+      plain(only(elements(summary, "strong"), "topic label")),
+      englishTopicLabels?.[i] ?? part.topic,
+      "topic order changed",
+    );
+    assert.ok(
+      elements(summary, "span", hasClass("experience-topic-excerpt")).length,
+      "missing excerpt",
+    );
+    const content = only(
+      elements(topics[i], "div", hasClass("experience-topic-content")),
+      "topic content",
+    );
+    const paragraphs = elements(content, "p").map(plain);
+    assert.equal(paragraphs[0], part.body, "topic body changed");
+    const limitLabel = english ? "Observation limits: " : "觀察限制：";
+    assert.equal(paragraphs[1], limitLabel + part.limitations, "limitations changed");
+    const links = [...content.matchAll(/\bhref="([^"]+)"/g)].map((m) => decode(m[1]));
+    assert.deepEqual(links, part.urls, "sources changed or moved between topics");
+    assert.ok(paragraphs[2]?.startsWith(english ? "Sources:" : "來源："), "missing source label");
+    if (!part.urls.length)
+      assert.ok(
+        paragraphs[2]?.includes(
+          english ? "Sources: Unknown." : (part.missingSources ?? "來源：未知"),
+        ),
+        "missing unknown source label",
+      );
+    if (part.sourceLabels) {
+      assert.deepEqual(
+        elements(content, "a").map(plain),
+        part.sourceLabels.map(
+          (label) => (english ? label.replace(/^來源/, "Source ") : label) + " ↗",
+        ),
+        "source labels changed",
+      );
+    }
+  });
+}
+
+export function checkRuntimeRunnerCopy(html, copy, englishTopicLabels) {
+  const root = only(
+    elements(html, "section", (tag) => /\bid="runner-copy"/.test(tag)),
+    "runner account",
+  );
+  assert.equal(
+    plain(only(elements(root, "h2"), "runner account heading")),
+    englishTopicLabels ? "Runner accounts" : "跑手分享",
+  );
+  checkRunnerTopics(root, copy.sections, englishTopicLabels);
+}
+
 export function contentTargets() {
   return Object.entries(selectedExperiences).map(([raceId, pin]) => {
     const record = JSON.parse(
@@ -65,7 +125,11 @@ export function checkContent(html, record) {
     elements(html, "section", (tag) => /\bid="race-confirmed-experience"/.test(tag)),
     "confirmed experience",
   );
-  assert.equal(plain(only(elements(root, "h2"), "title")), record.title, "title changed");
+  assert.equal(
+    plain(only(elements(root, "h2"), "title")),
+    "跑手分享",
+    "runner account heading changed",
+  );
   const currentYear = record.raceId.match(/-(\d{4})$/)?.[1];
   assert.equal(
     plain(only(elements(root, "p", hasClass("review-edition-note")), "edition note")),
@@ -94,29 +158,7 @@ export function checkContent(html, record) {
     );
   });
   assert.ok(plain(details).includes(record.ruleVersion), "missing rating rule version");
-  const topics = elements(root, "details", hasClass("experience-topic")).filter(
-    (topic) => topic !== details,
-  );
-  assert.equal(topics.length, 5, "missing topic");
-  record.sections.forEach((part, i) => {
-    const summary = only(elements(topics[i], "summary"), "topic summary");
-    assert.equal(
-      plain(only(elements(summary, "strong"), "topic label")),
-      part.topic,
-      "topic order changed",
-    );
-    const content = only(
-      elements(topics[i], "div", hasClass("experience-topic-content")),
-      "topic content",
-    );
-    const paragraphs = elements(content, "p").map(plain);
-    assert.equal(paragraphs[0], part.body, "topic body changed");
-    assert.equal(paragraphs[1], `觀察限制：${part.limitations}`, "limitations changed");
-    const links = [...content.matchAll(/\bhref="([^"]+)"/g)].map((m) => decode(m[1]));
-    assert.deepEqual(links, part.urls, "sources changed or moved between topics");
-    if (!part.urls.length)
-      assert.ok(paragraphs[2]?.includes("來源：未知"), "missing unknown source label");
-  });
+  checkRunnerTopics(root, record.sections);
   assert.ok(
     !/本機預覽|候選・待覆核|未部署|待人工確認/.test(plain(root)),
     "workflow label in public content",

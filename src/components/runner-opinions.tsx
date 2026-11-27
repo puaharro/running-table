@@ -4,6 +4,12 @@ import { language } from "@/lib/english-races";
 import { unscopedRunnerOpinionsForRace, type RunnerOpinions } from "@/data/runner-opinions";
 import { OpinionTopicFilter } from "./opinion-topic-filter";
 import { opinionTopics, topicComments } from "@/lib/opinion-topic-filter";
+import { runnerAccountTopics } from "@/lib/cms-runtime-schema.mjs";
+import {
+  RunnerAccountEdition,
+  RunnerAccountHelp,
+  RunnerAccountTopics,
+} from "./runner-account-topics";
 
 export function RunnerOpinionSummary({
   record,
@@ -24,20 +30,13 @@ export function RunnerOpinionSummary({
         `${record.editionYear} external runner comments`,
       )}
     >
-      <p className="review-context">
-        {t(
-          `${record.editionYear} 年${record.groupLabel ?? "半馬"} · 外站跑手意見整理`,
-          `${record.editionYear} · ${englishRaceTerm(record.groupLabel ?? "半馬", true)} · External runner comments`,
-        )}
-      </p>
-      {record.editionYear < currentYear && (
-        <p className="review-edition-note">
-          {t(
-            `往屆意見 · 不代表 ${currentYear} 年安排或表現`,
-            `Past edition comments · Arrangements and experience may differ in ${currentYear}`,
-          )}
-        </p>
-      )}
+      <RunnerAccountEdition
+        english={english}
+        year={record.editionYear}
+        currentYear={currentYear}
+        group={record.groupLabel}
+        context={t("外站跑手意見整理", "External runner comments")}
+      />
       <ul className="runner-topic-counts" aria-label={t("主題留言數", "Comment counts by topic")}>
         {opinionTopics.map((topic) => (
           <li key={topic}>
@@ -48,18 +47,26 @@ export function RunnerOpinionSummary({
           </li>
         ))}
       </ul>
-      <dl className="runner-opinion-topics">
-        {record.topics.map((topic) => (
-          <div key={topic.title}>
-            <dt>
-              <RaceDataText value={topic.title} english={english} />
-            </dt>
-            <dd>
-              <RaceDataText original value={topic.summary} english={english} />
-            </dd>
-          </div>
-        ))}
-      </dl>
+      <RunnerAccountHelp english={english} />
+      <div className="runner-copy-body experience-topics">
+        <RunnerAccountTopics
+          english={english}
+          sections={runnerAccountTopics.flatMap((title) => {
+            const topic = record.topics.find((item) => item.title === title);
+            return topic
+              ? [
+                  {
+                    topic: title,
+                    body: topic.summary,
+                    limitations: record.scope,
+                    urls: topic.sources.map((source) => source.url),
+                    sourceLabels: topic.sources.map((source) => source.reference),
+                  },
+                ]
+              : [];
+          })}
+        />
+      </div>
       <details className="runner-opinion-sources">
         <summary>
           {t("按主題查看留言原文及來源", "Browse original comments and sources by topic")}

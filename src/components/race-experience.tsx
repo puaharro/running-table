@@ -6,6 +6,7 @@ import { RaceConfirmedExperience } from "./confirmed-race-experience";
 import { RaceRatingAssessmentPreview } from "./race-rating-assessment-preview";
 import { EditorialReviewCard } from "./group-ratings";
 import { RaceRunnerCopy } from "./race-runner-copy";
+import { RunnerAccountHelp } from "./runner-account-topics";
 import { UnscopedRunnerOpinions } from "./runner-opinions";
 
 export function raceExperience(race: Race, english: boolean) {
@@ -56,15 +57,29 @@ export function RaceExperienceSections({
   english: boolean;
   experience: ReturnType<typeof raceExperience>;
 }) {
-  const { runnerCopy, combinedRunnerCopy, confirmed, ratingAssessment, reviewAnchor, laterReview } =
-    experience;
+  const {
+    runnerCopy,
+    runnerCopyGroup,
+    combinedRunnerCopy,
+    confirmed,
+    ratingAssessment,
+    reviewAnchor,
+    laterReview,
+  } = experience;
   const currentYear = race.date.slice(0, 4);
   const t = language(english);
   const latestId = combinedRunnerCopy ? "runner-copy" : "runner-account-latest";
   return (
     <>
       {ratingAssessment && <RaceRatingAssessmentPreview draft={ratingAssessment} />}
-      {runnerCopy && !combinedRunnerCopy && <RaceRunnerCopy english={english} copy={runnerCopy} />}
+      {runnerCopy && !combinedRunnerCopy && (
+        <RaceRunnerCopy
+          english={english}
+          copy={runnerCopy}
+          year={currentYear}
+          group={runnerCopyGroup?.name}
+        />
+      )}
       {confirmed && (combinedRunnerCopy || laterReview) ? (
         <section
           className="race-runner-copy runner-account-editions"
@@ -81,9 +96,16 @@ export function RaceExperienceSections({
               </a>
             </nav>
           </header>
+          <RunnerAccountHelp english={english} />
           <div className="runner-account-current">
             {combinedRunnerCopy ? (
-              <RaceRunnerCopy english={english} copy={combinedRunnerCopy} embedded />
+              <RaceRunnerCopy
+                english={english}
+                copy={combinedRunnerCopy}
+                year={currentYear}
+                group={runnerCopyGroup?.name}
+                embedded
+              />
             ) : laterReview ? (
               <div id={latestId} tabIndex={-1}>
                 {laterReview.editionYear < Number(currentYear) && (

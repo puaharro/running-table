@@ -270,7 +270,7 @@ CLI：`npm run content:agent -- execute .editorial-private/request.json`
 2. `npm run content:runtime -- prepare <website-id> <revision>`：重新核對確認及依據，輸出白名單公開欄位至 `.editorial-private/runtime-prepared/`，回傳完整記錄 hash。此步不修改公開檔或選擇清單。
 3. 將完整接入檔交營運者覆核。只有營運者明確批准該完整 hash 的公開選擇後，可信操作者才可執行 `npm run content:runtime -- select <website-id> <revision> <owner-approved-record-hash>`。不得由 AI 自行取 prepare 的 hash 當成營運者批准；本輪實作沒有對新稿件執行 select。命令是本機可信操作者介面，沒有新增受限 Agent API 發布權，也不假裝能驗證 OS 操作者是不是人。
 4. select 重新讀取已確認的指定 CMS 版本、核對依據與獲准 hash，只產生公開五主題文字、限制、HTTPS 來源與版本 manifest，更新資料清單；不自動 commit、push 或部署。既有數字評分不由文字自動生成；已有評分的賽事需另行更新完整評分內容選擇，不能用純文字入口直接覆蓋。
-5. 跑測試、build、check:export及test:http，覆核本機頁面；部署仍須另行授權。
+5. 執行 `npm run build`、`npm run check:export` 和 `npm run test:http`。CMS 選稿的中英文賽事頁共用[港珠澳半馬 2025 跑手分享版型](../skills/nxtgo-site-qa/SKILL.md#跑手分享年份切換)。核對每題預設摺合，展開後可查閱正文、觀察限制及來源。舊 Markdown 選稿在顯示時轉換，原核准檔及雜湊維持原值。部署仍須另行授權。
 
 新增已存在於公開 catalog 的賽事只需已確認 CMS 網站稿與選擇資料，毋須修改 loader 或 component。新增私人賽事到公開 catalog 仍需獨立資料確認。過往 RMAC Markdown 原文及兩份2025評論／評分保持原有 hash；遷移只把程式內固定選擇移到資料清單，沒有重新批准文字。
 

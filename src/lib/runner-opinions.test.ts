@@ -36,7 +36,7 @@ describe("approved external runner opinions", () => {
     const html = renderToStaticMarkup(
       createElement(RunnerOpinionSummary, { record, currentYear: 2026 }),
     );
-    const highlights = html.slice(0, html.indexOf("<details"));
+    const highlights = html.slice(0, html.indexOf('<details class="runner-opinion-sources">'));
     for (const title of ["賽道", "大會安排", "補給"]) expect(highlights).toContain(title);
     expect(highlights).toContain("建議擴闊頭 3 公里");
     expect(highlights).toContain("較前屆改善");
@@ -91,6 +91,11 @@ it("keeps the mobile overview to three short topics with the full take and remin
     for (const topic of ["交通", "寄存", "水站", "賽道", "賽事組織"])
       expect(overview).toContain(`${topic}（`);
     expect(overview).not.toContain("原帖 ↗");
+    expect([...overview.matchAll(/<summary><strong>(.*?)<\/strong>/g)].map((m) => m[1])).toEqual([
+      "賽道",
+      "補給",
+      "大會安排",
+    ]);
     expect(overview).not.toContain("選擇主題查看原文及來源");
     expect(html).toContain("按主題查看留言原文及來源</summary>");
     expect(item.topics.map((topic) => topic.title)).toEqual(["賽道", "大會安排", "補給"]);
@@ -128,11 +133,11 @@ it("keeps approved SCHKM 2025 opinions on their explicit groups, unscoped source
       createElement(RunnerOpinionSummary, { record: selected[0] ?? record, currentYear: 2027 }),
     );
     if (group.id === "schkm-2027-marathon") {
-      expect(html).toContain("年全馬");
+      expect(html).toContain("年 · 全馬");
       expect(html).not.toContain("_9walker_");
     }
     if (group.id === "schkm-2027-half") {
-      expect(html).toContain("年半馬");
+      expect(html).toContain("年 · 半馬");
       expect(html).toContain("_9walker_");
       expect(html).not.toContain("Lawrence Hui");
     }
@@ -155,7 +160,9 @@ it("keeps names in the source disclosure, with approved anonymous prose and no s
     const html = renderToStaticMarkup(
       createElement(RunnerOpinionSummary, { record: item, currentYear: 2027 }),
     );
-    const body = html.slice(0, html.indexOf('<details class="runner-opinion-sources">'));
+    const body = html
+      .slice(0, html.indexOf('<details class="runner-opinion-sources">'))
+      .replace(/<[^>]*>/g, "");
     const prose = [
       item.intro,
       item.fullText,

@@ -1,7 +1,11 @@
 import { language } from "@/lib/english-races";
 import { englishRaceTerm } from "@/lib/race-terms.en";
 import type { ConfirmedRaceExperience } from "@/lib/confirmed-race-experience";
-import { RunnerAccountTopics } from "./runner-account-topics";
+import {
+  RunnerAccountEdition,
+  RunnerAccountHelp,
+  RunnerAccountTopics,
+} from "./runner-account-topics";
 import { ratingDimensions, ratingPolicy } from "@/lib/rating-policy";
 
 export function RaceConfirmedExperience({
@@ -25,24 +29,14 @@ export function RaceConfirmedExperience({
       tabIndex={-1}
     >
       {reviewAnchor && <span id={reviewAnchor} aria-hidden="true" />}
-      <h2 className={embedded ? "sr-only" : undefined}>{english ? "Race experience" : e.title}</h2>
-      <p className="review-edition-note">
-        {t(
-          `${e.year} 年 · ${e.group} · 往屆體驗，不代表 ${currentYear} 年安排或表現。`,
-          `${e.year} · ${englishRaceTerm(e.group, true)} · Past edition, with original accounts in Chinese. Arrangements and experience may differ in ${currentYear}.`,
-        )}
-      </p>
-      {!embedded && (
-        <>
-          <h3 className="experience-topics-heading">{t("跑手分享", "Runner accounts")}</h3>
-          <p className="experience-help">
-            {t(
-              "展開各主題，即可查閱全文、來源及觀察限制。",
-              "Expand a topic to read the original account, sources and observation limits.",
-            )}
-          </p>
-        </>
-      )}
+      <h2 className={embedded ? "sr-only" : undefined}>{t("跑手分享", "Runner accounts")}</h2>
+      <RunnerAccountEdition
+        english={english}
+        year={e.year}
+        group={e.group}
+        currentYear={Number(currentYear)}
+      />
+      {!embedded && <RunnerAccountHelp english={english} />}
       <div className="runner-copy-body experience-topics">
         <details className="experience-topic experience-written-review">
           <summary>{t("參賽評論及依據", "Race experience review and evidence")}</summary>

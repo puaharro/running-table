@@ -23,7 +23,8 @@ jobs:
       - run: npm run test:threads:http
       - run: npm run test:research
       - run: npm run build
-      - run: npm run check:export
+      - name: Verify static export and runner account format
+        run: npm run check:export
       - run: npm run test:http
       - name: Check production SEO output with test values
         env:

@@ -32,7 +32,9 @@ describe("confirmed content regression check", () => {
       record.sections[0].limitations,
       record.assessments.course.comment,
     ]) {
-      expect(() => checkContent(render(record).replaceAll(text, "遺漏內容"), record)).toThrow();
+      expect(() =>
+        checkContent(render(record).replaceAll(text.split("。")[0], "遺漏內容"), record),
+      ).toThrow();
     }
   });
   it("rejects a legacy score grid in the published experience", () => {
@@ -105,7 +107,10 @@ it("CLI returns nonzero for missing full text without printing the paragraph", (
     const target = targets[0];
     writeFileSync(
       join(dir, target.path),
-      render(target.record).replaceAll(target.record.sections[0].body, "PRIVATE_TEST_SENTINEL"),
+      render(target.record).replaceAll(
+        target.record.sections[0].body.split("。")[0],
+        "PRIVATE_TEST_SENTINEL",
+      ),
     );
     const failed = invoke();
     expect(failed.status).toBe(1);

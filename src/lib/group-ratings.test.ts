@@ -225,7 +225,7 @@ describe("ten-second review view", () => {
     const html = renderToStaticMarkup(
       createElement(GroupRatings, { race: main, group: main.groups[0] }),
     );
-    expect(html).toContain("2025 年全馬");
+    expect(html).toContain("2025 年 · 全馬");
     expect(html).toContain("review-quicklook");
     expect(html).not.toContain("編輯評分");
     expect(html).not.toContain('role="tablist"');
@@ -349,9 +349,10 @@ describe("race detail as the main review reading location", () => {
       expect(html).toContain('href="#race-confirmed-experience"');
       expect(html).toContain('id="ratings-' + race.groups[0].id + '"');
       expect(html).toContain('id="review-' + review.id + '"');
+      const visibleText = html.replace(/<[^>]*>/g, "");
       for (const section of confirmed.sections) {
-        expect(html).toContain(section.body);
-        expect(html).toContain(section.limitations);
+        expect(visibleText).toContain(section.body);
+        expect(visibleText).toContain(section.limitations);
       }
       for (const a of Object.values(confirmed.assessments)) expect(html).toContain(a.comment);
       if (review.editionYear === confirmed.year) {

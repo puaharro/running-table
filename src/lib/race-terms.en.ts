@@ -270,6 +270,11 @@ const terms: Readonly<Record<string, string>> = {
   "活動參賽頁分列跑步及定向健步行；本頁只收錄5K計時、4K體驗及1K家庭跑，不收錄定向行。只有5K計時；園內有上落斜，路線圖尚待公布，地面及詳細路線待核實。分時段起步，不以準備時間代替個別起跑時間。":
     "This listing covers the timed 5K, 4K fun run and 1K family run. The orienteering walk is a separate event. The park has climbs and descents. The course map, surface and detailed route are unconfirmed. Starts are staggered; assembly times and start times differ.",
   賽道體驗: "Course experience",
+  賽道: "Course",
+  補給: "Aid stations",
+  寄存: "Bag drop",
+  交通: "Transport",
+  大會安排: "Event organisation",
   大會執行: "Event organisation",
   補給體驗: "Aid stations",
   "NXTGO 編輯": "NXTGO editorial team",
