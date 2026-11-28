@@ -204,9 +204,6 @@ export function HomeFocusBanner({
             <div className="focus-banner-art" aria-hidden="true">
               <span>{slide.location}</span>
               <strong>{slide.graphic}</strong>
-              <i />
-              <i />
-              <i />
             </div>
           </article>
         ))}

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LayoutGroup, motion, useReducedMotion } from "motion/react";
 import { englishRaceTerm } from "@/lib/race-terms.en";
 import { language } from "@/lib/english-races";
+import { calendarRegistrationLabels } from "@/lib/list-registration";
 import { Icon } from "./ui";
 import { defaultFilters, filterError } from "@/lib/races";
 import { toggleDateShortcut, type DateShortcut } from "@/lib/filter-shortcuts";
@@ -211,7 +212,7 @@ export function RaceExplorer({
       : filters.view;
   const quickViews = [
     ["upcoming", t("即將舉行", "Upcoming")],
-    ["open", t("接受申請", "Accepting entries")],
+    ["open", t(calendarRegistrationLabels.open, "Accepting entries")],
     ["saved", t("我的收藏", "Saved races")],
     ["all", t("全部", "All")],
   ] as const;
@@ -330,6 +331,7 @@ export function RaceExplorer({
                   <button
                     key={key}
                     type="button"
+                    data-entry-status={key === "open" ? "open" : undefined}
                     aria-pressed={selectedView === key}
                     onClick={(event) => {
                       setInstantQuickView(event.detail === 0);

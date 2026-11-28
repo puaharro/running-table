@@ -257,14 +257,14 @@ export function RaceResultsList({
                   <div className="calendar-race-deadline" data-empty={!deadline}>
                     {deadline ? (
                       <>
-                        <span
-                          className={highlightDeadlines ? "calendar-verified-deadline" : "sr-only"}
-                        >
-                          {t("已核實報名截止", "Verified entry deadline")}
-                        </span>
-                        <strong>
-                          <time dateTime={deadline.day}>{dateLabel(deadline.day)}</time>
-                        </strong>
+                        <div className="calendar-deadline-heading">
+                          <span className="calendar-verified-deadline">
+                            {t("已核實報名截止", "Verified entry deadline")}
+                          </span>
+                          <strong>
+                            <time dateTime={deadline.day}>{dateLabel(deadline.day)}</time>
+                          </strong>
+                        </div>
                         <span>
                           {deadline.time ? (
                             <time dateTime={deadline.date}>

@@ -50,7 +50,7 @@ function fixture() {
 it("keeps closed general and open charity separate, without claiming guaranteed places", () => {
   const race = fixture();
   expect(listRegistration(race, race.groups, now)).toEqual({
-    primary: "接受申請",
+    primary: "接受報名",
     secondary: "慈善報名 · 一般報名：已截止",
     status: "open",
   });
@@ -59,7 +59,7 @@ it("uses only matching groups and channels", () => {
   const race = fixture();
   expect(
     listRegistration(race, [{ ...race.groups[0], channels: [race.groups[0].channels[1]] }], now),
-  ).toEqual({ primary: "接受申請", secondary: "慈善報名", status: "open" });
+  ).toEqual({ primary: "接受報名", secondary: "慈善報名", status: "open" });
 });
 it.each(["upcoming", "waitlist"] as const)("exposes %s for a verified channel", (status) => {
   const race = fixture();
@@ -97,7 +97,7 @@ it("does not hide unknown groups behind an open channel of the same type", () =>
   race.groups[0].channels[0].deadline = undefined;
   race.groups[0].channels[0].status = "unknown";
   expect(listRegistration(race, race.groups, now)).toEqual({
-    primary: "部分接受申請",
+    primary: "部分接受報名",
     secondary: "慈善報名 · 部分報名狀態待核實",
     status: "open",
   });
@@ -106,8 +106,8 @@ it("limits visible categories and flags further channels", () => {
   const race = fixture();
   race.groups[0].channels.push({ ...race.groups[0].channels[1], id: "hotel", type: "hotel" });
   expect(listRegistration(race, race.groups, now)).toEqual({
-    primary: "接受申請",
-    secondary: "慈善報名 · 住宿連名額：接受申請 · 另 1 類渠道",
+    primary: "接受報名",
+    secondary: "慈善報名 · 住宿連名額：接受報名 · 另 1 類渠道",
     status: "open",
   });
 });

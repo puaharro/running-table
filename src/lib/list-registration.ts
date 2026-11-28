@@ -17,6 +17,8 @@ import {
   type RegistrationStatus,
 } from "./types";
 
+export const calendarRegistrationLabels = { ...registrationLabels, open: "接受報名" };
+
 export function listDeadline(race: Race, groups: RaceGroup[], now: Clock, english = false) {
   const candidates = groups.flatMap((group) =>
     group.channels.flatMap((channel) => {
@@ -117,9 +119,9 @@ export function listRegistration(
       const label = singleStatus
         ? singleStatus === "unknown"
           ? unverified
-          : (english ? englishStatus : registrationLabels)[singleStatus]
+          : (english ? englishStatus : calendarRegistrationLabels)[singleStatus]
         : open
-          ? t("部分接受申請", "Some categories open")
+          ? t("部分接受報名", "Some categories open")
           : unknown
             ? t("部分報名狀態待核實", "Some entry statuses unverified")
             : t("按組別而異", "Varies by category");

@@ -1,5 +1,9 @@
 /* NXTGO: calendar-first editorial design. Tokens live in tokens.css. */
 .homepage {
+  --home-paper: #f5f5ec;
+  --home-ink: #18271e;
+  --home-muted: #4c584e;
+  --home-action: #20563b;
   background: var(--home-paper);
   color: var(--home-ink);
 }
@@ -46,40 +50,6 @@
 .home-description-mobile {
   display: none;
 }
-.home-search {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
-  border: 1px solid var(--home-control);
-  border-radius: 8px;
-  background: var(--home-card);
-}
-.home-search > svg {
-  flex: none;
-  color: var(--home-muted);
-}
-.home-search input {
-  min-width: 0;
-  width: 100%;
-  height: 44px;
-  border: none;
-  color: var(--home-ink);
-  background: transparent;
-  font-size: 16px;
-}
-.home-search input::placeholder {
-  color: var(--home-muted);
-  opacity: 1;
-}
-.homepage .home-search:has(input:focus) {
-  outline: 2px solid var(--home-action);
-  outline-offset: -2px;
-}
-.homepage .home-search input:focus-visible {
-  outline: none;
-}
-.home-search button,
 .home-primary {
   display: inline-flex;
   justify-content: center;
@@ -95,12 +65,10 @@
   font-weight: 600;
   white-space: nowrap;
 }
-.home-search button:hover,
 .homepage .home-primary:hover {
   background: var(--home-ink);
   color: var(--home-on-dark);
 }
-.home-search button:active,
 .homepage .home-primary:active {
   background: var(--home-action-pressed);
 }
@@ -561,17 +529,6 @@
   .home-hero-description br {
     display: none;
   }
-  .home-search {
-    gap: var(--space-2);
-    padding-left: var(--space-3);
-  }
-  .home-search button {
-    padding-inline: var(--space-3);
-    font-size: 14px;
-  }
-  .home-search button svg {
-    display: none;
-  }
   .home-distance-links {
     column-gap: var(--space-2);
     margin-block: var(--space-3) 0;
@@ -731,50 +688,66 @@
 /* Focus placements lead the homepage; full filtering remains on /races/. */
 .home-intro {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
   align-items: end;
-  gap: var(--space-6);
-  padding-block: var(--space-7) var(--space-6);
+  gap: clamp(24px, 5vw, 72px);
+  padding-block: clamp(24px, 3vw, 44px) var(--space-7);
+}
+.home-intro-copy {
+  align-self: center;
+  border-top: 2px solid var(--home-ink);
+  padding-top: clamp(16px, 2vw, 28px);
 }
 .home-intro h1 {
-  font-size: clamp(25px, 3vw, 36px);
+  font-size: clamp(42px, 5vw, 72px);
+  font-weight: 800;
+  letter-spacing: -0.065em;
+  line-height: 1.12;
   margin: 0;
-  line-height: 1.5;
-  text-wrap: balance;
 }
-.home-intro p {
-  margin: var(--space-1) 0 0;
-  color: var(--home-muted);
-  font-size: 14px;
+.home-intro h1 span {
+  display: inline-block;
 }
-.home-intro-search {
-  max-width: 38rem;
-  margin-top: var(--space-4);
-}
-.home-intro-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--space-5);
-}
-.home-intro-links > a {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-height: 44px;
-  color: var(--home-ink);
-  font-size: 14px;
-  font-weight: 650;
-}
-.home-intro-links > a:first-child {
+.home-intro h1 span:last-child {
   color: var(--home-action);
 }
-.homepage .home-intro-links > a:is(:hover, :focus-visible) {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.home-intro p {
+  margin: var(--space-4) 0 0;
+  color: var(--home-muted);
+  font-size: 16px;
+}
+.home-intro-links .home-primary {
+  border: 1px solid #389f98;
+  border-radius: 999px;
+  background: #77f2e9;
+  color: #111;
+}
+.homepage .home-intro-links .home-primary:is(:hover, :active) {
+  background: #61e2d8;
+  color: #111;
+}
+.homepage .home-intro-links .home-primary:active {
+  background: #4bd1c8;
+}
+@media (min-width: 1024px) {
+  .home-intro-links {
+    justify-self: end;
+  }
+  .home-intro-links .home-primary {
+    min-height: 56px;
+    padding-inline: var(--space-7);
+    font-size: 17px;
+  }
+}
+@media (max-width: 1023px) {
+  .home-intro {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+  }
 }
 .home-focus-banner {
   border: 1px solid var(--home-line);
-  border-radius: 10px;
+  border-radius: clamp(16px, 2vw, 22px);
   overflow: hidden;
   background: var(--home-card);
 }
@@ -797,7 +770,10 @@
   outline-offset: 4px;
 }
 .focus-banner-slide {
-  --banner-surface: var(--surface-hero);
+  --banner-surface: #14291f;
+  --banner-ink: #fbfdf7;
+  --banner-muted: #d4dfd5;
+  --banner-accent: #d4ec83;
   position: relative;
   isolation: isolate;
   flex: 0 0 100%;
@@ -810,10 +786,15 @@
   scroll-snap-align: start;
   scroll-snap-stop: always;
   background: var(--banner-surface);
-  color: var(--text-primary);
+  color: var(--banner-ink);
 }
 .focus-banner-slide--blue {
-  --banner-surface: var(--surface-brand);
+  --banner-surface: #172d38;
+  --banner-accent: #b8e7f2;
+}
+.focus-banner-slide--sand {
+  --banner-surface: #392c20;
+  --banner-accent: #f7dca1;
 }
 .focus-banner-copy {
   position: relative;
@@ -823,13 +804,13 @@
 .focus-banner-category {
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--banner-accent);
 }
 .focus-banner-copy h2 {
   font-size: clamp(28px, 3vw, 42px);
   line-height: 1.3;
   margin: var(--space-3) 0 var(--space-3);
-  color: var(--text-primary);
+  color: var(--banner-ink);
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
@@ -840,13 +821,13 @@
   margin-bottom: var(--space-3);
   font-size: 15px;
   font-weight: 650;
-  color: var(--text-primary);
+  color: var(--banner-ink);
   font-variant-numeric: tabular-nums;
 }
 .focus-banner-copy p {
   font-size: 16px;
   line-height: 1.85;
-  color: var(--text-secondary);
+  color: var(--banner-muted);
   max-width: 45ch;
   margin: 0 0 var(--space-5);
 }
@@ -857,9 +838,9 @@
   max-width: 100%;
   min-height: 48px;
   padding: var(--space-3) var(--space-5);
-  border-radius: 5px;
-  background: var(--action-primary);
-  color: var(--text-on-dark);
+  border-radius: 10px;
+  background: var(--banner-accent);
+  color: var(--banner-surface);
   font-size: 15px;
   font-weight: 600;
 }
@@ -867,21 +848,21 @@
   flex: none;
 }
 .homepage .focus-banner-cta:focus-visible {
-  outline-color: var(--focus-ring);
+  outline-color: var(--banner-accent);
 }
-.homepage .focus-banner-cta:hover {
-  background: var(--action-primary-hover);
-  color: var(--text-on-dark);
+.homepage .focus-banner-cta:is(:hover, :active) {
+  background: var(--banner-ink);
+  color: var(--banner-surface);
 }
 .focus-banner-art {
   position: absolute;
   inset: 0 0 0 auto;
-  width: 33%;
+  width: 37%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: var(--action-primary);
+  color: var(--banner-accent);
   pointer-events: none;
 }
 .focus-banner-art > span {
@@ -895,35 +876,32 @@
   z-index: 1;
   letter-spacing: -0.025em;
 }
-.focus-banner-art i {
+.focus-banner-art::before {
+  content: "";
   position: absolute;
-  width: 240px;
-  height: 480px;
-  border: 1px solid currentColor;
-  border-radius: 48%;
-  transform: rotate(28deg);
-  opacity: 0.15;
-  right: -130px;
-}
-.focus-banner-art i:nth-of-type(2) {
-  right: -104px;
-}
-.focus-banner-art i:nth-of-type(3) {
-  right: -78px;
+  inset: 0;
+  border-inline-start: 1px solid currentColor;
+  background: repeating-linear-gradient(-65deg, transparent 0 40px, currentColor 40px 41px);
+  opacity: 0.18;
 }
 .focus-banner-copy h2::after {
   content: "";
   display: block;
   width: min(100%, 10rem);
   height: 2px;
-  margin: var(--space-3) 0 0 auto;
-  background: currentColor;
-  opacity: 0.55;
-  transform-origin: right center;
+  margin: var(--space-3) 0 0;
+  background: var(--banner-accent);
+  transform-origin: left center;
 }
 @media (prefers-reduced-motion: no-preference) {
   .focus-banner-slide[data-settled="true"]:not([inert]) h2::after {
     animation: focus-start-line 280ms ease-out both;
+  }
+  .focus-banner-cta svg {
+    transition: translate 160ms ease-out;
+  }
+  .focus-banner-cta:is(:hover, :focus-visible) svg {
+    translate: 3px 0;
   }
 }
 @keyframes focus-start-line {
@@ -989,19 +967,10 @@
 }
 @media (max-width: 767px) {
   .home-intro {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-1);
-    padding-block: var(--space-5) var(--space-3);
+    padding-block: var(--space-5) var(--space-6);
   }
   .home-intro h1 {
-    font-size: 24px;
-    line-height: 1.35;
-  }
-  .home-intro-links {
-    column-gap: var(--space-3);
-  }
-  .home-intro-links > a {
-    font-size: 13px;
+    font-size: clamp(34px, 7.7vw, 54px);
   }
   .home-focus-banner[data-multiple="true"] .focus-banner-track {
     gap: var(--space-2);
@@ -1018,6 +987,7 @@
   .focus-banner-copy h2 {
     font-size: 23px;
     margin-block: var(--space-2);
+    text-wrap: pretty;
   }
   .focus-banner-date {
     font-size: 14px;
@@ -1037,6 +1007,9 @@
     width: 55%;
     inset: auto -20px -32px auto;
     opacity: 0.1;
+  }
+  .focus-banner-art::before {
+    display: none;
   }
   .focus-banner-art strong {
     font-size: 160px;

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { englishDate, englishDistanceTag, language } from "@/lib/english-races";
 import { englishRaceTerm } from "@/lib/race-terms.en";
+import { calendarRegistrationLabels } from "@/lib/list-registration";
 import { dateShortcutIsActive, type DateShortcut } from "@/lib/filter-shortcuts";
 import { displayDate, hongKongToday } from "@/lib/races";
 import { distanceOptions, regions, type Filters } from "@/lib/types";
@@ -387,10 +388,11 @@ export function RaceFilterPanel({
               <span className="engine-label">{t("報名狀態", "Entry status")}</span>
               <div className="option-row">
                 <button
+                  data-entry-status="open"
                   aria-pressed={acceptingOnly}
                   onClick={() => field("statuses", acceptingOnly ? [] : ["open"])}
                 >
-                  {t("接受申請", "Accepting entries")}
+                  {t(calendarRegistrationLabels.open, "Accepting entries")}
                 </button>
               </div>
             </div>
