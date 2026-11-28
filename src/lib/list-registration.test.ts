@@ -72,13 +72,13 @@ it("requires field-specific official provenance, including for expired deadlines
   const race = fixture();
   race.sources![0].fields = ["date"];
   expect(listRegistration(race, race.groups, now)).toEqual({
-    primary: "報名待核實",
+    primary: "報名狀態待核實",
     status: "unknown",
   });
   race.sources![0].fields = ["channels.registration"];
   race.sources![0].checkedAt = "2026-11-08T02:00:00Z";
   expect(listRegistration(race, race.groups, now)).toEqual({
-    primary: "報名待核實",
+    primary: "報名狀態待核實",
     status: "unknown",
   });
 });
@@ -86,7 +86,7 @@ it("keeps stale availability unknown alongside verified closed channels", () => 
   const race = fixture();
   race.groups[0].channels[1].registrationVerifiedAt = "2026-11-01T02:00:00Z";
   expect(listRegistration(race, race.groups, now)).toEqual({
-    primary: "待核實",
+    primary: "報名狀態待核實",
     secondary: "慈善報名 · 一般報名：已截止",
     status: "unknown",
   });
@@ -98,7 +98,7 @@ it("does not hide unknown groups behind an open channel of the same type", () =>
   race.groups[0].channels[0].status = "unknown";
   expect(listRegistration(race, race.groups, now)).toEqual({
     primary: "部分接受申請",
-    secondary: "慈善報名 · 部分待核實",
+    secondary: "慈善報名 · 部分報名狀態待核實",
     status: "open",
   });
 });
@@ -118,7 +118,7 @@ it("gives lifecycle changes precedence over registration", () => {
   race.status = "postponed";
   expect(listRegistration(race, race.groups, now)).toEqual({
     primary: "賽事延期",
-    secondary: "報名待核實",
+    secondary: "報名狀態待核實",
   });
   race.status = "completed";
   expect(listRegistration(race, race.groups, now)).toEqual({ primary: "賽事已完成" });

@@ -1,6 +1,16 @@
 import { englishDate } from "./english-races";
 
 const terms: Readonly<Record<string, string>> = {
+  "大會活動頁及四個組別頁列12月1日23:59（香港時間）截止。即時名額仍待核實。":
+    "The organiser's event page and all four category pages list a deadline of 1 December at 23:59 HKT. Current availability is unconfirmed.",
+  "官方公告確認相關組別額滿。": "The official notice confirms these categories are full.",
+  "官方報名表仍列相關組別為可選；名額以大會確認為準。":
+    "The official entry form still lists these categories as selectable. The organiser confirms availability.",
+  "官方報名表暫未列出3公里個人組，報名狀態有待確認。":
+    "The official entry form currently omits the 3K individual category. Entry status is unconfirmed.",
+  "官方組別表列有2公里親子組，報名表暫未見獨立選項，報名狀態待確認。":
+    "The organiser lists a 2K family category. The entry form has no separate option, so its entry status is unconfirmed.",
+  "重新核對選定組別的報名狀態。": "Rechecked entry status for selected categories.",
   "補登四組暫定起步時間，並重新核對半馬額滿公告及其餘組別的報名入口。":
     "Added tentative start times for the four categories and rechecked the half-marathon sold-out notice and entry options for the other categories.",
   "重新核對官方報名截止及指定平台四個場次，名額仍以大會確認為準。":

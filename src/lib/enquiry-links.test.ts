@@ -25,7 +25,13 @@ describe("charity directory is an enquiry resource rather than a registration ch
       { ...defaultFilters, channels: ["charity"], statuses: ["unknown"] },
       now,
     );
-    expect(unresolved).toEqual([]);
+    expect(unresolved.flatMap((r) => r.groups.flatMap((g) => g.channels.map((c) => c.id)))).toEqual(
+      [
+        "schkm-2027-marathon-charity-familyvalue",
+        "schkm-2027-half-charity-familyvalue",
+        "schkm-2027-10k-charity-familyvalue",
+      ],
+    );
     const open = selectRaces(
       [main],
       { ...defaultFilters, channels: ["charity"], statuses: ["open"] },

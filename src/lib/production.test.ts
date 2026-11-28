@@ -45,6 +45,13 @@ describe("real catalog publication and provenance", () => {
     expect(publishedRaces(data)).toHaveLength(data.length);
     expect(data.every((r) => r.verification === "verified" && r.sources!.length > 0)).toBe(true);
   });
+  it("rejects publication without evidence for the race date", () => {
+    const data = catalog();
+    for (const source of data[0].sources!) {
+      source.fields = source.fields.filter((field) => field !== "date");
+    }
+    expect(() => assertCatalog(data)).toThrow("published race requires event date evidence");
+  });
   it("rejects duplicate IDs and broken source references", () => {
     const data = catalog();
     data[1].id = data[0].id;
@@ -53,12 +60,14 @@ describe("real catalog publication and provenance", () => {
     other[0].groups[0].sourceIds = ["missing"];
     expect(() => assertCatalog(other)).toThrow("source");
   });
-  it("keeps drafts and demo records out of published results", () => {
+  it("keeps drafts, demo and pending records out of published results", () => {
     const data = catalog();
     data[0].publication = "draft";
     expect(publishedRaces(data)).toHaveLength(data.length - 1);
     data[1].verification = "demo";
     expect(publishedRaces(data)).toHaveLength(data.length - 2);
+    data[2].verification = "pending";
+    expect(publishedRaces(data)).toHaveLength(data.length - 3);
     expect(() => assertCatalog(data)).toThrow("verified");
   });
   it("rejects unsafe links, invalid timestamps and mismatched deadlines", () => {

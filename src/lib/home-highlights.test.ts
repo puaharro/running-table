@@ -23,9 +23,7 @@ it("places the localised search before the banner and links deadline headlines t
   const news = html.split('class="home-news-sheet"')[1].split("<aside")[0];
   expect(news).toMatch(/sai-kung-district-run-2026\/?#registration-groups/);
   expect(news).toContain("距報名截止尚餘 2 日");
-  expect(news.indexOf("sai-kung-district-run-2026")).toBeLessThan(
-    news.indexOf("ocean-park-run-for-survival-2026"),
-  );
+  expect(news).not.toContain("ocean-park-run-for-survival-2026");
 
   const english = renderToStaticMarkup(
     createElement(HomeHighlights, { races, initialNow, english: true }),

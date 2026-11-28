@@ -184,7 +184,7 @@ describe("additional NGO evidence without extrapolating availability or prices",
   it("preserves the family foundation sold-out evidence without inventing a minimum from its fundraising target", () => {
     for (const group of main.groups) {
       const channel = group.channels.find((c) => c.id.endsWith("-familyvalue"))!;
-      expect(channelStatus(main, group, channel, now)).toBe("full");
+      expect(channelStatus(main, group, channel, channel.registrationVerifiedAt!)).toBe("full");
       expect(channel.price).toBeNull();
       expect(channel.priceNote).toContain("籌款目標HK$10,000");
     }
@@ -204,11 +204,19 @@ describe("additional NGO evidence without extrapolating availability or prices",
 
 describe("27 October review preserves unresolved official evidence", () => {
   it("keeps the completed family recruitment separate from its unverified minimum donation", () => {
+    const originalReview = main.sources!.find((source) => source.id === "schkm-familyvalue-form")!;
     for (const group of main.groups) {
       const channel = group.channels.find((c) => c.id.endsWith("-familyvalue"))!;
       expect(channel.sourceIds).toContain("schkm-familyvalue-form");
       expect(channel.registrationNote).toContain("招募已完成");
-      expect(channelStatus(main, group, channel, now)).toBe("full");
+      expect(
+        channelStatus(
+          main,
+          group,
+          { ...channel, registrationVerifiedAt: originalReview.checkedAt },
+          now,
+        ),
+      ).toBe("full");
       expect(channel.price).toBeNull();
     }
     const half = races.find((r) => r.id === "unicef-powerun-2027")!.groups[0].channels[0];

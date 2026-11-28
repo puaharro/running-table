@@ -73,11 +73,12 @@ export function listRegistration(
   english = false,
 ): { primary: string; secondary?: string; status?: RegistrationStatus } {
   const t = language(english);
+  const unverified = t("報名狀態待核實", "Entry status unverified");
   if (race.status === "cancelled") return { primary: t("賽事取消", "Race cancelled") };
   if (race.status === "postponed")
     return {
       primary: t("賽事延期", "Postponed"),
-      secondary: t("報名待核實", "Entry status unverified"),
+      secondary: unverified,
     };
   if (race.status === "completed" || race.endDate < hongKongToday(clockTime(now)))
     return { primary: t("賽事已完成", "Race completed") };
@@ -103,7 +104,7 @@ export function listRegistration(
   if (!entries.length && race.charityEntry?.available)
     return { primary: t("報名詳情請參閱大會網站", "See the official website for entry details") };
   if (!entries.length || entries.every((entry) => entry.status === "unknown"))
-    return { primary: t("報名待核實", "Entry status unverified"), status: "unknown" };
+    return { primary: unverified, status: "unknown" };
   const parts = Object.entries(english ? englishChannels : channelTypeLabels)
     .flatMap(([type, channel]) => {
       const statuses = new Set(
@@ -114,13 +115,16 @@ export function listRegistration(
       const unknown = statuses.has("unknown");
       const singleStatus = statuses.size === 1 ? [...statuses][0] : undefined;
       const label = singleStatus
-        ? (english ? englishStatus : registrationLabels)[singleStatus]
+        ? singleStatus === "unknown"
+          ? unverified
+          : (english ? englishStatus : registrationLabels)[singleStatus]
         : open
           ? t("部分接受申請", "Some categories open")
           : unknown
-            ? t("部分待核實", "Partly unverified")
+            ? t("部分報名狀態待核實", "Some entry statuses unverified")
             : t("按組別而異", "Varies by category");
-      const detail = open && unknown ? t("部分待核實", "Some unverified") : undefined;
+      const detail =
+        open && unknown ? t("部分報名狀態待核實", "Some entry statuses unverified") : undefined;
       const status = open ? "open" : unknown ? "unknown" : singleStatus;
       return [{ channel, label, detail, status, priority: open ? 0 : unknown ? 1 : 2 }];
     })

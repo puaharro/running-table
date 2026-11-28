@@ -94,6 +94,11 @@ export function assertCatalog(input: unknown): asserts input is Race[] {
         fail(race.id, "invalid or duplicate source");
       sourceIds.add(source.id);
     }
+    if (
+      race.publication === "published" &&
+      !race.sources!.some((source) => source.fields.includes("date"))
+    )
+      fail(race.id, "published race requires event date evidence");
     if (race.announcement !== undefined) {
       const notice = race.announcement;
       if (
