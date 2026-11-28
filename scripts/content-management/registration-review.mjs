@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { registrationSoldOutSource } from "../../src/lib/registration-sold-out.mjs";
 import { ReviewError } from "../threads/review-store.mjs";
 import {
   extractRegistration,
@@ -57,9 +58,9 @@ export function registrationTargets(catalog, now, recorded = []) {
   return catalog
     .filter((race) => race.publication === "published" && race.date >= today)
     .flatMap((race) => {
-      const soldOut = confirmedSoldOut(race);
+      const soldOut = confirmedSoldOut(race, now);
       return race.groups.flatMap((group) => {
-        const groupSoldOut = soldOut ?? confirmedGroupSoldOut(race, group);
+        const groupSoldOut = soldOut ?? confirmedGroupSoldOut(race, group, now);
         return group.channels.flatMap((channel) => {
           const deadline = channel.registrationClosesAt ?? channel.deadline ?? null;
           const deadlineValue =
@@ -71,7 +72,12 @@ export function registrationTargets(catalog, now, recorded = []) {
           const close = channel.status === "closed" || (end < now && channel.status !== "unknown");
           const priority = ["priority", "elite"].includes(channel.type);
           const linkOnly = isLinkOnly(channel);
-          if (linkOnly ? endedPartnerRegistration(race, channel, now) : groupSoldOut) return [];
+          if (
+            linkOnly
+              ? endedPartnerRegistration(race, channel, now)
+              : groupSoldOut || registrationSoldOutSource(race, channel, now)
+          )
+            return [];
           if (
             !linkOnly &&
             !priority &&

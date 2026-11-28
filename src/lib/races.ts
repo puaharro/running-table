@@ -12,6 +12,7 @@ import {
   type RegistrationStatus,
 } from "./types";
 import { normalizeRaceSearch, raceSearchText } from "./race-search";
+import { registrationSoldOutSource } from "./registration-sold-out.mjs";
 
 export const defaultFilters: Filters = {
   q: "",
@@ -114,7 +115,11 @@ export function channelStatus(
   if (group.status === "unknown") return "unknown";
   if (group.registrationOpensAt && current.getTime() < Date.parse(group.registrationOpensAt))
     return "upcoming";
-  if (registrationIsStale(race, group, now)) return "unknown";
+  if (
+    registrationIsStale(race, group, current) &&
+    !registrationSoldOutSource(race, group, current.getTime())
+  )
+    return "unknown";
   if (group.registrationStart && group.registrationStart > today) return "upcoming";
   if (
     group.status === "upcoming" &&

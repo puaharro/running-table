@@ -53,6 +53,7 @@ export interface RegistrationChannel {
   registrationOpensAt?: string;
   registrationClosesAt?: string;
   registrationVerifiedAt?: string;
+  soldOutSourceId?: string;
   resultAnnouncedAt?: string;
   paymentClosesAt?: string;
   registrationNote?: string;

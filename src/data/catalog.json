@@ -189,6 +189,7 @@
           {
             "price": 320,
             "status": "full",
+            "soldOutSourceId": "mizuno-hk-run-fest-2026-registration-recheck-20261128-news",
             "registrationUrl": "https://mizunohkrun.com/zh-hant",
             "registrationVerifiedAt": "2026-11-28T00:16:49+08:00",
             "registrationMethod": "個人報名",
@@ -219,6 +220,7 @@
           {
             "price": 360,
             "status": "full",
+            "soldOutSourceId": "mizuno-hk-run-fest-2026-registration-recheck-20261128-news",
             "registrationUrl": "https://mizunohkrun.com/zh-hant",
             "registrationVerifiedAt": "2026-11-28T00:16:49+08:00",
             "registrationMethod": "個人報名",
@@ -249,6 +251,7 @@
           {
             "price": 400,
             "status": "full",
+            "soldOutSourceId": "mizuno-hk-run-fest-2026-registration-recheck-20261128-news",
             "registrationUrl": "https://mizunohkrun.com/zh-hant",
             "registrationVerifiedAt": "2026-11-28T00:16:49+08:00",
             "registrationMethod": "個人報名",
@@ -1139,6 +1142,7 @@
             "priceNote": "官方只列每位籌款目標HK$10,000或以上；未確認統一最低捐款或報名費，不能把目標填作最低額。",
             "currency": "HKD",
             "status": "full",
+            "soldOutSourceId": "standard-chartered-hk-marathon-2027-registration-recheck-20261128-familyvalue",
             "registrationVerifiedAt": "2026-11-28T00:20:56+08:00",
             "registrationUrl": "https://www.familyvalue.org.hk/marathon.html",
             "registrationNote": "官網9月30日14:00公告三距離名額均0及全部額滿；10月27日再查官網連結的官方表格，明確顯示所有慈善跑手招募已完成。保留額滿狀態；表格關閉亦不能補證最低費用，籌款目標不當成最低額。",
@@ -1376,6 +1380,7 @@
             "priceNote": "官方只列每位籌款目標HK$10,000或以上；未確認統一最低捐款或報名費，不能把目標填作最低額。",
             "currency": "HKD",
             "status": "full",
+            "soldOutSourceId": "standard-chartered-hk-marathon-2027-registration-recheck-20261128-familyvalue",
             "registrationVerifiedAt": "2026-11-28T00:20:56+08:00",
             "registrationUrl": "https://www.familyvalue.org.hk/marathon.html",
             "registrationNote": "官網9月30日14:00公告三距離名額均0及全部額滿；10月27日再查官網連結的官方表格，明確顯示所有慈善跑手招募已完成。保留額滿狀態；表格關閉亦不能補證最低費用，籌款目標不當成最低額。",
@@ -1612,6 +1617,7 @@
             "priceNote": "官方只列每位籌款目標HK$10,000或以上；未確認統一最低捐款或報名費，不能把目標填作最低額。",
             "currency": "HKD",
             "status": "full",
+            "soldOutSourceId": "standard-chartered-hk-marathon-2027-registration-recheck-20261128-familyvalue",
             "registrationVerifiedAt": "2026-11-28T00:20:56+08:00",
             "registrationUrl": "https://www.familyvalue.org.hk/marathon.html",
             "registrationNote": "官網9月30日14:00公告三距離名額均0及全部額滿；10月27日再查官網連結的官方表格，明確顯示所有慈善跑手招募已完成。保留額滿狀態；表格關閉亦不能補證最低費用，籌款目標不當成最低額。",
@@ -2581,6 +2587,7 @@
             "currency": "HKD",
             "priceNote": "按年齡及田總註冊身份分HK$150／200／300／350，沒有統一費用。",
             "status": "full",
+            "soldOutSourceId": "asics-hk-half-2026-registration-recheck-20261110",
             "registrationUrl": "https://www.hkaaa.com/tc/comp_details.php?id=293",
             "registrationNote": "田總當屆頁仍明確公告報名名額已滿；原定10月29日期限亦已過。",
             "sourceIds": [
@@ -2868,6 +2875,7 @@
             "currency": "HKD",
             "priceNote": "所列為已核對組別費用；優惠、其他組別及額外費用請另查官方。",
             "status": "full",
+            "soldOutSourceId": "tai-po-half-2026-registration-recheck-20261128-news",
             "registrationUrl": "https://tphm.sportsoho.com/form/enrolment-form",
             "registrationNote": "報名表可見10公里、3公里及1公里親子組可選項；未填資料或提交，不保證名額。半馬未列於表格，另已讀大會11月9日最新消息明確公告半程馬拉松額滿。無固定報名截止日期，隊際盃期限不套用個人報名。",
             "sourceIds": [
@@ -3124,6 +3132,7 @@
             "currency": "HKD",
             "priceNote": "費用／最低籌款額待核實。",
             "status": "full",
+            "soldOutSourceId": "dhk-healthy-run-2027-registration-recheck-20261128-news",
             "registrationUrl": "https://diabetes-hk.org/healthy_run_2027/",
             "registrationNote": "官方公告確認相關組別額滿。",
             "sourceIds": [
@@ -3155,6 +3164,7 @@
             "currency": "HKD",
             "priceNote": "費用／最低籌款額待核實。",
             "status": "full",
+            "soldOutSourceId": "dhk-healthy-run-2027-registration-recheck-20261128-news",
             "registrationUrl": "https://diabetes-hk.org/healthy_run_2027/",
             "registrationNote": "官方公告確認相關組別額滿。",
             "sourceIds": [

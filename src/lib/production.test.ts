@@ -40,6 +40,16 @@ describe("real catalog publication and provenance", () => {
     source.fields.push("announcement");
     expect(() => assertCatalog(data)).not.toThrow();
   });
+  it("requires the sold-out notice to belong to a full channel", () => {
+    const data = catalog();
+    const channel = data.find((race) => race.id === "tai-po-half-2026")!.groups[0].channels[0];
+    const notice = channel.soldOutSourceId;
+    channel.soldOutSourceId = "unrelated-source";
+    expect(() => assertCatalog(data)).toThrow("sold-out notice");
+    channel.soldOutSourceId = notice;
+    channel.status = "open";
+    expect(() => assertCatalog(data)).toThrow("sold-out notice");
+  });
   it("publishes source-backed real events and no fixtures", () => {
     const data = catalog();
     expect(publishedRaces(data)).toHaveLength(data.length);
@@ -109,6 +119,23 @@ describe("exact deadlines, freshness and truthful channel statuses", () => {
     };
     expect(channelStatus(r, r.groups[0], group, "2026-10-24T13:22:07+08:00")).toBe("open");
     expect(channelStatus(r, r.groups[0], group, "2026-10-24T13:22:08+08:00")).toBe("unknown");
+  });
+  it("keeps an official sellout current without extending availability of other channels", () => {
+    const race = catalog().find((race) => race.id === "tai-po-half-2026")!;
+    const [half, ten] = race.groups;
+    const full = half.channels[0];
+    const afterRecheckWindow = "2026-12-03T12:00:00+08:00";
+    const status = (channel: typeof full, record = race, at = afterRecheckWindow) =>
+      channelStatus(record, half, channel, at);
+    expect(status(full)).toBe("full");
+    expect(status({ ...full, soldOutSourceId: undefined })).toBe("unknown");
+    expect(groupStatus(race, ten, afterRecheckWindow)).toBe("unknown");
+    expect(status(full, race, "2026-11-27T12:00:00+08:00")).toBe("unknown");
+    expect(status(full, { ...race, status: "postponed" })).toBe("unknown");
+    expect(status(full, { ...race, status: "completed" })).toBe("closed");
+    expect(status({ ...full, status: "open", registrationVerifiedAt: afterRecheckWindow })).toBe(
+      "open",
+    );
   });
   it("preserves deadline closure even when its source is older", () => {
     const r = catalog()[0];

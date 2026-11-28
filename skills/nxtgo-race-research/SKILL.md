@@ -1,6 +1,6 @@
 ---
 name: nxtgo-race-research
-description: Run NXTGO’s Hong Kong road race update cycle. Discover missing race editions, verify changes to existing listings, and collect current-edition runner comments after races for Traditional Chinese CMS drafts, and refresh the website’s Latest News section. Use for routine NXTGO updates or targeted race research.
+description: 維護 NXTGO 香港路跑賽事目錄，核對官方報名資料或研究指定屆次的跑手經驗。適用於例行更新、新賽事、報名覆核及跑手分享草稿。
 ---
 
 # NXTGO 賽事更新
@@ -8,6 +8,8 @@ description: Run NXTGO’s Hong Kong road race update cycle. Discover missing ra
 交接網站稿時列出賽事 ID、屆次、組別 ID、修訂版及待補來源。以 CMS「選稿及差異預覽」核對現行公開版，再把完整稿和包含組別的記錄雜湊交營運者批准。
 
 先讀 repo 的 `AGENTS.md` 及[每輪更新流程](../../docs/CONTENT_OPERATIONS.md#每輪更新流程)。讀取私人工作區的上一輪摘要及待辦。除非營運者指定範圍，每輪按以下次序做四項：
+
+安裝版的相對連結以目前 NXTGO checkout 內的本 SKILL 路徑為基準。只核對官方報名時走[報名覆核流程](../../docs/REGISTRATION_REVIEW.md)，按屆次、組別及渠道對照大會與指定平台。研究跑手親身經驗時，依 `scripts/research/sources.mjs` 及研究 SOP 查齊每個來源類別。
 
 1. **搵新賽事。** 查主辦方、田總及官方報名平台的香港路跑公告。按中英文賽名、屆次、日期及主辦方對照 `src/data/catalog.json` 及可見 CMS 建議。比賽組別、報名渠道和同一屆的不同寫法保留在同一賽事下。以官方當屆資料核對後，先進 CMS 待覆核清單。
 2. **更新已收錄賽事。** 執行 `npm run review:data` 產生報名待覆核清單。優先查改期、取消、七日內截止與將開放的賽事。逐組逐渠道記錄官方來源、香港時間及欄位差異。申請、結果、付款期限分開記錄。未知名額保持待核實，查閱時間只更新實際核對的欄位。
@@ -24,7 +26,7 @@ description: Run NXTGO’s Hong Kong road race update cycle. Discover missing ra
 
 先看 CMS「需要處理 → 報名資料自動覆核」，按[試行與覆核流程](../../docs/REGISTRATION_REVIEW.md)處理。共用官方網址只巡查一次，一般報名逐屆逐組核對入口、開放、截止、費用及名額。優先／精英另核資格、成績期、證明、適用的結果公布及付款期。慈善及旅遊只核對當屆官方或指定夥伴連結，共用連結集中處理。相同值自動保存核實紀錄。變更交營運者批准，讀取失敗或證據不足的欄位留待查。分開記錄最後嘗試及欄位核實時間。批准紀錄接入公開資料前重對現行值和依據。已獲官方證實全組額滿的賽事保留公告及核對時間，停止例行欄位覆核。個別組別有當屆官方額滿依據時，停止該組全部報名欄位的例行覆核，保留公告及核對時間。其餘組別繼續覆核。按賽事及官方來源集中處理待查。已核實開放的組別停止追查歷史開放時間。官方只列「額滿即止」時保存截止條件，仍核對名額。
 
-查當屆表格的可選組別，再按各欄證據入庫。若組別未出現，記下限制並找官方公告。接入已批准資料後重新載入 CMS，核對剩餘待查及已批准項目。
+查當屆表格的可選組別，再按各欄證據入庫。遇登入先記錄限制，請擁有人在原站登入，再用同一分頁續查。組別缺席或只確認截止時，名額維持待核實。刊登賽事須有本屆日期來源。接入已批准資料後重新載入 CMS，核對剩餘待查及已批准項目。
 
 ## 研究待辦
 

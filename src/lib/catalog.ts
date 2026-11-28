@@ -1,4 +1,5 @@
 import { hongKongToday, validDate } from "./races";
+import { registrationSoldOutSource } from "./registration-sold-out.mjs";
 import { channelTypeLabels, registrationLabels, regions, countries, type Race } from "./types";
 
 export function isHttpsUrl(value: unknown): value is string {
@@ -249,6 +250,11 @@ export function assertCatalog(input: unknown): asserts input is Race[] {
           fail(channel.id, "payment deadline precedes result");
         if (channel.status !== "unknown" && !channel.registrationVerifiedAt)
           fail(channel.id, "known registration status needs timestamp and channel");
+        if (
+          channel.soldOutSourceId !== undefined &&
+          !registrationSoldOutSource(race, channel, Infinity)
+        )
+          fail(channel.id, "sold-out notice requires a verified full channel and matching source");
         if (
           channel.status !== "unknown" &&
           !race.sources!.some(

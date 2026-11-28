@@ -259,6 +259,40 @@ test("verified race-wide and group-specific sellouts leave the queue at the conf
   }
 });
 
+test("an explicitly sourced sellout leaves only the affected channel out of the review queue", async () => {
+  const { registrationTargets } =
+    await import("../scripts/content-management/registration-review.mjs");
+  const checkedAt = "2026-11-25T12:00:00+08:00";
+  const source = {
+    id: "notice",
+    url: "https://www.run2gather.com/notice",
+    checkedAt,
+    fields: ["channels.registration"],
+  };
+  const full = {
+    ...channel,
+    status: "full",
+    registrationVerifiedAt: checkedAt,
+    sourceIds: [source.id],
+    soldOutSourceId: source.id,
+  };
+  const other = { ...channel, id: "other", status: "unknown" };
+  const event = {
+    ...race,
+    verification: "verified",
+    sources: [source],
+    groups: [{ name: "5K", channels: [full, other] }],
+  };
+  const now = Date.parse("2026-11-29T12:00:00+08:00");
+  assert.deepEqual(
+    registrationTargets([event], now).map((target) => target.channel.id),
+    ["other"],
+  );
+  full.status = "open";
+  delete full.soldOutSourceId;
+  assert.ok(registrationTargets([event], now).some((target) => target.channel.id === full.id));
+});
+
 test("official quota-only deadline and verified opening end the relevant follow-ups", async () => {
   const { registrationTargets } =
     await import("../scripts/content-management/registration-review.mjs");

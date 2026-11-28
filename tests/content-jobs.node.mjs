@@ -14,6 +14,11 @@ test("editorial jobs use selected materials, survive a retry and leave publicati
   cpSync(new URL("../scripts/", import.meta.url), join(root, "scripts"), { recursive: true });
   mkdirSync(join(root, "src"));
   cpSync(new URL("../src/data/", import.meta.url), join(root, "src/data"), { recursive: true });
+  mkdirSync(join(root, "src/lib"));
+  cpSync(
+    new URL("../src/lib/registration-sold-out.mjs", import.meta.url),
+    join(root, "src/lib/registration-sold-out.mjs"),
+  );
 
   const race = raceCatalog[0];
   const database = join(root, ".editorial-private/content-management/manual.sqlite");

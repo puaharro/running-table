@@ -1,3 +1,5 @@
+import { registrationSoldOutSource } from "../../src/lib/registration-sold-out.mjs";
+
 // Only recognized, edition-specific notices and table rows can produce a value.
 export const sourceOverrides = {
   "schkm-youth-2027": "https://www.hkmarathon.com/zh-hant/youth-run",
@@ -97,7 +99,20 @@ function soldOutSource(race, groups) {
   return official && /^https:\/\//.test(official.url) ? official : null;
 }
 
-export function confirmedSoldOut(race) {
+function markedSoldOutSource(race, groups, now) {
+  const channels = groups
+    .flatMap((group) => group.channels)
+    .filter((channel) => !isLinkOnly(channel));
+  const first = channels[0] && registrationSoldOutSource(race, channels[0], now);
+  return first &&
+    channels.every((channel) => registrationSoldOutSource(race, channel, now) === first)
+    ? first
+    : null;
+}
+
+export function confirmedSoldOut(race, now = Date.now()) {
+  const marked = markedSoldOutSource(race, race.groups, now);
+  if (marked) return { ...marked, allGroups: race.groups.length > 1 };
   const official = soldOutSource(race, race.groups);
   if (!official) return null;
   const channels = race.groups
@@ -110,7 +125,9 @@ export function confirmedSoldOut(race) {
   return { ...official, allGroups: race.groups.length > 1 };
 }
 
-export function confirmedGroupSoldOut(race, group) {
+export function confirmedGroupSoldOut(race, group, now = Date.now()) {
+  const marked = markedSoldOutSource(race, [group], now);
+  if (marked) return marked;
   const source = soldOutSource(race, [group]);
   if (!source) return null;
   const name = group.name.replace(/\s+/g, "").replace(/(?:個人)?組$/, "");

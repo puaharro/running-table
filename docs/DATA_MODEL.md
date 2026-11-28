@@ -1,6 +1,6 @@
 # 資料合約 v0.3：組別與獨立報名渠道
 
-程式型別：src/lib/types.ts。正式資料：src/data/catalog.json；assertCatalog 在匯入及建置時驗證。published + verified 紀錄才可發布，虛構資料只用於 tests/fixtures。
+程式型別見 `src/lib/types.ts`，正式資料在 `src/data/catalog.json`。匯入及建置時由 `assertCatalog` 驗證。刊登須同時標記 `published`、`verified`，並有本屆賽事日期的來源紀錄（`sources[].fields` 包含 `date`）。虛構資料只用於 `tests/fixtures`。
 
 ## Race：活動的一屆
 
@@ -30,6 +30,7 @@
 | registrationOpensAt／registrationClosesAt | 有時區的精確申請窗口；截止與日期欄須對應香港同一天                       |
 | resultAnnouncedAt／paymentClosesAt        | 結果公布及獲確認後付款期限，不能代替申請截止；同時有值時付款不得早於結果 |
 | registrationVerifiedAt                    | 此渠道的實際核對時間；已知狀態必填                                       |
+| soldOutSourceId                           | 可持續顯示額滿的當屆官方公告，必須是該 `full` 渠道的一個報名來源            |
 | registrationUrl／registrationNote         | 此渠道 HTTPS 官方入口及安排／限制                                        |
 | sourceIds                                 | 只引用同一活動 sources；已知狀態必須有 channels.registration 證據        |
 
@@ -38,6 +39,8 @@
 ## 狀態、篩選與計數
 
 取消／已完成／組別日期已過 → closed；延期 → unknown；該渠道申請截止已到 → closed；未到開放 → upcoming；超過 72 小時未核對 → unknown。原先 upcoming 到預告開放時間只轉 unknown，不自動宣稱接受申請。
+
+有 `soldOutSourceId` 的額滿渠道不因超過 72 小時變為待核實。重開時移除該標示，記錄新狀態及核實時間。截止來源只證明申請期限，不能更新名額狀態的核實時間。
 
 日期、距離、地區須在同一組別符合；渠道類型與狀態須在該組別的同一個渠道符合。不同欄 AND、同欄多選 OR。查詢使用可重複的 channel=general 等參數，支援分享及返回。
 

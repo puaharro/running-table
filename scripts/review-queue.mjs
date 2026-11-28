@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { registrationSoldOutSource } from "../src/lib/registration-sold-out.mjs";
 import {
   confirmedGroupSoldOut,
   confirmedSoldOut,
@@ -15,9 +16,9 @@ if (!Number.isFinite(now.getTime()))
 const queue = [];
 for (const race of records) {
   if (race.publication !== "published") continue;
-  const soldOut = confirmedSoldOut(race);
+  const soldOut = confirmedSoldOut(race, now.getTime());
   for (const group of race.groups) {
-    const groupSoldOut = soldOut ?? confirmedGroupSoldOut(race, group);
+    const groupSoldOut = soldOut ?? confirmedGroupSoldOut(race, group, now.getTime());
     for (const channel of group.channels) {
       const reasons = [];
       if (isLinkOnly(channel)) {
@@ -35,7 +36,7 @@ for (const race of records) {
           });
         continue;
       }
-      if (groupSoldOut) continue;
+      if (groupSoldOut || registrationSoldOutSource(race, channel, now.getTime())) continue;
       const age = channel.registrationVerifiedAt
         ? now.getTime() - Date.parse(channel.registrationVerifiedAt)
         : Infinity;
