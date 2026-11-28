@@ -130,6 +130,9 @@
 .search-page .calendar-view-tabs button[aria-pressed="true"] {
   color: var(--home-action-pressed);
 }
+.search-page :is(.calendar-view-tabs, .engine-options .option-row) button[data-entry-status="open"] {
+  color: var(--status-open-text);
+}
 .calendar-view-indicator {
   position: absolute;
   inset: 0;
@@ -272,14 +275,14 @@
   background: var(--home-tint);
   border-radius: 6px;
 }
-.search-page :is(.calendar-race-content h2, .calendar-race-content h3, .race-directory li) a {
+.search-page .race-directory li a {
   color: var(--race-link);
   letter-spacing: 0.025em;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
 }
-.search-page :is(.calendar-race-content h2, .calendar-race-content h3, .race-directory li) a:is(:hover, :focus-visible) {
+.search-page .race-directory li a:is(:hover, :focus-visible) {
   color: var(--race-link-emphasis);
   text-decoration-thickness: 2px;
 }
@@ -574,14 +577,23 @@
   margin: 0;
   color: var(--home-ink);
   font-size: var(--text-base);
-  font-weight: 700;
-  line-height: 1.5;
+  font-weight: 750;
+  line-height: 1.4;
   overflow-wrap: anywhere;
 }
 .calendar-race-content :is(h2, h3) a {
-  display: inline-flex;
-  align-items: center;
+  display: inline-block;
   min-height: 44px;
+  padding-block: 10px;
+  color: var(--home-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--home-control);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+.calendar-race-content :is(h2, h3) a:is(:hover, :focus-visible) {
+  color: var(--race-link);
+  text-decoration-color: currentColor;
 }
 .calendar-race-new {
   display: inline-block;
@@ -608,7 +620,8 @@
 }
 .search-page .calendar-race-start {
   grid-area: date;
-  color: var(--home-ink);
+  color: var(--info-text);
+  font-weight: 650;
   font-variant-numeric: tabular-nums;
 }
 .calendar-race-start time {
@@ -618,6 +631,7 @@
 .search-page .calendar-race-card :is(.calendar-race-venue, .calendar-race-start) svg {
   flex: none;
   margin-top: 2px;
+  color: var(--info-text);
 }
 .search-page .calendar-race-distances {
   grid-area: distances;
@@ -629,10 +643,10 @@
   padding: 0;
 }
 .search-page .calendar-race-distances li {
-  background: var(--surface-muted);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: 5px;
+  background: var(--home-card);
+  color: var(--home-action-pressed);
+  border: 1px solid color-mix(in srgb, var(--home-action) 42%, var(--home-card));
+  border-radius: var(--radius-badge);
   padding: 2px 6px;
   font-size: 12px;
 }
@@ -651,7 +665,19 @@
 }
 .calendar-race-registration .status-badge {
   justify-self: start;
-  font-weight: 600;
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-badge);
+  background: var(--badge-surface);
+  color: var(--badge-text);
+  font-weight: 650;
+}
+.calendar-race-registration .status-badge.closed {
+  --badge-text: var(--status-error-text);
+  --badge-surface: var(--status-error-surface);
+}
+.calendar-race-registration .status-badge.unknown {
+  --badge-text: #52525b;
+  --badge-surface: #f1f1f3;
 }
 .calendar-race-registration > span:not(.status-badge) {
   color: var(--home-muted);
@@ -683,11 +709,17 @@
   background: var(--urgent-surface);
 }
 .calendar-race-deadline time {
-  color: var(--registration-deadline-text);
-}
-.calendar-race-deadline > .calendar-verified-deadline {
   color: var(--urgent-text);
-  font-weight: 650;
+}
+.calendar-deadline-heading {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px var(--space-2);
+}
+.calendar-verified-deadline {
+  color: var(--urgent-text);
+  font-weight: 600;
 }
 .race-list[data-highlight-deadlines] .calendar-race-deadline[data-empty="true"] {
   display: block;

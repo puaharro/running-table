@@ -6,8 +6,9 @@ import {
   language,
 } from "@/lib/english-races";
 import { englishRaceTerm } from "@/lib/race-terms.en";
+import { calendarRegistrationLabels } from "@/lib/list-registration";
 import { displayDate } from "@/lib/races";
-import { channelTypeLabels, registrationLabels, type Filters } from "@/lib/types";
+import { channelTypeLabels, type Filters, type RegistrationStatus } from "@/lib/types";
 import { Icon } from "./ui";
 
 export function CalendarActiveFilters({
@@ -57,9 +58,7 @@ export function CalendarActiveFilters({
       if (key === "regions" && value === "港島") label = t("香港島", "Hong Kong Island");
       if (key === "distances" && english) label = englishDistanceTag(value);
       if (key === "statuses")
-        label = (english ? englishStatus : registrationLabels)[
-          value as keyof typeof registrationLabels
-        ];
+        label = (english ? englishStatus : calendarRegistrationLabels)[value as RegistrationStatus];
       if (key === "channels")
         label = (english ? englishChannels : channelTypeLabels)[
           value as keyof typeof channelTypeLabels

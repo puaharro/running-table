@@ -8,14 +8,15 @@ import { homeRaceNews } from "@/lib/home-race-news";
 
 const initialNow = "2026-11-16T12:00:00+08:00";
 
-it("places the localised search before the banner and links deadline headlines to registration details", () => {
+it("places the localised calendar link before the banner and links deadlines to registration details", () => {
   for (const english of [false, true]) {
     const home = renderToStaticMarkup(createElement(HomeView, { english }));
-    const action = `action="${english ? "/en/races/" : "/races/"}"`;
-    expect(home).toContain(action);
-    expect(home).toContain('name="q"');
+    const intro = home.split('class="shell home-intro"')[1].split("</header>")[0];
+    expect(intro).not.toContain('role="search"');
+    expect(intro.match(/<a\b/g)).toHaveLength(1);
+    expect(intro).toMatch(english ? /href="\/en\/races\/?"/ : /href="\/races\/?"/);
     expect(home).toContain("home-focus-banner");
-    expect(home.indexOf(action)).toBeLessThan(home.indexOf("home-focus-banner"));
+    expect(home.indexOf("home-intro-links")).toBeLessThan(home.indexOf("home-focus-banner"));
   }
 
   const html = renderToStaticMarkup(createElement(HomeHighlights, { races, initialNow }));
